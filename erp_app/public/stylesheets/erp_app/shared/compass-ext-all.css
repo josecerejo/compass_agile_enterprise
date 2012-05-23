@@ -279,6 +279,11 @@
     filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='/images/icons/document_up/document_up_16x16.png', sizingMethod='crop');
 }
 
+.icon-document_down {
+    background-image:url( /images/icons/document_down/document_down_16x16.png ) !important;
+    filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='/images/icons/document_down/document_down_16x16.png', sizingMethod='crop');
+}
+
 .icon-refresh {
     background-image:url( /images/icons/refresh/refresh_16x16.png ) !important;
     filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='/images/icons/refresh/refresh_16x16.png', sizingMethod='crop');
