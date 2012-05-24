@@ -8,16 +8,18 @@ class PublishedWebsite < ActiveRecord::Base
   end
 
   def self.activate(website, version, current_user)
-    published_websites = self.where('website_id = ?', website.id).all
+    #deactivate
+    published_websites = self.where(:website_id => website.id).where(:active => true).all
     published_websites.each do |published_website|
-      if published_website.version == version
-        published_website.active = true
-        published_website.published_by = current_user
-      else
-        published_website.active = false
-      end
+      published_website.active = false
       published_website.save
     end
+    
+    #activate
+    published_website = self.where(:website_id => website.id).where(:version => version).first
+    published_website.active = true
+    published_website.published_by = current_user
+    published_website.save
   end
 
   def publish(comment, current_user)
