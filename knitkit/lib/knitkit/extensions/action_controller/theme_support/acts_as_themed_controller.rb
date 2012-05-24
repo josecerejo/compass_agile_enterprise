@@ -16,7 +16,8 @@ module Knitkit
           module ActMacro
             def acts_as_themed_controller(options = {})
               before_filter :add_theme_view_paths
-              write_inheritable_attribute :current_themes, options[:current_themes] || []
+              class_attribute :current_themes 
+              self.current_themes = (options[:current_themes] || [])
 
               return if acts_as_themed_controller?
               include InstanceMethods
