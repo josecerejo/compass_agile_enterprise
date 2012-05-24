@@ -26,5 +26,5 @@ Gem::Specification.new do |s|
   s.add_dependency('delayed_job_active_record','0.3.2')
   s.add_dependency('paperclip','3.0.2')
   s.add_dependency('pdfkit','0.4.6')
-  s.add_dependency('sorcery','0.7.7')
+  s.add_dependency('sorcery','0.7.12')
 end

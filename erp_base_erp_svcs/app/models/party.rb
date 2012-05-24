@@ -176,7 +176,7 @@ class Party < ActiveRecord::Base
     end
   end
 
-  def respond_to?(m)
+  def respond_to?(m, include_private_methods = false)
     ((get_contact_by_method(m.to_s).nil? ? super : true)) rescue super
   end
   

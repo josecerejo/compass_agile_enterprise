@@ -30,7 +30,7 @@ class Agreement < ActiveRecord::Base
                            agreement_items.agreement_item_type_id").where("agreement_item_types.internal_identifier = '#{item_type_internal_identifier}'").first
   end
   
-  def respond_to?(m)
+  def respond_to?(m, include_private_methods = false)
     ((get_item_by_item_type_internal_identifier(m.to_s).nil? ? false : true)) unless super
   end
   

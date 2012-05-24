@@ -19,7 +19,7 @@ module ActionView
     def cached(key, path_info, details, locals) #:nodoc:
       file_support = ErpTechSvcs::FileSupport::Base.new(:storage => :s3)
       name, prefix, partial = path_info
-      locals = sort_locals(locals)
+      locals = locals.map { |x| x.to_s }.sort!
 
       if key && caching?
         if @cached[key][name][prefix][partial][locals].nil? or @cached[key][name][prefix][partial][locals].empty?
