@@ -356,6 +356,12 @@ class Website < ActiveRecord::Base
             website.save
           end
 
+          if !setup_hash[:hosts].blank? and !setup_hash[:hosts].empty?
+            #set first host as primary host in configuration
+            website.configurations.first.update_configuration_item(ConfigurationItemType.find_by_internal_identifier('primary_host'), setup_hash[:hosts].first)
+            website.save
+          end
+
           #handle sections
           setup_hash[:sections].each do |section_hash|
             build_section(section_hash, entries, website, current_user)

@@ -18,8 +18,8 @@ Gem::Specification.new do |s|
   s.test_files = Dir["spec/**/*"]
   
   #compass dependencies
-  s.add_dependency "knitkit", "2.0.1"
-  s.add_development_dependency "erp_dev_svcs", "3.0.1"
+  s.add_dependency "knitkit", "~> 2.0"
+  s.add_development_dependency "erp_dev_svcs", "~> 3.0"
   
   #this is needed for the sunspot gems it will try to install rails 3.2
   s.add_dependency 'railties', "~> 3.1.0"
