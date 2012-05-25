@@ -61,9 +61,6 @@ module Knitkit
           begin
             current_user.with_capability(model, 'view', 'Theme') do
               if @theme.destroy
-                #clear resolver cache
-                path = File.join("#{@theme[:url]}","templates")
-                cached_resolver = ThemeSupport::Cache.theme_resolvers.find{|cached_resolver| cached_resolver.to_path == path}
                 render :json => {:success => true}
               else
                 render :json =>  {:success => false}
@@ -245,9 +242,6 @@ module Knitkit
                 if result && !is_folder
                   theme_file = get_theme_file(path)
                   theme_file.destroy
-                  #clear resolver cache
-                  path = File.join("#{@theme[:url]}","templates")
-                  cached_resolver = ThemeSupport::Cache.theme_resolvers.find{|cached_resolver| cached_resolver.to_path == path}
                 end
                 result = {:success => result, :error => message}
               rescue Exception=>ex

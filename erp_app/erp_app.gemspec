@@ -23,8 +23,6 @@ Gem::Specification.new do |s|
   #s.add_dependency 'therubyracer' # needed on Linux for javascript
 
   #compass dependencies
-  s.add_dependency 'erp_tech_svcs', "3.0.1"
-
-  #dev dependencies
-  s.add_development_dependency 'erp_dev_svcs', "3.0.1"
+  s.add_dependency 'erp_tech_svcs', "~> 3.0"
+  s.add_development_dependency 'erp_dev_svcs', "~> 3.0"
 end
