@@ -2,10 +2,10 @@ require 'yaml'
 require 'fileutils'
 
 class Theme < ActiveRecord::Base
-  THEME_STRUCTURE = ['stylesheets', 'javascripts', 'images', 'templates']
-  BASE_LAYOUTS_VIEWS_PATH = "#{Knitkit::Engine.root.to_s}/app/views"
-  KNITKIT_WEBSITE_STYLESHEETS_PATH = "#{Knitkit::Engine.root.to_s}/public/stylesheets/knitkit"
-  KNITKIT_WEBSITE_IMAGES_PATH = "#{Knitkit::Engine.root.to_s}/public/images/knitkit"
+  @@theme_structure = ['stylesheets', 'javascripts', 'images', 'templates']
+  @@base_layouts_views_path = "#{Knitkit::Engine.root.to_s}/app/views"
+  @@knitkit_website_stylesheets_path = "#{Knitkit::Engine.root.to_s}/public/stylesheets/knitkit"
+  @@knitkit_website_images_path  = "#{Knitkit::Engine.root.to_s}/public/images/knitkit"
 
   has_file_assets
 
@@ -39,14 +39,14 @@ class Theme < ActiveRecord::Base
       Zip::ZipFile.open(file.path) do |zip|
         zip.sort.each do |entry|
           entry.name.split('/').each do |file|
-            valid = true if THEME_STRUCTURE.include?(file)
+            valid = true if @@theme_structure.include?(file)
           end
         end
       end
       valid
     end
   end
-  
+
   belongs_to :website
 
   has_permalink :name, :theme_id, :scope => :website_id,
@@ -54,9 +54,9 @@ class Theme < ActiveRecord::Base
 
   validates :name, :presence => {:message => 'Name cannot be blank'}
   validates_uniqueness_of :theme_id, :scope => :website_id
-  
+
   before_destroy :delete_theme_files!
-  
+
   def path
     "#{self.class.base_dir(website)}/#{theme_id}"
   end
@@ -64,7 +64,7 @@ class Theme < ActiveRecord::Base
   def url
     "/public/sites/#{website.iid}/themes/#{theme_id}"
   end
-  
+
   def activate!
     update_attributes! :active => true
   end
@@ -99,7 +99,7 @@ class Theme < ActiveRecord::Base
       result
     end
   end
-  
+
   def import(file)
     file_support = ErpTechSvcs::FileSupport::Base.new(:storage => Rails.application.config.erp_tech_svcs.file_storage)
     file = ActionController::UploadedTempfile.new("uploaded-theme").tap do |f|
@@ -183,7 +183,7 @@ class Theme < ActiveRecord::Base
       root_found = false
       theme_root = ''
       path.split('/').each do |piece|
-        if piece == 'about.yml' || THEME_STRUCTURE.include?(piece)
+        if piece == 'about.yml' || @@theme_structure.include?(piece)
           root_found = true
         else
           theme_root += piece + '/' if !piece.match('\.') && !root_found
@@ -204,9 +204,9 @@ class Theme < ActiveRecord::Base
 
   def create_theme_files!
     file_support = ErpTechSvcs::FileSupport::Base.new
-    create_theme_files_for_directory_node(file_support.build_tree(BASE_LAYOUTS_VIEWS_PATH, :preload => true), :templates, :path_to_replace => BASE_LAYOUTS_VIEWS_PATH)
-    create_theme_files_for_directory_node(file_support.build_tree(KNITKIT_WEBSITE_STYLESHEETS_PATH, :preload => true), :stylesheets, :path_to_replace => KNITKIT_WEBSITE_STYLESHEETS_PATH)
-    create_theme_files_for_directory_node(file_support.build_tree(KNITKIT_WEBSITE_IMAGES_PATH, :preload => true), :images, :path_to_replace => KNITKIT_WEBSITE_IMAGES_PATH)
+    create_theme_files_for_directory_node(file_support.build_tree(@@base_layouts_views_path, :preload => true), :templates, :path_to_replace => @@base_layouts_views_path)
+    create_theme_files_for_directory_node(file_support.build_tree(@@knitkit_website_stylesheets_path, :preload => true), :stylesheets, :path_to_replace => @@knitkit_website_stylesheets_path)
+    create_theme_files_for_directory_node(file_support.build_tree(@@knitkit_website_images_path, :preload => true), :images, :path_to_replace => @@knitkit_website_images_path)
   end
 
   private
@@ -221,7 +221,7 @@ class Theme < ActiveRecord::Base
     contents = IO.read(path)
     contents.gsub!("../../images/knitkit","../images") unless path.scan('style.css').empty?
     contents.gsub!("<%= static_stylesheet_link_tag('knitkit/style.css') %>","<%= theme_stylesheet_link_tag('#{self.theme_id}','style.css') %>") unless path.scan('base.html.erb').empty?
-  
+
     path = case type
     when :widgets
       path.gsub(options[:path_to_replace], "#{self.url}/widgets/#{options[:widget_name]}")
@@ -231,5 +231,5 @@ class Theme < ActiveRecord::Base
 
     self.add_file(contents, path)
   end
-  
+
 end

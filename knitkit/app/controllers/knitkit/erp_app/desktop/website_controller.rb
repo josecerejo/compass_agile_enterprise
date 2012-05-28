@@ -81,8 +81,8 @@ module Knitkit
 
         def new
           model = DesktopApplication.find_by_internal_identifier('knitkit')
-          begin
-            current_user.with_capability(model, 'create', 'Website') do
+          #begin
+            #current_user.with_capability(model, 'create', 'Website') do
               result = {}
               website = Website.new
               website.subtitle                  = params[:subtitle]
@@ -116,12 +116,13 @@ module Knitkit
               else
                 result[:success] = false
               end
+              puts website.errors.full_messages
 
               render :json => result
-            end
-          rescue ErpTechSvcs::Utils::CompassAccessNegotiator::Errors::UserDoesNotHaveCapability=>ex
-            render :json => {:success => false, :message => ex.message}
-          end
+            #end
+          #rescue ErpTechSvcs::Utils::CompassAccessNegotiator::Errors::UserDoesNotHaveCapability=>ex
+            #render :json => {:success => false, :message => ex.message}
+          #end
         end
 
         def update

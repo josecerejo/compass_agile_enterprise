@@ -101,6 +101,8 @@ class Website < ActiveRecord::Base
     PublishedWebsite.create(:website => self, :version => 0, :active => true, :comment => 'New Site Created')
     Role.create(:description => "Website #{self.title}", :internal_identifier => website_role_iid)
     configuration = ::Configuration.find_template('default_website_configuration').clone(true)
+    configuration.description = "Website #{self.name} Configuration"
+    configuration.internal_identifier = configuration.description.underscore
     configuration.update_configuration_item(ConfigurationItemType.find_by_internal_identifier('contact_us_email_address'), self.email)
     configuration.update_configuration_item(ConfigurationItemType.find_by_internal_identifier('login_url'), '/login')
     configuration.update_configuration_item(ConfigurationItemType.find_by_internal_identifier('homepage_url'), '/home')
@@ -353,6 +355,12 @@ class Website < ActiveRecord::Base
           #handle hosts
           setup_hash[:hosts].each do |host|
             website.hosts << WebsiteHost.create(:host => host)
+            website.save
+          end
+
+          if !setup_hash[:hosts].blank? and !setup_hash[:hosts].empty?
+            #set first host as primary host in configuration
+            website.configurations.first.update_configuration_item(ConfigurationItemType.find_by_internal_identifier('primary_host'), setup_hash[:hosts].first)
             website.save
           end
 
