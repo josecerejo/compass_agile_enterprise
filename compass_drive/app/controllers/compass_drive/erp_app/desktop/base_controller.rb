@@ -19,14 +19,19 @@ module CompassDrive
           render :json => tree
         end
 
-        def add_asset
-          name = request.env['HTTP_X_FILE_NAME'].blank? ? params[:file_data].original_filename : request.env['HTTP_X_FILE_NAME']
-          data = request.env['HTTP_X_FILE_NAME'].blank? ? params[:file_data] : request.raw_post
+        def add_category
+          
+        end
 
-          compass_drive_asset = CompassDriveAsset.create(:name => name)
-          compass_drive_asset.add_file(data)
+        def add_asset
+          begin
+          compass_drive_asset = CompassDriveAsset.new(:name => params[:asset_data].original_filename)
+          compass_drive_asset.add_file(params[:asset_data], params[:comment], current_user)
 
           render :inline => {:success => true}.to_json
+          rescue Exception=>ex
+            render :inline => {:success => false, :msg => ex.message}.to_json
+          end
         end
 
         def delete_asset
@@ -63,11 +68,27 @@ module CompassDrive
         def versions
           compass_drive_asset = CompassDriveAsset.find(params[:id])
           versions = compass_drive_asset.compass_drive_asset_versions.ordered.collect do |version|
-            version.to_hash(:only => [:version, :created_at],
-              :additional_values => {:checked_in_by => (version.checked_in_by.username)})
+            version.to_hash(:only => [:id, :version, :created_at],
+              :additional_values => {
+                :checked_in_by => (version.checked_in_by.username),
+                :comment => (version.comment.nil? ? '' : "#{version.comment[0..10]}...")
+              })
           end
 
           render :json => {:success => true, :versions => versions, :totalCount => versions.count}
+        end
+
+        def view_comment
+          compass_drive_asset_version = CompassDriveAssetVersion.find(params[:id])
+
+          render :inline => (compass_drive_asset_version.comment.nil? ? 'No Comment' : compass_drive_asset_version.comment)
+        end
+
+        def download_version
+          compass_drive_asset_version = CompassDriveAssetVersion.find(params[:id])
+          send_file compass_drive_asset_version.file_asset.data.path,
+            :type => compass_drive_asset_version.file_asset.class.content_type,
+            :filename => compass_drive_asset_version.compass_drive_asset.name
         end
 
       end

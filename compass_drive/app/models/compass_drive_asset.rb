@@ -35,11 +35,11 @@ class CompassDriveAsset < ActiveRecord::Base
     end
   end
 
-  def add_file(file, comment=nil)
+  def add_file(file, comment=nil, user=nil)
     compass_drive_asset_version = CompassDriveAssetVersion.new
     compass_drive_asset_version.version = (self.current_version + 1)
     compass_drive_asset_version.comment = comment
-    compass_drive_asset_version.checked_in_by = self.checked_out_by
+    compass_drive_asset_version.checked_in_by = user || self.checked_out_by
     compass_drive_asset_version.file_asset = FileAsset.create!(:base_path => file_path(compass_drive_asset_version.version), :data => file.read)
     compass_drive_asset_version.compass_drive_asset = self
     compass_drive_asset_version.save
