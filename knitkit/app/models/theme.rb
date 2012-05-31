@@ -2,10 +2,11 @@ require 'yaml'
 require 'fileutils'
 
 class Theme < ActiveRecord::Base
-  @@theme_structure = ['stylesheets', 'javascripts', 'images', 'templates']
-  @@base_layouts_views_path = "#{Knitkit::Engine.root.to_s}/app/views"
-  @@knitkit_website_stylesheets_path = "#{Knitkit::Engine.root.to_s}/public/stylesheets/knitkit"
-  @@knitkit_website_images_path  = "#{Knitkit::Engine.root.to_s}/public/images/knitkit"
+  THEME_STRUCTURE = ['stylesheets', 'javascripts', 'images', 'templates']
+  class << self; attr_accessor :base_layouts_views_path, :knitkit_website_stylesheets_path, :knitkit_website_images_path  end
+  @base_layouts_views_path = "#{Knitkit::Engine.root.to_s}/app/views"
+  @knitkit_website_stylesheets_path = "#{Knitkit::Engine.root.to_s}/public/stylesheets/knitkit"
+  @knitkit_website_images_path = "#{Knitkit::Engine.root.to_s}/public/images/knitkit"
 
   has_file_assets
 
@@ -39,7 +40,7 @@ class Theme < ActiveRecord::Base
       Zip::ZipFile.open(file.path) do |zip|
         zip.sort.each do |entry|
           entry.name.split('/').each do |file|
-            valid = true if @@theme_structure.include?(file)
+            valid = true if THEME_STRUCTURE.include?(file)
           end
         end
       end
@@ -183,7 +184,7 @@ class Theme < ActiveRecord::Base
       root_found = false
       theme_root = ''
       path.split('/').each do |piece|
-        if piece == 'about.yml' || @@theme_structure.include?(piece)
+        if piece == 'about.yml' || THEME_STRUCTURE.include?(piece)
           root_found = true
         else
           theme_root += piece + '/' if !piece.match('\.') && !root_found
@@ -204,9 +205,9 @@ class Theme < ActiveRecord::Base
 
   def create_theme_files!
     file_support = ErpTechSvcs::FileSupport::Base.new
-    create_theme_files_for_directory_node(file_support.build_tree(@@base_layouts_views_path, :preload => true), :templates, :path_to_replace => @@base_layouts_views_path)
-    create_theme_files_for_directory_node(file_support.build_tree(@@knitkit_website_stylesheets_path, :preload => true), :stylesheets, :path_to_replace => @@knitkit_website_stylesheets_path)
-    create_theme_files_for_directory_node(file_support.build_tree(@@knitkit_website_images_path, :preload => true), :images, :path_to_replace => @@knitkit_website_images_path)
+    create_theme_files_for_directory_node(file_support.build_tree(Theme.base_layouts_views_path, :preload => true), :templates, :path_to_replace => Theme.base_layouts_views_path)
+    create_theme_files_for_directory_node(file_support.build_tree(Theme.knitkit_website_stylesheets_path, :preload => true), :stylesheets, :path_to_replace => Theme.knitkit_website_stylesheets_path)
+    create_theme_files_for_directory_node(file_support.build_tree(Theme.knitkit_website_images_path, :preload => true), :images, :path_to_replace => Theme.knitkit_website_images_path)
   end
 
   private
