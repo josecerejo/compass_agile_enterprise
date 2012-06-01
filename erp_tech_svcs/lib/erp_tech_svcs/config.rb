@@ -10,7 +10,9 @@ module ErpTechSvcs
                     :s3_protocol,
                     :file_storage,
                     :s3_cache_expires_in_minutes,
-                    :session_expires_in_hours
+                    :session_expires_in_hours,
+                    :execute_mail_processors_job_delay,
+                    :mail_processors
 
       def init!
         @defaults = {
@@ -23,7 +25,9 @@ module ErpTechSvcs
           :@s3_protocol => 'https', # Can be either 'http' or 'https'
           :@file_storage => :filesystem, # Can be either :s3 or :filesystem
           :@s3_cache_expires_in_minutes => 60,
-          :@session_expires_in_hours => 12 # this is used by DeleteExpiredSessionsJob to purge inactive sessions from database 
+          :@session_expires_in_hours => 12, # this is used by DeleteExpiredSessionsJob to purge inactive sessions from database
+          :@execute_mail_processors_job_delay => 1, #in minutes
+          :@mail_processors => [] #Child classes of ErpTechSvcs::MailProcessor::Base
         }
       end
 

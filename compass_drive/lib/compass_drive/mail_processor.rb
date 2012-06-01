@@ -1,0 +1,1 @@
+require 'compass_drive/mail_processor/compass_drive_mail_processor'

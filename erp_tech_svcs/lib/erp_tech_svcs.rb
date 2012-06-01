@@ -16,8 +16,9 @@ require 'erp_tech_svcs/file_support'
 require 'erp_tech_svcs/sms_wrapper'
 require "erp_tech_svcs/config"
 require "erp_tech_svcs/engine"
-require 'erp_tech_svcs/sessions/delete_expired_sessions_job'
-require 'erp_tech_svcs/sessions/delete_expired_sessions_service'
+require "erp_tech_svcs/delayed_jobs"
+require 'erp_tech_svcs/utils/delete_expired_sessions_service'
+require 'erp_tech_svcs/mail_processor'
 
 module ErpTechSvcs
 end

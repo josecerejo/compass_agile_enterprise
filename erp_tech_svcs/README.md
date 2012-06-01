@@ -22,6 +22,10 @@ This engine is implemented with the premise that services like logging, tracing 
 - file\_storage
   - File storage to use either s3 or filesystem.
   - Default : :filesystem
+- execute\_mai\l_processors\_job\_delay
+  - Delay for mail ExecuteMailProcessorsJob
+- mail\_processors
+  - Child classes of ErpTechSvcs::MailProcessor::Base
 
 ### Override Initializer
 
@@ -37,7 +41,9 @@ To override these settings simple create a erp_tech_svcs.rb file in your initial
       config.s3_protocol = 'https' # Can be either 'http' or 'https'
       config.file_storage = :filesystem # Can be either :s3 or :filesystem
       config.s3_cache_expires_in_minutes = 60 
-      config.session_expires_in_hours = 12 # this is used by DeleteExpiredSessionsJob to purge inaactive sessions from database 
+      config.session_expires_in_hours = 12 # this is used by DeleteExpiredSessionsJob to purge inaactive sessions from database
+      config.execute_mail_processors_job_delay => 1 #in minutes
+      config.mail_processors => [] #Child classes of ErpTechSvcs::MailProcessor::Base
     end
     Rails.application.config.erp_tech_svcs.configure!
 

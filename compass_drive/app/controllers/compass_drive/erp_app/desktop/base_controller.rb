@@ -11,11 +11,7 @@ module CompassDrive
           }
 
           tree.each do |category_hash|
-            #build asset nodes for child categories
-            category_hash[:children].each do |category_child_hash|
-              build_compass_asset_nodes_for_category(category_child_hash)
-            end
-            build_compass_asset_nodes_for_category(category_hash)
+            build_tree_node(category_hash)
           end
 
           #get any assets without categories
@@ -47,7 +43,7 @@ module CompassDrive
               :domain => 'compass_drive'
           )
 
-          unless params[:category_id].blank?
+          if !params[:category_id].blank? and params[:category_id].to_i != 0
             parent_category = Category.find(params[:category_id])
             category.move_to_child_of(parent_category)
           end
@@ -64,7 +60,7 @@ module CompassDrive
             compass_drive_asset = CompassDriveAsset.new(:name => params[:asset_data].original_filename)
             compass_drive_asset.add_file(params[:asset_data], params[:comment], current_user)
 
-            compass_drive_asset.categorize(Category.find(params[:category_id])) unless params[:category_id].blank?
+            compass_drive_asset.categorize(Category.find(params[:category_id])) if (!params[:category_id].blank? and params[:category_id].to_i != 0)
 
             render :inline => {:success => true}.to_json
           rescue Exception => ex
@@ -86,7 +82,6 @@ module CompassDrive
             compass_drive_asset_version = compass_drive_asset.checkout(current_user)
 
             send_file compass_drive_asset_version.file_asset.data.path,
-                      :type => compass_drive_asset_version.file_asset.class.content_type,
                       :filename => compass_drive_asset.name
           else
             render :inline => "Already checked out by #{compass_drive_asset.checked_out_by.username}"
@@ -108,7 +103,7 @@ module CompassDrive
           versions = compass_drive_asset.compass_drive_asset_versions.ordered.collect do |version|
             version.to_hash(:only => [:id, :version, :created_at],
                             :additional_values => {
-                                :checked_in_by => (version.checked_in_by.username),
+                                :checked_in_by => ((version.checked_in_by.username) rescue ''),
                                 :comment => (version.comment.nil? ? '' : "#{version.comment[0..10]}...")
                             })
           end
@@ -129,7 +124,26 @@ module CompassDrive
                     :filename => compass_drive_asset_version.compass_drive_asset.name
         end
 
+        def email_asset_version
+          begin
+            CompassDriveAssetMailer.email_compass_drive_asset_version(params[:to_email], CompassDriveAssetVersion.find(params[:id])).deliver
+            render :json => {:success => true}
+          rescue Exception => ex
+            Rails.logger.debug(ex.message)
+            Rails.logger.debug(ex.backtrace)
+            render :json => {:success => false}
+          end
+        end
+
         private
+
+        def build_tree_node(category_hash)
+          #build asset nodes for child categories
+          category_hash[:children].each do |category_child_hash|
+            build_tree_node(category_child_hash)
+          end
+          build_compass_asset_nodes_for_category(category_hash)
+        end
 
         def build_compass_asset_nodes_for_category(category_hash)
           compass_drive_assets = CompassDriveAsset.joins(:category_classification).where('category_id = ?', category_hash[:modelId]).collect do |compass_drive_asset|

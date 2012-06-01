@@ -1,6 +1,9 @@
 Ext.define("Compass.ErpApp.Desktop.Applications.CompassDrive.RespositoryTreePanel", {
     extend:"Ext.tree.Panel",
-    alias:'widget.compassdrive-repositorytreepanel',
+    alias:"widget.compassdrive-repositorytreepanel",
+    showVersions:function (dd) {
+
+    },
     store:{
         proxy:{
             type:'ajax',
@@ -200,7 +203,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.CompassDrive.RespositoryTreePane
                                                     form.submit({
                                                         waitMsg:'Uploading ...',
                                                         success:function (form, action) {
-                                                            Ext.getStore('compassdrive-repositorytreepanel-store').load();;
+                                                            Ext.getStore('compassdrive-repositorytreepanel-store').load();
                                                             btn.up('window').close();
                                                         },
                                                         failure:function (form, action) {
@@ -221,14 +224,13 @@ Ext.define("Compass.ErpApp.Desktop.Applications.CompassDrive.RespositoryTreePane
                             }).show();
                         }
                     }
-                })
+                });
             }
             else if (record.get('isCategory')) {
 
             }
             else if (record.get('isCompassDriveAsset')) {
-                (!record.get('checkedOut'))
-                {
+                if(!record.get('checkedOut')){
                     items.push({
                         text:'Checkout',
                         iconCls:'icon-document_down',
@@ -243,7 +245,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.CompassDrive.RespositoryTreePane
                     });
                 }
 
-                if (record.get('checkedOut') && currentUser.username == record.get('checkedOutBy')) {
+                if (record.get('checkedOut') && currentUser.username === record.get('checkedOutBy')) {
                     items.push({
                         text:'Checkin',
                         iconCls:'icon-document_up',
@@ -330,11 +332,11 @@ Ext.define("Compass.ErpApp.Desktop.Applications.CompassDrive.RespositoryTreePane
                     listeners:{
                         'click':function () {
                             Ext.MessageBox.confirm('Confirm', 'Are you sure you want to delete this asset?', function (btn) {
-                                if (btn == 'no') {
+                                if (btn === 'no') {
                                     return false;
                                 }
                                 else
-                                if (btn == 'yes') {
+                                if (btn ==='yes') {
                                     var wait = Ext.Msg.wait('Status', 'Deleting asset...');
                                     Ext.Ajax.request({
                                         url:'/compass_drive/erp_app/desktop/delete_asset',

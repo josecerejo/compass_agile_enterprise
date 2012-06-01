@@ -1,0 +1,1 @@
+require 'erp_tech_svcs/mail_processor/base'
