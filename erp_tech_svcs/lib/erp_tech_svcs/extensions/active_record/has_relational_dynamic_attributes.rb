@@ -91,6 +91,11 @@ module ErpTechSvcs
             self.attribute_values << attribute_value
           end
 
+          def method_missing(m, *args, &block)
+            value = get_dynamic_value_of_type(m.to_s)
+            (value.nil?) ? super : (return value)
+          end
+
         end
         
       end#HasRelationalDynamicAttributes
