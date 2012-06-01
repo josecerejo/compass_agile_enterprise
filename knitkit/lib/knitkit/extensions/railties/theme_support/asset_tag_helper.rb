@@ -24,19 +24,20 @@ module ActionView
         cache   = options.delete("cache")
         recursive = options.delete("recursive")
 
-        if ActionController::Base.perform_caching && cache
-          joined_javascript_name = (cache == true ? "all" : cache) + ".js"
-          joined_javascript_path = File.join(theme.path + '/javascripts', joined_javascript_name)
+        # this caching appears to be deprecated, commenting out
+        # if ActionController::Base.perform_caching && cache
+        #   joined_javascript_name = (cache == true ? "all" : cache) + ".js"
+        #   joined_javascript_path = File.join(theme.path + '/javascripts', joined_javascript_name)
 
-          paths = theme_compute_javascript_paths(theme, sources, recursive)
-          theme_write_asset_file_contents(theme, joined_javascript_path, paths) unless File.exists?(joined_javascript_path)
-          raw theme_javascript_src_tag(theme, joined_javascript_name, options)
-        else
+        #   paths = theme_compute_javascript_paths(theme, sources, recursive)
+        #   theme_write_asset_file_contents(theme, joined_javascript_path, paths) unless File.exists?(joined_javascript_path)
+        #   raw theme_javascript_src_tag(theme, joined_javascript_name, options)
+        # else
           sources = theme_expand_javascript_sources(theme, sources, recursive).collect do |source|
             theme_javascript_src_tag(theme, source, options)
           end.join("\n")
           raw sources
-        end
+        #end
       end
 
       def theme_stylesheet_path(theme, source)
@@ -54,19 +55,20 @@ module ActionView
         cache   = options.delete("cache")
         recursive = options.delete("recursive")
     
-        if ActionController::Base.perform_caching && cache
-          joined_stylesheet_name = (cache == true ? "all" : cache) + ".css"
-          joined_stylesheet_path = File.join(theme.path + '/stylesheets', joined_stylesheet_name)
+        # this caching appears to be deprecated, commenting out
+        # if ActionController::Base.perform_caching && cache
+        #   joined_stylesheet_name = (cache == true ? "all" : cache) + ".css"
+        #   joined_stylesheet_path = File.join(theme.path + '/stylesheets', joined_stylesheet_name)
           
-          paths = theme_compute_stylesheet_paths(theme, sources, recursive)
-          theme_write_asset_file_contents(theme, joined_stylesheet_path, paths) unless File.exists?(joined_stylesheet_path)
-          raw theme_stylesheet_tag(theme, joined_stylesheet_name, options)
-        else
+        #   paths = theme_compute_stylesheet_paths(theme, sources, recursive)
+        #   theme_write_asset_file_contents(theme, joined_stylesheet_path, paths) unless File.exists?(joined_stylesheet_path)
+        #   raw theme_stylesheet_tag(theme, joined_stylesheet_name, options)
+        # else
           sources = theme_expand_stylesheet_sources(theme, sources, recursive).collect do |source|
             theme_stylesheet_tag(theme, source, options)
           end.join("\n")
           raw sources
-        end
+        #end
       end
 
       def theme_image_path(theme, source)
