@@ -14,6 +14,14 @@ class CompassDriveAsset < ActiveRecord::Base
     end
   end
 
+  def category
+    self.category_classification.category unless self.category_classification.nil?
+  end
+
+  def categorize(category)
+    CategoryClassification.create(:classification => self, :category => category)
+  end
+
   def current_version
     self.compass_drive_asset_versions.ordered.last.version rescue 0
   end
@@ -65,6 +73,10 @@ class CompassDriveAsset < ActiveRecord::Base
   def root_path
     file_support = ErpTechSvcs::FileSupport::Base.new(:storage => Rails.application.config.erp_tech_svcs.file_storage)
     File.join(file_support.root, Rails.application.config.compass_drive.compass_drive_directory)
+  end
+
+  class << self
+
   end
 end
 

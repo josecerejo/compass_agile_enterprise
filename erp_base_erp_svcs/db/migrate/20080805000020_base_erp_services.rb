@@ -37,8 +37,8 @@ class BaseErpServices < ActiveRecord::Migration
     	  t.column  :role_type_id,  :integer
     	  t.timestamps
       end
-	  add_index :party_roles, :party_id
-	  add_index :party_roles, :role_type_id 
+      add_index :party_roles, :party_id
+      add_index :party_roles, :role_type_id
     end
     
     
@@ -73,13 +73,13 @@ class BaseErpServices < ActiveRecord::Migration
         t.column  	:name,                    :string  
         t.column  	:description,             :string
 
-		t.column    :internal_identifier, 	  :string
-		t.column    :external_identifier, 	  :string
-	    t.column    :external_id_source,      :string
+        t.column    :internal_identifier, 	  :string
+        t.column    :external_identifier, 	  :string
+        t.column    :external_id_source,      :string
         t.timestamps
       end
-	  add_index :relationship_types, :valid_from_role_type_id
-	  add_index :relationship_types, :valid_to_role_type_id
+      add_index :relationship_types, :valid_from_role_type_id
+      add_index :relationship_types, :valid_to_role_type_id
     end
     
     # Create party_relationships table
@@ -99,7 +99,7 @@ class BaseErpServices < ActiveRecord::Migration
 		    t.column    :external_id_source,    :string
       	t.timestamps
       end
-	  add_index :party_relationships, :status_type_id
+      add_index :party_relationships, :status_type_id
       add_index :party_relationships, :priority_type_id
       add_index :party_relationships, :relationship_type_id
     end
@@ -136,12 +136,12 @@ class BaseErpServices < ActiveRecord::Migration
 		    t.column  :total_years_work_experience,   :integer
 		    t.column  :comments,                      :string
 		    t.column  :encrypted_ssn,                 :string  	
-			t.column  :temp_ssn,                      :string 
-			t.column  :salt,                          :string
-			t.column  :ssn_last_four,                 :string 
+        t.column  :temp_ssn,                      :string
+        t.column  :salt,                          :string
+        t.column  :ssn_last_four,                 :string
 		    t.timestamps
       end
-	  add_index :individuals, :party_id
+      add_index :individuals, :party_id
     end
     
     # Create contacts table
@@ -156,8 +156,8 @@ class BaseErpServices < ActiveRecord::Migration
 
         t.timestamps
       end
-	  add_index :contacts, :party_id
-	  add_index :contacts, [:contact_mechanism_id, :contact_mechanism_type], :name => "besi_2"
+      add_index :contacts, :party_id
+      add_index :contacts, [:contact_mechanism_id, :contact_mechanism_type], :name => "besi_2"
     end
     
     # Create contact_types
@@ -178,7 +178,7 @@ class BaseErpServices < ActiveRecord::Migration
 
         t.timestamps
       end
-	  add_index :contact_types, :parent_id
+      add_index :contact_types, :parent_id
     end
     
     # Create contact_purposes
@@ -205,11 +205,11 @@ class BaseErpServices < ActiveRecord::Migration
     end
     
     unless table_exists?(:contact_purposes_contacts)
-        create_table :contact_purposes_contacts, {:id => false} do |t|
-          t.column :contact_id,         :integer
-          t.column :contact_purpose_id, :integer
-        end
-        add_index :contact_purposes_contacts, [:contact_id, :contact_purpose_id], :name => "contact_purposes_contacts_index"
+      create_table :contact_purposes_contacts, {:id => false} do |t|
+        t.column :contact_id,         :integer
+        t.column :contact_purpose_id, :integer
+      end
+      add_index :contact_purposes_contacts, [:contact_id, :contact_purpose_id], :name => "contact_purposes_contacts_index"
     end
     
     # Create postal_addresses (a contact_mechanism)
@@ -226,8 +226,8 @@ class BaseErpServices < ActiveRecord::Migration
 		    t.column    :geo_zone_id,       :integer
 		    t.timestamps
       end
-	  add_index :postal_addresses, :geo_country_id
-	  add_index :postal_addresses, :geo_zone_id
+      add_index :postal_addresses, :geo_country_id
+      add_index :postal_addresses, :geo_zone_id
     end
     
     # Create email_addresses (a contact_mechanism)
@@ -286,7 +286,7 @@ class BaseErpServices < ActiveRecord::Migration
         t.references  :currency 
         t.timestamps
       end
-	  add_index :money, :currency_id
+      add_index :money, :currency_id
     end
 
     unless table_exists?(:currencies)
@@ -303,17 +303,18 @@ class BaseErpServices < ActiveRecord::Migration
 		    t.datetime  :expiration_date
         t.timestamps
       end
-	  add_index :currencies, :internal_identifier
+      add_index :currencies, :internal_identifier
     end
 
     ## categories
     unless table_exists?(:categories)
       create_table :categories do |t|
-        t.string :description
-        t.string :external_identifier
+        t.string   :description
+        t.string   :external_identifier
         t.datetime :from_date
         t.datetime :to_date
-        t.string :internal_identifier
+        t.string   :internal_identifier
+        t.string   :domain
 
         # polymorphic assns
         t.integer :category_record_id
@@ -326,7 +327,8 @@ class BaseErpServices < ActiveRecord::Migration
 
         t.timestamps
       end
-	  add_index :categories, [:category_record_id, :category_record_type], :name => "category_polymorphic"
+      add_index :categories, [:category_record_id, :category_record_type], :name => "category_polymorphic"
+      add_index :categories, :domain, :name => "category_domain"
     end
 
     ## category_classifications
@@ -340,7 +342,7 @@ class BaseErpServices < ActiveRecord::Migration
 
         t.timestamps
       end
-	  add_index :category_classifications, [:classification_id, :classification_type], :name => "classification_polymorphic"
+      add_index :category_classifications, [:classification_id, :classification_type], :name => "classification_polymorphic"
     end
 
     ## descriptive_assets
@@ -378,7 +380,7 @@ class BaseErpServices < ActiveRecord::Migration
         t.column :external_id,  :integer
         t.column :created_at,   :datetime
       end
-	  add_index :geo_countries, :name
+      add_index :geo_countries, :name
       add_index :geo_countries, :iso_code_2
     end
 
@@ -389,7 +391,7 @@ class BaseErpServices < ActiveRecord::Migration
         t.column :zone_name,      :string
         t.column :created_at,     :datetime
       end
-	  add_index :geo_zones, :geo_country_id
+      add_index :geo_zones, :geo_country_id
       add_index :geo_zones, :zone_name
       add_index :geo_zones, :zone_code
     end

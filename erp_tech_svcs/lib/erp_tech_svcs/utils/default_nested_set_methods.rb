@@ -25,6 +25,7 @@ module ErpTechSvcs
           :leaf => self.leaf,
           :children => self.children.collect{|child| child.to_tree_hash(options)}
         })
+        options[:only] = options[:only] || []
         tree_hash = self.to_hash(options)
         tree_hash[:iconCls] = options[:icon_cls] if options[:icon_cls]
         tree_hash
