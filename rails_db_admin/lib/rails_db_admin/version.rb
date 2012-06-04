@@ -1,8 +1,8 @@
 module RailsDbAdmin
   module VERSION #:nodoc:
     MAJOR = 2
-    MINOR = 0
-    TINY  = 2
+    MINOR = 1
+    TINY  = 0
 
     STRING = [MAJOR, MINOR, TINY].compact.join('.')
   end

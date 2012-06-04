@@ -18,9 +18,9 @@ Gem::Specification.new do |s|
   s.files = Dir["{public,app,config,db,lib,tasks}/**/*"] + ["GPL-3-LICENSE", "Rakefile", "README.rdoc"]
   s.test_files = Dir["spec/**/*"]
 
-  s.add_dependency('dynamic_attributes','1.2.0')
+  s.add_dependency('dynamic_attributes','~> 1.2.0')
 
   #compass dependencies
-  s.add_dependency 'erp_app', '~> 3.0' 
-  s.add_development_dependency 'erp_dev_svcs', '~> 3.0'
+  s.add_dependency 'erp_app', '~> 3.1'
+  s.add_development_dependency 'erp_dev_svcs', '~> 3.1'
 end

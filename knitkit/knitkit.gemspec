@@ -19,22 +19,11 @@ Gem::Specification.new do |s|
   s.test_files = Dir["spec/**/*"]
 
   #compass dependencies
-  s.add_dependency 'erp_forms', "~> 2.0"
-  s.add_development_dependency 'erp_dev_svcs', "~> 3.0"
+  s.add_dependency 'erp_forms', "~> 2.1"
+  s.add_development_dependency 'erp_dev_svcs', "~> 3.1"
 
   s.add_dependency('routing-filter','0.3.1')
-  s.add_dependency('nokogiri','1.5.0')
-  s.add_dependency('rubyzip','0.9.4')
+  s.add_dependency('nokogiri','1.5.3')
+  s.add_dependency('rubyzip','0.9.8')
   s.add_dependency('permalink_fu','1.0.0')
-
-  #this is needed for acts-as-taggable-on it will try to install rails 3.2
-  s.add_dependency 'railties', "~> 3.2.0"
-  s.add_dependency 'actionmailer', "~> 3.2.0"
-  s.add_dependency 'actionpack', "~> 3.2.0"
-  s.add_dependency 'activerecord', "~> 3.2.0"
-  s.add_dependency 'activeresource', "~> 3.2.0"
-  s.add_dependency 'activesupport', "~> 3.2.0"
-  s.add_dependency 'rails', "~> 3.2.0"
-  s.add_dependency('acts-as-taggable-on','2.1.1')
-  #nasty I know
 end

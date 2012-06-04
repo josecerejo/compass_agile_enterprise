@@ -17,11 +17,11 @@ Gem::Specification.new do |s|
   s.files = Dir["{app,config,db,lib,tasks}/**/*"] + ["GPL-3-LICENSE", "Rakefile", "README.md"]
   s.test_files = Dir["spec/**/*"]
 
-  s.add_dependency "aasm", "2.3.1"
-  s.add_dependency "activemerchant", "1.20.4"
+  s.add_dependency "aasm", "3.0.6"
+  s.add_dependency "activemerchant", "1.23.0"
 
   #compass_ae dependencies
-  s.add_dependency "erp_orders", "~> 3.0"
+  s.add_dependency "erp_orders", "~> 3.1"
   s.add_dependency "prismpay"
-  s.add_development_dependency "erp_dev_svcs", "~> 3.0"
+  s.add_development_dependency "erp_dev_svcs", "~> 3.1"
 end
