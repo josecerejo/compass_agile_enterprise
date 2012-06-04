@@ -3,7 +3,7 @@ class AttributeValue < ActiveRecord::Base
   belongs_to :attribute_type
 
   validates_format_of :value, :with => /\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}/, :if => :is_date?
-  before_destroy :destroy_attribute_types_without_values
+  after_destroy :remove_unused_types
 
   def is_date?
     self.attribute_type.data_type == 'Date' ? true : false
@@ -34,8 +34,9 @@ class AttributeValue < ActiveRecord::Base
     end
   end
 
-  def destroy_attribute_types_without_values
-    self.attribute_type.destroy unless self.attribute_type.attribute_values.count > 1
+  def remove_unused_types
+    AttributeType.includes(:attribute_values).joins('LEFT OUTER JOIN attribute_values on attribute_values.attribute_type_id = attribute_types.id').where('attribute_values.id is null').each do |type|
+      type.destroy
+    end
   end
-  
 end

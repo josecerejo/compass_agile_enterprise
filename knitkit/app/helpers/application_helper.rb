@@ -1,4 +1,5 @@
 # Methods added to this helper will be available to all templates in the application.
+=begin
 module ApplicationHelper
   def theme_stylesheet_path(theme, source)
     theme = @controller.website.themes.find_by_theme_id(theme) unless theme.is_a?(Theme)
@@ -130,3 +131,4 @@ module ApplicationHelper
       end
     end
 end
+=end
