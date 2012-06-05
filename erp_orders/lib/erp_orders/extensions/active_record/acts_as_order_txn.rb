@@ -40,6 +40,7 @@ module ErpOrders
               :payment_gateway_txn_id,:payment_gateway_txn_id=,
               :Phone2,:Phone2=,
               :phone_number,:phone_number=,
+              :ship_to_phone2, :ship_to_phone2=,
               :Salutation,:Salutation=,
               :ship_to_company,:ship_to_company=,
               :ship_to_address_line_1,:ship_to_address_line_1=,
