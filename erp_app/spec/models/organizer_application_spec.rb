@@ -6,6 +6,6 @@ describe OrganizerApplication do
   end
 
   it "can be saved successfully" do
-    OrganizerApplication.create().should be_persisted
+    OrganizerApplication.create(:javascript_class_name => 'test', :internal_identifier => 'test').should be_persisted
   end
 end
