@@ -3,11 +3,11 @@ source "http://rubygems.org"
 gemspec
 
 #For Compass AE developemnt
-#gem 'erp_base_erp_svcs', :path => '../Compass-AE-Kernel/erp_base_erp_svcs'
-#gem 'erp_tech_svcs', :path => '../Compass-AE-Kernel/erp_tech_svcs'
-#gem 'erp_app', :path => '../Application-Stack---Suite/erp_app'
-#gem 'erp_forms', :path => '../Application-Stack---Suite/erp_forms'
+#gem 'erp_base_erp_svcs', :path => '../erp_base_erp_svcs'
+#gem 'erp_tech_svcs', :path => '../erp_tech_svcs'
+#gem 'erp_app', :path => '../erp_app'
+#gem 'erp_forms', :path => '../erp_forms'
 
 #group :development, :test do
-#  gem 'erp_dev_svcs', :path => '../Compass-AE-Kernel/erp_dev_svcs'
+#  gem 'erp_dev_svcs', :path => '../erp_dev_svcs'
 #end

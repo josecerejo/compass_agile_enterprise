@@ -1,4 +1,4 @@
 Rails.application.routes.draw do
 
-  mount Console::Engine => "/console"
+  mount CompassAeConsole::Engine => "/console"
 end
