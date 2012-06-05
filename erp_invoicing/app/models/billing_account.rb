@@ -1,8 +1,8 @@
 class BillingAccount < ActiveRecord::Base
   has_relational_dynamic_attributes
   acts_as_financial_txn_account
-  
 
+  belongs_to :calculate_balance_strategy_type
   has_many :invoices, :dependent => :destroy do
     def by_invoice_date
       order('invoice_date desc')
@@ -22,13 +22,21 @@ class BillingAccount < ActiveRecord::Base
   end
   has_one  :recurring_payment, :dependent => :destroy
 
+  def self.find_by_account_number(account_number)
+    self.includes(:financial_txn_account).where(:financial_txn_accounts => {:account_number => account_number.to_s}).first
+  end
+
   def has_recurring_payment_enabled?
     !self.recurring_payment.nil? and self.recurring_payment.enabled
   end
 
   def has_payments?(status)
     selected_payment_applications = self.get_payment_applications(status)
-    !(selected_payment_applications.nil? or selected_payment_applications.empty?) 
+    !(selected_payment_applications.nil? or selected_payment_applications.empty?)
+  end
+
+  def all_documents
+    (self.invoices.collect(&:document) | self.documents).flatten
   end
 
   def get_payment_applications(status=:all)
@@ -48,12 +56,27 @@ class BillingAccount < ActiveRecord::Base
     selected_payment_applications
   end
 
+  def calculate_balance
+    unless self.calculate_balance_strategy_type.nil?
+      case self.calculate_balance_strategy_type.internal_identifier
+        when 'invoices_and_payments'
+          (self.invoices.balance.amount - self.total_payments)
+        when 'payments'
+          (self.balance - self.total_payments)
+        else
+          self.balance
+      end
+    else
+      self.balance
+    end
+  end
+
   def has_outstanding_balance?
     (outstanding_balance > 0)
   end
 
   def outstanding_balance
-    (balance - total_pending_payments)
+    (calculate_balance - total_pending_payments)
   end
 
   def total_pending_payments
@@ -66,8 +89,8 @@ class BillingAccount < ActiveRecord::Base
 
   #payment due is determined by last invoice
   def payment_due
-    if self.calculate_balance and !self.invoices.empty?
-      self.invoices.by_invoice_date.last.payment_due
+    if !self.calculate_balance_strategy_type.nil? and self.calculate_balance_strategy_type.iid == 'invoices_and_payments' and !self.invoices.empty?
+      self.current_invoice.payment_due
     else
       self.financial_txn_account.payment_due.amount
     end
@@ -85,6 +108,23 @@ class BillingAccount < ActiveRecord::Base
       self.financial_txn_account.payment_due = Money.create(:amount => amount, :currency => currency)
     end
     self.financial_txn_account.payment_due.save
+  end
+
+  def balance
+    self.financial_txn_account.balance.amount
+  end
+
+  def balance=(amount, currency=Currency.usd)
+    if amount.is_a?(Array)
+      currency = amount.last
+      amount = amount.first
+    end
+    if self.financial_txn_account.balance
+      self.financial_txn_account.balance.amount = amount
+    else
+      self.financial_txn_account.balance = Money.create(:amount => amount, :currency => currency)
+    end
+    self.financial_txn_account.balance.save
   end
 
   def billing_date
@@ -117,28 +157,6 @@ class BillingAccount < ActiveRecord::Base
     end
   end
 
-  #override balance to use invoices is calculate_balance is set to true
-  def balance
-    if self.calculate_balance
-      self.invoices.balance
-    else
-      (self.financial_txn_account.balance.amount - self.total_payments)
-    end
-  end
-
-  def balance=(amount, currency=Currency.usd)
-    if amount.is_a?(Array)
-      currency = amount.last
-      amount = amount.first
-    end
-    if self.financial_txn_account.balance
-      self.financial_txn_account.balance.amount = amount
-    else
-      self.financial_txn_account.balance = Money.create(:amount => amount, :currency => currency)
-    end
-    self.financial_txn_account.balance.save
-  end
-
   def current_invoice
     self.invoices.by_invoice_date.last
   end
@@ -164,7 +182,7 @@ class BillingAccount < ActiveRecord::Base
 
     unless primary_party.billing_phone_number.nil? or !previous_cmm_evt.nil?
       message = SMS_NOTIFICATION_MESSAGE.gsub('payment_due',self.payment_due.to_s)
-      
+
 
       # get cmm event purpose type
       sms_purpose = CommEvtPurposeType.find_by_internal_identifier('sms_notification')
