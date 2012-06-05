@@ -36,7 +36,6 @@ class AddCapabilites < ActiveRecord::Migration
       create_table :capabilities_capable_models, :id => false do |t|
         t.references :capable_model
         t.references :capability
-        t.timestamps
       end
 
       add_index :capabilities_capable_models, :capable_model_id

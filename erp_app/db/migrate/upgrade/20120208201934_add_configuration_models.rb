@@ -74,8 +74,6 @@ class AddConfigurationModels < ActiveRecord::Migration
       create_table :configuration_item_types_configuration_options, {:id => false} do |t|
         t.references :configuration_item_type
         t.references :configuration_option
-
-        t.timestamps
       end
 
       add_index :configuration_item_types_configuration_options, :configuration_item_type_id, :name => 'conf_type_conf_opt_id_item_idx'
@@ -86,8 +84,6 @@ class AddConfigurationModels < ActiveRecord::Migration
       create_table :configuration_items_configuration_options, {:id => false} do |t|
         t.references :configuration_item
         t.references :configuration_option
-
-        t.timestamps
       end
 
       add_index :configuration_items_configuration_options, :configuration_item_id, :name => 'conf_item_conf_opt_id_item_idx'

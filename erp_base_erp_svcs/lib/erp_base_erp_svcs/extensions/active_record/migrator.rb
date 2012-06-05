@@ -11,8 +11,8 @@ ActiveRecord::Migrator.instance_eval do
     end
 
     dirs = Rails::Application::Railties.engines.map{|p| p.config.root.to_s}
-    files = Dir["{#{dirs.join(',')}}/db/migrate/*.rb"]
 
+    files = Dir["{#{dirs.join(',')}}/db/migrate/*.rb"]
     unless files.empty?
       FileUtils.mkdir_p target
       FileUtils.cp files, target

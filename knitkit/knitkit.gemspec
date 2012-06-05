@@ -26,4 +26,5 @@ Gem::Specification.new do |s|
   s.add_dependency('nokogiri','1.5.3')
   s.add_dependency('rubyzip','0.9.8')
   s.add_dependency('permalink_fu','1.0.0')
+  s.add_dependency('acts-as-taggable-on','2.3.1')
 end

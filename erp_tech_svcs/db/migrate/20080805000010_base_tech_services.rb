@@ -152,8 +152,6 @@ class BaseTechServices < ActiveRecord::Migration
       create_table :roles_secured_models, :id => false do |t|
         t.references :secured_model
         t.references :role
-
-        t.timestamps
       end
       add_index :roles_secured_models, :secured_model_id
       add_index :roles_secured_models, :role_id
@@ -230,7 +228,6 @@ class BaseTechServices < ActiveRecord::Migration
       create_table :capabilities_capable_models, :id => false do |t|
         t.references :capable_model
         t.references :capability
-        t.timestamps
       end
 
       add_index :capabilities_capable_models, :capable_model_id

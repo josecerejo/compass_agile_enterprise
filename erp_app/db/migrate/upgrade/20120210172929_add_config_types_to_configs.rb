@@ -4,8 +4,6 @@ class AddConfigTypesToConfigs < ActiveRecord::Migration
       create_table :configuration_item_types_configurations, {:id => false} do |t|
         t.references :configuration_item_type
         t.references :configuration
-
-        t.timestamps
       end
 
       add_index :configuration_item_types_configurations, :configuration_item_type_id, :name => 'conf_item_type_conf_opt_id_item_idx'

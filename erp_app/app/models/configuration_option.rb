@@ -1,7 +1,8 @@
 class ConfigurationOption < ActiveRecord::Base
   validates :internal_identifier, :uniqueness => {:scope => :id}
 
-  has_and_belongs_to_many :configuration_item_types
+  has_many :configuration_item_type_configuration_options
+  has_many :configuration_item_types, :through => :configuration_item_type_configuration_options
   has_and_belongs_to_many :configuration_items
 
   validates :value, :presence => {:message => 'Value can not be blank.'}
