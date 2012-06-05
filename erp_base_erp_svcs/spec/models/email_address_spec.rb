@@ -6,7 +6,7 @@ describe EmailAddress do
   end
 
   it "can be saved successfully" do
-    EmailAddress.create.should be_persisted
+    EmailAddress.create!(:email_address => 'test@test.com').should be_persisted
   end
   
 end
