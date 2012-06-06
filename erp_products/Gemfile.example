@@ -5,7 +5,7 @@ gemspec
 #For Compass AE developemnt
 # gem 'erp_base_erp_svcs', :path => '../erp_base_erp_svcs'
 # gem 'erp_tech_svcs', :path => '../erp_tech_svcs'
-# gem 'erp_products', :path => '../erp_products'
+# gem 'erp_orders', :path => '../erp_orders'
 # gem 'erp_txns_and_accts', :path => '../erp_txns_and_accts'
 # gem 'erp_agreements', :path => '../erp_agreements'
 # gem 'erp_app', :path => '../erp_app'
