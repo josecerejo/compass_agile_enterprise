@@ -50,7 +50,7 @@ module ErpTechSvcs
               :children => []
             }
             child_hash = add_children(child_hash, child) unless child.leaf?
-            parent_hash[:children] << child_hash 
+            parent_hash[:children] << child_hash unless child_hash[:downloadPath] == '/.'
           end
 
           parent_hash
@@ -104,13 +104,15 @@ module ErpTechSvcs
 
       def create_file(path, name, content)
         path = path.sub(%r{^/},'')
-        bucket.objects[File.join(path, name)].write(content)
+        full_filename = (path.blank? ? name : File.join(path, name))
+        bucket.objects[full_filename].write(content)
         clear_cache(path)
       end
 
       def create_folder(path, name)
         path = path.sub(%r{^/},'')
-        folder = File.join(path, name) + "/"
+        full_filename = (path.blank? ? name : File.join(path, name))
+        folder = full_filename + "/"
         bucket.objects[folder].write('')
         clear_cache(path)
       end
@@ -179,8 +181,8 @@ module ErpTechSvcs
         message = nil
 
         begin
-          is_directory = !bucket.objects[path].exists?
-          if options[:force] or bucket.as_tree(:prefix => path).children.count == 0
+          is_directory = !path.match(/\/$/).nil?
+          if options[:force] or bucket.as_tree(:prefix => path).children.count <= 1 # aws-sdk includes the folder itself as a child (like . is current dir), this needs revisited as <= 1 is scary
             bucket.objects.with_prefix(path).delete_all
             message = "File was deleted successfully"
             result = true
@@ -189,8 +191,8 @@ module ErpTechSvcs
             message = FOLDER_IS_NOT_EMPTY
           end
         rescue Exception => e
-          result = false
-          message = e
+         result = false
+         message = e
         end    
 
         return result, message, is_directory    
@@ -199,7 +201,7 @@ module ErpTechSvcs
       def exists?(path)
         begin
           path = path.sub(%r{^/},'')
-          !bucket.objects[path].nil?
+          return bucket.objects[path].exists?
         rescue AWS::S3::Errors::NoSuchKey
           return false
         end
@@ -212,11 +214,11 @@ module ErpTechSvcs
         path = path.sub(%r{^/},'')
         begin
           object = bucket.objects[path]
+          contents = object.read 
         rescue AWS::S3::Errors::NoSuchKey => error
+          contents = ''
           message = FILE_DOES_NOT_EXIST
         end
-
-        contents = object.read if message.nil?
 
         return contents, message
       end
