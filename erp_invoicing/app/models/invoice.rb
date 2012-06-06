@@ -4,6 +4,8 @@ class Invoice < ActiveRecord::Base
   belongs_to  :billing_account
   belongs_to	:invoice_type
   belongs_to  :invoice_payment_strategy_type
+  belongs_to  :balance, :class_name => "Money", :foreign_key => 'balance_id', :dependent => :destroy
+  belongs_to  :calculate_balance_strategy_type
   has_many    :invoice_payment_term_sets, :dependent => :destroy
   has_many    :payment_applications, :as => :payment_applied_to, :dependent => :destroy do
     def successful
@@ -52,8 +54,20 @@ class Invoice < ActiveRecord::Base
     selected_payment_applications
   end
 
-  def balance
-    (self.payment_due - self.total_payments)
+  def calculate_balance
+    unless self.calculate_balance_strategy_type.nil?
+      case self.calculate_balance_strategy_type.internal_identifier
+        when 'invoice_items_and_payments'
+          (self.items.all.sum(&:total_amount) - self.total_payments)
+        when 'payments'
+          (self.balance - self.total_payments)
+        else
+          self.balance
+      end
+    else
+      self.balance
+    end
+
   end
 
   def payment_due

@@ -40,11 +40,14 @@ module ErpOrders
               :payment_gateway_txn_id,:payment_gateway_txn_id=,
               :Phone2,:Phone2=,
               :phone_number,:phone_number=,
+              :ship_to_phone2, :ship_to_phone2=,
               :Salutation,:Salutation=,
+              :ship_to_company,:ship_to_company=,
               :ship_to_address_line_1,:ship_to_address_line_1=,
               :ship_to_city,:ship_to_city=,
               :ship_to_country,:ship_to_country=,
               :ship_to_country_name,:ship_to_country_name=,
+              :ship_to_salutation,:ship_to_salutation=,
               :ship_to_first_name,:ship_to_first_name=,
               :ship_to_last_name,:ship_to_last_name=,
               :ship_to_postal_code,:ship_to_postal_code=,
@@ -73,6 +76,8 @@ module ErpOrders
               :find_party_by_role,
               :txn_type,:txn_type=,
               :txn_type_iid,:txn_type_iid=,:create_dependent_txns,
+              :biz_txn_type_id,:biz_txn_type_id=,
+              :external_id_source,:external_id_source=,
               :account,:account=].each { |m| delegate m, :to => :order_txn }
     		  end
     	  end
