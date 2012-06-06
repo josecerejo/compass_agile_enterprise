@@ -12,7 +12,7 @@ describe Knitkit::ErpApp::Desktop::WebsiteSectionController do
   describe "POST new" do
 
     it "should create a new website section" do
-      post :section, {:use_route => :knitkit,
+      post :new, {:use_route => :knitkit,
                      :action => "new",
                      :website_id => @website.id,
                      :title => "Some New Title"}
@@ -22,7 +22,7 @@ describe Knitkit::ErpApp::Desktop::WebsiteSectionController do
     end
     
     it "title can not be 'blog' if section is a blog" do
-      post :section, {:use_route => :knitkit,
+      post :new, {:use_route => :knitkit,
                      :action => "new",
                      :website_id => @website.id,
                      :title => "Blog", 
@@ -35,7 +35,7 @@ describe Knitkit::ErpApp::Desktop::WebsiteSectionController do
     it "can be a child of another section" do
       @website_section = Factory.create(:website_section)
       @website.website_sections << @website_section
-      post :section, {:use_route => :knitkit,
+      post :new, {:use_route => :knitkit,
                      :action => "new",
                      :website_id => @website.id,
                      :title => "Some New Title",
@@ -48,7 +48,7 @@ describe Knitkit::ErpApp::Desktop::WebsiteSectionController do
 
     
     it "should fail to save if no title is given" do
-      post :section, {:use_route => :knitkit,
+      post :new, {:use_route => :knitkit,
                      :action => "new",
                      :website_id => @website.id}
 
@@ -64,7 +64,7 @@ describe Knitkit::ErpApp::Desktop::WebsiteSectionController do
     end
 
     it "should delete the given section" do
-      post :section, {:use_route => :knitkit,
+      post :delete, {:use_route => :knitkit,
                      :action => "delete",
                      :id => @website_section.id}
       parsed_res = JSON.parse(response.body)
@@ -84,7 +84,7 @@ describe Knitkit::ErpApp::Desktop::WebsiteSectionController do
       WebsiteSection.should_receive(:find).and_return(@website_section_double)
       @website_section_double.should_receive(:add_role)
 
-      post :section, {:use_route => :knitkit,
+      post :update_security, {:use_route => :knitkit,
                      :action => "update_security",
                      :id => @website_section.id,
                      :site_id => @website.id,
@@ -96,7 +96,7 @@ describe Knitkit::ErpApp::Desktop::WebsiteSectionController do
       WebsiteSection.should_receive(:find).and_return(@website_section_double)
       @website_section_double.should_receive(:remove_role)
       
-      post :section, {:use_route => :knitkit,
+      post :update_security, {:use_route => :knitkit,
                      :action => "update_security",
                      :id => @website_section.id,
                      :site_id => @website.id,
@@ -111,7 +111,7 @@ describe Knitkit::ErpApp::Desktop::WebsiteSectionController do
     end
 
     it "should save" do
-      post :section, {:use_route => :knitkit,
+      post :update, {:use_route => :knitkit,
                      :action => "update",
                      :id => @website_section.id,
                      :in_menu => "yes",
@@ -123,7 +123,7 @@ describe Knitkit::ErpApp::Desktop::WebsiteSectionController do
     end
 
     it "should return false if website_section.save returns false" do
-      post :section, {:use_route => :knitkit,
+      post :update, {:use_route => :knitkit,
                      :action => "update",
                      :id => @website_section.id,
                      :in_menu => "yes",
@@ -143,7 +143,7 @@ describe Knitkit::ErpApp::Desktop::WebsiteSectionController do
       WebsiteSection.should_receive(:find).and_return(@website_section_double)
       @website_section_double.should_receive(:create_layout)
 
-      post :section, {:use_route => :knitkit,
+      post :add_layout, {:use_route => :knitkit,
                      :action => "add_layout",
                      :id => @website_section.id}
     end
@@ -157,7 +157,7 @@ describe Knitkit::ErpApp::Desktop::WebsiteSectionController do
       WebsiteSection.should_receive(:find).and_return(@website_section_double)
       @website_section_double.should_receive(:layout)
 
-      get :section, {:use_route => :knitkit,
+      get :get_layout, {:use_route => :knitkit,
                     :action => "get_layout",
                     :id => @website_section.id}
     end
@@ -170,7 +170,7 @@ describe Knitkit::ErpApp::Desktop::WebsiteSectionController do
     end
 
     it "should save layout" do
-      post :section, {:use_route => :knitkit,
+      post :save_layout, {:use_route => :knitkit,
                      :action => "save_layout",
                      :id => @website_section.id,
                      :content => "some text"}
@@ -194,7 +194,7 @@ describe Knitkit::ErpApp::Desktop::WebsiteSectionController do
       @article_2 = Factory.create(:article, :internal_identifier => "article_2", :created_by_id => 1)
       @website_section_2.contents << @article_2
 
-      get :section, {:use_route => :knitkit,
+      get :available_articles, {:use_route => :knitkit,
                      :action => "available_articles",
                      :section_id => @website_section.id}
 
@@ -210,7 +210,7 @@ describe Knitkit::ErpApp::Desktop::WebsiteSectionController do
       @website_section = Factory.create(:website_section, :title => "some_title")
       @website.website_sections << @website_section
 
-      get :section, {:use_route => :knitkit,
+      get :existing_sections, {:use_route => :knitkit,
                      :action => "existing_sections",
                      :website_id => @website.id}
 
