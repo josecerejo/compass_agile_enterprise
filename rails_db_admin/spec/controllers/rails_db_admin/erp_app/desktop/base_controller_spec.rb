@@ -16,9 +16,8 @@ describe RailsDbAdmin::ErpApp::Desktop::BaseController do
 
     it "should return success:true" do
 
-      post :base, {:use_route => :rails_db_admin,
-                   :action => "setup_table_grid",
-                   :table =>  'role_types'}
+      post :setup_table_grid, {:use_route => :rails_db_admin,
+                               :table =>  'role_types'}
 
       parsed_body = JSON.parse(response.body)
       parsed_body["success"].should eq(true)
@@ -26,9 +25,8 @@ describe RailsDbAdmin::ErpApp::Desktop::BaseController do
 
     it "should return model, columns, and fields" do
 
-      post :base, {:use_route => :rails_db_admin,
-                   :action => "setup_table_grid",
-                   :table =>  'role_types'}
+      post :setup_table_grid, {:use_route => :rails_db_admin,
+                               :table =>  'role_types'}
 
       parsed_body = JSON.parse(response.body)
       parsed_body["model"].should eq("role_types")
@@ -38,9 +36,8 @@ describe RailsDbAdmin::ErpApp::Desktop::BaseController do
 
     it "should return true even if there is not an 'id' column on the table in question" do
 
-      post :base, {:use_route => :rails_db_admin,
-                   :action => "setup_table_grid",
-                   :table =>  'preference_options_preference_types'}
+      post :setup_table_grid, {:use_route => :rails_db_admin,
+                               :table =>  'preference_options_preference_types'}
 
       parsed_body = JSON.parse(response.body)
       parsed_body["success"].should eq(true)
@@ -49,9 +46,8 @@ describe RailsDbAdmin::ErpApp::Desktop::BaseController do
     it "should return model, columns, and fields even if there is not an 'id' column on a table 
         and should have a 'fake_id' column in the fields and columns array" do
 
-      post :base, {:use_route => :rails_db_admin,
-                   :action => "setup_table_grid",
-                   :table =>  'preference_options_preference_types'}
+      post :setup_table_grid, {:use_route => :rails_db_admin,
+                               :table =>  'preference_options_preference_types'}
 
       parsed_body = JSON.parse(response.body)
 
@@ -73,9 +69,8 @@ describe RailsDbAdmin::ErpApp::Desktop::BaseController do
 
     it "should return a value called id_property that equals 'fake_id'" do
 
-      post :base, {:use_route => :rails_db_admin,
-                   :action => "setup_table_grid",
-                   :table =>  'preference_options_preference_types'}
+      post :setup_table_grid, {:use_route => :rails_db_admin,
+                               :table =>  'preference_options_preference_types'}
 
       parsed_body = JSON.parse(response.body)
       parsed_body["id_property"].should eq("fake_id")
@@ -83,9 +78,8 @@ describe RailsDbAdmin::ErpApp::Desktop::BaseController do
 
     it "should return a value called id_property that equals 'id'" do
 
-      post :base, {:use_route => :rails_db_admin,
-                   :action => "setup_table_grid",
-                   :table =>  'role_types'}
+      post :setup_table_grid, {:use_route => :rails_db_admin,
+                               :table =>  'role_types'}
 
       parsed_body = JSON.parse(response.body)
       parsed_body["id_property"].should eq("id")
@@ -96,9 +90,8 @@ describe RailsDbAdmin::ErpApp::Desktop::BaseController do
 
     it "should return JSON to display in an ExtJS data grid for Rails tables with an Id column" do
 
-      get :base, {:use_route => :rails_db_admin,
-                  :action => "table_data",
-                  :table => "role_types"}
+      get :table_data, {:use_route => :rails_db_admin,
+                        :table => "role_types"}
 
       parsed_body = JSON.parse(response.body)
       parsed_body["total"].should eq(2)
@@ -106,10 +99,9 @@ describe RailsDbAdmin::ErpApp::Desktop::BaseController do
 
     it "should return 1 row because start is increased by 1, but total should remain 2" do
 
-      get :base, {:use_route => :rails_db_admin,
-                  :action => "table_data",
-                  :table => "role_types",
-                  :start => "1"}
+      get :table_data, {:use_route => :rails_db_admin,
+                        :table => "role_types",
+                        :start => "1"}
 
       parsed_body = JSON.parse(response.body)
       parsed_body["total"].should eq(2)
@@ -118,10 +110,9 @@ describe RailsDbAdmin::ErpApp::Desktop::BaseController do
 
     it "should return 1 row because limit is set to 1, but total should remain 2" do
 
-      get :base, {:use_route => :rails_db_admin,
-                  :action => "table_data",
-                  :table => "role_types",
-                  :limit => "1"}
+      get :table_data, {:use_route => :rails_db_admin,
+                        :table => "role_types",
+                        :limit => "1"}
 
       parsed_body = JSON.parse(response.body)
       parsed_body["total"].should eq(2)
@@ -131,9 +122,8 @@ describe RailsDbAdmin::ErpApp::Desktop::BaseController do
     #TODO: Need to setup Factory Girl to dummy up data for this test
     it "should return successfully with a fake_id column because there is no id column defined in the DB" do
 
-      get :base, {:use_route => :rails_db_admin,
-                  :action => "table_data",
-                  :table => 'preference_options_preference_types'}
+      get :table_data, {:use_route => :rails_db_admin,
+                        :table => 'preference_options_preference_types'}
 
       parsed_body = JSON.parse(response.body)
       parsed_body["total"].should eq(13)
@@ -191,10 +181,9 @@ describe RailsDbAdmin::ErpApp::Desktop::BaseController do
       @json_data_builder.should_receive(:get_row_data).with(
         @table, @pkey).and_return(@role_types_data)
 
-      put :base, {:use_route => :rails_db_admin,
-                  :action => "table_data",
-                  :table => @table,
-                  :data => [@role_types_data, @role_types_data] }
+      put :table_data, {:use_route => :rails_db_admin,
+                        :table => @table,
+                        :data => [@role_types_data, @role_types_data] }
 
       parsed_body = JSON.parse(response.body)
       parsed_body["success"].should eq(true)
@@ -219,10 +208,9 @@ describe RailsDbAdmin::ErpApp::Desktop::BaseController do
         @table, @pref_opt_types_data).and_return(
         @pref_opt_types_data)
 
-      put :base, {:use_route => :rails_db_admin,
-                  :action => "table_data",
-                  :table => @table,
-                  :data => [@pref_opt_types_data, @pref_opt_types_data]}
+      put :table_data, {:use_route => :rails_db_admin,
+                        :table => @table,
+                        :data => [@pref_opt_types_data, @pref_opt_types_data]}
 
       parsed_body = JSON.parse(response.body)
       parsed_body["success"].should eq(true)
@@ -276,10 +264,9 @@ describe RailsDbAdmin::ErpApp::Desktop::BaseController do
       @json_data_builder.should_receive(:get_row_data).with(@table,["id",3]).
         and_return(@role_types_data)
 
-      post :base, {:use_route => :rails_db_admin,
-                  :action => "table_data",
-                  :table => @table,
-                  :data => @role_types_data}
+      post :table_data, {:use_route => :rails_db_admin,
+                         :table => @table,
+                         :data => @role_types_data}
 
       parsed_body = JSON.parse(response.body)
       parsed_body["success"].should eq(true)
@@ -320,10 +307,9 @@ describe RailsDbAdmin::ErpApp::Desktop::BaseController do
       @json_data_builder.should_receive(:get_row_data).with(@table,["id",3]).
         and_return(@role_types_data)
 
-      post :base, {:use_route => :rails_db_admin,
-                  :action => "table_data",
-                  :table => @table,
-                  :data => @role_types_data}
+      post :table_data, {:use_route => :rails_db_admin,
+                         :table => @table,
+                         :data => @role_types_data}
 
       parsed_body = JSON.parse(response.body)
       parsed_body["success"].should eq(true)
@@ -357,10 +343,9 @@ describe RailsDbAdmin::ErpApp::Desktop::BaseController do
         @table, @mod_data).and_return(
         @pref_opt_types_data)
 
-      post :base, {:use_route => :rails_db_admin,
-                  :action => "table_data",
-                  :table => @table,
-                  :data => @pref_opt_types_data}
+      post :table_data, {:use_route => :rails_db_admin,
+                         :table => @table,
+                         :data => @pref_opt_types_data}
 
       parsed_body = JSON.parse(response.body)
       parsed_body["success"].should eq(true)
@@ -394,10 +379,9 @@ describe RailsDbAdmin::ErpApp::Desktop::BaseController do
         @table, @mod_data).and_return(
         @pref_opt_types_data)
 
-      post :base, {:use_route => :rails_db_admin,
-                  :action => "table_data",
-                  :table => @table,
-                  :data => @pref_opt_types_data}
+      post :table_data, {:use_route => :rails_db_admin,
+                         :table => @table,
+                         :data => @pref_opt_types_data}
 
       parsed_body = JSON.parse(response.body)
       parsed_body["success"].should eq(true)
@@ -424,10 +408,9 @@ describe RailsDbAdmin::ErpApp::Desktop::BaseController do
       @table_support.should_receive(:delete_row).with(
         @table, id)
 
-      delete :base, {:use_route => :rails_db_admin,
-                     :action => "table_data",
-                     :table => @table,
-                     :id => "2"}
+      delete :table_data, {:use_route => :rails_db_admin,
+                           :table => @table,
+                           :id => "2"}
     end
 
     it "should fail because we don't send an id parameter" do
@@ -435,10 +418,9 @@ describe RailsDbAdmin::ErpApp::Desktop::BaseController do
       id = "2"
       @table_support.should_receive(:primary_key?).and_return(false)
 
-      delete :base, {:use_route => :rails_db_admin,
-                     :action => "table_data",
-                     :table => "role_types",
-                     :id => id}
+      delete :table_data, {:use_route => :rails_db_admin,
+                           :table => "role_types",
+                           :id => id}
 
       parsed_body = JSON.parse(response.body)
       parsed_body["success"].should eq(false)
@@ -451,9 +433,8 @@ describe RailsDbAdmin::ErpApp::Desktop::BaseController do
 
     it "should return data for a tree grid of tables" do
 
-      get :base, {:use_route => :rails_db_admin,
-                  :action => "tables",
-                  :node => "root"}
+      get :tables, {:use_route => :rails_db_admin,
+                    :node => "root"}
 
       parsed_body = JSON.parse(response.body)
       parsed_body[0].should eq({"isTable"=>true, "text"=>"app_containers",
@@ -463,9 +444,8 @@ describe RailsDbAdmin::ErpApp::Desktop::BaseController do
 
     it "should create nested tree of column names if a node id is passed in" do
 
-      get :base, {:use_route => :rails_db_admin,
-                  :action => "tables",
-                  :node => "app_containers"}
+      get :tables, {:use_route => :rails_db_admin,
+                    :node => "app_containers"}
 
       parsed_body = JSON.parse(response.body)
       parsed_body[0].should eq({"text"=>"id : integer",
