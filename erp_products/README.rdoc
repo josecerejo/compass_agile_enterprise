@@ -1,2 +1,5 @@
 = ErpProducts
 
+The Products Engine implements ProductType and ProductInstance, as well as a number of classes
+to support product catalog-type functions and search/shopping scenarios.
+
