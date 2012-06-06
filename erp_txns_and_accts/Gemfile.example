@@ -2,4 +2,16 @@ source "http://rubygems.org"
 
 gemspec
 
-gem "erp_commerce"
+#For Compass AE developemnt
+#gem 'erp_base_erp_svcs', :path => '../erp_base_erp_svcs'
+#gem 'erp_tech_svcs', :path => '../erp_tech_svcs'
+#gem 'erp_agreements', :path => '../erp_agreements'
+#gem 'erp_app', :path => '../erp_app'
+#gem 'erp_commerce', :path => '../erp_commerce'
+#gem 'prismpay', :path => '/var/www/PrismPay-Gateway'
+#gem 'erp_orders', :path => '../erp_orders'
+#gem 'erp_products', :path => '../erp_products'
+
+#group :development, :test do
+#  gem 'erp_dev_svcs', :path => '../erp_dev_svcs'
+#end
