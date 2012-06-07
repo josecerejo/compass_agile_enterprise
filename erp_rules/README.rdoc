@@ -1,2 +1,6 @@
 = ErpRules
 
+The Rules Module of CompassAE includes classes which act as helpers in externalizing the execution
+context of CompassAE value objects for processing by a rules engine. It also includes an
+integration with Ruleby, which is a pure ruby implementation of the forward chaining Rete algorithm.
+
