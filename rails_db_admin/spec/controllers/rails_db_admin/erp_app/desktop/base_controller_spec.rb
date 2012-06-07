@@ -58,7 +58,7 @@ describe RailsDbAdmin::ErpApp::Desktop::BaseController do
           "dataIndex"=>"preference_type_id",
           "width"=>150,
           "editor"=>{"xtype"=>"textfield"}})
-      parsed_body["columns"][4].should include(
+      parsed_body["columns"][2].should include(
           {"header"=>"fake_id", "type"=>"number", "dataIndex"=>"fake_id", "hidden"=>true}
       )
       parsed_body["fields"].should include(

@@ -3,8 +3,8 @@ require "spec_helper"
 describe RailsDbAdmin::Extjs::JsonColumnBuilder do
 
   before(:each) do
-    @connection_class = RailsDbAdmin::ConnectionHandler.create_connection_class("spec")
-    @connection = @connection_class.connection
+    @connection_class = RailsDbAdmin::ConnectionHandler.create_connection_class ''
+    @connection = ActiveRecord::Base.connection
   end
 
   describe "build_grid_columns" do
@@ -197,7 +197,6 @@ describe RailsDbAdmin::Extjs::JsonColumnBuilder do
         @connection.columns("role_types"),true)
 
       result.should eq(expected_result)
-
     end
 
   end

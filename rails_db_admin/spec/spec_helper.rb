@@ -27,6 +27,10 @@ Spork.prefork do
   `rake db:drop`
   Dir.chdir ENGINE_RAILS_ROOT
 
+  Dir.chdir DUMMY_APP_ROOT
+  `rake db:create`
+  Dir.chdir ENGINE_RAILS_ROOT
+
   #We have to execute the migrations from dummy app directory
   Dir.chdir DUMMY_APP_ROOT
   `rake db:migrate`
