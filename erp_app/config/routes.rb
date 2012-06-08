@@ -68,6 +68,9 @@ ErpApp::Engine.routes.draw do
   match '/desktop/configuration_management/types/:action' => "desktop/configuration_management/types"
   match '/desktop/configuration_management/options/:action' => "desktop/configuration_management/options"
 
+  #audit_log_view
+  match '/desktop/audit_log_viewer/:action.:format' => 'desktop/audit_log_viewer/base'
+
   #widget proxy
   match '/widgets/:widget_name/:widget_action/:uuid(/:id)' => "widget_proxy#index", :as => :widget
 
