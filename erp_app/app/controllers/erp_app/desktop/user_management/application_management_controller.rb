@@ -37,8 +37,10 @@ module ErpApp
           app_container.applications = []
           app_container.save
 
-          app_ids.each do |app_id|
-            app_container.applications << Application.find(app_id)
+          unless app_ids.blank?
+            app_ids.each do |app_id|
+              app_container.applications << Application.find(app_id)
+            end
           end
           app_container.save
 				
