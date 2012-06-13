@@ -22,7 +22,6 @@ module ErpBaseErpSvcs
     engine = self
     config.to_prepare do
       ErpBaseErpSvcs.register_compass_ae_engine(engine)
-      ErpBaseErpSvcs.load_root_compass_ae_framework_extensions
     end
     
   end
