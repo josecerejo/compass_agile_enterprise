@@ -1,6 +1,6 @@
 class CreditCardAccount < ActiveRecord::Base
   acts_as_biz_txn_account
-  
+
   belongs_to :credit_card_account_purpose
   has_one    :credit_card_account_party_role, :dependent => :destroy
   has_one    :credit_card, :through => :credit_card_account_party_role
@@ -31,7 +31,7 @@ class CreditCardAccount < ActiveRecord::Base
   #credit_card_to_use
   def authorize(financial_txn, cvv, gateway_wrapper, gateway_options={}, credit_card_to_use=nil)
     credit_card_to_use = self.credit_card unless credit_card_to_use
-    
+
     gateway_options[:debug] = true
     result = gateway_wrapper.authorize(credit_card_to_use, financial_txn.money.amount, cvv, gateway_options)
 
@@ -55,7 +55,7 @@ class CreditCardAccount < ActiveRecord::Base
   #credit_card_to_use
   def purchase(financial_txn, cvv, gateway_wrapper, gateway_options={}, credit_card_to_use=nil)
     credit_card_to_use = self.credit_card unless credit_card_to_use
-    
+
     gateway_options[:debug] = true
     result = gateway_wrapper.purchase(credit_card_to_use, financial_txn.money.amount, cvv, gateway_options)
 
@@ -85,11 +85,12 @@ class CreditCardAccount < ActiveRecord::Base
     #only capture this payment if it was authorized
     if !payment.nil? && payment.current_state.to_sym == :authorized
       gateway_options[:debug] = true
-      result = gateway_wrapper.capture(credit_card_to_use, payment, cvv,gateway_options)
+      gateway_options[:amount] = financial_txn.money.amount
+      result = gateway_wrapper.capture(credit_card_to_use, payment, cvv, gateway_options)
     end
     result
   end
-  
+
   #params
   #financial_txn
   #cvv
@@ -106,7 +107,7 @@ class CreditCardAccount < ActiveRecord::Base
     #only reverse this payment if it was authorized
     if !payment.nil? && payment.current_state.to_sym == :authorized
       gateway_options[:debug] = true
-
+      gateway_options[:amount] = financial_txn.money.amount
       result = gateway_wrapper.full_reverse_of_authorization(credit_card_to_use, payment, cvv, gateway_options)
     end
     result
@@ -115,9 +116,32 @@ class CreditCardAccount < ActiveRecord::Base
   def void
     # implement a void transaction of a transaction
   end
-  
+
   def refund
     # implement a refund on a card
+  end
+
+  #params
+  #financial_txn
+  #gateway_wrapper
+  #
+  #Optional
+  #money_amount: amount to refund may be less than amount originally charged, so money_amount param is optional
+  #gateway_options
+  #credit_card_to_use
+  def void_or_return(financial_txn, gateway_wrapper, money_amount = nil, gateway_options={}, credit_card_to_use=nil)
+    credit_card_to_use = self.credit_card unless credit_card_to_use
+    result = {:success => true}
+
+    gateway_options[:debug] = true
+    if money_amount == nil
+      money_amount = financial_txn.money.amount
+    end
+    payment = Payment.where("reference_number = ? and financial_txn_id = ?",gateway_options[:ReferenceNumber], financial_txn.id).order('created_at desc').first
+    gateway_options[:debug] = true
+    result = gateway_wrapper.void_or_return(credit_card_to_use, payment, money_amount, gateway_options)
+
+    result
   end
 
 end
