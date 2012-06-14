@@ -298,7 +298,8 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.WestRegion",{
             }
           }
           else if(record.data['isForm']){
-            self.getDynamicForm(record);
+            //self.getDynamicForm(record);
+            Ext.Msg.alert('Info', 'Form Builder not yet implemented');
           }
         },
         'itemcontextmenu':function(view, record, htmlItem, index, e){

@@ -23,6 +23,7 @@ class ErpForms::ErpApp::Desktop::DynamicForms::DataController < ErpForms::ErpApp
       definition << DynamicFormField.datefield({ :fieldLabel => "Created At", :name => 'created_at' })
       definition << DynamicFormField.datefield({ :fieldLabel => "Updated At", :name => 'updated_at' })
       definition << DynamicFormField.hidden({ :fieldLabel => "ID", :name => 'id' })
+      definition << DynamicFormField.hidden({ :fieldLabel => "Form ID", :name => 'form_id' })
 
       render :inline => "{
         \"success\": true,
@@ -43,12 +44,12 @@ class ErpForms::ErpApp::Desktop::DynamicForms::DataController < ErpForms::ErpApp
       wi = []
       dynamic_records.each do |i|
         wihash = i.data.dynamic_attributes_without_prefix
-  #      puts i.data.created_by.inspect
         wihash[:id] = i.id
         wihash[:created_username] = i.data.created_by.nil? ? '' : i.data.created_by.username
         wihash[:updated_username] = i.data.updated_by.nil? ? '' : i.data.updated_by.username
         wihash[:created_at] = i.data.created_at
         wihash[:updated_at] = i.data.updated_at
+        wihash[:form_id] = i.data.created_with_form_id
         wi << wihash
       end
 
