@@ -5,6 +5,7 @@ class AuditLog < ActiveRecord::Base
   validates :audit_log_type, :presence => {:message => 'Audit Log Type cannot be blank'}
 
   belongs_to :audit_log_type
+  belongs_to :party
   has_many   :audit_log_items
   belongs_to :event_record, :polymorphic => true
 

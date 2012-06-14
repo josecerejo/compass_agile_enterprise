@@ -1,2 +1,6 @@
 = ErpInventory
 
+The Inventory Engine in CompassAE implements a set of models for storing information about the
+availability and location of ProductTypes and optionally Product Instances. It is also the root
+for yield and revenue management requirements to segment and allocate inventory for different
+purposes.

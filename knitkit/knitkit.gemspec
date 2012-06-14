@@ -23,7 +23,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'erp_dev_svcs', "~> 3.0"
 
   s.add_dependency('routing-filter','0.2.4')
-  s.add_dependency('nokogiri',"~> 1.5")
+  s.add_dependency('nokogiri','~> 1.5.0')
   s.add_dependency('rubyzip','0.9.4')
   s.add_dependency('permalink_fu','1.0.0')
 
