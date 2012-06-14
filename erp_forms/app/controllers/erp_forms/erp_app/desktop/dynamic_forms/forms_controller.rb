@@ -61,7 +61,7 @@ class ErpForms::ErpApp::Desktop::DynamicForms::FormsController < ErpForms::ErpAp
 
     form = dform.to_extjs_formpanel(
                 { :url => "/erp_forms/erp_app/desktop/dynamic_forms/data/#{params[:form_action]}",
-                  :record_id => params[:id]
+                  :record_id => params[:record_id]
                 })
 
     render :json => form

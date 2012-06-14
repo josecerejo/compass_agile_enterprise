@@ -9,7 +9,8 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.DynamicDataGridPane
             url: '/erp_forms/erp_app/desktop/dynamic_forms/forms/get',
             method: 'POST',
             params:{
-                id:rec.get("id"),
+                id:rec.get("form_id"),
+                record_id:rec.get("id"),
                 model_name:model_name,
                 form_action: 'update'
             },
