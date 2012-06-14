@@ -171,7 +171,7 @@ Compass.ErpApp.Desktop.Applications.Knitkit.FileAssetsPanel = function(module) {
     },
     {
       nodeType:'leaf',
-      text:'Insert link at cursor (inline)',
+      text:'Insert link at cursor',
       iconCls:'icon-add',
       listeners:{
         scope:self,
@@ -180,6 +180,22 @@ Compass.ErpApp.Desktop.Applications.Knitkit.FileAssetsPanel = function(module) {
           Ext.MessageBox.prompt('Display Name', 'Please enter display name:', function(btn, text){
             if(btn == 'ok'){
               self.module.centerRegion.insertHtmlIntoActiveCkEditor('<a href="/download/'+node.data.text+'?path='+node.data.downloadPath+'">'+text+'</a>');
+            }
+          });
+        }
+      }      
+    },
+    {
+      nodeType:'leaf',
+      text:'Insert link at cursor (inline)',
+      iconCls:'icon-add',
+      listeners:{
+        scope:self,
+        'click':function(){
+          var node = this.websiteFileAssetsTreePanel.selectedNode;
+          Ext.MessageBox.prompt('Display Name', 'Please enter display name:', function(btn, text){
+            if(btn == 'ok'){
+              self.module.centerRegion.insertHtmlIntoActiveCkEditor('<a href="/download/'+node.data.text+'?path='+node.data.downloadPath+'&disposition=inline">'+text+'</a>');
             }
           });
         }
