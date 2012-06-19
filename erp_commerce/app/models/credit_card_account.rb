@@ -85,7 +85,6 @@ class CreditCardAccount < ActiveRecord::Base
     #only capture this payment if it was authorized
     if !payment.nil? && payment.current_state.to_sym == :authorized
       gateway_options[:debug] = true
-      gateway_options[:amount] = financial_txn.money.amount rescue nil
       result = gateway_wrapper.capture(credit_card_to_use, payment, cvv, gateway_options)
     end
     result
