@@ -22,7 +22,6 @@ module ErpTechSvcs
           )
 
           @@s3_bucket = @@s3_connection.buckets[@@configuration['bucket'].to_sym]
-          build_node_tree(true)
         end
 
         def reload
