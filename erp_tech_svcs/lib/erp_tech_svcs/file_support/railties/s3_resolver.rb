@@ -28,11 +28,8 @@ module ActionView
           @cached[key][name][prefix][partial][locals].each do |template|
             #check if the file still exists
             if file_support.exists? template.identifier
-              last_update = mtime(template.identifier, file_support)
-              if last_update > template.updated_at
-                @cached[key][name][prefix][partial][locals].delete_if{|item| item.identifier == template.identifier}
-                @cached[key][name][prefix][partial][locals] << build_template(template.identifier, template.virtual_path, (details[:formats] || [:html] if template.formats.empty?), file_support, template.locals)
-              end
+              @cached[key][name][prefix][partial][locals].delete_if{|item| item.identifier == template.identifier}
+              @cached[key][name][prefix][partial][locals] << build_template(template.identifier, template.virtual_path, (details[:formats] || [:html] if template.formats.empty?), file_support, template.locals)
             else
               @cached[key][name][prefix][partial][locals].delete_if{|item| item.identifier == template.identifier}
             end
