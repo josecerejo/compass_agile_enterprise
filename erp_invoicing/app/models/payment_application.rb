@@ -1,6 +1,6 @@
 class PaymentApplication < ActiveRecord::Base
 
-  belongs_to :financial_txn, :dependent => :destroy
+  belongs_to :financial_txn
   belongs_to :payment_applied_to, :polymorphic => true
   belongs_to :money, :foreign_key => 'applied_money_amount_id', :dependent => :destroy
 
@@ -25,12 +25,14 @@ class PaymentApplication < ActiveRecord::Base
   def unapply_payment
     #check the calculate balance strategy, if it includes payments then do nothing
     #if it doesn't include payments then update the balance on the model
-    unless self.payment_applied_to.calculate_balance_strategy_type.nil?
-      unless self.payment_applied_to.calculate_balance_strategy_type.iid =~ /payment/
+    if self.payment_applied_to.respond_to? :calculate_balance_strategy_type
+      if !self.payment_applied_to.calculate_balance_strategy_type.nil?
+        if self.payment_applied_to.calculate_balance_strategy_type.iid !=~ /payment/ and !self.is_pending?
+          update_applied_to_balance(:credit)
+        end
+      elsif !self.is_pending?
         update_applied_to_balance(:credit)
       end
-    else
-      update_applied_to_balance(:credit)
     end
   end
 

@@ -1,5 +1,5 @@
-ErpApp::Widgets::Base.instance_eval do
-  def render_template(view, website=nil, locals={})
+::ErpApp::Widgets::Base.instance_eval do
+  def render_template(view, locals={}, website=nil)
     widget = Rails.application.config.erp_app.widgets.find{|item| item[:name] == self.widget_name}
     paths = widget[:view_paths]
 
