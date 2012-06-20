@@ -9,5 +9,6 @@ Rails.application.config.erp_tech_svcs.configure do |config|
   config.file_storage = :filesystem # Can be either :s3 or :filesystem
   config.s3_cache_expires_in_minutes = 60 
   config.session_expires_in_hours = 12 # this is used by DeleteExpiredSessionsJob to purge inaactive sessions from database 
+  config.compass_logger_path = "#{Rails.root}/log"
 end
 Rails.application.config.erp_tech_svcs.configure!
