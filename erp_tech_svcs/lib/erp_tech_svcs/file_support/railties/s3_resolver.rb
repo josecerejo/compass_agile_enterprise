@@ -26,12 +26,10 @@ module ActionView
           @cached[key][name][prefix][partial][locals] = decorate(yield, path_info, details, locals)
         else
           @cached[key][name][prefix][partial][locals].each do |template|
+            @cached[key][name][prefix][partial][locals].delete_if{|item| item.identifier == template.identifier}
             #check if the file still exists
             if file_support.exists? template.identifier
-              @cached[key][name][prefix][partial][locals].delete_if{|item| item.identifier == template.identifier}
               @cached[key][name][prefix][partial][locals] << build_template(template.identifier, template.virtual_path, (details[:formats] || [:html] if template.formats.empty?), file_support, template.locals)
-            else
-              @cached[key][name][prefix][partial][locals].delete_if{|item| item.identifier == template.identifier}
             end
           end
           @cached[key][name][prefix][partial][locals]
