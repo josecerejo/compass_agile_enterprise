@@ -4,7 +4,9 @@ module Widgets
     class Base < ErpApp::Widgets::Base
       def index
         @login_url = params[:login_url]
+        @user = User.new
         render
+	
       end
 
       def new
@@ -32,8 +34,10 @@ module Widgets
             @user.party = individual.party
             @user.save
             render :update => {:id => "#{@uuid}_result", :view => :success}
+            render :update => {:id => "#{@uuid}_result_form", :view => :success}
           else
-            render :update => {:id => "#{@uuid}_result", :view => :error}
+            render :update => {:id => "#{@uuid}_result_form", :view => :error}
+             
           end
         rescue Exception=>ex
           logger.error ex.message
