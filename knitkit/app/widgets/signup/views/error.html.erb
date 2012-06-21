@@ -1,11 +1,25 @@
+ 
+
+
+
 <div class="sexyerror">
   <h2>There was an error.</h2>
   <%if !@user.errors.empty?%>
   <h3>Please address the following issues</h3>
+ 
+<hr>
+  
   <ul>
-    <%  @user.errors.messages.collect{|k,v| v}.flatten.each do |msg| %>
-      <li><%=msg%></li>
-    <% end %>
+    <%  @user.errors.each do |attribute,error| %>
+ 	<li class="error_text"><%=  attribute.to_s.capitalize %> : <%=  error %> </li>
+    <%end%>
   </ul>
-  <%end%>
+
+<%end%>
+</div>
+
+<div id="<%=widget_result_id%>_form">
+
+ <%= render "/signup_form_block" %>
+
 </div>
