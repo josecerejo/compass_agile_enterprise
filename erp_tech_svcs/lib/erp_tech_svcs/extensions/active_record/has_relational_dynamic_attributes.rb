@@ -21,14 +21,12 @@ module ErpTechSvcs
 
         module SingletonMethods
           def find_by_dynamic_attribute(value, options={})
-            arel_query = AttributeValue.select("DISTINCT id,attributed_record_id, attributed_record_type,
-                                                 attribute_type_id, value")
-                                       .where('attributed_record_type = ?', self.name)
+            arel_query = AttributeValue.where('attributed_record_type = ?', self.name)
                                        .where(AttributeValue.arel_table[:value].matches("%#{value}%"))
 
-            #if type_iids are based add or clauses for the types
+            #if included_type_iids then find where types is equal to given types
             or_clauses = nil
-            options[:type_iids].each do |type_iid|
+            options[:included_type_iids].each do |type_iid|
               type = AttributeType.where('description = ? or internal_identifier = ?', type_iid, type_iid).first
               raise "Attribute Type '#{type_iid}' does not exist" if type.nil?
               or_clauses = if or_clauses.nil?
@@ -36,12 +34,24 @@ module ErpTechSvcs
                            else
                              or_clauses.or(AttributeValue.arel_table[:attribute_type_id].eq(type.id))
                            end
-            end if options[:type_iids]
+            end if options[:included_type_iids]
+
+            #if excluded_type_iids then find where types is not equal to
+            or_clauses = nil
+            options[:excluded_type_iids].each do |type_iid|
+              type = AttributeType.where('description = ? or internal_identifier = ?', type_iid, type_iid).first
+              raise "Attribute Type '#{type_iid}' does not exist" if type.nil?
+              or_clauses = if or_clauses.nil?
+                             AttributeValue.arel_table[:attribute_type_id].eq(type.id).not
+                           else
+                             or_clauses.or(AttributeValue.arel_table[:attribute_type_id].eq(type.id).not)
+                           end
+            end if options[:excluded_type_iids]
 
             arel_query = arel_query.where(or_clauses) if or_clauses
 
             #get total_count if we need to return it
-            total_count = arel_query.count('attribute_values.id') if options[:return_total_count]
+            total_count = arel_query.count('attributed_record_id') if options[:return_total_count]
 
             arel_query = arel_query.limit(options[:limit]) if options[:limit]
             arel_query = arel_query.offset(options[:offset]) if options[:offset]
