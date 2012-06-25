@@ -326,7 +326,8 @@ Ext.define("Compass.ErpApp.Shared.FileManagerTree",{
                 if(btn == 'yes')
                 {
                   Ext.apply(self.extraPostData, {
-                    node:record.data.id
+                    node:record.data.id,
+                    leaf:record.data.leaf
                   });
                   var msg = Ext.Msg.wait("Loading", "Deleting file...");
                   Ext.Ajax.request({
