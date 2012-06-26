@@ -71,12 +71,12 @@ module ActionView
     protected
     
     def cache_key(path)
-      path.sub!(%r{^/},'')
       Thread.current[:tenant_id].nil? ? path : "tenant_#{Thread.current[:tenant_id]}_#{path}"
     end
     
     def cache_template(path, file_support)
       contents, message = file_support.get_contents(path)
+      path = path.sub(%r{^/},'')
       #Rails.logger.info "creating cache with key: #{path}"
       Rails.cache.write(cache_key(path), contents, :expires_in => ErpTechSvcs::Config.s3_cache_expires_in_minutes.minutes)
       return contents, message 
@@ -84,7 +84,7 @@ module ActionView
 
     def build_template(p, virtual_path, formats, file_support, locals=nil)
       handler, format = extract_handler_and_format(p, formats)
-      contents = Rails.cache.read(cache_key(p))
+      contents = Rails.cache.read(cache_key(p.sub(%r{^/},'')))
       if contents.nil?
         contents, message = cache_template(p, file_support)
       else
