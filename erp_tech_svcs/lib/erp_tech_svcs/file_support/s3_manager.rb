@@ -29,7 +29,7 @@ module ErpTechSvcs
         end
 
         def cache_key
-           Thread.current[:tenant_id].nil? ? 'node_tree' : "tenant_#{Thread.current[:tenant_id]}_node_tree"
+          Thread.current[:tenant_id].nil? ? 'node_tree' : "tenant_#{Thread.current[:tenant_id]}_node_tree"
         end
 
         def cache_node_tree(node_tree)
