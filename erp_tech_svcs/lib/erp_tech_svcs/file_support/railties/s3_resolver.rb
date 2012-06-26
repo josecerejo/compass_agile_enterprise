@@ -72,7 +72,7 @@ module ActionView
     
     def cache_key(path)
       path.sub!(%r{^/},'')
-      Thread.current[:tenant_id].nil? ? path : "tenant_id_#{Thread.current[:tenant_id]}_#{path}"
+      Thread.current[:tenant_id].nil? ? path : "tenant_#{Thread.current[:tenant_id]}_#{path}"
     end
     
     def cache_template(path, file_support)
