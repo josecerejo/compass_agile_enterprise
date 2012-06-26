@@ -45,7 +45,7 @@ module ErpTechSvcs
             success = false
           end
         else
-          message = "Invalid email address."
+          message = "Invalid user name or email address."
           success = false
         end
         render :json => {:success => success,:message => message}

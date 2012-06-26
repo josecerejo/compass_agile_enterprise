@@ -177,12 +177,16 @@ class Party < ActiveRecord::Base
   end
 
   def respond_to?(m)
-    ((get_contact_by_method(m.to_s).nil? ? super : true)) rescue super
+    (super ? true : get_contact_by_method(m.to_s)) rescue super
   end
   
   def method_missing(m, *args, &block)
-    value = get_contact_by_method(m.to_s)
-    (value.nil?) ? super : (return value)
+    if self.respond_to?(m)
+      value = get_contact_by_method(m.to_s)
+      (value.nil?) ? super : (return value)
+    else
+      super
+    end
   end
   
   #************************************************************************************************
