@@ -1,6 +1,4 @@
 require 'prismpay'
-require 'prismpay/prismpay_am'
-require 'active_merchant'
 
 module ErpCommerce
   module ActiveMerchantWrappers
