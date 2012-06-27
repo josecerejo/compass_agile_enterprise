@@ -74,6 +74,7 @@ Ext.define('Compass.ErpApp.Desktop.Applications.AuditLogViewer.AuditLogGrid', {
     alias:'widget.audit_log_viewer-audit_log_grid',
     extend:'Ext.grid.Panel',
     title:'Audit Log Records',
+	autoScroll:true,
     store:Ext.getStore('audit-log-view-audit-log-entry-store'),
     dockedItems:[
         {

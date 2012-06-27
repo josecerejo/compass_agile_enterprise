@@ -1,7 +1,8 @@
 Ext.define("Compass.ErpApp.Desktop.Applications.AuditLogViewer.TabPanel", {
     alias:'widget.audit_log_viewer-tabpanel',
     extend:"Ext.tab.Panel",
-    plugins:Ext.create('Ext.ux.TabCloseMenu', {
+    autoScroll:true,
+	plugins:Ext.create('Ext.ux.TabCloseMenu', {
         extraItemsTail:[
             '-',
             {
@@ -60,7 +61,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.AuditLogViewer", {
                             {
                                 closable:true,
                                 listeners:{
-                                    'render':function(comp){
+                                    'afterrender':function(comp){
                                         comp.getStore().load({params:{audit_log_id:auditLogEntry.get('id')}});
                                     }
                                 }
@@ -75,13 +76,15 @@ Ext.define("Compass.ErpApp.Desktop.Applications.AuditLogViewer", {
             win = desktop.createWindow({
                 id:'audit_log_viewer',
                 title:'Audit Log Viewer',
+				layout:'fit',
+				autoScroll:true,
                 width:1000,
                 height:540,
                 iconCls:'icon-history',
                 shim:false,
+				autoScroll:true,
                 animCollapse:false,
                 constrainHeader:true,
-                layout:'fit',
                 items:[container]
             });
 

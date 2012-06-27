@@ -54,6 +54,7 @@ Ext.define('Compass.ErpApp.Desktop.Applications.AuditLogViewer.AuditLogItemGrid'
     alias:'widget.audit_log_viewer-audit_log_item_grid',
     extend:'Ext.grid.Panel',
     title:'Audit Log Items',
+	autoScroll:true,
     store:Ext.getStore('audit-log-view-audit-log-item-store'),
     columns:[
         {
@@ -68,27 +69,27 @@ Ext.define('Compass.ErpApp.Desktop.Applications.AuditLogViewer.AuditLogItemGrid'
             width:75
         },
         {
-            header:'Description',
-            dataIndex:'description',
-            sortable:false,
-            width:300
-        },
+            header:'Audit Log Item Type',
+            dataIndex:'audit_log_item_type',
+            width:200
+	    },
         {
             header:'Value',
             dataIndex:'value',
             sortable:false,
             width:300
         },
+		{
+            header:'Description',
+            dataIndex:'description',
+            sortable:false,
+            width:200
+	    },
         {
             header:'Created At',
             dataIndex:'created_at',
             renderer:function(value){return Ext.Date.format(value, 'm-d-Y');},
             width:100
-        },
-        {
-            header:'Audit Log Item Type',
-            dataIndex:'audit_log_item_type',
-            width:200
         }
 
     ],
