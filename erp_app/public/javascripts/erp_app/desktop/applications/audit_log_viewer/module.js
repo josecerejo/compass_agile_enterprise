@@ -1,22 +1,35 @@
-Ext.define('Compass.ErpApp.Desktop.Applications.AuditLogViewer.AuditLogType', {
-    extend:'Ext.data.Model',
-    fields:[
-        {name:'id', type:'int'},
-        {name:'description', type:'string'},
-        {name:'internal_identifier', type:'string'}
-    ]
-});
-
-Ext.create('Ext.data.Store', {
-    storeId:'audit-log-view-audit-log-type-store',
-    model:'Compass.ErpApp.Desktop.Applications.AuditLogViewer.AuditLogType',
-    proxy:{
-        type:'ajax',
-        url:'/erp_app/desktop/audit_log_viewer/audit_log_types.json',
-        reader:{
-            type:'json',
-            root:'audit_log_types'
+Ext.define("Compass.ErpApp.Desktop.Applications.AuditLogViewer.TabPanel", {
+    alias:'widget.audit_log_viewer-tabpanel',
+    extend:"Ext.tab.Panel",
+    plugins:Ext.create('Ext.ux.TabCloseMenu', {
+        extraItemsTail:[
+            '-',
+            {
+                text:'Closable',
+                checked:true,
+                hideOnClick:true,
+                handler:function (item) {
+                    currentItem.tab.setClosable(item.checked);
+                }
+            }
+        ],
+        listeners:{
+            aftermenu:function () {
+                currentItem = null;
+            },
+            beforemenu:function (menu, item) {
+                var menuitem = menu.child('*[text="Closable"]');
+                currentItem = item;
+                menuitem.setChecked(item.closable);
+            }
         }
+    }),
+    constructor:function (config) {
+        this.addEvents({
+            'auditLogEntrySelected':true
+        });
+
+        this.callParent([config]);
     }
 });
 
@@ -37,65 +50,26 @@ Ext.define("Compass.ErpApp.Desktop.Applications.AuditLogViewer", {
         var win = desktop.getWindow('audit_log_viewer');
         if (!win) {
 
-            var container = Ext.create('Ext.panel.Panel', {
-                layout:'fit',
-                dockedItems:[
-                    {
-                        xtype:'toolbar',
-                        dock:'top',
-                        items:[
-                            'Start Date:',
-                            {
-                                xtype:'datefield',
-                                itemId:'startDate',
-                                value:new Date()
-
-                            },
-                            'End Date:',
-                            {
-                                xtype:'datefield',
-                                itemId:'endDate',
-                                value:new Date()
-                            },
-                            'Audit Log Type',
-                            {
-                                xtype:'combo',
-                                itemId:'auditLogTypeId',
-                                store:Ext.getStore('audit-log-view-audit-log-type-store'),
-                                queryMode:'remote',
-                                displayField:'description',
-                                valueField:'id'
-                            },
-                            {
-                                xtype:'button',
-                                text:'Search',
-                                iconCls:'icon-search',
-                                handler:function (btn) {
-                                    var startDate = btn.up('toolbar').down('#startDate').getValue();
-                                    var endDate = btn.up('toolbar').down('#endDate').getValue();
-                                    var auditLogTypeId = btn.up('toolbar').down('#auditLogTypeId').getValue();
-
-                                    var store = btn.up('toolbar').up('panel').down('audit_log_viewer-audit_log_grid').getStore();
-                                    store.currentPage = 1;
-                                    store.load({params:{start:0, start_date:startDate, end_date:endDate, audit_log_type_id:auditLogTypeId}});
-                                }
-                            },
-                            {
-                                xtype:'button',
-                                text:'All',
-                                iconCls:'icon-eye',
-                                handler:function (btn) {
-                                    var store = btn.up('toolbar').up('panel').down('audit_log_viewer-audit_log_grid').getStore();
-                                    store.currentPage = 1;
-                                    store.load({params:{start:0, start_date:null, end_date:null, audit_log_type_id:null}});
-                                }
-                            }
-                        ]
-                    }
-                ],
+            var container = Ext.create('Compass.ErpApp.Desktop.Applications.AuditLogViewer.TabPanel', {
                 items:[
                     {xtype:'audit_log_viewer-audit_log_grid'}
-                ]
+                ],
+                listeners:{
+                    auditLogEntrySelected:function (auditLogEntry) {
+                        var audit_log_item_grid = Ext.create('Compass.ErpApp.Desktop.Applications.AuditLogViewer.AuditLogItemGrid',
+                            {
+                                closable:true,
+                                listeners:{
+                                    'render':function(comp){
+                                        comp.getStore().load({params:{audit_log_id:auditLogEntry.get('id')}});
+                                    }
+                                }
+                            }
+                        );
+                        this.add(audit_log_item_grid);
+                        this.setActiveTab(audit_log_item_grid);
+                    }
+                }
             });
 
             win = desktop.createWindow({
@@ -111,7 +85,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.AuditLogViewer", {
                 items:[container]
             });
 
-            //had to add the docked this docked item after it was created.  Was throwing style error????
+            //had to add the docked item after it was created.  Was throwing style error????
             container.down('audit_log_viewer-audit_log_grid').addDocked({
                 xtype:'pagingtoolbar',
                 store:Ext.getStore('audit-log-view-audit-log-entry-store'),

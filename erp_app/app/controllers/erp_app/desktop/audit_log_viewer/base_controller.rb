@@ -20,13 +20,12 @@ module ErpApp
           else
             audit_logs = AuditLog.arel_table
 
-            audit_log_entries = AuditLog.where(audit_logs[:created_at].gteq(start_date)
-                                               .and(audit_logs[:created_at].lteq(end_date))
-                                               .and(audit_logs[:audit_log_type_id].eq(audit_log_type_id)))
-                                        .order("#{sort} #{dir}").offset(start).limit(limit).all
-            total_count = AuditLog.where(audit_logs[:created_at].gteq(start_date)
-                                         .and(audit_logs[:created_at].lteq(end_date))
-                                         .and(audit_logs[:audit_log_type_id].eq(audit_log_type_id))).count
+            arel_query = AuditLog.where(:created_at => start_date..(end_date + 1.day))
+            arel_query = arel_query.where(audit_logs[:audit_log_type_id].eq(audit_log_type_id)) if audit_log_type_id
+
+            audit_log_entries = arel_query.order("#{sort} #{dir}").offset(start).limit(limit).all
+
+            total_count = arel_query.count
           end
 
           render :json => {:total_count => total_count,
@@ -37,28 +36,11 @@ module ErpApp
         end
 
         def items
-          id=params[:id]
-
-          page= (params[:page].to_i)
-          if (page==0)
-            page=1
-          end
-          row_count= params[:limit].to_i
-          if (row_count==0)
-            row_count=10
-          end
-          sort=params[:sort]
-          if (sort!=nil)
-            sort_hash = ActiveSupport::JSON.decode(sort)
-            logger.debug("\n\nsort_hash :#{sort_hash[0].class}-#{sort_hash[0]}")
-            property=sort_hash[0]['property']
-            direction=sort_hash[0]['direction']
-            logger.debug("\n\nsort :#{property} -#{direction}")
-          end
-
-          rec_count=AuditLogItem.count(:conditions => ["audit_log_id = ?", id])
-          paged_results=AuditLogItem.paginate(:page => page, :per_page => row_count, :conditions => ["audit_log_id = ?", id])
-          render :json => {:total_count => rec_count, :audit_items => paged_results}
+          render :json => {:total_count => AuditLog.find(params[:audit_log_id]).items.count,
+                           :audit_log_entries => AuditLog.find(params[:audit_log_id]).items.collect{
+                               |audit_log_item| audit_log_item.to_hash(:only => [:id, :description, :created_at, :audit_log_id],
+                                                             :additional_values => {:value => audit_log.value,
+                                                                                    :audit_log_item_type => audit_log_item.type.description})}}
         end
 
 

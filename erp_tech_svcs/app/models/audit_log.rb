@@ -1,13 +1,36 @@
 class AuditLog < ActiveRecord::Base
 
-  validates :party_id, :presence => {:message => 'Party cannot be blank'}
-  validates :description, :presence => {:message => 'Description cannot be blank'}
-  validates :audit_log_type, :presence => {:message => 'Audit Log Type cannot be blank'}
+  validates :party_id, :presence => {:message => 'cannot be blank'}
+  validates :description, :presence => {:message => 'cannot be blank'}
+  validates :audit_log_type, :presence => {:message => 'cannot be blank'}
 
   belongs_to :audit_log_type
   belongs_to :party
-  has_many   :audit_log_items
   belongs_to :event_record, :polymorphic => true
+  has_many   :audit_log_items, :dependent => :destroy
+
+  alias :items :audit_log_items
+  alias :type :audit_log_type
+
+  def get_item_by_item_type_internal_identifier(item_type_internal_identifier)
+    self.items.includes(:audit_log_item_type)
+              .where(:audit_log_item_types => {:internal_identifier => item_type_internal_identifier}).first
+  end
+
+  #allow items to be looked up by method calls
+  def respond_to?(m)
+    (super ? true : get_item_by_item_type_internal_identifier(m.to_s)) rescue super
+  end
+
+  #allow items to be looked up by method calls
+  def method_missing(m, *args, &block)
+    if self.respond_to?(m)
+      item = get_item_by_item_type_internal_identifier(m.to_s)
+      (item.nil?) ? super : (return item.value)
+    else
+      super
+    end
+  end
 
   class << self
     def custom_application_log_message(party, msg)
