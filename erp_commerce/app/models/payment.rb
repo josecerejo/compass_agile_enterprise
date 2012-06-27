@@ -41,7 +41,7 @@ class Payment < ActiveRecord::Base
   end
 
   aasm_event :return do
-    transitions :to => :returned, :from => [:captured]
+    transitions :to => :returned, :from => [:pending, :captured]
   end
 
 end
