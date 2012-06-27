@@ -76,60 +76,56 @@ Ext.define('Compass.ErpApp.Desktop.Applications.AuditLogViewer.AuditLogGrid', {
     title:'Audit Log Records',
 	autoScroll:true,
     store:Ext.getStore('audit-log-view-audit-log-entry-store'),
-    dockedItems:[
-        {
-            xtype:'toolbar',
-            dock:'top',
-            items:[
-                'Start Date:',
-                {
-                    xtype:'datefield',
-                    itemId:'startDate',
-                    value:new Date()
+    tbar:{
+		items:[
+               'Start Date:',
+               {
+                   xtype:'datefield',
+                   itemId:'startDate',
+                   value:new Date()
 
-                },
-                'End Date:',
-                {
-                    xtype:'datefield',
-                    itemId:'endDate',
-                    value:new Date()
-                },
-                'Audit Log Type',
-                {
-                    xtype:'combo',
-                    itemId:'auditLogTypeId',
-                    store:Ext.getStore('audit-log-view-audit-log-type-store'),
-                    queryMode:'remote',
-                    displayField:'description',
-                    valueField:'id'
-                },
-                {
-                    xtype:'button',
-                    text:'Search',
-                    iconCls:'icon-search',
-                    handler:function (btn) {
-                        var startDate = btn.up('toolbar').down('#startDate').getValue();
-                        var endDate = btn.up('toolbar').down('#endDate').getValue();
-                        var auditLogTypeId = btn.up('toolbar').down('#auditLogTypeId').getValue();
+               },
+               'End Date:',
+               {
+                   xtype:'datefield',
+                   itemId:'endDate',
+                   value:new Date()
+               },
+               'Audit Log Type',
+               {
+                   xtype:'combo',
+                   itemId:'auditLogTypeId',
+                   store:Ext.getStore('audit-log-view-audit-log-type-store'),
+                   queryMode:'remote',
+                   displayField:'description',
+                   valueField:'id'
+               },
+               {
+                   xtype:'button',
+                   text:'Search',
+                   iconCls:'icon-search',
+                   handler:function (btn) {
+                       var startDate = btn.up('toolbar').down('#startDate').getValue();
+                       var endDate = btn.up('toolbar').down('#endDate').getValue();
+                       var auditLogTypeId = btn.up('toolbar').down('#auditLogTypeId').getValue();
 
-                        var store = btn.up('toolbar').up('audit_log_viewer-audit_log_grid').getStore();
-                        store.currentPage = 1;
-                        store.load({params:{start:0, start_date:startDate, end_date:endDate, audit_log_type_id:auditLogTypeId}});
-                    }
-                },
-                {
-                    xtype:'button',
-                    text:'All',
-                    iconCls:'icon-eye',
-                    handler:function (btn) {
-                        var store = btn.up('toolbar').up('audit_log_viewer-audit_log_grid').getStore();
-                        store.currentPage = 1;
-                        store.load({params:{start:0, start_date:null, end_date:null, audit_log_type_id:null}});
-                    }
-                }
-            ]
-        }
-    ],
+                       var store = btn.up('toolbar').up('audit_log_viewer-audit_log_grid').getStore();
+                       store.currentPage = 1;
+                       store.load({params:{start:0, start_date:startDate, end_date:endDate, audit_log_type_id:auditLogTypeId}});
+                   }
+               },
+               {
+                   xtype:'button',
+                   text:'All',
+                   iconCls:'icon-eye',
+                   handler:function (btn) {
+                       var store = btn.up('toolbar').up('audit_log_viewer-audit_log_grid').getStore();
+                       store.currentPage = 1;
+                       store.load({params:{start:0, start_date:null, end_date:null, audit_log_type_id:null}});
+                   }
+               }
+           ]
+    },
     columns:[
         {
             header:'Log Id',
