@@ -39,7 +39,7 @@ module ErpApp
           render :json => {:total_count => AuditLog.find(params[:audit_log_id]).items.count,
                            :audit_log_entries => AuditLog.find(params[:audit_log_id]).items.collect{
                                |audit_log_item| audit_log_item.to_hash(:only => [:id, :description, :created_at, :audit_log_id],
-                                                             :additional_values => {:value => audit_log.value,
+                                                             :additional_values => {:value => audit_log.audit_log_item_value,
                                                                                     :audit_log_item_type => audit_log_item.type.description})}}
         end
 
