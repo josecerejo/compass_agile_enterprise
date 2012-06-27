@@ -1,5 +1,5 @@
 require 'prismpay'
-require 'prismpay_am'
+require 'prismpay/prismpay_am'
 require 'active_merchant'
 
 module ErpCommerce
