@@ -99,7 +99,7 @@ class Website < ActiveRecord::Base
 
   def setup_website
     PublishedWebsite.create(:website => self, :version => 0, :active => true, :comment => 'New Site Created')
-    Role.create(:description => "Website #{self.title}", :internal_identifier => website_role_iid)
+    Role.create(:description => "Website #{self.title}", :internal_identifier => website_role_iid) if self.role.nil?
     configuration = ::Configuration.find_template('default_website_configuration').clone(true)
     configuration.description = "Website #{self.name} Configuration"
     configuration.internal_identifier = configuration.description.underscore
