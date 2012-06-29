@@ -98,7 +98,8 @@ class Website < ActiveRecord::Base
   end
 
   def setup_website
-    PublishedWebsite.create(:website => self, :version => 0, :active => true, :comment => 'New Site Created')
+    pw = PublishedWebsite.create(:website => self, :version => 0, :active => true, :comment => 'New Site Created')
+    Rails.logger info "@@@@@@@@ PublishedWebsite: #{pw.inspect}"
     Role.create(:description => "Website #{self.title}", :internal_identifier => website_role_iid) if self.role.nil?
     configuration = ::Configuration.find_template('default_website_configuration').clone(true)
     configuration.description = "Website #{self.name} Configuration"
