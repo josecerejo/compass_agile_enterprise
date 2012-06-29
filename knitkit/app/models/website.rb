@@ -319,7 +319,7 @@ class Website < ActiveRecord::Base
           :email_inquiries => setup_hash[:email_inquiries],
           :auto_activate_publication => setup_hash[:auto_activate_publication]
         )
-
+        website.reload #reloading this object to ensure published_websites are loaded
         Rails.logger.error { "*********************************************" }
         Rails.logger.error { "*********************************************" }
         Rails.logger.error { "Inside Website#import" }
