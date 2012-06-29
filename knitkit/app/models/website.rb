@@ -382,6 +382,7 @@ class Website < ActiveRecord::Base
           website.publish("Website Imported", current_user)
 
         rescue Exception=>ex
+          Rails.logger.error "#{ex.inspect} #{ex.backtrace}"
           website.destroy unless website.nil?
           raise ex
         end
