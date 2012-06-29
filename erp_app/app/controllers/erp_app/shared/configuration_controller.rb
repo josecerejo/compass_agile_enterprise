@@ -9,14 +9,15 @@ module ErpApp
             array << category.to_tree_hash(:only => [], :methods => [{:id => :categoryId}], :icon_cls => 'icon-index')
           end
         end
+        tree_array.sort_by!{|hash| [hash[:text]]}
         render :json => tree_array
       end
 
 		  def setup
         category_id = params[:category_id]
         configuration = ::Configuration.find(params[:id])
-
-        render :json => {:success => true, :configurationItemTypes => configuration.item_types.by_category(Category.find(category_id)).collect(&:to_js_hash)}
+        
+        render :json => {:success => true, :configurationItemTypes => configuration.item_types.by_category(Category.find(category_id)).collect(&:to_js_hash).sort_by{|hash| [hash[:internalIdentifier]]}}
       end
 
       def load
