@@ -12,6 +12,10 @@ class Document < ActiveRecord::Base
     def add_dyn_prefix(field)
       "#{DOCUMENT_DYNAMIC_ATTRIBUTE_PREFIX}#{field}"
     end
+    
+    def remove_dyn_prefix(field)
+      field.gsub(DOCUMENT_DYNAMIC_ATTRIBUTE_PREFIX, '')
+    end
   end
   
   def set_dyn_attribute(field, value)

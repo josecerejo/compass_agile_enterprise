@@ -1,5 +1,4 @@
 class BillingAccount < ActiveRecord::Base
-  has_relational_dynamic_attributes
   acts_as_financial_txn_account
 
   belongs_to :calculate_balance_strategy_type
@@ -62,12 +61,13 @@ class BillingAccount < ActiveRecord::Base
         when 'invoices_and_payments'
           (self.invoices.balance.amount - self.total_payments)
         when 'payments'
-          (self.balance - self.total_payments)
+          balance_amt = (self.balance - self.total_payments)
+          balance_amt == 0 ? 0 : balance_amt.round(2)
         else
-          self.balance
+          self.balance == 0 ? 0 : self.balance.round(2)
       end
     else
-      self.balance
+      self.balance == 0 ? 0 : self.balance.round(2)
     end
   end
 
@@ -76,7 +76,8 @@ class BillingAccount < ActiveRecord::Base
   end
 
   def outstanding_balance
-    (calculate_balance - total_pending_payments)
+     outstanding_balance_amt = (calculate_balance - total_pending_payments)
+     outstanding_balance_amt == 0 ? 0 : outstanding_balance_amt.round(2)
   end
 
   def total_pending_payments
