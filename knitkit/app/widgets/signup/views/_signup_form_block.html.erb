@@ -1,0 +1,79 @@
+    
+<%  @first_name_class="" 
+    @last_name_class =""
+    @email_class =""
+    @username_class =""
+    @password_class = "" 
+%> 
+ 
+ 
+ 
+ <%  @user.errors.each do |attribute,error| %>
+ 
+  <%  
+
+    case attribute
+
+    when :first_name    
+    
+      @first_name_class = "input_error"
+
+    when :last_name    
+    
+      @last_name_class = "input_error"
+
+    when :email    
+    
+      @email_class= "input_error"
+
+    when :username    
+    
+      @username_class = "input_error"
+
+    when :password    
+    
+       
+      @password_class = "input_error"
+
+    end
+
+
+    %>
+  
+     
+<% end %>
+
+  <%= form_remote_tag build_widget_url(:new), :success => "call_success"  do %>
+    <div class="form_settings">
+      <p>
+        <span> <%= label_tag :first_name ,'First Name' %> </span>
+        <%= text_field_tag :first_name, nil,    :class => @first_name_class %>
+      </p>
+      <p>
+        <span> <%= label_tag :last_name , 'Last Name' %> </span>
+        <%= text_field_tag :last_name , nil,    :class => @last_name_class%>
+      </p>
+      <p>
+        <span> <%= label_tag :email , 'Email' %>  </span>
+        <%= text_field_tag :email , @user.email ,    :class => @email_class %>
+      </p>
+      <p>
+        <span> <%= label_tag :username , 'Username' %> </span>
+        <%= text_field_tag :username , @user.username,    :class => @username_class %>
+      </p>
+      <p>
+        <span> <%= label_tag :password , 'Password'  %> </span>
+        <%= password_field_tag :password , nil,    :class => @password_class%>  
+      </p>
+      <p>
+        <span> <%= label_tag :password_confirmation , 'Confirm Password' %>  </span>
+        <%= password_field_tag :password_confirmation ,nil ,  :class => @password_class %>
+      </p>
+      <p style="padding-top: 15px">
+        <span>&nbsp;</span>
+        <%=  submit_tag "Sign Up", :disable_with => "Please wait...", :class => "submit", :style => 'margin: 0 0 0 0px;' %>
+      </p>
+    </div>
+  <input type="hidden" value="<%=@login_url%>" name="login_url" />
+  <% end %>
+ 

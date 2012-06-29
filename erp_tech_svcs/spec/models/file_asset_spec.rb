@@ -28,7 +28,7 @@ describe FileAsset do
     end
 
     it "should have method to get all valid extensions for all subclasses" do
-      FileAsset.all_valid_extensions.should eq [".jpg", ".jpeg", ".gif", ".png", ".ico", ".PNG", ".JPEG", ".JPG", ".txt", ".text", ".js", ".css", ".erb", ".haml", ".liquid", ".builder", ".html", ".pdf"]
+      FileAsset.all_valid_extensions.should eq [".jpg", ".jpeg", ".gif", ".png", ".ico", ".PNG", ".JPEG", ".JPG", ".txt", ".text", ".js", ".css", ".erb", ".haml", ".liquid", ".builder", ".html", ".pdf", ".swf"]
     end
 
     it "should be able to lookup subclass based on extension" do
@@ -60,7 +60,7 @@ describe FileAsset do
       new_path = File.join(Rails.root.to_s, 'move_test_tmp')
 
       File.exists?(@base_path).should eq true
-      
+
       result, message = @file_asset.move(new_path)
       result.should eq true
       File.exists?(@base_path).should eq false

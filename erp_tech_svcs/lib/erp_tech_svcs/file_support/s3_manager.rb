@@ -29,7 +29,7 @@ module ErpTechSvcs
         end
 
         def cache_key
-          'node_tree'
+          Thread.current[:tenant_id].nil? ? 'node_tree' : "tenant_#{Thread.current[:tenant_id]}_node_tree"
         end
 
         def cache_node_tree(node_tree)
@@ -49,7 +49,9 @@ module ErpTechSvcs
               :children => []
             }
             child_hash = add_children(child_hash, child) unless child.leaf?
-            parent_hash[:children] << child_hash 
+            unless child_hash[:id].gsub(/\/$/,'') == parent_hash[:id].gsub(/\/$/,'') # resolves s3 issue where empty dir contains itself
+              parent_hash[:children] << child_hash unless child_hash[:downloadPath] == '/.'
+            end
           end
 
           parent_hash
@@ -106,13 +108,15 @@ module ErpTechSvcs
 
       def create_file(path, name, content)
         path = path.sub(%r{^/},'')
-        bucket.objects[File.join(path, name)].write(content, { :acl => :public_read })
+        full_filename = (path.blank? ? name : File.join(path, name))
+        bucket.objects[full_filename].write(content, { :acl => :public_read })
         clear_cache(path)
       end
 
       def create_folder(path, name)
         path = path.sub(%r{^/},'')
-        folder = File.join(path, name) + "/"
+        full_filename = (path.blank? ? name : File.join(path, name))
+        folder = full_filename + "/"
         bucket.objects[folder].write('', { :acl => :public_read })
         clear_cache(path)
       end
@@ -176,13 +180,12 @@ module ErpTechSvcs
       end
 
       def delete_file(path, options={})
+        is_directory = !path.match(/\/$/).nil?
         path = path.sub(%r{^/},'')
         result = false
         message = nil
-
         begin
-          is_directory = !bucket.objects[path].exists?
-          if options[:force] or bucket.as_tree(:prefix => path).children.count == 0
+          if options[:force] or bucket.as_tree(:prefix => path).children.count <= 1 # aws-sdk includes the folder itself as a child (like . is current dir), this needs revisited as <= 1 is scary
             bucket.objects.with_prefix(path).delete_all
             message = "File was deleted successfully"
             result = true
@@ -191,8 +194,8 @@ module ErpTechSvcs
             message = FOLDER_IS_NOT_EMPTY
           end
         rescue Exception => e
-          result = false
-          message = e
+         result = false
+         message = e
         end    
 
         return result, message, is_directory    
@@ -201,7 +204,7 @@ module ErpTechSvcs
       def exists?(path)
         begin
           path = path.sub(%r{^/},'')
-          !bucket.objects[path].nil?
+          return bucket.objects[path].exists?
         rescue AWS::S3::Errors::NoSuchKey
           return false
         end
@@ -214,18 +217,17 @@ module ErpTechSvcs
         path = path.sub(%r{^/},'')
         begin
           object = bucket.objects[path]
+          contents = object.read 
         rescue AWS::S3::Errors::NoSuchKey => error
+          contents = ''
           message = FILE_DOES_NOT_EXIST
         end
-
-        contents = object.read if message.nil?
 
         return contents, message
       end
 
       def build_tree(starting_path, options={})
         starting_path = "/" + starting_path unless starting_path.first == "/"
-        #ErpTechSvcs::FileSupport::S3Manager.reload
         node_tree = find_node(starting_path, options)
         node_tree.nil? ? [] : node_tree
       end

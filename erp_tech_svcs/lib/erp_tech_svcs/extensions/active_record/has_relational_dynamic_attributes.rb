@@ -24,17 +24,41 @@ module ErpTechSvcs
             arel_query = AttributeValue.where('attributed_record_type = ?', self.name)
                                        .where(AttributeValue.arel_table[:value].matches("%#{value}%"))
 
+            #if included_type_iids then find where types is equal to given types
             or_clauses = nil
-            options[:type_iids].each do |type_iid|
-              type = AttributeType.where('description = ? or internal_identifier = ?',type_iid,type_iid).first
+            options[:included_type_iids].each do |type_iid|
+              type = AttributeType.where('description = ? or internal_identifier = ?', type_iid, type_iid).first
               raise "Attribute Type '#{type_iid}' does not exist" if type.nil?
-              or_clauses = or_clauses.nil? ? AttributeValue.arel_table[:attribute_type_id].eq(type.id) : or_clauses.or(AttributeValue.arel_table[:attribute_type_id].eq(type.id))
-            end if options[:type_iids]
-            
+              or_clauses = if or_clauses.nil?
+                             AttributeValue.arel_table[:attribute_type_id].eq(type.id)
+                           else
+                             or_clauses.or(AttributeValue.arel_table[:attribute_type_id].eq(type.id))
+                           end
+            end if options[:included_type_iids]
+
+            #if excluded_type_iids then find where types is not equal to
+            or_clauses = nil
+            options[:excluded_type_iids].each do |type_iid|
+              type = AttributeType.where('description = ? or internal_identifier = ?', type_iid, type_iid).first
+              raise "Attribute Type '#{type_iid}' does not exist" if type.nil?
+              or_clauses = if or_clauses.nil?
+                             AttributeValue.arel_table[:attribute_type_id].eq(type.id).not
+                           else
+                             or_clauses.or(AttributeValue.arel_table[:attribute_type_id].eq(type.id).not)
+                           end
+            end if options[:excluded_type_iids]
+
             arel_query = arel_query.where(or_clauses) if or_clauses
+
+            #get total_count if we need to return it
+            total_count = arel_query.count('attributed_record_id') if options[:return_total_count]
+
             arel_query = arel_query.limit(options[:limit]) if options[:limit]
             arel_query = arel_query.offset(options[:offset]) if options[:offset]
-            arel_query.all.collect(&:attributed_record)
+            records = arel_query.all.collect(&:attributed_record)
+
+            #return total_count if option passed
+            options[:return_total_count] ? (return records, total_count) :  records
           end
         end
 
@@ -71,7 +95,7 @@ module ErpTechSvcs
             attribute_value = self.attribute_values.includes(:attribute_type).where('attribute_types.internal_identifier = ? or attribute_types.description = ?', attribute_type_iid.to_s, attribute_type_iid.to_s).first
             attribute_value.nil? ? nil : attribute_value
           end
-          
+
           def assign_dynamic_attribute_on_save
             #template method overridden in implementing class
           end
@@ -83,7 +107,7 @@ module ErpTechSvcs
           def destroy_dynamic_attribute_of_type (attribute_type_iid)
             self.attribute_values.includes(:attribute_type).destroy_all("attribute_types.internal_identifier = #{attribute_type_iid.to_s} or attribute_types.description = #{attribute_type_iid.to_s}")
           end
-          
+
           def add_dynamic_attribute(value, type, data_type)
             attribute_type = AttributeType.where('description = ? or internal_identifier = ?', type, type).first
             attribute_type = AttributeType.create(:description => type, :data_type => data_type) unless attribute_type
@@ -97,8 +121,8 @@ module ErpTechSvcs
           end
 
         end
-        
-      end#HasRelationalDynamicAttributes
-    end#ActiveRecord
-  end#Extensions
-end#ErpTechSvcs
+
+      end #HasRelationalDynamicAttributes
+    end #ActiveRecord
+  end #Extensions
+end #ErpTechSvcs
