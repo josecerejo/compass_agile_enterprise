@@ -4,14 +4,14 @@ module Widgets
       include ActionDispatch::Routing::UrlFor
       include Rails.application.routes.url_helpers
       include WillPaginate::ActionView
-         
+
       def set_variables
         @results_permalink = params[:results_permalink]
         @section_permalink = params[:section_permalink]
         @content_type = params[:content_type]
         @per_page = params[:per_page]
         @css_class = params[:class]
-        
+
         if @results_permalink.nil? or @results_permalink.blank?
           @ajax_results = true
         else
@@ -25,6 +25,10 @@ module Widgets
       end
 
       def new
+        logger.info { "**********************************" }
+        logger.info { "I'm in the new search" }
+        logger.info { "**********************************" }
+        debugger
         set_variables
         @website = Website.find_by_host(request.host_with_port)
 
@@ -50,16 +54,16 @@ module Widgets
       def locate
         File.dirname(__FILE__)
       end
-        
+
       class << self
         def title
           "Search"
         end
-        
+
         def widget_name
           File.basename(File.dirname(__FILE__))
         end
-          
+
         def base_layout
           begin
             file = File.join(File.dirname(__FILE__),"/views/layouts/base.html.erb")
@@ -69,7 +73,7 @@ module Widgets
           end
         end
       end
-        
+
     end
   end
 end

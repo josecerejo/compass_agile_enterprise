@@ -194,7 +194,7 @@ class Website < ActiveRecord::Base
 
     articles_path = Pathname.new(File.join(tmp_dir,'articles'))
     FileUtils.mkdir_p(articles_path) unless articles_path.exist?
-    
+
     documented_contents_path = Pathname.new(File.join(tmp_dir, 'documented contents'))
     FileUtils.mkdir_p(documented_contents_path) unless documented_contents_path.exist?
 
@@ -319,6 +319,18 @@ class Website < ActiveRecord::Base
           :auto_activate_publication => setup_hash[:auto_activate_publication]
         )
 
+        Rails.logger.error { "*********************************************" }
+        Rails.logger.error { "*********************************************" }
+        Rails.logger.error { "Inside Website#import" }
+        Rails.logger.error { "website.inspect" }
+        Rails.logger.error { "#{website.inspect}" }
+        Rails.logger.error { "website.published_websites" }
+        Rails.logger.error { "#{website.published_websites}" }
+        Rails.logger.error { "website.published_websites.inspect" }
+        Rails.logger.error { "#{website.published_websites.inspect}" }
+        Rails.logger.error { "*********************************************" }
+        Rails.logger.error { "*********************************************" }
+
         #set default publication published by user
         first_publication = website.published_websites.first
         first_publication.published_by = current_user
@@ -392,7 +404,7 @@ class Website < ActiveRecord::Base
         message = 'Website already exists with that internal_identifier'
         success = false
       end
-      
+
       return success, message
     end
 
