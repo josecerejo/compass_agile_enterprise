@@ -25,7 +25,7 @@ Gem::Specification.new do |s|
   s.add_dependency('routing-filter','0.2.4')
   s.add_dependency('nokogiri','~> 1.5.0')
   s.add_dependency('rubyzip','0.9.4')
-  s.add_dependency('permalink_fu','1.0.0')
+#  s.add_dependency('permalink_fu','1.0.0')
 
   #this is needed for acts-as-taggable-on it will try to install rails 3.2
   s.add_dependency 'railties', "~> 3.1.0"

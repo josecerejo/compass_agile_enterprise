@@ -98,8 +98,7 @@ class Website < ActiveRecord::Base
   end
 
   def setup_website
-    pw = PublishedWebsite.create(:website => self, :version => 0, :active => true, :comment => 'New Site Created')
-    Rails.logger.info "@@@@@@@@ PublishedWebsite: #{pw.inspect}"
+    PublishedWebsite.create(:website => self, :version => 0, :active => true, :comment => 'New Site Created')
     Role.create(:description => "Website #{self.title}", :internal_identifier => website_role_iid) if self.role.nil?
     configuration = ::Configuration.find_template('default_website_configuration').clone(true)
     configuration.description = "Website #{self.name} Configuration"
@@ -320,19 +319,6 @@ class Website < ActiveRecord::Base
           :auto_activate_publication => setup_hash[:auto_activate_publication]
         )
         website.save!
-        Rails.logger.error { "#{website.errors.full_messages}" }
-        #website.reload #reloading this object to ensure published_websites are loaded
-        Rails.logger.error { "*********************************************" }
-        Rails.logger.error { "*********************************************" }
-        Rails.logger.error { "Inside Website#import" }
-        Rails.logger.error { "website.inspect" }
-        Rails.logger.error { "#{website.inspect}" }
-        Rails.logger.error { "website.published_websites" }
-        Rails.logger.error { "#{website.published_websites}" }
-        Rails.logger.error { "website.published_websites.inspect" }
-        Rails.logger.error { "#{website.published_websites.inspect}" }
-        Rails.logger.error { "*********************************************" }
-        Rails.logger.error { "*********************************************" }
 
         #set default publication published by user
         first_publication = website.published_websites.first
