@@ -310,7 +310,7 @@ class Website < ActiveRecord::Base
       FileUtils.rm_rf(tmp_dir.to_s)
 
       if Website.find_by_internal_identifier(setup_hash[:internal_identifier]).nil?
-        website = Website.create(
+        website = Website.new(
           :name => setup_hash[:name],
           :title => setup_hash[:title],
           :subtitle => setup_hash[:subtitle],
@@ -319,8 +319,9 @@ class Website < ActiveRecord::Base
           :email_inquiries => setup_hash[:email_inquiries],
           :auto_activate_publication => setup_hash[:auto_activate_publication]
         )
+        website.save!
         Rails.logger.error { "#{website.errors.full_messages}" }
-        website.reload #reloading this object to ensure published_websites are loaded
+        #website.reload #reloading this object to ensure published_websites are loaded
         Rails.logger.error { "*********************************************" }
         Rails.logger.error { "*********************************************" }
         Rails.logger.error { "Inside Website#import" }
