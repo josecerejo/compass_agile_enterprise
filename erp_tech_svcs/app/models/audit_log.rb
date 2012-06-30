@@ -26,7 +26,7 @@ class AuditLog < ActiveRecord::Base
   def method_missing(m, *args, &block)
     if self.respond_to?(m)
       item = get_item_by_item_type_internal_identifier(m.to_s)
-      (item.nil?) ? super : (return item.value)
+      (item.nil?) ? super : (return item.audit_log_item_value)
     else
       super
     end
