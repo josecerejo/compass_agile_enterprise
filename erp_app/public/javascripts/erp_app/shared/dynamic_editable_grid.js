@@ -36,12 +36,11 @@ Ext.define("Compass.ErpApp.Shared.DynamicEditableGrid",{
         var store = Ext.create('Ext.data.Store', {
             model: ((config.editable) ? config.model : undefined),
             fields:config['fields'],
-            autoLoad: true,
             autoSync: true,
             pageSize: config['pageSize'],
             proxy: config.proxy,
             storeId: config['storeId'],
-            autoLoad: true
+            autoLoad: false
         });
 
         this.store = store;
@@ -54,18 +53,18 @@ Ext.define("Compass.ErpApp.Shared.DynamicEditableGrid",{
                 emptyMsg: config['emptyMsg']
             });
         }
-        
+
         this.callParent(arguments);
     },
 
     constructor : function(config) {
-        this.editing = Ext.create('Ext.grid.plugin.RowEditing', {
-            clicksToMoveEditor: 1
-        });
-
-        var plugins = [];
-        var tbar = {};
         if(config['editable']){
+            var tbar = {};
+            var plugins = [];
+            this.editing = Ext.create('Ext.grid.plugin.RowEditing', {
+                clicksToMoveEditor: 1
+            });
+
             var Model = Ext.define(config.model,{
                 extend:'Ext.data.Model',
                 fields:config.fields,
@@ -97,16 +96,20 @@ Ext.define("Compass.ErpApp.Shared.DynamicEditableGrid",{
                     }
                 }]
             };
+
+            config = Ext.apply({
+                plugins:plugins,
+                tbar:tbar
+            }, config);
         }
 
         config = Ext.apply({
             layout:'fit',
             frame: false,
             autoScroll:true,
-            loadMask:true,
-            plugins:plugins,
-            tbar:tbar
+            loadMask:true
         }, config);
+
         this.callParent([config]);
     }
 });

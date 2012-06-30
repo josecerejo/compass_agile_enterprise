@@ -49,20 +49,31 @@ Compass.ErpApp.Widgets = {
     jQuery(bindCss).bind('click', function(){
         anchor = $(this);
 		var href = anchor.attr('href');
-        $.address.value('nav?url=' + href);
+        $.address.value('nav?url=' + href + '&key='+Compass.ErpApp.Utility.randomString(10));
+        anchor.closest('div.compass_ae-widget').mask("Loading....");
+
+        $.ajax({
+            url: href,
+            success: Compass.ErpApp.JQuerySupport.handleHtmlUpdateResponse
+        });
+
         return false;
     });
 
     $.address.change(function(event) {
-        if($.isEmptyObject(event.parameters))
-            return;
-		
-		anchor.closest('div.compass_ae-widget').mask("Loading....");
-        
-		$.ajax({
-            url: event.parameters.url,
-            success: Compass.ErpApp.JQuerySupport.handleHtmlUpdateResponse
-        });
+        try{
+            if(!Ext.isEmpty(event.parameters.url)){
+                $.ajax({
+                    url: event.parameters.url,
+                    success: Compass.ErpApp.JQuerySupport.handleHtmlUpdateResponse
+                });
+            }
+        }
+        catch(exception){
+            if(console){
+                console.log(exception);
+            }
+        }
     });
   },
 
