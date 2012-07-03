@@ -129,7 +129,7 @@ module ErpInvoicing
         def create_invoice_item
           data = params[:data]
           invoice = Invoice.find(params[:invoice_id])
-          invoice_item = InvoiceItem.create(:amount => data[:amount].to_f, :quantity => data[:quantity], :item_description => data[:item_description])
+          invoice_item = InvoiceItem.create(:amount => data[:amount].to_d, :quantity => data[:quantity], :item_description => data[:item_description])
           invoice.items << invoice_item
 
           {:success => true,
@@ -146,7 +146,7 @@ module ErpInvoicing
         def update_invoice_item
           data = params[:data]
           invoice_item = InvoiceItem.find(data[:id])
-          invoice_item.amount = data[:amount].to_f
+          invoice_item.amount = data[:amount].to_d
           invoice_item.quantity = data[:quantity]
           invoice_item.item_description = data[:item_description]
           invoice_item.save

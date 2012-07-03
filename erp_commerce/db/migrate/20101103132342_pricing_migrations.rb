@@ -36,7 +36,7 @@ class PricingMigrations < ActiveRecord::Migration
         #support for simple assignment of a single money amount
         t.boolean :is_simple_amount
         t.integer :currency_id
-        t.float   :money_amount
+        t.decimal :money_amount, :precision => 8, :scale => 2
 
         t.timestamps
       end
@@ -62,7 +62,7 @@ class PricingMigrations < ActiveRecord::Migration
         #support for simple assignment of a single money amount
         t.boolean :is_simple_amount
         t.integer :currency_id
-        t.float   :money_amount
+        t.decimal :money_amount, :precision => 8, :scale => 2
 
         t.timestamps
 

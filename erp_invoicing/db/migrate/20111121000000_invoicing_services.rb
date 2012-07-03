@@ -75,9 +75,9 @@ class InvoicingServices < ActiveRecord::Migration
         #non-key columns
         t.integer    :item_seq_id
         t.string     :item_description
-        t.float      :sales_tax
-        t.float      :quantity
-        t.float      :amount
+        t.decimal    :sales_tax, :precision => 8, :scale => 2
+        t.decimal    :quantity, :precision => 8, :scale => 2
+        t.decimal    :amount, :precision => 8, :scale => 2
         
         t.timestamps
       end
@@ -151,8 +151,8 @@ class InvoicingServices < ActiveRecord::Migration
       create_table :recurring_payments do |t|
         t.references :payment_account, :polymorphic => true
         t.references :billing_account
-        t.float    :pay_up_to_amount
-        t.float    :payment_amount
+        t.decimal    :pay_up_to_amount, :precision => 8, :scale => 2
+        t.decimal    :payment_amount, :precision => 8, :scale => 2
         t.integer  :payment_day
         t.date     :from_date
         t.date     :thru_date
@@ -217,7 +217,7 @@ class InvoicingServices < ActiveRecord::Migration
         #non-key columns
         t.string :description
         t.date :pay_by
-        t.float :amount
+        t.decimal :amount, :precision => 8, :scale => 2
 
         t.timestamps
       end
