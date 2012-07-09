@@ -36,6 +36,7 @@ Ext.define("Compass.ErpApp.Shared.DynamicEditableGrid",{
         var store = Ext.create('Ext.data.Store', {
             model: ((config.editable) ? config.model : undefined),
             fields:config['fields'],
+			remoteSort:config['remoteSort'],
             autoSync: true,
             pageSize: config['pageSize'],
             proxy: config.proxy,

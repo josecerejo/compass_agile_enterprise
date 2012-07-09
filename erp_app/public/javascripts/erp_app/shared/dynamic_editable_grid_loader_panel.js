@@ -15,6 +15,7 @@ Ext.define("Compass.ErpApp.Shared.DynamicEditableGridLoaderPanel",{
                         editable:config['editable'],
                         url:config['dataUrl'],
                         page:config['page'],
+					    remoteSort:config['remoteSort'],
                         pageSize:config['pageSize'],
                         displayMsg:config['displayMsg'],
                         emptyMsg:config['emptyMsg'],
