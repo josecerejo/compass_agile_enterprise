@@ -20,7 +20,7 @@ module ErpApp
             def include_extjs(opt={})
               resources = ''
 
-              if opt[:debug] or Rails.env != 'production'
+              if opt[:debug]
                 resources << static_javascript_include_tag("extjs/ext-all-debug.js")
               else
                 resources << static_javascript_include_tag("extjs/ext-all.js")
