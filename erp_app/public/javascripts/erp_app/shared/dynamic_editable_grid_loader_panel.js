@@ -15,6 +15,7 @@ Ext.define("Compass.ErpApp.Shared.DynamicEditableGridLoaderPanel",{
                         editable:config['editable'],
                         url:config['dataUrl'],
                         page:config['page'],
+					    remoteSort:config['remoteSort'],
                         pageSize:config['pageSize'],
                         displayMsg:config['displayMsg'],
                         emptyMsg:config['emptyMsg'],
@@ -28,8 +29,7 @@ Ext.define("Compass.ErpApp.Shared.DynamicEditableGridLoaderPanel",{
                         listeners: config.grid_listeners,
                         storeId: config['storeId']
                     });
-                    self.getLayout().setActiveItem(0);
-
+                    self.down('shared_dynamiceditablegrid').getStore().load();
                 }
                 else{
                     var message = response.message;
@@ -46,14 +46,12 @@ Ext.define("Compass.ErpApp.Shared.DynamicEditableGridLoaderPanel",{
     },
 
     onRender: function() {
-        Compass.ErpApp.Shared.DynamicEditableGridLoaderPanel.superclass.onRender.apply(this, arguments);
+        this.callParent(arguments);
         this.setupGrid();
     },
 
     constructor : function(config) {
-        config = Ext.apply({
-            layout:'card'
-        }, config);
+        config = Ext.apply({layout:'card'}, config);
         this.callParent([config]);
     }
 });

@@ -66,7 +66,7 @@ module ErpInvoicing
             @total_payment = params[:total_payment]
 
             money = Money.create(
-              :amount => @total_payment.to_f,
+              :amount => @total_payment.to_d,
               :description => "Online Payment",
               :currency => Currency.usd
             )
@@ -79,13 +79,13 @@ module ErpInvoicing
             financial_txn.save
 
             @billing_account_payment_amts.each do |hash|
-              amount = hash[:amount].to_f rescue 0
+              amount = hash[:amount].to_d rescue 0
               if amount > 0
                 comment = (params[:short_payment_comment] and hash[:short_payment]) ? params[:short_payment_comment] : nil
                 PaymentApplication.create(
                   :financial_txn => financial_txn,
                   :payment_applied_to => hash[:billing_account],
-                  :money => Money.create(:amount => hash[:amount].to_f),
+                  :money => Money.create(:amount => amount),
                   :comment => comment
                 )
               end
@@ -145,7 +145,7 @@ module ErpInvoicing
             billing_account_payment_amts = []
             billing_account = BillingAccount.find(params["billing_account_id"])
             amount = params[:total_payment]
-            billing_account_payment_amts << {:billing_account => billing_account, :amount => amount, :short_payment => (amount.to_f < billing_account.balance)}
+            billing_account_payment_amts << {:billing_account => billing_account, :amount => amount, :short_payment => (amount.to_d < billing_account.balance)}
 
             billing_account_payment_amts
           end

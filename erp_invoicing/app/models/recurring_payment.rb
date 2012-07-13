@@ -9,7 +9,7 @@ class RecurringPayment < ActiveRecord::Base
         if payment_amount < self.pay_up_to_amount
 
           money = Money.create(
-            :amount => payment_amount.to_f,
+            :amount => payment_amount.to_d,
             :description => "AutoPayment",
             :currency => Currency.usd
           )

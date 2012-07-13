@@ -46,6 +46,16 @@ Compass.ErpApp.Utility.handleFormFailure = function(action){
   }
 };
 
+Compass.ErpApp.Utility.randomString = function(length) {
+    var chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXTZabcdefghiklmnopqrstuvwxyz";
+    var randomString = '';
+    for (var i=0; i<length; i++) {
+        var randomNumber = Math.floor(Math.random() * chars.length);
+        randomString += chars.substring(randomNumber,randomNumber+1);
+    }
+    return randomString
+};
+
 Compass.ErpApp.Utility.roundNumber = function(num) {
   var twoDPString = "0.00";
   if(!Compass.ErpApp.Utility.isBlank(num) && !isNaN(num)){
@@ -128,13 +138,7 @@ Compass.ErpApp.Utility.addCommas = function(nStr)
 };
 
 Compass.ErpApp.Utility.isBlank = function(value) {
-  var result = false;
-
-  if(value === 'undefined' || value === undefined || value === null || value === '' || value === ' '){
-    result = true;
-  }
-
-  return result;
+  return Ext.isEmpty(value);
 };
 
 Compass.ErpApp.Utility.removeDublicates = function(arrayName) {

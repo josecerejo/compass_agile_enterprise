@@ -14,7 +14,7 @@ module ErpBaseErpSvcs
     end
 
     def register_compass_ae_engine(engine)
-      Rails.application.config.erp_base_erp_svcs.compass_ae_engines << engine
+      Rails.application.config.erp_base_erp_svcs.compass_ae_engines << engine unless Rails.application.config.erp_base_erp_svcs.compass_ae_engines.include?(engine)
       load_compass_ae_extensions(engine)
       load_root_compass_ae_framework_extensions()
     end
