@@ -25,10 +25,6 @@ module Widgets
       end
 
       def new
-        logger.info { "**********************************" }
-        logger.info { "I'm in the new search" }
-        logger.info { "**********************************" }
-        debugger
         set_variables
         @website = Website.find_by_host(request.host_with_port)
 
