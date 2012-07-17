@@ -2,6 +2,7 @@ Rails.application.routes.draw do
   #handle login / logout
   match "/session/sign_in" => 'erp_tech_svcs/session#create'
   match "/session/sign_out" => 'erp_tech_svcs/session#destroy'
+  match "/session/keep_alive" => 'erp_tech_svcs/session#keep_alive'
 
   #handle activation
   get "/users/activate/:activation_token" => 'erp_tech_svcs/user#activate'

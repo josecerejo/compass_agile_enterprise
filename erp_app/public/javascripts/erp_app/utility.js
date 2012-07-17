@@ -1,5 +1,40 @@
 Ext.ns("Compass.ErpApp.Utility");
 
+//handle session timeout
+Compass.ErpApp.Utility.redirectTimer = null;
+Compass.ErpApp.Utility.setForceRedirectTimer = function(action, timeoutInMilliseconds){
+    switch(action) {
+        case 'start':
+            //wait timeoutInMilliseconds + 2 minutes before force redirect
+            Compass.ErpApp.Utility.redirectTimer = Compass.ErpApp.Utility.redirectTimer = window.setTimeout(function(){window.location = redirect_to;},(timeoutInMilliseconds + 120000));
+            break;
+
+        case 'stop':
+            clearTimeout(Compass.ErpApp.Utility.redirectTimer);
+            break;
+    }
+};
+Compass.ErpApp.Utility.setupSessionTimeout = function(warnInMilliseconds, redirectInMilliseconds, redirect_to){
+    Compass.ErpApp.Utility.setForceRedirectTimer('create', redirectInMilliseconds);
+    window.setTimeout(function(){
+        var r=confirm("Your session is about to expire due to inactivity. Do you wish to continue this session?");
+        if (r!=true)
+        {
+            window.location = redirect_to;
+        }
+        else
+        {
+            $.ajax({
+                type: 'POST',
+                url: '/session/keep_alive'
+            });
+            Compass.ErpApp.Utility.setForceRedirectTimer('stop', redirectInMilliseconds);
+            Compass.ErpApp.Utility.setupSessionTimeout(warnInMilliseconds, redirectInMilliseconds, redirect_to)
+        }
+    }, warnInMilliseconds);
+};
+//end handle session timeout
+
 Compass.ErpApp.Utility.confirmBrowserNavigation = function(additionalmessage){
   additionalmessage = additionalmessage || null;
   window.onbeforeunload = function(){

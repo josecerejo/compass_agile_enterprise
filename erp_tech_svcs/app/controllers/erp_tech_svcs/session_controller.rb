@@ -8,6 +8,9 @@ module ErpTechSvcs
           #log when someone logs in
           ErpTechSvcs::ErpTechSvcsAuditLog.successful_login(current_user)
 
+          #set logout
+          session[:logout_to] = params[:logout_to]
+
           login_to = last_login_at.nil? ? params[:first_login_to] : params[:login_to]
           login_to = login_to || params[:login_to]
           request.xhr? ? (render :json => {:success => true, :login_to => login_to}) : (redirect_to login_to)
@@ -19,14 +22,26 @@ module ErpTechSvcs
     end
 
     def destroy
+      message = "You have successfully logged out."
       logged_out_user = current_user
+      logout_to       =  session[:logout_to]
+
       logout
 
       #log when someone logs out
       ErpTechSvcs::ErpTechSvcsAuditLog.successful_logout(logged_out_user)
 
-      login_url = params[:login_url].blank? ? ErpTechSvcs::Config.login_url : params[:login_url]
-      redirect_to login_url, :notice => "You have successfully logged out."
+      if logout_to
+        redirect_to logout_to, :notice => message
+      else
+        login_url = params[:login_url].blank? ? ErpTechSvcs::Config.login_url : params[:login_url]
+        redirect_to login_url, :notice => message
+      end
+
+    end
+
+    def keep_alive
+      render :json => {:success => true, :last_activity_at => current_user.last_activity_at}
     end
   end#SessionsController
 end#ErpTechSvcs
