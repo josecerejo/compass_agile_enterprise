@@ -139,8 +139,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.Knitkit.VersionsArticleGridPanel
         {
             var self = this;
             self.initialConfig['centerRegion'].setWindowStatus('Reverting...');
-            var conn = new Ext.data.Connection();
-            conn.request({
+            Ext.Ajax.request({
                 url: '/knitkit/erp_app/desktop/versions/revert_content',
                 method: 'POST',
                 params:{
@@ -148,7 +147,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.Knitkit.VersionsArticleGridPanel
                     version:rec.get('version')
                 },
                 success: function(response) {
-	        self.initialConfig['centerRegion'].clearWindowStatus();
+	                  self.initialConfig['centerRegion'].clearWindowStatus();
                     var obj =  Ext.decode(response.responseText);
                     if(obj.success){
                         self.initialConfig['centerRegion'].replaceHtmlInActiveCkEditor(rec.get('body_html'));
