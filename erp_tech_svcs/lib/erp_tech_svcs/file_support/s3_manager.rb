@@ -100,7 +100,7 @@ module ErpTechSvcs
       def update_file(path, content)
         file = FileAsset.where(:name => ::File.basename(path)).where(:directory => ::File.dirname(path)).first
         acl = (file.has_capabilities? ? :private : :public_read) unless file.nil?
-        options = (file.nil? ? {} : {:acl => acl})
+        options = (file.nil? ? {} : {:acl => acl, :content_type => file.content_type })
         path = path.sub(%r{^/},'')
         bucket.objects[path].write(content, options)
         clear_cache(path)
