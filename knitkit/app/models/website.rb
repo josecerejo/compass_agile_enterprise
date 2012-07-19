@@ -66,8 +66,10 @@ class Website < ActiveRecord::Base
 
   def self.find_by_host(host)
     website = nil
-    website_host = WebsiteHost.find_by_host(host)
-    website = website_host.website unless website_host.nil?
+    unless host.nil?
+      website_host = WebsiteHost.find_by_host(host)
+      website = website_host.website unless website_host.nil?
+    end
     website
   end
 
