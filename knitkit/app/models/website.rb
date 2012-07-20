@@ -64,6 +64,11 @@ class Website < ActiveRecord::Base
     #ActiveRecord::Base.connection.execute("select path from website_sections where website_id = #{self.id}").collect{|row| row['path']}
   end
 
+  def config_value(config_item_type_iid)
+    primary_host_config_item_type = ConfigurationItemType.find_by_internal_identifier(config_item_type_iid)
+    self.configurations.first.get_configuration_item(primary_host_config_item_type).options.first.value
+  end
+
   def self.find_by_host(host)
     website = nil
     unless host.nil?
