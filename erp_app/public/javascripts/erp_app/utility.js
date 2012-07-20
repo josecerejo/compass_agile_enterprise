@@ -29,16 +29,16 @@ Compass.ErpApp.Utility.SessionTimeout = {
                 this.warnTimer = window.setTimeout(function () {
                     Ext.MessageBox.confirm('Confirm', 'Your session is about to expire due to inactivity. Do you wish to continue this session?', function(btn){
                         if(btn == 'no'){
+                            window.location = self.redirectTo;
+                        }
+                        else
+                        if(btn == 'yes')
+                        {
                             $.ajax({
                                 type:'POST',
                                 url:'/session/keep_alive'
                             });
                             self.reset();
-                        }
-                        else
-                        if(btn == 'yes')
-                        {
-                            window.location = self.redirectTo;
                         }
                     });
                 }, this.warnInMilliseconds);
