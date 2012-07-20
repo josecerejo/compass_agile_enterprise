@@ -165,7 +165,9 @@ class FileAsset < ActiveRecord::Base
 
     result, message = file_support.save_move(old_path, new_parent_path)
     if result
-      self.directory = new_parent_path.gsub(Regexp.new(Rails.root.to_s), '') # strip rails root from new_parent_path, we want relative path
+      dir = new_parent_path.gsub(Regexp.new(Rails.root.to_s), '') # strip rails root from new_parent_path, we want relative path
+      dir = '/' + dir unless dir.match(%r{^/})
+      self.directory = dir
       self.save
     end
 
