@@ -1111,6 +1111,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.Knitkit.WestRegion",{
                                 var obj = Ext.decode(action.response.responseText);
                                 if(obj.success){
                                   record.appendChild(obj.node);
+                                  addSectionWindow.close();
                                 }
                                 else{
                                   Ext.Msg.alert("Error", obj.message);
@@ -1907,6 +1908,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.Knitkit.WestRegion",{
                                 var obj = Ext.decode(action.response.responseText);
                                 if(obj.success){
                                   record.appendChild(obj.node);
+                                  addSectionWindow.close();
                                 }
                                 else{
                                   Ext.Msg.alert("Error", obj.msg);

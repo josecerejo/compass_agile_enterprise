@@ -106,6 +106,7 @@ Ext.define("Compass.ErpApp.Shared.UploadWindow",{
             self.updateFileUploadRecord(file.id, 'progress', 100 );
             self.updateFileUploadRecord(file.id, 'status', 'Uploaded' );
             this.fireEvent('fileuploaded', this);
+            self.close();
           }else{
             return false;
           }
