@@ -23,7 +23,7 @@ module ErpTechSvcs
       logout
 
       #log when someone logs out
-      ErpTechSvcs::ErpTechSvcsAuditLog.successful_logout(logged_out_user)
+      ErpTechSvcs::ErpTechSvcsAuditLog.successful_logout(logged_out_user) unless logged_out_user.nil?
 
       login_url = params[:login_url].blank? ? ErpTechSvcs::Config.login_url : params[:login_url]
       redirect_to login_url, :notice => "You have successfully logged out."
