@@ -710,7 +710,7 @@ var columnItems = [];
             iconCls: 'icon-search',
             handler: function(button) {
                 var iid = Ext.getCmp('global_article_search_field').getValue();
-                store.setProxy({
+                store.setProxy({ 
                     type: 'ajax',
                     url: '/knitkit/erp_app/desktop/articles/all/',
                     reader: {
@@ -720,7 +720,7 @@ var columnItems = [];
                         totalProperty:'total'
                     },
                     extraParams:{
-                        iid:iid,
+                        iid:ii
                     }
                 });
                 store.load();
