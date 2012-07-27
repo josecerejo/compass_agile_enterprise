@@ -39,6 +39,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.Knitkit.VersionsGridPanel",{
       width:60,
       items:[{
         icon:'/images/icons/document_view/document_view_16x16.png',
+				iconCls:'actioncolumn_hover',
         tooltip:'View',
         handler :function(grid, rowIndex, colIndex){
           var rec = grid.getStore().getAt(rowIndex);
@@ -55,6 +56,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.Knitkit.VersionsGridPanel",{
       width:60,
       items:[{
         icon:'/images/icons/document_down/document_down_16x16.png',
+				iconCls:'actioncolumn_hover',
         tooltip:'Revert',
         handler :function(grid, rowIndex, colIndex){
           var rec = grid.getStore().getAt(rowIndex);
@@ -70,6 +72,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.Knitkit.VersionsGridPanel",{
       align:'center',
       width:60,
       items:[{
+				iconCls:'actioncolumn_hover',
         getClass: function(v, meta, rec) {  // Or return a class from a function
           if (rec.get('published')) {
             this.items[0].tooltip = 'Published';
@@ -631,6 +634,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.Knitkit.NonPublishedVersionsGrid
         width:60,
         items:[{
           icon:'/images/icons/document_view/document_view_16x16.png',
+					iconCls:'actioncolumn_hover',
           tooltip:'View',
           handler :function(grid, rowIndex, colIndex){
             var rec = grid.getStore().getAt(rowIndex);
@@ -647,6 +651,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.Knitkit.NonPublishedVersionsGrid
         width:60,
         items:[{
           icon:'/images/icons/document_down/document_down_16x16.png',
+					iconCls:'actioncolumn_hover',
           tooltip:'Revert',
           handler :function(grid, rowIndex, colIndex){
             var rec = grid.getStore().getAt(rowIndex);

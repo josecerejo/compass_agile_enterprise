@@ -1,0 +1,4 @@
+/* Added to give EXTJS action columns a pointer icon on mouseover */
+/* See knitkit/public/javascripts/erp_app/desktop/applications/knitkit/section_articles_grid_panel.js */
+/*  - iconCls:'actioncolumn_hover' as an example */
+.actioncolumn_hover:hover{ cursor: pointer;}

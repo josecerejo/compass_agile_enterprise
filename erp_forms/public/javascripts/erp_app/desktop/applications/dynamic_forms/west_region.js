@@ -130,7 +130,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.WestRegion",{
           sectionId,
           response.responseText,
           [{
-            text: 'Insert Content Area',
+            text: 'Insert Content Area1',
             handler: function(btn){
               var codeMirror = btn.findParentByType('codemirror');
               Ext.MessageBox.prompt('New File', 'Please enter content area name:', function(btn, text){
