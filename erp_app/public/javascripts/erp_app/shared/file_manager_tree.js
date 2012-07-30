@@ -119,7 +119,16 @@ Ext.define("Compass.ErpApp.Shared.FileManagerTree",{
         name:'leaf'
       },{
         name:'isSecured'
-      }]
+      },{
+        name:'size'
+      },{
+        name:'width'
+      },{
+        name:'height'
+      },{
+        name:'url'
+      }
+      ]
     });
 
     var defaultListeners = {

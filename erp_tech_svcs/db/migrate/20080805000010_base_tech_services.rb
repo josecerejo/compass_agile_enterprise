@@ -169,6 +169,8 @@ class BaseTechServices < ActiveRecord::Migration
         t.string :data_content_type
         t.integer :data_file_size
         t.datetime :data_updated_at
+        t.string :width
+        t.string :height
 
         t.timestamps
       end

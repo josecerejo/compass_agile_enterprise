@@ -56,7 +56,10 @@ Compass.ErpApp.Desktop.Applications.Knitkit.FileAssetsPanel = function(module) {
         scope:self,
         'click':function(){
           var node = this.sharedFileAssetsTreePanel.selectedNode;
-          Ext.Msg.alert('Details', 'URL: /download/'+node.data.text+'?path='+node.data.downloadPath);
+          Ext.Msg.alert('Details', 'Filename: '+node.data.text +
+                                   '<br /> URL: '+node.data.url +
+                                   '<br /> Size: ' + node.data.size + ' bytes'
+                        );
         }
       }
     },
@@ -165,7 +168,10 @@ Compass.ErpApp.Desktop.Applications.Knitkit.FileAssetsPanel = function(module) {
         scope:self,
         'click':function(){
           var node = this.websiteFileAssetsTreePanel.selectedNode;
-          Ext.Msg.alert('Details', 'URL: /download/'+node.data.text+'?path='+node.data.downloadPath);
+          Ext.Msg.alert('Details', 'Filename: '+node.data.text +
+                                   '<br /> URL: '+node.data.url +
+                                   '<br /> Size: ' + node.data.size + ' bytes'
+                        );
         }
       }
     },

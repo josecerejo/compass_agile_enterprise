@@ -14,7 +14,6 @@ module ErpApp
 	  # end
 
     # TODO:
-    # test X Send file in apache
     # reorder menuitems
     # drag and drop image into ckeditor uses bad (but somehow not broken, i.e. ../../images/) url (filesystem on firefox, chrome OK) 
 
@@ -56,10 +55,10 @@ module ErpApp
     def serve_file(file, disposition=nil)
       type = (file.type == 'Image' ? "image/#{params[:format]}" : file.content_type)
 
-      if Rails.application.config.erp_tech_svcs.file_storage == :s3
+      if ErpTechSvcs::Config.file_storage == :s3
         path = File.join(file.directory,file.name).sub(%r{^/},'')
         options = { :response_content_disposition => disposition }
-        options[:expires] = Rails.application.config.erp_tech_svcs.s3_url_expires_in_seconds if file.has_capabilities?
+        options[:expires] = ErpTechSvcs::Config.s3_url_expires_in_seconds if file.has_capabilities?
         redirect_to @file_support.bucket.objects[path].url_for(:read, options).to_s
       else
         # to use X-Sendfile or X-Accel-Redirect, set config.action_dispatch.x_sendfile_header in environment config file
