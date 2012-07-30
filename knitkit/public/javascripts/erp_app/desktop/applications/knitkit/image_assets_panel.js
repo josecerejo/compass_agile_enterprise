@@ -40,6 +40,18 @@ Compass.ErpApp.Desktop.Applications.Knitkit.ImageAssetsPanel = function(module) 
         }
       }
     },
+		{
+      nodeType:'leaf',
+      text:'Insert image at cursor',
+      iconCls:'icon-add',
+      listeners:{
+        scope:self,
+        'click':function(){
+          var node = this.sharedImageAssetsTreePanel.selectedNode;
+					self.module.centerRegion.insertHtmlIntoActiveCkEditor('<img src="/download/'+node.data.text+'?path='+node.data.downloadPath+'" alt="'+node.data.text+'" height="" width="" />');
+        }
+      }
+    },
     {
       nodeType:'leaf',
       text:'Insert image at cursor',
@@ -123,6 +135,18 @@ Compass.ErpApp.Desktop.Applications.Knitkit.ImageAssetsPanel = function(module) 
                                    '<br /> Width: ' + node.data.width + ' px' +
                                    '<br /> Height: ' + node.data.height + ' px' 
                         );
+        }
+      }
+    },
+		{
+      nodeType:'leaf',
+      text:'Insert image at cursor',
+      iconCls:'icon-add',
+      listeners:{
+        scope:self,
+        'click':function(){
+          var node = this.websiteImageAssetsTreePanel.selectedNode;
+					self.module.centerRegion.insertHtmlIntoActiveCkEditor('<img src="/download/'+node.data.text+'?path='+node.data.downloadPath+'" alt="'+node.data.text+'" height="" width="" />');
         }
       }
     },

@@ -242,6 +242,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.Knitkit.SectionArticlesGridPanel
             width:40,
             items:[{
                 icon:'/images/icons/edit/edit_16x16.png',
+								iconCls:'actioncolumn_hover',
                 tooltip:'Edit',
                 handler :function(grid, rowIndex, colIndex){
                     var rec = grid.getStore().getAt(rowIndex);
@@ -266,6 +267,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.Knitkit.SectionArticlesGridPanel
                 width:40,
                 items:[{
                     icon:'/images/icons/edit/edit_16x16.png',
+										iconCls:'actioncolumn_hover',
                     tooltip:'Edit Attributes',
                     handler :function(grid, rowIndex, colIndex){
                         var rec = grid.getStore().getAt(rowIndex);
@@ -291,6 +293,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.Knitkit.SectionArticlesGridPanel
                 width:40,
                 items:[{
                     icon:'/images/icons/delete/delete_16x16.png',
+										iconCls:'actioncolumn_hover',
                     tooltip:'Delete Article from Section',
                     handler :function(grid, rowIndex, colIndex){
                         var rec = grid.getStore().getAt(rowIndex);

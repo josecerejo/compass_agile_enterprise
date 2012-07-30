@@ -460,6 +460,7 @@ var columnItems = [];
             align:'center',
             width:50,
             items:[{
+								iconCls:'actioncolumn_hover',
                 getClass: function(v, meta, rec) {  // Or return a class from a function
                     this.items[0].tooltip = rec.get('sections');
                     return 'info-col';
@@ -486,6 +487,7 @@ var columnItems = [];
                 width:40,
                 items:[{
                     icon:'/images/icons/edit/edit_16x16.png',
+										iconCls:'actioncolumn_hover',
                     tooltip:'Edit',
                     handler :function(grid, rowIndex, colIndex){
                         var rec = grid.getStore().getAt(rowIndex);
@@ -505,6 +507,7 @@ var columnItems = [];
             width:60,
             items:[{
                 icon:'/images/icons/document_text/document_text_16x16.png',
+   							iconCls:'actioncolumn_hover',
                 tooltip:'Comments',
                 handler :function(grid, rowIndex, colIndex){
                     var rec = grid.getStore().getAt(rowIndex);
@@ -529,6 +532,7 @@ var columnItems = [];
                 width:50,
                 items:[{
                     icon:'/images/icons/edit/edit_16x16.png',
+										iconCls:'actioncolumn_hover',
                     tooltip:'Edit Excerpt',
                     handler :function(grid, rowIndex, colIndex){
                         var rec = grid.getStore().getAt(rowIndex);
@@ -548,6 +552,7 @@ var columnItems = [];
             width:40,
             items:[{
                 icon:'/images/icons/edit/edit_16x16.png',
+								iconCls:'actioncolumn_hover',
                 tooltip:'Edit Content',
                 handler :function(grid, rowIndex, colIndex){
                     var rec = grid.getStore().getAt(rowIndex);
@@ -572,6 +577,7 @@ var columnItems = [];
                 width:40,
                 items:[{
                     icon:'/images/icons/delete/delete_16x16.png',
+										iconCls:'actioncolumn_hover',
                     tooltip:'Delete',
                     handler :function(grid, rowIndex, colIndex){
                         var rec = grid.getStore().getAt(rowIndex);
