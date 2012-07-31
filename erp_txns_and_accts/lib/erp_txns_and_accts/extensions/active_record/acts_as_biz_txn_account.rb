@@ -40,7 +40,7 @@ module ErpTxnsAndAccts
           end
 
           def initialize_biz_txn_account
-            if (self.biz_txn_acct_root.nil?)
+            if self.new_record? and self.biz_txn_acct_root.nil?
               t = BizTxnAcctRoot.new
               self.biz_txn_acct_root = t
               t.biz_txn_acct = self

@@ -48,7 +48,7 @@ module ErpWorkEffort
           end
 
           def new_support_effort
-            if (self.support_effort.nil?)
+            if self.new_record? and self.support_effort.nil?
               support_effort = SupportEffort.new
               self.support_effort = support_effort
               support_effort.work_effort_record = self

@@ -37,7 +37,7 @@ module ErpBaseErpSvcs
 				  end
 
 				  def initialize_category
-            if (self.category.nil?)
+            if self.new_record? and self.category.nil?
               category = Category.new
               self.category = category
               category.category_record = self
