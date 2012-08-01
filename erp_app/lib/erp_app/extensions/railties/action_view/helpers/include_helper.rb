@@ -37,6 +37,9 @@ module ErpApp
                 resources << static_stylesheet_link_tag("extjs/resources/css/ext-all.css")
               end
         
+              # this requirement is new in ExtJS 4.1
+              resources << "<script type=\"text/javascript\">Ext.Loader.setConfig({ enabled: true, disableCaching: false });</script>"
+
               raw resources
             end
 

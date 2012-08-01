@@ -33,41 +33,6 @@ Ext.define("Ext.ux.desktop.ShortcutModel",{
 
 /*
  *
- *   Ext.ux.desktop.FitAllLayout
- *
- */
-
-Ext.define("Ext.ux.desktop.FitAllLayout",{
-  extend:"Ext.layout.container.AbstractFit",
-  alias:"layout.fitall",
-  onLayout:function(){
-    var b=this;
-    b.callParent();
-    var a=b.getLayoutTargetSize();
-    b.owner.items.each(function(c){
-      b.setItemBox(c,a)
-    })
-  },
-  getTargetBox:function(){
-    return this.getLayoutTargetSize()
-  },
-  setItemBox:function(c,b){
-    var a=this;
-    if(c&&b.height>0){
-      if(c.layoutManagedWidth==2){
-        b.width=undefined
-      }
-      if(c.layoutManagedHeight==2){
-        b.height=undefined
-      }
-      c.getEl().position("absolute",null,0,0);
-      a.setItemSize(c,b.width,b.height)
-    }
-  }
-});
-
-/*
- *
  *   Ext.ux.desktop.Desktop
  *
  */
@@ -75,19 +40,20 @@ Ext.define("Ext.ux.desktop.FitAllLayout",{
 Ext.define("Ext.ux.desktop.Desktop",{
   extend:"Ext.panel.Panel",
   alias:"widget.desktop",
-  uses:["Ext.util.MixedCollection","Ext.menu.Menu","Ext.view.View","Ext.window.Window","Ext.ux.desktop.TaskBar","Ext.ux.desktop.FitAllLayout"],
+  uses:["Ext.util.MixedCollection","Ext.menu.Menu","Ext.view.View","Ext.window.Window","Ext.ux.desktop.TaskBar","Ext.ux.desktop.Wallpaper"],
   activeWindowCls:"ux-desktop-active-win",
   inactiveWindowCls:"ux-desktop-inactive-win",
   lastActiveWindow:null,
   border:false,
   html:"&#160;",
-  layout:"fitall",
+  layout:"fit",
   xTickSize:1,
   yTickSize:1,
   app:null,
   shortcuts:null,
   shortcutItemSelector:"div.ux-desktop-shortcut",
   shortcutTpl:['<div style="width:100%"><tpl for=".">','<div class="ux-desktop-shortcut" id="{name}-shortcut">','<div class="ux-desktop-shortcut-icon {iconCls}">','<img src="',Ext.BLANK_IMAGE_URL,'" title="{name}">',"</div>",'<span class="ux-desktop-shortcut-text">{name}</span>',"</div>","</tpl></div>",'<div class="x-clear"></div>'],
+//  shortcutTpl: ['<tpl for=".">', '<div class="ux-desktop-shortcut" id="{name}-shortcut">', '<div class="ux-desktop-shortcut-icon {iconCls}">', '<img src="', Ext.BLANK_IMAGE_URL, '" title="{name}">', "</div>", '<span class="ux-desktop-shortcut-text">{name}</span>', "</div>", "</tpl>", '<div class="x-clear"></div>'],
   taskbarConfig:null,
   windowMenu:null,
   initComponent:function(){
@@ -123,6 +89,11 @@ Ext.define("Ext.ux.desktop.Desktop",{
       trackOver:true,
       itemSelector:a.shortcutItemSelector,
       store:a.shortcuts,
+      style: {
+        position: "absolute"
+      },
+      x: 0,
+      y: 0,      
       tpl:new Ext.XTemplate(a.shortcutTpl),
       listeners:{
         scope:this,
@@ -132,19 +103,19 @@ Ext.define("Ext.ux.desktop.Desktop",{
       }
     }
   },
-  addShortcut:function(shortcut){
-    var a=this;
-    if(a.shortcuts.findExact("module", shortcut.data.module) == -1){
-      a.shortcuts.add(shortcut);
-    }
-  },
-  removeShortcut:function(shortcut){
-    var a=this;
-    var index = a.shortcuts.findExact("module", shortcut.data.module)
-    if(index != -1){
-      a.shortcuts.removeAt(index);
-    }
-  },
+  // addShortcut:function(shortcut){
+  //   var a=this;
+  //   if(a.shortcuts.findExact("module", shortcut.data.module) == -1){
+  //     a.shortcuts.add(shortcut);
+  //   }
+  // },
+  // removeShortcut:function(shortcut){
+  //   var a=this;
+  //   var index = a.shortcuts.findExact("module", shortcut.data.module)
+  //   if(index != -1){
+  //     a.shortcuts.removeAt(index);
+  //   }
+  // },
   createDesktopMenu:function(){
     var b=this,a={
       items:b.contextMenuItems||[]
@@ -469,7 +440,7 @@ Ext.define("Ext.ux.desktop.Desktop",{
       scope:d
     });
     e.on({
-      afterrender:function(){
+      boxready:function(){
         e.dd.xTickSize=d.xTickSize;
         e.dd.yTickSize=d.yTickSize;
         if(e.resizer){
