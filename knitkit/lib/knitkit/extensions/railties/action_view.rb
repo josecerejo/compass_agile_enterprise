@@ -62,7 +62,7 @@ ActionView::Base.class_eval do
     if content_version.nil?
       return ''
     else
-      return raw content_version.body_html.nil? ? '' : content_version.body_html
+      return raw "<div class='knitkit_content'>#{(content_version.body_html.nil? ? '' : content_version.body_html)}</div>"
     end
   end
 

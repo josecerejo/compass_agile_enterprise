@@ -24,6 +24,9 @@
     <%= static_javascript_include_tag('ajax_pagination.js') %>
     <%= static_javascript_include_tag('erp_app/shared/dynamic_forms/dynamic_forms_validation.js') %>
     <%= static_javascript_include_tag('knitkit/helpers.js') %>
+    <%= static_javascript_include_tag('knitkit/inline_editing.js') %>
+    <%= static_javascript_include_tag('erp_app/ckeditor/ckeditor.js') %>
+
     <%= yield :head %>
   </head>
   <body>
@@ -58,5 +61,10 @@
       <%= yield :foot %>
     </div>
     <%= setSessionTimeout %>
+    <script type="text/javascript">
+      jQuery(document).ready(function() {
+          Knitkit.InlineEditing.setup();
+      });
+    </script>
   </body>
 </html>
