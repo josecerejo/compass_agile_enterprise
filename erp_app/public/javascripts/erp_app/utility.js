@@ -34,11 +34,13 @@ Compass.ErpApp.Utility.SessionTimeout = {
                         else
                         if(btn == 'yes')
                         {
-                            $.ajax({
-                                type:'POST',
-                                url:'/session/keep_alive'
+                            Ext.Ajax.request({
+                                method:'POST',
+                                url:'/session/keep_alive',
+                                success: function( result, request ){
+                                    self.reset();
+                                }
                             });
-                            self.reset();
                         }
                     });
                 }, this.warnInMilliseconds);
