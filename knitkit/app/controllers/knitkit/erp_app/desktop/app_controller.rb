@@ -9,13 +9,15 @@ module Knitkit
 
           tree = []
           websites.each do |website|
+            @website_primary_host = website.config_value('primary_host')
+
             website_hash = {
               :text => website.name,
               :configurationId => website.configurations.first.id,
               :iconCls => 'icon-globe_disconnected',
               :id => "website_#{website.id}",
               :leaf => false,
-              :url => "http://#{website.config_value('primary_host')}",
+              :url => "http://#{@website_primary_host}",
               :name => website.name,
               :title => website.title,
               :subtitle => website.subtitle,
@@ -42,7 +44,6 @@ module Knitkit
             end
 
             website_hash[:children] << sections_hash
-
 
             #handle menus
             menus_hash = {:text => 'Menus', :iconCls => 'icon-content', :isMenuRoot => true, :websiteId => website.id, :leaf => false, :children => []}
@@ -79,7 +80,7 @@ module Knitkit
           unless item.linked_to_item.nil?
             linked_to_item_id = item.linked_to_item_id
             link_to_type = item.linked_to_item.class.to_s.underscore
-            url = "http://#{website.config_value('primary_host')}" + item.linked_to_item.path
+            url = "http://#{@website_primary_host}" + item.linked_to_item.path
           end
 
           menu_item_hash = {
@@ -115,7 +116,7 @@ module Knitkit
             :renderWithBaseLayout => website_section.render_base_layout?,
             :hasLayout => !website_section.layout.blank?,
             :id => "section_#{website_section.id}",
-            :url => "http://#{website.config_value('primary_host')}#{website_section.path}",
+            :url => "http://#{@website_primary_host}#{website_section.path}",
             :internal_identifier => website_section.internal_identifier
           }
           if (website_section.is_a?(OnlineDocumentSection) || website_section.type == 'OnlineDocumentSection')
