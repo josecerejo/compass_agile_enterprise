@@ -39,7 +39,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.Knitkit.EastRegion",{
   
     constructor : function(config) {
         config = Ext.apply({
-            id:'knitkitEastRegion',
+            itemId:'knitkitEastRegion',
             region:'east',
             width:300,
             split:true,
