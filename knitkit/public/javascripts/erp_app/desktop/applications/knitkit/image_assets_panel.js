@@ -13,7 +13,7 @@ Compass.ErpApp.Desktop.Applications.Knitkit.ImageAssetsPanel = function(module) 
   this.sharedImageAssetsTreePanel = Ext.create("Compass.ErpApp.Shared.FileManagerTree",{
     region:'north',
     rootText:'Images',
-    collapsible:true,
+    collapsible:false,
     allowDownload:false,
     addViewContentsToContextMenu:false,
     rootVisible:true,
@@ -94,11 +94,19 @@ Compass.ErpApp.Desktop.Applications.Knitkit.ImageAssetsPanel = function(module) 
       },
       'fileDeleted':function(fileTreePanel, node){
         var store = self.sharedImageAssetsDataView.getStore();
-        store.load();
+        store.load({
+          params:{
+            directory:node.data.downloadPath
+          }
+        });
       },
       'fileUploaded':function(fileTreePanel, node){
         var store = self.sharedImageAssetsDataView.getStore();
-        store.load();
+        store.load({
+          params:{
+            directory:node.data.id
+          }
+        });
       },
       'downloadfile':function(fileTreePanel, node){
         window.open("/download/"+node.data.text+"?path=" + node.data.downloadPath+'&disposition=attachment','mywindow','width=400,height=200');
@@ -111,7 +119,7 @@ Compass.ErpApp.Desktop.Applications.Knitkit.ImageAssetsPanel = function(module) 
     autoLoadRoot:false,
     region:'north',
     rootText:'Images',
-    collapsible:true,
+    collapsible:false,
     allowDownload:false,
     addViewContentsToContextMenu:false,
     rootVisible:true,
@@ -184,7 +192,7 @@ Compass.ErpApp.Desktop.Applications.Knitkit.ImageAssetsPanel = function(module) 
       'fileDeleted':function(fileTreePanel, node){
         self.websiteImageAssetsDataView.getStore().load({
           params:{
-            directory:node.data.id,
+            directory:node.parentNode.data.downloadPath,
             website_id:self.websiteId
           }
         });
@@ -281,7 +289,11 @@ Compass.ErpApp.Desktop.Applications.Knitkit.ImageAssetsPanel = function(module) 
         website_id:websiteId
       }
     });
+
+    while (delNode = this.websiteImageAssetsTreePanel.getRootNode().childNodes[0]) {
+      this.websiteImageAssetsTreePanel.getRootNode().removeChild(delNode);
+    }
+    this.websiteImageAssetsTreePanel.getRootNode().expand();
     this.websiteImageAssetsTreePanel.getStore().load();
-    this.websiteImageAssetsDataView.getStore().removeAll();
   }
 }

@@ -400,9 +400,16 @@ Ext.define("Compass.ErpApp.Shared.FileManagerTree",{
                   currentUser.showInvalidAccess();
                   return false;
                 }
+
+                // bugfix (clearOnLoad) 
+                while (delNode = self.selectedNode.childNodes[0]) {
+                  self.selectedNode.removeChild(delNode);
+                }
+
                 store.load({
-                  node:record,
-                  params:self.extraPostData
+                  node:self.selectedNode,
+                  params:self.extraPostData,
+                  callback: function(){ view.refresh(); }
                 });
               }
             }
@@ -589,6 +596,7 @@ Ext.define("Compass.ErpApp.Shared.FileManagerTree",{
     config['listeners'] = defaultListeners;
 
     config = Ext.apply({
+      clearOnLoad: false, 
       store:store,
       animate:false,
       containerScroll: true,
@@ -597,6 +605,7 @@ Ext.define("Compass.ErpApp.Shared.FileManagerTree",{
       autoScroll:true,
       margins: '5 0 5 5',
       viewConfig: {
+        loadMask: true,
         plugins: {
           ptype: 'treeviewdragdrop'
         },

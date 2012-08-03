@@ -1,6 +1,7 @@
 Ext.define("Compass.ErpApp.Desktop.Applications.Knitkit.WestRegion",{
   extend:"Ext.tab.Panel",
   id:'knitkitWestRegion',
+  itemId:'knitkitWestRegion',
   alias:'widget.knitkit_westregion',
   setWindowStatus : function(status){
     this.findParentByType('statuswindow').setStatus(status);
@@ -233,8 +234,9 @@ Ext.define("Compass.ErpApp.Desktop.Applications.Knitkit.WestRegion",{
         }
       }
     });
-    Ext.getCmp('knitkitEastRegion').fileAssetsPanel.selectWebsite(websiteId);
-    Ext.getCmp('knitkitEastRegion').imageAssetsPanel.selectWebsite(websiteId);
+    var eastRegion = Ext.ComponentQuery.query('#knitkitEastRegion').first();
+    eastRegion.fileAssetsPanel.selectWebsite(websiteId);
+    eastRegion.imageAssetsPanel.selectWebsite(websiteId);
     Compass.ErpApp.Shared.FileManagerTree.extraPostData = {
       website_id:websiteId
     };
@@ -391,7 +393,14 @@ Ext.define("Compass.ErpApp.Desktop.Applications.Knitkit.WestRegion",{
       {
         name:'renderWithBaseLayout'
       }
-      ]
+      ],
+      listeners:{
+        'load':function(store, node, records){
+          var websiteId = records[0].id.split('_')[1];
+          var westRegion = Ext.ComponentQuery.query('#knitkitWestRegion').first();
+          westRegion.selectWebsite(websiteId);
+        }
+      }
     });
 
     var pluginItems = [];
@@ -2431,7 +2440,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.Knitkit.WestRegion",{
       autoDestroy:true,
       split:true,
       height:300,
-      collapsible:true
+      collapsible:false
     });
 
     var tbarItems = [];
