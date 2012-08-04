@@ -12,7 +12,7 @@ Compass.ErpApp.Desktop.Applications.Knitkit.ImageAssetsPanel = function(module) 
 
   this.sharedImageAssetsTreePanel = Ext.create("Compass.ErpApp.Shared.FileManagerTree",{
     region:'north',
-    rootText:'Images',
+    rootText:'Shared Images',
     collapsible:false,
     allowDownload:false,
     addViewContentsToContextMenu:false,
@@ -66,18 +66,18 @@ Compass.ErpApp.Desktop.Applications.Knitkit.ImageAssetsPanel = function(module) 
     }
     ],
     listeners:{
-           'allowdelete':function(){
-                return currentUser.hasApplicationCapability('knitkit', {
-                    capability_type_iid:'delete',
-                    resource:'GlobalImageAsset'
-                });
-            },
-            'allowupload':function(){
-                return currentUser.hasApplicationCapability('knitkit', {
-                    capability_type_iid:'upload',
-                    resource:'GlobalImageAsset'
-                });
-            },
+     'allowdelete':function(){
+          return currentUser.hasApplicationCapability('knitkit', {
+              capability_type_iid:'delete',
+              resource:'GlobalImageAsset'
+          });
+      },
+      'allowupload':function(){
+          return currentUser.hasApplicationCapability('knitkit', {
+              capability_type_iid:'upload',
+              resource:'GlobalImageAsset'
+          });
+      },
       'itemclick':function(view, record, item, index, e){
         e.stopEvent();
         if(!record.data["leaf"]){
@@ -172,6 +172,10 @@ Compass.ErpApp.Desktop.Applications.Knitkit.ImageAssetsPanel = function(module) 
     }
     ],
     listeners:{
+      'load':function(store, node, records){
+        store.getRootNode().data.text = self.websiteName;
+        self.websiteImageAssetsTreePanel.view.refresh();
+      },        
       'itemclick':function(view, record, item, index, e){
         if(self.websiteId != null){
           e.stopEvent();
@@ -273,8 +277,9 @@ Compass.ErpApp.Desktop.Applications.Knitkit.ImageAssetsPanel = function(module) 
     })
   });
 
-  this.selectWebsite = function(websiteId){
+  this.selectWebsite = function(websiteId, websiteName){
     this.websiteId = websiteId;
+    this.websiteName = websiteName;
   }
 
   this.reloadWebsiteImageAssetsTreePanel = function(websiteId){
@@ -290,10 +295,15 @@ Compass.ErpApp.Desktop.Applications.Knitkit.ImageAssetsPanel = function(module) 
       }
     });
 
-    while (delNode = this.websiteImageAssetsTreePanel.getRootNode().childNodes[0]) {
-      this.websiteImageAssetsTreePanel.getRootNode().removeChild(delNode);
+    if (websiteId){
+      while (delNode = this.websiteImageAssetsTreePanel.getRootNode().childNodes[0]) {
+        this.websiteImageAssetsTreePanel.getRootNode().removeChild(delNode);
+      }
+      this.websiteImageAssetsTreePanel.getRootNode().expand();
+
+      if (!this.websiteImageAssetsTreePanel.getStore().isLoading()){
+        this.websiteImageAssetsTreePanel.getStore().load();
+      }      
     }
-    this.websiteImageAssetsTreePanel.getRootNode().expand();
-    this.websiteImageAssetsTreePanel.getStore().load();
   }
 }

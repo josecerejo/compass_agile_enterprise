@@ -42,6 +42,7 @@ Compass.ErpApp.Desktop.Applications.Knitkit.FileAssetsPanel = function(module) {
     loadMask: true,
     collapsible:false,
     title:'Shared',
+    rootText:'Shared Files',    
     allowDownload:false,
     addViewContentsToContextMenu:false,
     rootVisible:true,
@@ -241,6 +242,10 @@ Compass.ErpApp.Desktop.Applications.Knitkit.FileAssetsPanel = function(module) {
     }],
     listeners:{
       scope:self,
+      'load':function(store, node, records){
+        store.getRootNode().data.text = self.websiteName;
+        self.websiteFileAssetsTreePanel.view.refresh();
+      },        
       'show': function(){
         self.reloadWebsiteFileAssetsTreePanel(self.websiteId);
       },
@@ -285,8 +290,9 @@ Compass.ErpApp.Desktop.Applications.Knitkit.FileAssetsPanel = function(module) {
     })
   });
 
-  this.selectWebsite = function(websiteId){
+  this.selectWebsite = function(websiteId, websiteName){
     this.websiteId = websiteId;
+    this.websiteName = websiteName;
   }
 
   this.reloadWebsiteFileAssetsTreePanel = function(websiteId){
@@ -302,10 +308,15 @@ Compass.ErpApp.Desktop.Applications.Knitkit.FileAssetsPanel = function(module) {
       }
     });
 
-    while (delNode = this.websiteFileAssetsTreePanel.getRootNode().childNodes[0]) {
-      this.websiteFileAssetsTreePanel.getRootNode().removeChild(delNode);
+    if (websiteId){
+      while (delNode = this.websiteFileAssetsTreePanel.getRootNode().childNodes[0]) {
+        this.websiteFileAssetsTreePanel.getRootNode().removeChild(delNode);
+      }
+      this.websiteFileAssetsTreePanel.getRootNode().expand();
+
+      if (!this.websiteFileAssetsTreePanel.getStore().isLoading()){
+        this.websiteFileAssetsTreePanel.getStore().load();
+      }
     }
-    this.websiteFileAssetsTreePanel.getRootNode().expand();
-    this.websiteFileAssetsTreePanel.getStore().load();
   }
 }

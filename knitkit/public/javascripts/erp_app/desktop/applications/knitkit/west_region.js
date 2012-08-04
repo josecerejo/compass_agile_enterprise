@@ -235,8 +235,8 @@ Ext.define("Compass.ErpApp.Desktop.Applications.Knitkit.WestRegion",{
       }
     });
     var eastRegion = Ext.ComponentQuery.query('#knitkitEastRegion').first();
-    eastRegion.fileAssetsPanel.selectWebsite(websiteId);
-    eastRegion.imageAssetsPanel.selectWebsite(websiteId);
+    eastRegion.fileAssetsPanel.selectWebsite(websiteId, node.data.text);
+    eastRegion.imageAssetsPanel.selectWebsite(websiteId, node.data.text);
     Compass.ErpApp.Shared.FileManagerTree.extraPostData = {
       website_id:websiteId
     };
