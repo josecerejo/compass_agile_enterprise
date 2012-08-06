@@ -22,7 +22,7 @@ module ErpTechSvcs
     				after_create     :save_secured_model
     				after_destroy    :destroy_secured_model
     				
-    				has_one :secured_model, :as => :secured_record    												
+    				has_one :secured_model, :as => :secured_record, :include => :roles  												
 				  end
 				end
 				

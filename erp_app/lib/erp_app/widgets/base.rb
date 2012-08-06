@@ -141,6 +141,14 @@ module ErpApp
       end
 
       class << self
+        def render_template(view, locals={})
+          widget = Rails.application.config.erp_app.widgets.find{|item| item[:name] == self.widget_name}
+          paths = widget[:view_paths]
+
+          paths.reverse!
+          ActionView::Base.new(paths).render(:template => view, :locals => locals)
+        end
+
         def widget_name
           File.basename(File.dirname(__FILE__))
         end

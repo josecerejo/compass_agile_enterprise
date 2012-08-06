@@ -281,9 +281,9 @@ class BaseErpServices < ActiveRecord::Migration
 
     unless table_exists?(:money)
       create_table :money do |t|
-        t.string :description
-        t.float :amount
-        t.references :currency
+        t.string      :description
+        t.decimal     :amount, :precision => 8, :scale => 2
+        t.references  :currency 
         t.timestamps
       end
       add_index :money, :currency_id

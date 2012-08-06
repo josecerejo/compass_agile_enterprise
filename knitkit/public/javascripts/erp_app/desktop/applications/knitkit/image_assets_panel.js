@@ -12,8 +12,8 @@ Compass.ErpApp.Desktop.Applications.Knitkit.ImageAssetsPanel = function(module) 
 
   this.sharedImageAssetsTreePanel = Ext.create("Compass.ErpApp.Shared.FileManagerTree",{
     region:'north',
-    rootText:'Images',
-    collapsible:true,
+    rootText:'Shared Images',
+    collapsible:false,
     allowDownload:false,
     addViewContentsToContextMenu:false,
     rootVisible:true,
@@ -31,71 +31,41 @@ Compass.ErpApp.Desktop.Applications.Knitkit.ImageAssetsPanel = function(module) 
         scope:self,
         'click':function(){
           var node = this.sharedImageAssetsTreePanel.selectedNode;
-          Ext.Msg.alert('Details', 'URL: /download/'+node.data.text+'?path='+node.data.downloadPath);
+          Ext.Msg.alert('Details', 'Filename: '+node.data.text +
+                                   '<br /> URL: '+node.data.url +
+                                   '<br /> Size: ' + node.data.size + ' bytes' +
+                                   '<br /> Width: ' + node.data.width + ' px' +
+                                   '<br /> Height: ' + node.data.height + ' px' 
+                        );
         }
       }
     },
     {
       nodeType:'leaf',
-      text:'Insert link at cursor',
+      text:'Insert image at cursor',
       iconCls:'icon-add',
       listeners:{
         scope:self,
         'click':function(){
           var node = this.sharedImageAssetsTreePanel.selectedNode;
-          Ext.MessageBox.prompt('Display Name', 'Please enter display name:', function(btn, text){
-            if(btn == 'ok'){
-              self.module.centerRegion.insertHtmlIntoActiveCkEditor('<a href="/download/'+node.data.text+'?path='+node.data.downloadPath+'">'+text+'</a>');
-            }
-          });
+          self.module.centerRegion.insertHtmlIntoActiveCkEditor('<img width="'+node.data.width+'" height="'+node.data.height+'" alt="'+node.data.text+'" src="/download/'+node.data.text+'?path='+node.data.downloadPath+'" />');
         }
       }
-    },
-    {
-      nodeType:'leaf',
-      text:'Insert link at cursor (inline)',
-      iconCls:'icon-add',
-      listeners:{
-        scope:self,
-        'click':function(){
-          var node = this.sharedImageAssetsTreePanel.selectedNode;
-          Ext.MessageBox.prompt('Display Name', 'Please enter display name:', function(btn, text){
-            if(btn == 'ok'){
-              self.module.centerRegion.insertHtmlIntoActiveCkEditor('<a href="/download/'+node.data.text+'?path='+node.data.downloadPath+'&disposition=inline">'+text+'</a>');
-            }
-          });
-        }
-      }
-    },
-    {
-      nodeType:'leaf',
-      text:'Insert link at cursor (prompt)',
-      iconCls:'icon-add',
-      listeners:{
-        scope:self,
-        'click':function(){
-          var node = this.sharedImageAssetsTreePanel.selectedNode;
-          Ext.MessageBox.prompt('Display Name', 'Please enter display name:', function(btn, text){
-            if(btn == 'ok'){
-              self.module.centerRegion.insertHtmlIntoActiveCkEditor('<a href="/download/'+node.data.text+'?path='+node.data.downloadPath+'&disposition=attachment">'+text+'</a>');
-            }
-          });
-        }
-      }
-    }],
+    }
+    ],
     listeners:{
-           'allowdelete':function(){
-                return currentUser.hasApplicationCapability('knitkit', {
-                    capability_type_iid:'delete',
-                    resource:'GlobalImageAsset'
-                });
-            },
-            'allowupload':function(){
-                return currentUser.hasApplicationCapability('knitkit', {
-                    capability_type_iid:'upload',
-                    resource:'GlobalImageAsset'
-                });
-            },
+     'allowdelete':function(){
+          return currentUser.hasApplicationCapability('knitkit', {
+              capability_type_iid:'delete',
+              resource:'GlobalImageAsset'
+          });
+      },
+      'allowupload':function(){
+          return currentUser.hasApplicationCapability('knitkit', {
+              capability_type_iid:'upload',
+              resource:'GlobalImageAsset'
+          });
+      },
       'itemclick':function(view, record, item, index, e){
         e.stopEvent();
         if(!record.data["leaf"]){
@@ -112,11 +82,19 @@ Compass.ErpApp.Desktop.Applications.Knitkit.ImageAssetsPanel = function(module) 
       },
       'fileDeleted':function(fileTreePanel, node){
         var store = self.sharedImageAssetsDataView.getStore();
-        store.load();
+        store.load({
+          params:{
+            directory:node.data.downloadPath
+          }
+        });
       },
       'fileUploaded':function(fileTreePanel, node){
         var store = self.sharedImageAssetsDataView.getStore();
-        store.load();
+        store.load({
+          params:{
+            directory:node.data.id
+          }
+        });
       },
       'downloadfile':function(fileTreePanel, node){
         window.open("/download/"+node.data.text+"?path=" + node.data.downloadPath+'&disposition=attachment','mywindow','width=400,height=200');
@@ -129,7 +107,7 @@ Compass.ErpApp.Desktop.Applications.Knitkit.ImageAssetsPanel = function(module) 
     autoLoadRoot:false,
     region:'north',
     rootText:'Images',
-    collapsible:true,
+    collapsible:false,
     allowDownload:false,
     addViewContentsToContextMenu:false,
     rootVisible:true,
@@ -147,59 +125,33 @@ Compass.ErpApp.Desktop.Applications.Knitkit.ImageAssetsPanel = function(module) 
         scope:self,
         'click':function(){
           var node = this.websiteImageAssetsTreePanel.selectedNode;
-          Ext.Msg.alert('Details', 'URL: /download/'+node.data.text+'?path='+node.data.downloadPath);
+          Ext.Msg.alert('Details', 'Filename: '+node.data.text +
+                                   '<br /> URL: '+node.data.url +
+                                   '<br /> Size: ' + node.data.size + ' bytes' +
+                                   '<br /> Width: ' + node.data.width + ' px' +
+                                   '<br /> Height: ' + node.data.height + ' px' 
+                        );
         }
       }
     },
     {
       nodeType:'leaf',
-      text:'Insert link at cursor',
+      text:'Insert image at cursor',
       iconCls:'icon-add',
       listeners:{
         scope:self,
         'click':function(){
           var node = this.websiteImageAssetsTreePanel.selectedNode;
-          Ext.MessageBox.prompt('Display Name', 'Please enter display name:', function(btn, text){
-            if(btn == 'ok'){
-              self.module.centerRegion.insertHtmlIntoActiveCkEditor('<a href="/download/'+node.data.text+'?path='+node.data.downloadPath+'">'+text+'</a>');
-            }
-          });
+          self.module.centerRegion.insertHtmlIntoActiveCkEditor('<img width="'+node.data.width+'" height="'+node.data.height+'" alt="'+node.data.text+'" src="/download/'+node.data.text+'?path='+node.data.downloadPath+'" />');
         }
       }
-    },
-    {
-      nodeType:'leaf',
-      text:'Insert link at cursor (inline)',
-      iconCls:'icon-add',
-      listeners:{
-        scope:self,
-        'click':function(){
-          var node = this.websiteImageAssetsTreePanel.selectedNode;
-          Ext.MessageBox.prompt('Display Name', 'Please enter display name:', function(btn, text){
-            if(btn == 'ok'){
-              self.module.centerRegion.insertHtmlIntoActiveCkEditor('<a href="/download/'+node.data.text+'?path='+node.data.downloadPath+'&disposition=inline">'+text+'</a>');
-            }
-          });
-        }
-      }
-    },
-    {
-      nodeType:'leaf',
-      text:'Insert link at cursor (prompt)',
-      iconCls:'icon-add',
-      listeners:{
-        scope:self,
-        'click':function(){
-          var node = this.websiteImageAssetsTreePanel.selectedNode;
-          Ext.MessageBox.prompt('Display Name', 'Please enter display name:', function(btn, text){
-            if(btn == 'ok'){
-              self.module.centerRegion.insertHtmlIntoActiveCkEditor('<a href="/download/'+node.data.text+'?path='+node.data.downloadPath+'&disposition=attachment">'+text+'</a>');
-            }
-          });
-        }
-      }
-    }],
+    }
+    ],
     listeners:{
+      'load':function(store, node, records){
+        store.getRootNode().data.text = self.websiteName;
+        self.websiteImageAssetsTreePanel.view.refresh();
+      },        
       'itemclick':function(view, record, item, index, e){
         if(self.websiteId != null){
           e.stopEvent();
@@ -220,7 +172,7 @@ Compass.ErpApp.Desktop.Applications.Knitkit.ImageAssetsPanel = function(module) 
       'fileDeleted':function(fileTreePanel, node){
         self.websiteImageAssetsDataView.getStore().load({
           params:{
-            directory:node.data.id,
+            directory:node.parentNode.data.downloadPath,
             website_id:self.websiteId
           }
         });
@@ -301,8 +253,9 @@ Compass.ErpApp.Desktop.Applications.Knitkit.ImageAssetsPanel = function(module) 
     })
   });
 
-  this.selectWebsite = function(websiteId){
+  this.selectWebsite = function(websiteId, websiteName){
     this.websiteId = websiteId;
+    this.websiteName = websiteName;
   }
 
   this.reloadWebsiteImageAssetsTreePanel = function(websiteId){
@@ -317,7 +270,16 @@ Compass.ErpApp.Desktop.Applications.Knitkit.ImageAssetsPanel = function(module) 
         website_id:websiteId
       }
     });
-    this.websiteImageAssetsTreePanel.getStore().load();
-    this.websiteImageAssetsDataView.getStore().removeAll();
+
+    if (websiteId){
+      while (delNode = this.websiteImageAssetsTreePanel.getRootNode().childNodes[0]) {
+        this.websiteImageAssetsTreePanel.getRootNode().removeChild(delNode);
+      }
+      this.websiteImageAssetsTreePanel.getRootNode().expand();
+
+      if (!this.websiteImageAssetsTreePanel.getStore().isLoading()){
+        this.websiteImageAssetsTreePanel.getStore().load();
+      }      
+    }
   }
 }

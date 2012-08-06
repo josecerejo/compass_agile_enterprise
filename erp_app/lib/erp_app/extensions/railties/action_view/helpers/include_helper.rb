@@ -20,7 +20,7 @@ module ErpApp
             def include_extjs(opt={})
               resources = ''
 
-              if opt[:debug] or Rails.env != 'production'
+              if opt[:debug]
                 resources << static_javascript_include_tag("extjs/ext-all-debug.js")
               else
                 resources << static_javascript_include_tag("extjs/ext-all.js")
@@ -37,6 +37,9 @@ module ErpApp
                 resources << static_stylesheet_link_tag("extjs/resources/css/ext-all.css")
               end
         
+              # this requirement is new in ExtJS 4.1
+              resources << "<script type=\"text/javascript\">Ext.Loader.setConfig({ enabled: true, disableCaching: false });</script>"
+
               raw resources
             end
 
@@ -114,6 +117,12 @@ module ErpApp
 
             def create_authenticity_token_sencha_touch_field
               raw "<script type='text/javascript'>Compass.ErpApp.Mobile.AuthentictyTokenField = {xtype:'hiddenfield', name:'authenticity_token', value:'#{form_authenticity_token}'}; </script>"
+            end
+
+            def setSessionTimeout(warn_milli_seconds=((ErpApp::Config.session_warn_after*60)*1000),
+                                  redirect_milli_seconds=((ErpApp::Config.session_redirect_after*60)*1000),
+                                  redirect_to='/session/sign_out')
+              raw "<script type='text/javascript'>Compass.ErpApp.Utility.SessionTimeout.setupSessionTimeout(#{warn_milli_seconds}, #{redirect_milli_seconds}, '#{redirect_to}') </script>" unless current_user === false
             end
 
             def load_shared_application_resources(resource_type)

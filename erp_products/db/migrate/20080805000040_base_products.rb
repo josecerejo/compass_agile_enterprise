@@ -69,7 +69,7 @@ class BaseProducts < ActiveRecord::Migration
       create_table :simple_product_offers do |t|
         t.column  :description,   :string
         t.column  :product_id,    :integer
-        t.column  :base_price,    :float
+        t.column  :base_price,    :decimal, :precision => 8, :scale => 2
         t.column  :uom,           :integer
         t.timestamps
       end

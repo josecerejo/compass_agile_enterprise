@@ -53,7 +53,7 @@ module ErpWorkEffort
           end
 
           def new_project_effort
-            if (self.project_effort.nil?)
+            if self.new_record? and self.project_effort.nil?
               project_effort = ProjectEffort.new
               self.project_effort = project_effort
               project_effort.work_effort_record = self

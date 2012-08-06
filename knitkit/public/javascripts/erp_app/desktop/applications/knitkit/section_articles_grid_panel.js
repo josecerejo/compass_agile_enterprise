@@ -31,135 +31,159 @@ Ext.define("Compass.ErpApp.Desktop.Applications.Knitkit.SectionArticlesGridPanel
     
   editArticle : function(record){
     var self = this;
-    var addFormItems = self.addFormItems;
-        
-    var editArticleWindow = Ext.create("Ext.window.Window",{
-      layout:'fit',
-      width:375,
-      title:'Edit Article',
-      plain: true,
-      buttonAlign:'center',
-      items: {
-        xtype: 'form',
-        labelWidth: 110,
-        frame:false,
-        bodyStyle:'padding:5px 5px 0',
-        width: 425,
-        url:'/knitkit/erp_app/desktop/articles/update/' + self.sectionId,
-        defaults: {
-          width: 225
-        },
-        items: [
-        {
-          xtype:'textfield',
-          fieldLabel:'Title',
-          allowBlank:false,
-          name:'title',
-          value: record.get('title')
-        },
-        {
-          xtype:'radiogroup',
-          fieldLabel:'Display title?',
-          name:'display_title',
-          columns:2,
-          items:[
-          {
-            boxLabel:'Yes',
-            name:'display_title',
-            inputValue: 'yes',
-            checked:record.get('display_title')
-          },
-          {
-            boxLabel:'No',
-            name:'display_title',
-            inputValue:'no',
-            checked:!record.get('display_title')
-          }]
-        },
-        {
-          xtype:'textfield',
-          fieldLabel:'Unique Name',
-          allowBlank:true,
-          name:'internal_identifier',
-          value: record.get('internal_identifier')
-        },
-        addFormItems,
-        {
-          xtype: 'displayfield',
-          fieldLabel: 'Created At',
-          name: 'created_at',
-          value: record.data.created_at
-        },
-        {
-          xtype: 'displayfield',
-          fieldLabel: 'Updated At',
-          name: 'updated_at',
-          value: record.data.updated_at
-        }
-        ]
-      },
-      listeners:{
-        'show':function(){
-          if (Ext.getCmp('record_id')){
-            Ext.getCmp('record_id').setValue(record.get('id'));
-          }
-          if (Ext.getCmp('tag_list')){
-            Ext.getCmp('tag_list').setValue(record.get('tag_list'));
-          }
-          if (Ext.getCmp('content_area')){
-            Ext.getCmp('content_area').setValue(record.get('content_area'));
-          }
-          if (Ext.getCmp('position')){
-            Ext.getCmp('position').setValue(record.get('position'));
-          }
-        }
-      },
-      buttons: [{
-        text:'Submit',
-        listeners:{
-          'click':function(button){
-            var window = button.findParentByType('window');
-            var formPanel = window.query('form')[0];
-            self.initialConfig['centerRegion'].setWindowStatus('Updating article...');
-            formPanel.getForm().submit({
-              reset:false,
-              success:function(form, action){
-                self.initialConfig['centerRegion'].clearWindowStatus();
-                var obj = Ext.decode(action.response.responseText);
-                if(obj.success){
-                  self.getStore().load();
-                  if(formPanel.getForm().findField('tag_list')){
-                    var tag_list = formPanel.getForm().findField('tag_list').getValue();
-                    record.set('tag_list', tag_list);
-                  }
-                  if(formPanel.getForm().findField('content_area')){
-                    var content_area = formPanel.getForm().findField('content_area').getValue();
-                    record.set('content_area', content_area);
-                  }
-                  if(formPanel.getForm().findField('position')){
-                    var position = formPanel.getForm().findField('position').getValue();
-                    record.set('position', position);
-                  }
-                  editArticleWindow.close();
-                }
-                else{
-                  Ext.Msg.alert("Error", obj.msg);
-                }
-              },
-              failure:function(form, action){
-                self.initialConfig['centerRegion'].clearWindowStatus();
-                Ext.Msg.alert("Error", "Error updating article");
-              }
-            });
-          }
-        }
-      },{
-        text: 'Close',
-        handler: function(){
-          editArticleWindow.close();
-        }
-      }]
-    });
+		var itemId = 'editArticle-'+record.get('id');
+		var editArticleWindow = Ext.ComponentQuery.query('#'+itemId).first();
+    // var addFormItems = self.addFormItems;
+		if (self.alias.first() == 'widget.knitkit_pagearticlesgridpanel'){
+			var addFormItems = [
+				{
+			  	xtype:'textfield',
+					fieldLabel:'Content Area',
+					name:'content_area',
+					value:record.data.content_area
+			   },
+	      {
+	        xtype:'numberfield',
+	        fieldLabel:'Position',
+	        name:'position',
+					value:record.data.position
+	      }
+			]
+		} 
+		else {
+			if (self.alias.first() == 'widget.knitkit_blogarticlesgridpanel'){
+				var addFormItems = [
+					{
+		        xtype:'textfield',
+		        fieldLabel:'Tags',
+		        allowBlank:true,
+		        name:'tags',
+						value:record.data.tag_list
+		      }
+				]
+			}
+		}
+
+    if(Compass.ErpApp.Utility.isBlank(editArticleWindow)){  
+	    var editArticleWindow = Ext.create("Ext.window.Window",{
+	      layout:'fit',
+	      width:375,
+	      title:'Edit Article',
+				itemId:itemId,
+	      plain: true,
+	      buttonAlign:'center',
+	      items: {
+	        xtype: 'form',
+	        labelWidth: 110,
+	        frame:false,
+	        bodyStyle:'padding:5px 5px 0',
+	        width: 425,
+	        url:'/knitkit/erp_app/desktop/articles/update/' + self.sectionId,
+	        defaults: {
+	          width: 225
+	        },
+	        items: [
+					{
+		        xtype:'hidden',
+		        allowBlank:false,
+		        name:'id',
+		        value: record.data.id
+		      },
+	        {
+	          xtype:'textfield',
+	          fieldLabel:'Title',
+	          allowBlank:false,
+	          name:'title',
+	          value: record.data.title
+	        },
+	        {
+	          xtype:'radiogroup',
+	          fieldLabel:'Display title?',
+	          name:'display_title',
+	          columns:2,
+	          items:[
+	          {
+	            boxLabel:'Yes',
+	            name:'display_title',
+	            inputValue: 'yes',
+	            checked:record.data.display_title
+	          },
+	          {
+	            boxLabel:'No',
+	            name:'display_title',
+	            inputValue:'no',
+	            checked:!record.data.display_title
+	          }]
+	        },
+	        {
+	          xtype:'textfield',
+	          fieldLabel:'Unique Name',
+	          allowBlank:true,
+	          name:'internal_identifier',
+	          value: record.data.internal_identifier
+	        },
+	        addFormItems,
+	        {
+	          xtype: 'displayfield',
+	          fieldLabel: 'Created At',
+	          name: 'created_at',
+	          value: record.data.created_at
+	        },
+	        {
+	          xtype: 'displayfield',
+	          fieldLabel: 'Updated At',
+	          name: 'updated_at',
+	          value: record.data.updated_at
+	        }
+	        ]
+	      },
+	      buttons: [{
+	        text:'Submit',
+	        listeners:{
+	          'click':function(button){
+	            var window = button.findParentByType('window');
+	            var formPanel = window.query('form')[0];
+	            self.initialConfig['centerRegion'].setWindowStatus('Updating article...');
+	            formPanel.getForm().submit({
+	              reset:false,
+	              success:function(form, action){
+	                self.initialConfig['centerRegion'].clearWindowStatus();
+	                var obj = Ext.decode(action.response.responseText);
+	                if(obj.success){
+	                  self.getStore().load();
+	                  if(formPanel.getForm().findField('tag_list')){
+	                    var tag_list = formPanel.getForm().findField('tag_list').getValue();
+	                    record.set('tag_list', tag_list);
+	                  }
+	                  if(formPanel.getForm().findField('content_area')){
+	                    var content_area = formPanel.getForm().findField('content_area').getValue();
+	                    record.set('content_area', content_area);
+	                  }
+	                  if(formPanel.getForm().findField('position')){
+	                    var position = formPanel.getForm().findField('position').getValue();
+	                    record.set('position', position);
+	                  }
+	                  editArticleWindow.close();
+	                }
+	                else{
+	                  Ext.Msg.alert("Error", obj.msg);
+	                }
+	              },
+	              failure:function(form, action){
+	                self.initialConfig['centerRegion'].clearWindowStatus();
+	                Ext.Msg.alert("Error", "Error updating article");
+	              }
+	            });
+	          }
+	        }
+	      },{
+	        text: 'Close',
+	        handler: function(){
+	          editArticleWindow.close();
+	        }
+	      }]
+	    });
+		}
     editArticleWindow.show();
   },
 
@@ -185,39 +209,17 @@ Ext.define("Compass.ErpApp.Desktop.Applications.Knitkit.SectionArticlesGridPanel
       },
       remoteSort: true,
       fields:[
-      {
-        name:'id'
-      },
-      {
-        name:'title'
-      },
-      {
-        name:'tag_list'
-      },
-      {
-        name:'excerpt_html'
-      },
-      {
-        name:'position'
-      },
-      {
-        name:'content_area'
-      },
-      {
-        name:'body_html'
-      },
-      {
-        name:'internal_identifier'
-      },
-      {
-        name:'display_title'
-      },
-      {
-        name:'created_at'
-      },
-      {
-        name:'updated_at'
-      }
+	      {name:'id'},
+	      {name:'title'},
+	      {name:'tag_list'},
+	      {name:'excerpt_html'},
+	      {name:'position'},
+	      {name:'content_area'},
+	      {name:'body_html'},
+	      {name:'internal_identifier'},
+	      {name:'display_title'},
+	      {name:'created_at'},
+	      {name:'updated_at'}
       ]
     });
 
@@ -242,6 +244,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.Knitkit.SectionArticlesGridPanel
             width:40,
             items:[{
                 icon:'/images/icons/edit/edit_16x16.png',
+								iconCls:'actioncolumn_hover',
                 tooltip:'Edit',
                 handler :function(grid, rowIndex, colIndex){
                     var rec = grid.getStore().getAt(rowIndex);
@@ -266,6 +269,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.Knitkit.SectionArticlesGridPanel
                 width:40,
                 items:[{
                     icon:'/images/icons/edit/edit_16x16.png',
+										iconCls:'actioncolumn_hover',
                     tooltip:'Edit Attributes',
                     handler :function(grid, rowIndex, colIndex){
                         var rec = grid.getStore().getAt(rowIndex);
@@ -291,6 +295,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.Knitkit.SectionArticlesGridPanel
                 width:40,
                 items:[{
                     icon:'/images/icons/delete/delete_16x16.png',
+										iconCls:'actioncolumn_hover',
                     tooltip:'Delete Article from Section',
                     handler :function(grid, rowIndex, colIndex){
                         var rec = grid.getStore().getAt(rowIndex);
@@ -577,20 +582,17 @@ Ext.define("Compass.ErpApp.Desktop.Applications.Knitkit.PageArticlesGridPanel",{
       {
         xtype:'hidden',
         allowBlank:false,
-        name:'id',
-        id: 'record_id'
+        name:'id'
       },
       {
         xtype:'textfield',
         fieldLabel:'Content Area',
-        name:'content_area',
-        id: 'content_area'
+        name:'content_area'
       },
       {
         xtype:'numberfield',
         fieldLabel:'Position',
-        name:'position',
-        id: 'position'
+        name:'position'
       }
       ]
     }, config);
@@ -615,15 +617,13 @@ Ext.define("Compass.ErpApp.Desktop.Applications.Knitkit.BlogArticlesGridPanel",{
       {
         xtype:'hidden',
         allowBlank:false,
-        name:'id',
-        id: 'record_id'
+        name:'id'
       },
       {
         xtype:'textfield',
         fieldLabel:'Tags',
         allowBlank:true,
-        name:'tags',
-        id: 'tag_list'
+        name:'tags'
       }
       ],
       columns:[{

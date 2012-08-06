@@ -129,12 +129,12 @@
                 iconCls:"icon-control_panel",
                 scope:b
               }],
-            shortcuts:Ext.create("Ext.data.Store",{
-              model:"Ext.ux.desktop.ShortcutModel",
-              data:[
-                {applicationId:0,name:"Control Panel",iconCls:"control-panel-win-shortcut",module:"control-panel-win",autoLoad:'na'},
-                {applicationId:0,name:"Web Navigator",iconCls:"web-navigator-win-shortcut",module:"web-navigator-win",autoLoad:'na'}<%=(@desktop.shortcuts.count > 0) ? ',' : '' %>
-				<%=@desktop.shortcuts.collect{|app| "{name:'#{app.description}',iconCls:'#{app.shortcut_id}-shortcut',module:'#{app.shortcut_id}'}"}.join(",")%>
+            shortcuts: Ext.create("Ext.data.Store",{
+              model: "Ext.ux.desktop.ShortcutModel",
+              data: [
+                {name:"Control Panel",iconCls:"control-panel-win-shortcut",module:"control-panel-win"},
+                {name:"Web Navigator",iconCls:"web-navigator-win-shortcut",module:"web-navigator-win"}<%=(@desktop.shortcuts.count > 0) ? ',' : '' %>
+				        <%=@desktop.shortcuts.collect{|app| "{name:'#{app.description}',iconCls:'#{app.shortcut_id}-shortcut',module:'#{app.shortcut_id}'}"}.join(",")%>
               ]
             }),
             wallpaper:"/images/wallpaper/<%=@desktop.get_preference(:desktop_background) %>",
@@ -231,13 +231,9 @@
         setTimeout(function(){
           Ext.get('loading').remove();
           Ext.get('loading-mask').fadeOut({remove:true});
-          <%
-            @desktop.autoloads.each do |application|
-          %>
+          <% @desktop.autoloads.each do |application| %>
             compassDesktop.getModule('<%=application.shortcut_id%>').createWindow();
-          <%
-            end
-          %>
+          <% end %>
         }, 250);
       });
 
@@ -248,5 +244,6 @@
         <p style='margin-left: -110px; margin-top: 30px;'>Loading Compass Desktop...</p>
       </div>
     </div>
+    <%= setSessionTimeout %>
   </body>
 </html>

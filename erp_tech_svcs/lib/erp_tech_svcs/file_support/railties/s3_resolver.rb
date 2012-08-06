@@ -26,15 +26,10 @@ module ActionView
           @cached[key][name][prefix][partial][locals] = decorate(yield, path_info, details, locals)
         else
           @cached[key][name][prefix][partial][locals].each do |template|
+            @cached[key][name][prefix][partial][locals].delete_if{|item| item.identifier == template.identifier}
             #check if the file still exists
             if file_support.exists? template.identifier
-              last_update = mtime(template.identifier, file_support)
-              if last_update > template.updated_at
-                @cached[key][name][prefix][partial][locals].delete_if{|item| item.identifier == template.identifier}
-                @cached[key][name][prefix][partial][locals] << build_template(template.identifier, template.virtual_path, (details[:formats] || [:html] if template.formats.empty?), file_support, template.locals)
-              end
-            else
-              @cached[key][name][prefix][partial][locals].delete_if{|item| item.identifier == template.identifier}
+              @cached[key][name][prefix][partial][locals] << build_template(template.identifier, template.virtual_path, (details[:formats] || [:html] if template.formats.empty?), file_support, template.locals)
             end
           end
           @cached[key][name][prefix][partial][locals]
@@ -74,18 +69,22 @@ module ActionView
     end
 
     protected
-
+    
+    def cache_key(path)
+      Thread.current[:tenant_id].nil? ? path : "tenant_#{Thread.current[:tenant_id]}_#{path}"
+    end
+    
     def cache_template(path, file_support)
       contents, message = file_support.get_contents(path)
       path = path.sub(%r{^/},'')
       #Rails.logger.info "creating cache with key: #{path}"
-      Rails.cache.write(path, contents, :expires_in => ErpTechSvcs::Config.s3_cache_expires_in_minutes.minutes)
+      Rails.cache.write(cache_key(path), contents, :expires_in => ErpTechSvcs::Config.s3_cache_expires_in_minutes.minutes)
       return contents, message 
     end
 
     def build_template(p, virtual_path, formats, file_support, locals=nil)
       handler, format = extract_handler_and_format(p, formats)
-      contents = Rails.cache.read(p.sub(%r{^/},''))
+      contents = Rails.cache.read(cache_key(p.sub(%r{^/},'')))
       if contents.nil?
         contents, message = cache_template(p, file_support)
       else

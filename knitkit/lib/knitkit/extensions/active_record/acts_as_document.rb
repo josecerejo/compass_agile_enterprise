@@ -50,7 +50,7 @@ module Knitkit
 				  end
 
 				  def initialize_document
-            if (self.document.nil?)
+            if self.new_record? and self.document.nil?
               self.document = Document.new
               self.document.document_record = self
             end

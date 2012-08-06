@@ -87,7 +87,7 @@ module ErpInvoicing
       @payment_date = Date.today
       
       money = Money.create(
-        :amount => @amount.to_f,
+        :amount => @amount.to_d,
         :description => "Clicktopay Payment Applied",
         :currency => Currency.usd
       )

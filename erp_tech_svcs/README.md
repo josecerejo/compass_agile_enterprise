@@ -22,6 +22,20 @@ This engine is implemented with the premise that services like logging, tracing 
 - file\_storage
   - File storage to use either s3 or filesystem.
   - Default : :filesystem
+- s3\_url\_expires\_in_seconds
+  - Set expiration in seconds on an S3 url to a secure file
+  - Default : 60
+- s3\_protocol
+  - Protocol for S3 URLs
+  - Default : https
+- s3\_cache\_expires\_in\_minutes
+  - S3 assets are cached for performance. Set expiration lifetime here in minutes.
+  - Default : 60
+- session\_expires\_in_hours
+  - Used by DeleteExpiredSessionsJob to purge inaactive sessions from database.
+  - Default : 12
+- compass\_logger\_path
+  - Default : Rails.root/log
 
 ### Override Initializer
 
@@ -38,6 +52,7 @@ To override these settings simple create a erp_tech_svcs.rb file in your initial
       config.file_storage = :filesystem # Can be either :s3 or :filesystem
       config.s3_cache_expires_in_minutes = 60 
       config.session_expires_in_hours = 12 # this is used by DeleteExpiredSessionsJob to purge inaactive sessions from database 
+      config.compass_logger_path = "#{Rails.root}/log"
     end
     Rails.application.config.erp_tech_svcs.configure!
 

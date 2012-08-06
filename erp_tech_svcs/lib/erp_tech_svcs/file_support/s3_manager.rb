@@ -29,7 +29,7 @@ module ErpTechSvcs
         end
 
         def cache_key
-          'node_tree'
+          Thread.current[:tenant_id].nil? ? 'node_tree' : "tenant_#{Thread.current[:tenant_id]}_node_tree"
         end
 
         def cache_node_tree(node_tree)
@@ -49,7 +49,9 @@ module ErpTechSvcs
               :children => []
             }
             child_hash = add_children(child_hash, child) unless child.leaf?
-            parent_hash[:children] << child_hash unless child_hash[:downloadPath] == '/.'
+            unless child_hash[:id].gsub(/\/$/,'') == parent_hash[:id].gsub(/\/$/,'') # resolves s3 issue where empty dir contains itself
+              parent_hash[:children] << child_hash unless child_hash[:downloadPath] == '/.'
+            end
           end
 
           parent_hash
@@ -96,15 +98,18 @@ module ErpTechSvcs
       end
 
       def update_file(path, content)
+        file = FileAsset.where(:name => ::File.basename(path)).where(:directory => ::File.dirname(path)).first
+        acl = (file.has_capabilities? ? :private : :public_read) unless file.nil?
+        options = (file.nil? ? {} : {:acl => acl, :content_type => file.content_type })
         path = path.sub(%r{^/},'')
-        bucket.objects[path].write(content)
+        bucket.objects[path].write(content, options)
         clear_cache(path)
       end
 
       def create_file(path, name, content)
         path = path.sub(%r{^/},'')
         full_filename = (path.blank? ? name : File.join(path, name))
-        bucket.objects[full_filename].write(content)
+        bucket.objects[full_filename].write(content, { :acl => :public_read })
         clear_cache(path)
       end
 
@@ -112,7 +117,7 @@ module ErpTechSvcs
         path = path.sub(%r{^/},'')
         full_filename = (path.blank? ? name : File.join(path, name))
         folder = full_filename + "/"
-        bucket.objects[folder].write('')
+        bucket.objects[folder].write('', { :acl => :public_read })
         clear_cache(path)
       end
 
@@ -175,12 +180,11 @@ module ErpTechSvcs
       end
 
       def delete_file(path, options={})
+        is_directory = !path.match(/\/$/).nil?
         path = path.sub(%r{^/},'')
         result = false
         message = nil
-
         begin
-          is_directory = !path.match(/\/$/).nil?
           if options[:force] or bucket.as_tree(:prefix => path).children.count <= 1 # aws-sdk includes the folder itself as a child (like . is current dir), this needs revisited as <= 1 is scary
             bucket.objects.with_prefix(path).delete_all
             message = "File was deleted successfully"
@@ -224,7 +228,6 @@ module ErpTechSvcs
 
       def build_tree(starting_path, options={})
         starting_path = "/" + starting_path unless starting_path.first == "/"
-        #ErpTechSvcs::FileSupport::S3Manager.reload
         node_tree = find_node(starting_path, options)
         node_tree.nil? ? [] : node_tree
       end

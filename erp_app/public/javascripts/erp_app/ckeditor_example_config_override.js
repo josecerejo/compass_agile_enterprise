@@ -1,5 +1,6 @@
 // This is an example of how to override default ckeditor configuration
-// place this file in Rails.root/public/javascripts/compass_ae_extensions/erp_app/desktop/applications/knitkit/
+// place this file in Rails.root/public/javascripts/extensions/compass_ae/erp_app/desktop/applications/knitkit/
+// Details here: https://github.com/portablemind/compass_agile_enterprise/wiki/Compass-AE-Extension-Pattern
 
 //set default config here
 Ext.override(Compass.ErpApp.Shared.CKeditor,{

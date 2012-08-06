@@ -95,6 +95,10 @@ module ErpTechSvcs
               unless file.nil?
                 child_hash[:isSecured] = file.has_capabilities?
                 child_hash[:iconCls] = 'icon-document_lock' if child_hash[:isSecured]
+                child_hash[:size] = file.data_file_size
+                child_hash[:width] = file.width
+                child_hash[:height] = file.height
+                child_hash[:url] = file.url
               end
 
               new_parents << child_hash

@@ -64,10 +64,17 @@ class Website < ActiveRecord::Base
     #ActiveRecord::Base.connection.execute("select path from website_sections where website_id = #{self.id}").collect{|row| row['path']}
   end
 
+  def config_value(config_item_type_iid)
+    primary_host_config_item_type = ConfigurationItemType.find_by_internal_identifier(config_item_type_iid)
+    self.configurations.first.get_configuration_item(primary_host_config_item_type).options.first.value
+  end
+
   def self.find_by_host(host)
     website = nil
-    website_host = WebsiteHost.find_by_host(host)
-    website = website_host.website unless website_host.nil?
+    unless host.nil?
+      website_host = WebsiteHost.find_by_host(host)
+      website = website_host.website unless website_host.nil?
+    end
     website
   end
 
@@ -99,7 +106,7 @@ class Website < ActiveRecord::Base
 
   def setup_website
     PublishedWebsite.create(:website => self, :version => 0, :active => true, :comment => 'New Site Created')
-    Role.create(:description => "Website #{self.title}", :internal_identifier => website_role_iid)
+    Role.create(:description => "Website #{self.title}", :internal_identifier => website_role_iid) if self.role.nil?
     configuration = ::Configuration.find_template('default_website_configuration').clone(true)
     configuration.description = "Website #{self.name} Configuration"
     configuration.internal_identifier = configuration.description.underscore
@@ -194,7 +201,7 @@ class Website < ActiveRecord::Base
 
     articles_path = Pathname.new(File.join(tmp_dir,'articles'))
     FileUtils.mkdir_p(articles_path) unless articles_path.exist?
-    
+
     documented_contents_path = Pathname.new(File.join(tmp_dir, 'documented contents'))
     FileUtils.mkdir_p(documented_contents_path) unless documented_contents_path.exist?
 
@@ -309,7 +316,7 @@ class Website < ActiveRecord::Base
       FileUtils.rm_rf(tmp_dir.to_s)
 
       if Website.find_by_internal_identifier(setup_hash[:internal_identifier]).nil?
-        website = Website.create(
+        website = Website.new(
           :name => setup_hash[:name],
           :title => setup_hash[:title],
           :subtitle => setup_hash[:subtitle],
@@ -318,6 +325,7 @@ class Website < ActiveRecord::Base
           :email_inquiries => setup_hash[:email_inquiries],
           :auto_activate_publication => setup_hash[:auto_activate_publication]
         )
+        website.save!
 
         #set default publication published by user
         first_publication = website.published_websites.first
@@ -382,6 +390,7 @@ class Website < ActiveRecord::Base
           website.publish("Website Imported", current_user)
 
         rescue Exception=>ex
+          Rails.logger.error "#{ex.inspect} #{ex.backtrace}"
           website.destroy unless website.nil?
           raise ex
         end
@@ -392,7 +401,7 @@ class Website < ActiveRecord::Base
         message = 'Website already exists with that internal_identifier'
         success = false
       end
-      
+
       return success, message
     end
 

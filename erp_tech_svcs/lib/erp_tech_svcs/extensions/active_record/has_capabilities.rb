@@ -16,9 +16,12 @@ module ErpTechSvcs
     				after_initialize :initialize_capable_model
     				after_update     :save_capable_model
     				after_create     :save_capable_model
-    				after_destroy    :destroy_capable_model
-    				
-    				has_one :capable_model, :as => :capable_model_record
+    				after_destroy    :destroy_capable_model    
+
+            has_one :capable_model, :as => :capable_model_record				
+            has_many :capabilities, :through => :capable_model
+
+            default_scope :include => :capabilities
 				  end
 				end
 				
@@ -26,12 +29,9 @@ module ErpTechSvcs
 				end
 						
 				module InstanceMethods
+
 				  def has_capabilities?
             !capabilities.empty?
-          end
-
-          def capabilities
-            capable_model.capabilities
           end
 
           def available_capability_resources
@@ -113,7 +113,8 @@ module ErpTechSvcs
           end
 
           def initialize_capable_model
-            if self.capable_model.nil?
+            # added new_record? because simply querying for a file_asset was causing a plethora of unnecessary queries for capable_model
+            if self.new_record? and self.capable_model.nil?
               capable_model = CapableModel.new
               self.capable_model = capable_model
               capable_model.capable_model_record = self

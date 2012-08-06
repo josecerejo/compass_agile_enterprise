@@ -61,14 +61,14 @@ module Knitkit
               else
                 result[:success] = false
               end
-          
+
               render :json => result
             end
           rescue ErpTechSvcs::Utils::CompassAccessNegotiator::Errors::UserDoesNotHaveCapability=>ex
             render :json => {:success => false, :message => ex.message}
           end
         end
-  
+
         def delete
           model = DesktopApplication.find_by_internal_identifier('knitkit')
           begin
@@ -103,12 +103,12 @@ module Knitkit
           section = WebsiteSection.find(website_section_id)
 
           if section.type == 'Blog'
-            sort_default = 'created_at'
+            sort_default = 'contents.created_at'
             dir_default = 'DESC'
           else
             sort_default = 'title'
             dir_default = 'ASC'
-          end            
+          end
 
           sort_hash = params[:sort].blank? ? {} : Hash.symbolize_keys(JSON.parse(params[:sort]).first)
           sort = sort_hash[:property] || sort_default
@@ -146,7 +146,7 @@ module Knitkit
 
           render :inline => "{total:#{total_count},data:#{articles_array.to_json}}"
         end
-      
+
         def all
           Article.include_root_in_json = false
           sort_hash = params[:sort].blank? ? {} : Hash.symbolize_keys(JSON.parse(params[:sort]).first)
@@ -157,7 +157,10 @@ module Knitkit
 
           articles = Article.includes(:website_section_contents)      
           articles = articles.where( :website_section_contents => { :content_id => nil } ) if params[:show_orphaned] == 'true'
-          articles = articles.where('internal_identifier like ?', "%#{params[:iid]}%") unless params[:iid].blank?
+          articles = articles.where("UPPER(contents.internal_identifier) LIKE UPPER('%#{params[:iid]}%')") unless params[:iid].blank?
+          articles = articles.where("UPPER(contents.title) LIKE UPPER('%#{params[:title]}%')") unless params[:title].blank?
+          articles = articles.where("UPPER(contents.body_html) LIKE UPPER('%#{params[:content]}%')
+                                  OR UPPER(contents.excerpt_html) LIKE UPPER('%#{params[:content]}%')") unless params[:content].blank?
           articles = articles.order("contents.#{sort} #{dir}")
           total_count = articles.count
           articles = articles.limit(limit).offset(start)
@@ -195,7 +198,7 @@ module Knitkit
           article = Article.find(params[:article_id])
           attributes = article.attribute_values
           attributes = attributes.slice(start.to_i, limit.to_i)
-          
+
           if dir == "DESC"
             if sort == "data_type" or sort == "description"
               attributes = attributes.sort {|x,y| x.attribute_type.send(sort) <=> y.attribute_type.send(sort)}
@@ -277,7 +280,7 @@ module Knitkit
 
           render :json => result
         end
-	  
+
       end#ArticlesController
     end#Desktop
   end#ErpApp

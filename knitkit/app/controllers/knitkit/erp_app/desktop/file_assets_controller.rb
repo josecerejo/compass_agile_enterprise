@@ -111,6 +111,7 @@ module Knitkit
           begin
             current_user.with_capability(model, capability_type, capability_resource) do
               path = params[:node]
+              path = "#{path}/" if params[:leaf] == 'false' and path.match(/\/$/).nil?
               result = {}
               begin
                 name = File.basename(path)

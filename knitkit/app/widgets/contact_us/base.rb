@@ -18,7 +18,7 @@ module Widgets
         @validation[:email] = "Please Enter a Valid Email Address" unless /^.+@.+\..+$/.match(params[:email])
 			
         if @is_html_form and !@validation.empty?
-          return render :view => :error
+          return render :update => {:id => "#{@uuid}_result", :view => :error}
         end
 			
         @website = Website.find_by_host(request.host_with_port)

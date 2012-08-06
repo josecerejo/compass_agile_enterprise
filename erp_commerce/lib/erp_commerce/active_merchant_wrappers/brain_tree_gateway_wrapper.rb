@@ -27,7 +27,7 @@ module ErpCommerce
           })
 
         if credit_card_result.valid?
-          cents = (amount.to_f * 100)
+          cents = (amount.to_d * 100)
           response = gateway.purchase(cents, credit_card_result)
 
           if response.success?

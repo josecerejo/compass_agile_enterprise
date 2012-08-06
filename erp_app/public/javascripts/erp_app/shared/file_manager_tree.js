@@ -119,7 +119,16 @@ Ext.define("Compass.ErpApp.Shared.FileManagerTree",{
         name:'leaf'
       },{
         name:'isSecured'
-      }]
+      },{
+        name:'size'
+      },{
+        name:'width'
+      },{
+        name:'height'
+      },{
+        name:'url'
+      }
+      ]
     });
 
     var defaultListeners = {
@@ -326,7 +335,8 @@ Ext.define("Compass.ErpApp.Shared.FileManagerTree",{
                 if(btn == 'yes')
                 {
                   Ext.apply(self.extraPostData, {
-                    node:record.data.id
+                    node:record.data.id,
+                    leaf:record.data.leaf
                   });
                   var msg = Ext.Msg.wait("Loading", "Deleting file...");
                   Ext.Ajax.request({
@@ -390,9 +400,16 @@ Ext.define("Compass.ErpApp.Shared.FileManagerTree",{
                   currentUser.showInvalidAccess();
                   return false;
                 }
+
+                // bugfix (clearOnLoad) 
+                while (delNode = self.selectedNode.childNodes[0]) {
+                  self.selectedNode.removeChild(delNode);
+                }
+
                 store.load({
-                  node:record,
-                  params:self.extraPostData
+                  node:self.selectedNode,
+                  params:self.extraPostData,
+                  callback: function(){ view.refresh(); }
                 });
               }
             }
@@ -579,6 +596,7 @@ Ext.define("Compass.ErpApp.Shared.FileManagerTree",{
     config['listeners'] = defaultListeners;
 
     config = Ext.apply({
+      clearOnLoad: false, 
       store:store,
       animate:false,
       containerScroll: true,
@@ -587,6 +605,7 @@ Ext.define("Compass.ErpApp.Shared.FileManagerTree",{
       autoScroll:true,
       margins: '5 0 5 5',
       viewConfig: {
+        loadMask: true,
         plugins: {
           ptype: 'treeviewdragdrop'
         },

@@ -21,7 +21,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.Knitkit.ImageAssetsDataView",{
       tpl: new Ext.XTemplate(
         '<tpl for=".">',
         '<div class="thumb-wrap" id="{name}">',
-        '<div class="thumb"><img src="{url}" alt="{name}" class="thumb-img"></div>',
+        '<div class="thumb"><img src="{url}" title="{name}" alt="{name}" class="thumb-img"></div>',
         '<span>{shortName}</span></div>',
         '</tpl>')
     }, config);

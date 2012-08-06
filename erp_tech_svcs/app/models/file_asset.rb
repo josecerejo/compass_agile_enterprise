@@ -39,13 +39,13 @@ class FileAsset < ActiveRecord::Base
   end
 
   after_create :set_sti
-  after_save   :set_data_file_name
+  after_save   :set_data_file_name, :save_dimensions
 
   belongs_to :file_asset_holder, :polymorphic => true
   instantiates_with_sti
 
   has_capabilities
-
+  
   #paperclip
   has_attached_file :data,
     :storage => ErpTechSvcs::Config.file_storage,
@@ -125,6 +125,35 @@ class FileAsset < ActiveRecord::Base
     super attributes.merge(:directory => directory, :name => name, :data => data)
   end
 
+  # compass file download url
+  def url
+    "/download/#{self.name}?#{self.directory}"
+  end
+
+  # returns full path to local image or url to s3 image
+  def path
+    file_support = ErpTechSvcs::FileSupport::Base.new(:storage => ErpTechSvcs::Config.file_storage)
+
+    if ErpTechSvcs::Config.file_storage == :s3
+      file_path = File.join(self.directory,self.name).sub(%r{^/},'')
+      options = {}
+      options[:expires] = ErpTechSvcs::Config.s3_url_expires_in_seconds if self.has_capabilities?
+      return file_support.bucket.objects[file_path].url_for(:read, options).to_s
+    else
+      return File.join(Rails.root, self.directory, self.name)
+    end
+  end
+
+  def save_dimensions 
+    if type == 'Image'
+      f = Paperclip::Geometry.from_file(self.path)
+      w = f.width.to_i
+      h = f.height.to_i
+      update_attribute(:width, w) if width != w
+      update_attribute(:height, h) if height != h
+    end
+  end 
+
   def basename
     data_file_name.gsub(/\.#{extname}$/, "")
   end
@@ -165,7 +194,9 @@ class FileAsset < ActiveRecord::Base
 
     result, message = file_support.save_move(old_path, new_parent_path)
     if result
-      self.directory = new_parent_path.gsub(Regexp.new(Rails.root.to_s), '') # strip rails root from new_parent_path, we want relative path
+      dir = new_parent_path.gsub(Regexp.new(Rails.root.to_s), '') # strip rails root from new_parent_path, we want relative path
+      dir = '/' + dir unless dir.match(%r{^/})
+      self.directory = dir
       self.save
     end
 

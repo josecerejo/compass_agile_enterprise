@@ -67,10 +67,7 @@ module ErpTechSvcs
       end
 
       def CompassLogger.app_logger()
-        path = "#{Rails.root}/log/#{Rails.env rescue 'rake'}.log"
-        unless RUBY_PLATFORM =~ /(:?mswin|mingw|darwin)/
-          path = "/var/log/rails/#{Rails.env rescue 'rake'}.log"
-        end
+        path = File.join(ErpTechSvcs::Config.compass_logger_path, "#{Rails.env rescue 'rake'}.log")
         unless @@writers.has_key?("app_logger")
           logger = Logger.new(path)
           logger.level = CompassLogger.log_level()
@@ -83,11 +80,7 @@ module ErpTechSvcs
       end
 
       def CompassLogger.log_path(method)
-        if RUBY_PLATFORM =~ /(:?mswin|mingw|darwin)/
-         return "#{Rails.root}/log/#{Rails.env rescue ''}_#{method}.log"
-       else
-         return "/var/log/rails/#{Rails.env rescue ''}_#{method}.log"
-       end
+        File.join(ErpTechSvcs::Config.compass_logger_path, "#{Rails.env rescue ''}_#{method}.log")
       end
     end
   end
