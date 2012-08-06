@@ -157,7 +157,10 @@ module Knitkit
 
           articles = Article.includes(:website_section_contents)      
           articles = articles.where( :website_section_contents => { :content_id => nil } ) if params[:show_orphaned] == 'true'
-          articles = articles.where('internal_identifier like ?', "%#{params[:iid]}%") unless params[:iid].blank?
+          articles = articles.where("UPPER(contents.internal_identifier) LIKE UPPER('%#{params[:iid]}%')") unless params[:iid].blank?
+          articles = articles.where("UPPER(contents.title) LIKE UPPER('%#{params[:title]}%')") unless params[:title].blank?
+          articles = articles.where("UPPER(contents.body_html) LIKE UPPER('%#{params[:content]}%')
+                                  OR UPPER(contents.excerpt_html) LIKE UPPER('%#{params[:content]}%')") unless params[:content].blank?
           articles = articles.order("contents.#{sort} #{dir}")
           total_count = articles.count
           articles = articles.limit(limit).offset(start)
