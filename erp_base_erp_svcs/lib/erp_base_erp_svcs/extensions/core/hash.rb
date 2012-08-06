@@ -15,5 +15,14 @@ Hash.class_eval do
     item
   end
 
+  #merge hash and overwrite key only if it is nil
+  def apply_if(hash)
+    self.merge(hash){|key, v1, v2| v1.nil? ? v2 : v1}
+  end
+
+  def apply_if!(hash)
+    self.merge!(hash){|key, v1, v2| v1.nil? ? v2 : v1}
+  end
+
 end
 

@@ -2,7 +2,7 @@ module ErpTechSvcs
   module Config
     class << self
 
-      attr_accessor :max_file_size_in_mb, 
+      attr_accessor :max_file_size_in_mb,
                     :installation_domain, 
                     :login_url,
                     :email_notifications_from, 
@@ -25,7 +25,7 @@ module ErpTechSvcs
           :@s3_protocol => 'https', # Can be either 'http' or 'https'
           :@file_storage => :filesystem, # Can be either :s3 or :filesystem
           :@s3_cache_expires_in_minutes => 60,
-          :@session_expires_in_hours => 12, # this is used by DeleteExpiredSessionsJob to purge inactive sessions from database 
+          :@session_expires_in_hours => 12, # this is used by DeleteExpiredSessionsJob to purge inactive sessions from database
           :@compass_logger_path => "#{Rails.root}/log"
         }
       end
