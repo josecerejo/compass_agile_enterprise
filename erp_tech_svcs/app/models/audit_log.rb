@@ -18,7 +18,7 @@ class AuditLog < ActiveRecord::Base
   end
 
   #allow items to be looked up by method calls
-  def respond_to?(m)
+  def respond_to?(m, include_private_methods = false)
     (super ? true : get_item_by_item_type_internal_identifier(m.to_s)) rescue super
   end
 
