@@ -759,6 +759,13 @@ var columnItems = [];
                             id:'global_article_advanced_search_title'
                         },
                         {
+                            xtype:'textfield',
+                            fieldLabel:'Content',
+                            allowBlank:true,
+                            name:'content',
+                            id:'global_article_advanced_search_content'
+                        },
+                        {
                             xtype:'fieldset',
                             border: false,
                             autoHeight: true,
@@ -880,7 +887,8 @@ var columnItems = [];
                         text:'Submit',
                         listeners:{
                             'click':function(button){
-                                var iid = Ext.getCmp('global_article_advanced_search_title').getValue();
+                                var title = Ext.getCmp('global_article_advanced_search_title').getValue();
+                                var content = Ext.getCmp('global_article_advanced_search_content').getValue();
                                 var created_start_date = Ext.getCmp('global_article_advanced_search_created_start_date').getValue();
                                 var created_end_date = Ext.getCmp('global_article_advanced_search_created_end_date').getValue();
                                 var updated_start_date = Ext.getCmp('global_article_advanced_search_updated_start_date').getValue();
@@ -900,7 +908,8 @@ var columnItems = [];
                                         totalProperty:'total'
                                     },
                                     extraParams:{
-                                        iid:iid,
+                                        title:title,
+                                        content:content,
                                         created_start_date:created_start_date,
                                         created_end_date:created_end_date,
                                         updated_start_date:updated_start_date,
