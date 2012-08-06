@@ -720,7 +720,7 @@ var columnItems = [];
                         totalProperty:'total'
                     },
                     extraParams:{
-                        iid:ii
+                        iid:iid
                     }
                 });
                 store.load();
