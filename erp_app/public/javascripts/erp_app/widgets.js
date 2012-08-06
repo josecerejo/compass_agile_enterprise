@@ -52,10 +52,10 @@ Compass.ErpApp.Widgets = {
         $.address.value('nav?url=' + href + '&key='+Compass.ErpApp.Utility.randomString(10));
         anchor.closest('div.compass_ae-widget').mask("Loading....");
 
-        $.ajax({
+        /*$.ajax({
             url: href,
             success: Compass.ErpApp.JQuerySupport.handleHtmlUpdateResponse
-        });
+        });*/
 
         return false;
     });

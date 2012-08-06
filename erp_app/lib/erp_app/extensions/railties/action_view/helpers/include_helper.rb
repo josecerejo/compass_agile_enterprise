@@ -119,6 +119,12 @@ module ErpApp
               raw "<script type='text/javascript'>Compass.ErpApp.Mobile.AuthentictyTokenField = {xtype:'hiddenfield', name:'authenticity_token', value:'#{form_authenticity_token}'}; </script>"
             end
 
+            def setSessionTimeout(warn_milli_seconds=((ErpApp::Config.session_warn_after*60)*1000),
+                                  redirect_milli_seconds=((ErpApp::Config.session_redirect_after*60)*1000),
+                                  redirect_to='/session/sign_out')
+              raw "<script type='text/javascript'>Compass.ErpApp.Utility.SessionTimeout.setupSessionTimeout(#{warn_milli_seconds}, #{redirect_milli_seconds}, '#{redirect_to}') </script>" unless current_user === false
+            end
+
             def load_shared_application_resources(resource_type)
               resource_type = resource_type.to_sym
               case resource_type

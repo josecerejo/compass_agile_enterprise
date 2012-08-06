@@ -10,6 +10,11 @@ if ($) {
     };
 
     Compass.ErpApp.JQuerySupport.handleHtmlUpdateResponse = function (e, xhr, settings) {
+        //reset SessionTimeout
+        if(Compass.ErpApp.Utility.SessionTimeout.enabled){
+            Compass.ErpApp.Utility.SessionTimeout.reset();
+        }
+
         if(Compass.ErpApp.JQuerySupport.IsJsonString(xhr.responseText)){
             var responseData = jQuery.parseJSON(xhr.responseText);
             if (!Ext.isEmpty(responseData) && !Ext.isEmpty(responseData.htmlId)) {

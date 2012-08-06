@@ -6,14 +6,23 @@ class Party < ActiveRecord::Base
   belongs_to :business_party, :polymorphic => true
   has_many   :party_roles, :dependent => :destroy
 	has_many   :role_types, :through => :party_roles
-	
+
+  after_destroy :destroy_business_party
+
 	attr_reader :relationships
   attr_writer :create_relationship
 
   # Gathers all party relationships that contain this particular party id
   # in either the from or to side of the relationship.
   def relationships
-    @relationships ||= PartyRelationship.where('party_id_from = ? OR party_id_to = ?', id, id)
+    @relationships ||= PartyRelationship.where('party_id_from = ? or party_id_to = ?', id, id)
+  end
+
+  def find_relationships_by_type(relationship_type_iid)
+    PartyRelationship.includes(:relationship_type)
+                     .where('party_id_from = ? or party_id_to = ?', id, id)
+                     .where('relationship_types.internal_identifier' => relationship_type_iid.to_s)
+
   end
 
   # Creates a new PartyRelationship for this particular
@@ -23,7 +32,7 @@ class Party < ActiveRecord::Base
   end
 
   # Callback
-	def after_destroy
+	def destroy_business_party
     if self.business_party
       self.business_party.destroy
     end
