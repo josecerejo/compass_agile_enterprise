@@ -22,9 +22,9 @@ Gem::Specification.new do |s|
   s.add_dependency 'erp_base_erp_svcs', "~> 3.1"
   s.add_development_dependency 'erp_dev_svcs', "~> 3.1"
   
-  s.add_dependency('aws-sdk','1.5.2')
+  s.add_dependency('aws-sdk','1.6.0')
   s.add_dependency('delayed_job_active_record','0.3.2')
-  s.add_dependency('paperclip','3.0.4')
+  s.add_dependency('paperclip','3.1.4')
   s.add_dependency('pdfkit','0.5.2')
   s.add_dependency('sorcery','0.7.12')
 end
