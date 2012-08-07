@@ -1,21 +1,21 @@
 module ErpOrders
-	module Extensions
-		module ActiveRecord
-			module ActsAsOrderTxn
-	    	def self.included(base)
-            	base.extend(ClassMethods)
+  module Extensions
+    module ActiveRecord
+      module ActsAsOrderTxn
+        def self.included(base)
+              base.extend(ClassMethods)
         end
 
-    		module ClassMethods
+        module ClassMethods
 
-      		def acts_as_order_txn
+          def acts_as_order_txn
             extend ActsAsOrderTxn::SingletonMethods
-    			  include ActsAsOrderTxn::InstanceMethods
-    			  
-    			  after_initialize :initialize_order_txn
-  					after_create :save_order_txn
-  					after_update :save_order_txn
-  					after_destroy :destroy_order_txn
+            include ActsAsOrderTxn::InstanceMethods
+            
+            after_initialize :initialize_order_txn
+            after_create :save_order_txn
+            after_update :save_order_txn
+            after_destroy :destroy_order_txn
             
             has_one :order_txn, :as => :order_txn_record
 
@@ -52,6 +52,7 @@ module ErpOrders
               :ship_to_last_name,:ship_to_last_name=,
               :ship_to_postal_code,:ship_to_postal_code=,
               :ship_to_state,:ship_to_state=,
+              :ship_to_fax,:ship_to_fax=,
               :state_machine,:state_machine=,
               :status,:status=,
               :add_line_item,
@@ -79,13 +80,13 @@ module ErpOrders
               :biz_txn_type_id,:biz_txn_type_id=,
               :external_id_source,:external_id_source=,
               :account,:account=].each { |m| delegate m, :to => :order_txn }
-    		  end
-    	  end
+          end
+        end
 
-    		module SingletonMethods
-    		end
+        module SingletonMethods
+        end
 
-    		module InstanceMethods
+        module InstanceMethods
           def order
             self.order_txn
           end
@@ -106,8 +107,8 @@ module ErpOrders
             end
           end
 
-    		end
-    	end
+        end
+      end
     end
   end
 end
