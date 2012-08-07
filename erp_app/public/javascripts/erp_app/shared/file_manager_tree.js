@@ -106,7 +106,8 @@ Ext.define("Compass.ErpApp.Shared.FileManagerTree",{
       proxy: {
         method: 'GET',
         type: 'ajax',
-        url:config['url'] || '/erp_app/desktop/file_manager/base/expand_directory'
+        url:config['url'] || '/erp_app/desktop/file_manager/base/expand_directory',
+        timeout: 60000
       },
       root:rootConfig,
       fields:config['fields'] || [{
