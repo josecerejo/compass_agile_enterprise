@@ -2,7 +2,7 @@
 require 'knitkit/extensions/core/array'
 
 #railties
-require 'knitkit/extensions/railties/action_view'
+require 'knitkit/extensions/railties/action_view/base'
 require 'knitkit/extensions/railties/theme_support/asset_tag_helper'
 require 'knitkit/extensions/railties/theme_support/theme_file_resolver'
 

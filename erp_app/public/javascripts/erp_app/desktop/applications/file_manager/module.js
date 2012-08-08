@@ -46,6 +46,8 @@ Ext.define("Compass.ErpApp.Desktop.Applications.FileManager",{
           'contentLoaded':function(fileManager, record, content){
             var path = record.data.id;
             var fileType = path.split('.').pop();
+
+
             contentCardPanel.removeAll(true);
             contentCardPanel.add({
               disableToolbar:!currentUser.hasRole('admin'),

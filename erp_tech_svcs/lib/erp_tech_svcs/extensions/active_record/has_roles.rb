@@ -55,7 +55,7 @@ module ErpTechSvcs
           end
 
 				  def add_role(role)
-					  role = Role.find_by_internal_identifier(role) if role.is_a? String
+					  role = role.is_a?(Role) ? role : Role.find_by_internal_identifier(role.to_s)
             unless self.has_role?(role)
   					  self.secured_model.roles << role
   					  self.secured_model.save
@@ -72,7 +72,7 @@ module ErpTechSvcs
           end
 
           def remove_role(role)
-            role = Role.find_by_internal_identifier(role) if role.is_a? String
+            role = role.is_a?(Role) ? role : Role.find_by_internal_identifier(role.to_s)
             self.secured_model.roles.delete(role) if has_role?(role)
 				  end
 
@@ -93,7 +93,7 @@ module ErpTechSvcs
             result = false
             passed_roles.flatten!
             passed_roles.each do |role|
-              role_iid = (role.is_a?(String)) ? role : role.internal_identifier
+              role_iid = role.is_a?(Role) ?  role.internal_identifier : role.to_s
               self.roles.each do |this_role|
                 result = true if (this_role.internal_identifier == role_iid)
                 break if result
@@ -121,9 +121,10 @@ module ErpTechSvcs
             end
           end
         end
-      end
-    end
-  end
-end
+
+      end #HasRoles
+    end #ActiveRecord
+  end #Extensions
+end #ErpTechSvcs
 
 
