@@ -94,7 +94,10 @@ module Knitkit
               @website_section.render_base_layout = params[:render_with_base_layout] == 'yes'
               @website_section.internal_identifier = params[:internal_identifier]
 
+              website = @website_section.website
               if @website_section.save
+                @website_section.publish(website, 'Auto Publish', @website_section.version, current_user) if website.publish_on_save?
+
                 render :json => {:success => true}
               else
                 render :json => {:success => false}

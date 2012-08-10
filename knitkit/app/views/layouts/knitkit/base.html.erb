@@ -61,6 +61,6 @@
       <%= yield :foot %>
     </div>
     <%= setSessionTimeout %>
-    <%= setup_inline_editing(current_user) %>
+    <%= setup_inline_editing(current_user, @website) %>
   </body>
 </html>

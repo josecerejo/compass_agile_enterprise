@@ -335,15 +335,6 @@ Ext.define("Compass.ErpApp.Desktop.Applications.Knitkit.WestRegion",{
         name:'subtitle'
       },
       {
-        name:'email'
-      },
-      {
-        name:'autoActivatePublication'
-      },
-      {
-        name:'emailInquiries'
-      },
-      {
         name:'isHostRoot'
       },
       {
@@ -1448,63 +1439,6 @@ Ext.define("Compass.ErpApp.Desktop.Applications.Knitkit.WestRegion",{
 
                         },
                         {
-                          xtype:'textfield',
-                          fieldLabel:'Email',
-                          allowBlank:false,
-                          name:'email',
-                          value:record.data['email']
-                        },
-                        {
-                          xtype:'radiogroup',
-                          fieldLabel:'Auto Activate Publication?',
-                          name:'auto_activate_publication',
-                          id:'knitkitAutoActivatePublication',
-                          columns:2,
-                          items:[
-                          {
-                            boxLabel:'Yes',
-                            name:'auto_activate_publication',
-                            inputValue: 'yes',
-                            checked:record.data['autoActivatePublication']
-                          },
-                          {
-                            boxLabel:'No',
-                            name:'auto_activate_publication',
-                            inputValue: 'no',
-                            checked:!record.data['autoActivatePublication']
-                          }]
-                        },
-                        {
-                          xtype:'radiogroup',
-                          fieldLabel:'Email Inquiries?',
-                          name:'email_inquiries',
-                          id:'knitkitEmailInquiries',
-                          columns:2,
-                          items:[
-                          {
-                            boxLabel:'Yes',
-                            name:'email_inquiries',
-                            inputValue: 'yes',
-                            checked:record.data['emailInquiries'],
-                            listeners:{
-                              scope:this,
-                              'check':function(checkbox, checked){
-                                if(checked)
-                                {
-                                  Ext.Msg.alert("Warning","ActionMailer must be setup to send emails");
-                                }
-                              }
-                            }
-                          },
-
-                          {
-                            boxLabel:'No',
-                            name:'email_inquiries',
-                            inputValue: 'no',
-                            checked:!record.data['emailInquiries']
-                          }]
-                        },
-                        {
                           xtype:'hidden',
                           name:'id',
                           value:record.data.id.split('_')[1]
@@ -1526,8 +1460,6 @@ Ext.define("Compass.ErpApp.Desktop.Applications.Knitkit.WestRegion",{
                                 record.data['subtitle'] = form.findField('subtitle').getValue();
                                 record.data['email'] = form.findField('email').getValue();
                                 //node.setText(node.attributes['title']);
-                                record.data.emailInquiries = form.findField('knitkitEmailInquiries').getValue().inputValue == 'yes';
-                                record.data.autoActivatePublication = form.findField('knitkitAutoActivatePublication').getValue().inputValue == 'yes';
                                 editWebsiteWindow.close();
                               },
                               failure:function(form, action){
@@ -2479,61 +2411,8 @@ Ext.define("Compass.ErpApp.Desktop.Applications.Knitkit.WestRegion",{
                 fieldLabel:'Sub Title',
                 allowBlank:true,
                 name:'subtitle'
-              },
-              {
-                xtype:'textfield',
-                fieldLabel:'Email',
-                allowBlank:false,
-                name:'email'
-              },
-              {
-                xtype:'radiogroup',
-                fieldLabel:'Auto Activate Publication?',
-                name:'auto_activate_publication',
-                columns:2,
-                items:[
-                {
-                  boxLabel:'Yes',
-                  name:'auto_activate_publication',
-                  inputValue: 'yes'
-                },
-                {
-                  boxLabel:'No',
-                  name:'auto_activate_publication',
-                  inputValue: 'no',
-                  checked:true
-                }]
-              },
-              {
-                xtype:'radiogroup',
-                fieldLabel:'Email Inquiries',
-                name:'email_inquiries',
-                columns:2,
-                items:[
-                {
-                  boxLabel:'Yes',
-                  name:'email_inquiries',
-                  inputValue: 'yes',
-                  checked:false,
-                  listeners:{
-                    scope:this,
-                    'check':function(checkbox, checked){
-                      if(checked)
-                      {
-                        Ext.Msg.alert("Warning","ActionMailer must be setup to send emails");
-                      }
-                    }
-                  }
-                },
-                {
-                  boxLabel:'No',
-                  name:'email_inquiries',
-                  inputValue: 'no',
-                  checked:true
-                }
-                ]
               }
-              ]
+             ]
             }),
             buttons: [{
               text:'Submit',

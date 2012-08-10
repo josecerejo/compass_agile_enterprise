@@ -1,6 +1,17 @@
 Knitkit.InlineEditing = {
     contentDiv:null,
-    setup:function () {
+    websiteId:null,
+    contentId:null,
+
+    closeEditor:function(editor){
+        editor.destroy();
+        jQuery('#light').remove();
+        jQuery('#fade').remove();
+    },
+
+    setup:function (websiteId) {
+        this.websiteId = websiteId;
+
         jQuery('div.knitkit_content').bind('mouseenter', function () {
             var div = jQuery(this);
             div.addClass('knitkit-inlineedit-editable')
@@ -12,7 +23,9 @@ Knitkit.InlineEditing = {
         });
 
         jQuery('div.knitkit_content').bind('click', function () {
+            var self = Knitkit.InlineEditing;
             var div = jQuery(this);
+            self.contentId = div.attr('content_id');
             var data = div.html();
 
             var whiteContent = jQuery("<div id='light' class='white_content'></div>");
@@ -23,10 +36,17 @@ Knitkit.InlineEditing = {
             whiteContent.append(closeLink);
 
             closeLink.bind('click', function () {
-                data = CKEDITOR.instances['inlineEditTextarea'].getData();
-                CKEDITOR.instances['inlineEditTextarea'].destroy();
-                jQuery('#light').remove();
-                jQuery('#fade').remove();
+                var editor = CKEDITOR.instances['inlineEditTextarea'];
+                if(editor.checkDirty()){
+                    var result = confirm("You have unsaved content, are you sure you want to close this editor?");
+                    if (result===true)
+                    {
+                        self.closeEditor(editor);
+                    }
+                }
+                else{
+                    self.closeEditor(editor);
+                }
             });
 
             jQuery("body").append(whiteContent);
@@ -57,8 +77,11 @@ Knitkit.InlineEditing = {
                     on:{
                         instanceReady:function (ev) {
                             Knitkit.InlineEditing.contentDiv = div;
-                            this.focus();
                             this.setData(data);
+                            this.focus();
+                        },
+                        dataReady:function(ev){
+                            this.resetDirty();
                         }
                     }
 

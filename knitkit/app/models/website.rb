@@ -93,6 +93,14 @@ class Website < ActiveRecord::Base
     self.published_websites.where(:active => true).first
   end
 
+  def auto_activate_publication?
+    self.configurations.first.get_item(ConfigurationItemType.find_by_internal_identifier('auto_active_publications')).options.first.value == 'yes'
+  end
+
+  def publish_on_save?
+    self.configurations.first.get_item(ConfigurationItemType.find_by_internal_identifier('publish_on_save')).options.first.value == 'yes'
+  end
+
   def role
     Role.iid(website_role_iid)
   end
@@ -103,7 +111,6 @@ class Website < ActiveRecord::Base
     configuration = ::Configuration.find_template('default_website_configuration').clone(true)
     configuration.description = "Website #{self.name} Configuration"
     configuration.internal_identifier = configuration.description.underscore
-    configuration.update_configuration_item(ConfigurationItemType.find_by_internal_identifier('contact_us_email_address'), self.email)
     configuration.update_configuration_item(ConfigurationItemType.find_by_internal_identifier('login_url'), '/login')
     configuration.update_configuration_item(ConfigurationItemType.find_by_internal_identifier('homepage_url'), '/home')
     self.configurations << configuration
@@ -154,14 +161,13 @@ class Website < ActiveRecord::Base
       :title => title,
       :subtitle => subtitle,
       :internal_identifier => internal_identifier,
-      :email => email,
-      :auto_activate_publication => auto_activate_publication,
-      :email_inquiries => email_inquiries,
       :sections => [],
       :images => [],
       :files => [],
       :website_navs => []
     }
+
+    #TODO update to handle configurations
 
     setup_hash[:sections] = sections.positioned.collect do |website_section|
       website_section.build_section_hash
@@ -313,11 +319,11 @@ class Website < ActiveRecord::Base
           :name => setup_hash[:name],
           :title => setup_hash[:title],
           :subtitle => setup_hash[:subtitle],
-          :internal_identifier => setup_hash[:internal_identifier],
-          :email => setup_hash[:email],
-          :email_inquiries => setup_hash[:email_inquiries],
-          :auto_activate_publication => setup_hash[:auto_activate_publication]
+          :internal_identifier => setup_hash[:internal_identifier]
         )
+
+        #TODO update to handle configurations
+
         website.save!
 
         #set default publication published by user

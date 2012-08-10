@@ -16,15 +16,12 @@ module Knitkit
               :iconCls => 'icon-globe_disconnected',
               :id => "website_#{website.id}",
               :leaf => false,
-              :url => "http://#{website.hosts.first.attributes['host']}",
+              :url => "http://#{website.configurations.first.get_item(ConfigurationItemType.find_by_internal_identifier('primary_host')).options.first.value}",
               :name => website.name,
               :title => website.title,
               :subtitle => website.subtitle,
               :isWebsite => true,
-              :email => website.email,
               :siteName => website.name,
-              :emailInquiries =>  website.email_inquiries?,
-              :autoActivatePublication => website.auto_activate_publication?,
               :children => []
             }
 
