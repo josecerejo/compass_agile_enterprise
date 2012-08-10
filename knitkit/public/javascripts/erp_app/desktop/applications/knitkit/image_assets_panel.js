@@ -54,9 +54,6 @@ Compass.ErpApp.Desktop.Applications.Knitkit.ImageAssetsPanel = function(module) 
     }
     ],
     listeners:{
-      'selectionchange':function(){
-
-      },
      'allowdelete':function(){
           return currentUser.hasApplicationCapability('knitkit', {
               capability_type_iid:'delete',
