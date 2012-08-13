@@ -155,23 +155,25 @@ module Knitkit
         end
 
         def save_move
+          result        = {}
+          nodes_to_move = (params[:selected_nodes] ? JSON(params[:selected_nodes]) : [params[:node]])
           model = DesktopApplication.find_by_internal_identifier('knitkit')
           begin
-            current_user.with_capability(model, 'view', 'Theme') do
-              result          = {}
-              path            = File.join(@file_support.root, params[:node])
-              new_parent_path = File.join(@file_support.root, params[:parent_node])
+            nodes_to_move.each do |node|
+              current_user.with_capability(model, 'view', 'Theme') do
+                path            = File.join(@file_support.root, node)
+                new_parent_path = File.join(@file_support.root, params[:parent_node])
 
-              unless @file_support.exists? path
-                result = {:success => false, :msg => 'File does not exist.'}
-              else
-                theme_file = get_theme_file(path)
-                theme_file.move(params[:parent_node])
-                result = {:success => true, :msg => "#{File.basename(path)} was moved to #{new_parent_path} successfully"}
+                unless @file_support.exists? path
+                  result = {:success => false, :msg => 'File does not exist.'}
+                else
+                  theme_file = get_theme_file(path)
+                  theme_file.move(params[:parent_node])
+                  result = {:success => true, :msg => "#{File.basename(path)} was moved to #{new_parent_path} successfully"}
+                end
               end
-
-              render :json => result
             end
+            render :json => result
           rescue ErpTechSvcs::Utils::CompassAccessNegotiator::Errors::UserDoesNotHaveCapability=>ex
             render :json => {:success => false, :message => ex.message}
           end

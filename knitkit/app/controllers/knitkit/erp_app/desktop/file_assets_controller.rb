@@ -85,17 +85,22 @@ module Knitkit
           path            = params[:node]
           new_parent_path = params[:parent_node]
           new_parent_path = @root_node if new_parent_path == ROOT_NODE
-
-          if Rails.application.config.erp_tech_svcs.file_storage == :filesystem and !File.exists?(File.join(@file_support.root, path))
-            result = {:success => false, :msg => 'File does not exist.'}
-          else
-            #path = path[1..path.length] if path[0] == "/"
-            file = @assets_model.files.find(:first, :conditions => ['name = ? and directory = ?', ::File.basename(path), ::File.dirname(path)])
-            file.move(new_parent_path)
-            result = {:success => true, :msg => "#{File.basename(path)} was moved to #{new_parent_path} successfully"}
+          
+          nodes_to_move = (params[:selected_nodes] ? JSON(params[:selected_nodes]) : [params[:node]])
+          begin
+            nodes_to_move.each do |path|
+              if ErpTechSvcs::Config.file_storage == :filesystem and !File.exists?(File.join(@file_support.root, path))
+                result = {:success => false, :msg => 'File does not exist.'}
+              else
+                file = @assets_model.files.find(:first, :conditions => ['name = ? and directory = ?', ::File.basename(path), ::File.dirname(path)])
+                file.move(new_parent_path)
+                result = {:success => true, :msg => "#{File.basename(path)} was moved to #{new_parent_path} successfully"}
+              end
+            end
+            render :json => result
+          rescue Exception => e
+            result = {:success => false, :msg => e.message}
           end
-
-          render :json => result
         end
 
         def delete_file

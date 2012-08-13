@@ -138,7 +138,7 @@ Ext.define("Compass.ErpApp.Shared.FileManagerTree",{
           currentUser.showInvalidAccess();
           return false;
         }
-        Ext.MessageBox.confirm('Confirm', 'Are you sure you want to move this file?', function(btn){
+        Ext.MessageBox.confirm('Confirm', 'Are you sure you want to move the selected file(s)?', function(btn){
           if(btn == 'no'){
             store.load({
               node:oldParent
@@ -151,10 +151,15 @@ Ext.define("Compass.ErpApp.Shared.FileManagerTree",{
           else
           if(btn == 'yes')
           {
+            selectedNodes = self.getSelectionModel().getSelection();
+
             var msg = Ext.Msg.wait("Saving", "Saving move...");
             Ext.apply(self.extraPostData, {
               node:node.data.id,
-              parent_node:newParent.data.id
+              parent_node:newParent.data.id,
+              selected_nodes:Ext.JSON.encode(Ext.Array.map(selectedNodes, function(node, i) {
+                return node.data.id;
+              }))
             });
             Ext.Ajax.request({
               url: (self.initialConfig['controllerPath'] || '/erp_app/desktop/file_manager/base') + '/save_move',
@@ -163,7 +168,7 @@ Ext.define("Compass.ErpApp.Shared.FileManagerTree",{
               success: function(response) {
                 msg.hide();
                 var responseObj = Ext.decode(response.responseText);
-                Ext.Msg.alert('Status', responseObj.msg);
+                //Ext.Msg.alert('Status', responseObj.msg);
                 if(responseObj.success){
                   store.load({
                     node:newParent
@@ -616,15 +621,17 @@ Ext.define("Compass.ErpApp.Shared.FileManagerTree",{
         loadMask: true,
         plugins: {
           ptype: 'treeviewdragdrop'
-        },
-        listeners:{
-          'beforedrop':function(node, data, overModel, dropPosition,dropFunction,options){
-            self.fireEvent('beforedrop_view', node, data, overModel, dropPosition,dropFunction,options);
-          },
-          'drop':function(node, data, overModel, dropPosition, options){
-            self.fireEvent('drop_view', node, data, overModel, dropPosition, options);
-          }
         }
+        // these events were throwing extjs errors when trying to move multiple files in file manager when hovering over drop node
+        // Since they are not being used I am commenting them out
+        // listeners:{
+        //   'beforedrop':function(node, data, overModel, dropPosition,dropFunction,options){
+        //     self.fireEvent('beforedrop_view', node, data, overModel, dropPosition,dropFunction,options);
+        //   },
+        //   'drop':function(node, data, overModel, dropPosition, options){
+        //     self.fireEvent('drop_view', node, data, overModel, dropPosition, options);
+        //   }
+        // }
       }
     }, config);
 
