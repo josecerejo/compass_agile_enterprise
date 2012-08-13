@@ -316,59 +316,66 @@ Ext.define("Compass.ErpApp.Shared.FileManagerTree",{
               renameWindow.show();
             }
           }
-        },
-        {
-          text:'Delete',
-          iconCls:'icon-delete',
-          listeners:{
-            scope:this,
-            'click':function(){
-              if(!self.fireEvent('allowdelete', this)){
-                currentUser.showInvalidAccess();
-                return false;
-              }
-              Ext.MessageBox.confirm('Confirm', 'Are you sure you want to delete this file?', function(btn){
-                if(btn == 'no'){
-                  return false;
-                }
-                else
-                if(btn == 'yes')
-                {
-                  Ext.apply(self.extraPostData, {
-                    node:record.data.id,
-                    leaf:record.data.leaf
-                  });
-                  var msg = Ext.Msg.wait("Loading", "Deleting file...");
-                  Ext.Ajax.request({
-                    url: (self.initialConfig['controllerPath'] || '/erp_app/desktop/file_manager/base') + '/delete_file',
-                    method: 'POST',
-                    params:self.extraPostData,
-                    success: function(response) {
-                      var responseObj =  Ext.decode(response.responseText);
-                      msg.hide();
-                      if(responseObj.success){
-                        store.load({
-                          node:record.parentNode,
-                          params:self.extraPostData
-                        });
-                        self.fireEvent('fileDeleted', this, record);
-                      }
-                      else{
-                        Ext.Msg.alert("Error", responseObj.error);
-                      }
-                    },
-                    failure: function(response) {
-                      var responseObj =  Ext.decode(response.responseText);
-                      msg.hide();
-                      Ext.Msg.alert('Status', responseObj.msg);
-                    }
-                  });
-                }
-              });
-            }
-          }
         }
         ];
+
+        // if root node don't show delete menu item
+        if(record.data['id'] != 'root_node'){
+          menuItems.push({
+            text:'Delete',
+            iconCls:'icon-delete',
+            listeners:{
+              scope:this,
+              'click':function(){
+                selectedNodes = self.getSelectionModel().getSelection();
+
+                if(!self.fireEvent('allowdelete', this)){
+                  currentUser.showInvalidAccess();
+                  return false;
+                }
+                Ext.MessageBox.confirm('Confirm', 'Are you sure you want to delete this file?', function(btn){
+                  if(btn == 'no'){
+                    return false;
+                  }
+                  else if(btn == 'yes'){
+                    Ext.apply(self.extraPostData, {
+                      node:record.data.id,
+                      leaf:record.data.leaf,
+                      selected_nodes:Ext.JSON.encode(Ext.Array.map(selectedNodes, function(node, i) {
+                        return node.data.id;
+                      }))
+                    });
+                    var msg = Ext.Msg.wait("Loading", "Deleting file...");
+                    Ext.Ajax.request({
+                      url: (self.initialConfig['controllerPath'] || '/erp_app/desktop/file_manager/base') + '/delete_file',
+                      method: 'POST',
+                      params:self.extraPostData,
+                      success: function(response) {
+                        var responseObj =  Ext.decode(response.responseText);
+                        msg.hide();
+                        if(responseObj.success){
+                          store.load({
+                            node:record.parentNode,
+                            params:self.extraPostData
+                          });
+                          self.fireEvent('fileDeleted', this, record);
+                        }
+                        else{
+                          Ext.Msg.alert("Error", responseObj.error);
+                        }
+                      },
+                      failure: function(response) {
+                        var responseObj =  Ext.decode(response.responseText);
+                        msg.hide();
+                        Ext.Msg.alert('Status', responseObj.msg);
+                      }
+                    });
+                  }
+                });
+              }
+            }
+          });
+        }
 
         //add additional menu items if they are passed in the config
         //check to see where the should show, folders, leafs, or all

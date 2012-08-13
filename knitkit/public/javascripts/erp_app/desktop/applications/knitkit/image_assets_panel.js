@@ -17,6 +17,7 @@ Compass.ErpApp.Desktop.Applications.Knitkit.ImageAssetsPanel = function(module) 
     allowDownload:false,
     addViewContentsToContextMenu:false,
     rootVisible:true,
+    multiSelect:true,
     controllerPath:'/knitkit/erp_app/desktop/image_assets/shared',
     standardUploadUrl:'/knitkit/erp_app/desktop/image_assets/shared/upload_file',
     xhrUploadUrl:'/knitkit/erp_app/desktop/image_assets/shared/upload_file',
@@ -111,6 +112,7 @@ Compass.ErpApp.Desktop.Applications.Knitkit.ImageAssetsPanel = function(module) 
     allowDownload:false,
     addViewContentsToContextMenu:false,
     rootVisible:true,
+    multiSelect:true,
     controllerPath:'/knitkit/erp_app/desktop/image_assets/website',
     standardUploadUrl:'/knitkit/erp_app/desktop/image_assets/website/upload_file',
     xhrUploadUrl:'/knitkit/erp_app/desktop/image_assets/website/upload_file',
@@ -172,7 +174,7 @@ Compass.ErpApp.Desktop.Applications.Knitkit.ImageAssetsPanel = function(module) 
       'fileDeleted':function(fileTreePanel, node){
         self.websiteImageAssetsDataView.getStore().load({
           params:{
-            directory:node.parentNode.data.downloadPath,
+            directory:node.data.downloadPath,
             website_id:self.websiteId
           }
         });
