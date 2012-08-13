@@ -231,26 +231,30 @@ module Knitkit
         end
 
         def delete_file
+          messages = []
+          nodes_to_delete = (params[:selected_nodes] ? JSON(params[:selected_nodes]) : [params[:node]])
           model = DesktopApplication.find_by_internal_identifier('knitkit')
           begin
-            current_user.with_capability(model, 'view', 'Theme') do
-              path = params[:node]
-              result = {}
-              begin
-                name = File.basename(path)
-                result, message, is_folder = @file_support.delete_file(File.join(@file_support.root,path))
-                if result && !is_folder
-                  theme_file = get_theme_file(path)
-                  theme_file.destroy
+            nodes_to_delete.each do |path|
+              current_user.with_capability(model, 'view', 'Theme') do
+                result = {}
+                begin
+                  name = File.basename(path)
+                  result, message, is_folder = @file_support.delete_file(File.join(@file_support.root,path))
+                  if result && !is_folder
+                    theme_file = get_theme_file(path)
+                    theme_file.destroy
+                  end
+                  messages << message
+                rescue Exception=>ex
+                  logger.error ex.message
+                  logger.error ex.backtrace.join("\n")
+                  result = {:success => false, :error => "Error deleting #{name}"}
                 end
-                result = {:success => result, :error => message}
-              rescue Exception=>ex
-                logger.error ex.message
-                logger.error ex.backtrace.join("\n")
-                result = {:success => false, :error => "Error deleting #{name}"}
-              end
-              render :json => result
-            end
+              end # end current_user.with_capability
+            end # end nodes_to_delete.each
+
+            render :json => {:success => true, :error => messages.join(',')}
           rescue ErpTechSvcs::Utils::CompassAccessNegotiator::Errors::UserDoesNotHaveCapability=>ex
             render :json => {:success => false, :message => ex.message}
           end

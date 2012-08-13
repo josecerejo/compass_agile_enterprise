@@ -63,11 +63,18 @@ module ErpApp
         end
 
         def delete_file
-          path = params[:node]
+          messages = []
+          nodes_to_delete = (params[:selected_nodes] ? JSON(params[:selected_nodes]) : [params[:node]])
 
-          result, message = @file_support.delete_file(path)
-
-          render :json => {:success => result, :msg => message}
+          begin
+            nodes_to_delete.each do |path|
+              result, message = @file_support.delete_file(path)
+              messages << message
+            end
+            render :json => {:success => true, :error => messages.join(',')}
+          rescue Exception => e
+            render :json => {:success => false, :message => ex.message}
+          end
         end
 
         def expand_directory

@@ -604,6 +604,7 @@ Ext.define("Compass.ErpApp.Shared.FileManagerTree",{
 
     config = Ext.apply({
       clearOnLoad: false, 
+      multiSelect:true,
       store:store,
       animate:false,
       containerScroll: true,

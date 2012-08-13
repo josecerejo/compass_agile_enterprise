@@ -251,6 +251,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.ThemesTreePanel",{
     config = Ext.apply({
       autoLoadRoot:true,
       rootVisible:true,
+      multiSelect:true,
       title:'Themes',
       rootText:'Websites',
       controllerPath:'/knitkit/erp_app/desktop/theme',
