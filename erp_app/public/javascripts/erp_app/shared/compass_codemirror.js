@@ -135,6 +135,7 @@ Ext.define("Compass.ErpApp.Shared.CodeMirror",{
     this.initialConfig.codeMirrorConfig = Ext.apply({
       undoDepth: 3,
       lineNumbers: true,
+      lineWrapping: true,
       tabMode: "indent",
       onChange: function() {
         var code = self.codeMirrorInstance.getValue();
