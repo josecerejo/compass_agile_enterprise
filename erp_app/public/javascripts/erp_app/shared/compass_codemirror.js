@@ -95,7 +95,7 @@ Ext.define("Compass.ErpApp.Shared.CodeMirror",{
       text: 'Indent',
       iconCls:'icon-arrow-right-blue',
       handler: function() {
-        this.codeMirrorInstance.reindent();
+        this.codeMirrorInstance.indentSelection();
       },
       scope: this
     }]);
