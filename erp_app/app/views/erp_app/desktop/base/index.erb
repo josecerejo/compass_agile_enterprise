@@ -134,7 +134,7 @@
               data: [
                 {name:"Control Panel",iconCls:"control-panel-win-shortcut",module:"control-panel-win"},
                 {name:"Web Navigator",iconCls:"web-navigator-win-shortcut",module:"web-navigator-win"}<%=(@desktop.shortcuts.count > 0) ? ',' : '' %>
-				        <%=@desktop.shortcuts.collect{|app| "{name:'#{app.description}',iconCls:'#{app.shortcut_id}-shortcut',module:'#{app.shortcut_id}'}"}.join(",")%>
+				        <%=raw @desktop.shortcuts.collect{|app| "{name:'#{app.description}',iconCls:'#{app.shortcut_id}-shortcut',module:'#{app.shortcut_id}'}"}.join(",")%>
               ]
             }),
             wallpaper:"/images/wallpaper/<%=@desktop.get_preference(:desktop_background) %>",

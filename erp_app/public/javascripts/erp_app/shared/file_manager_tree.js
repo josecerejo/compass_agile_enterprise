@@ -72,7 +72,8 @@ Ext.define("Compass.ErpApp.Shared.FileManagerTree",{
      * @event drop_view
      * call through for drop view event.
      */
-      'drop_view'
+      'drop_view',
+      'showImage'
       );
   },
 
@@ -139,7 +140,7 @@ Ext.define("Compass.ErpApp.Shared.FileManagerTree",{
           currentUser.showInvalidAccess();
           return false;
         }
-        Ext.MessageBox.confirm('Confirm', 'Are you sure you want to move this file?', function(btn){
+        Ext.MessageBox.confirm('Confirm', 'Are you sure you want to move the selected file(s)?', function(btn){
           if(btn == 'no'){
             store.load({
               node:oldParent
@@ -152,10 +153,15 @@ Ext.define("Compass.ErpApp.Shared.FileManagerTree",{
           else
           if(btn == 'yes')
           {
+            selectedNodes = self.getSelectionModel().getSelection();
+
             var msg = Ext.Msg.wait("Saving", "Saving move...");
             Ext.apply(self.extraPostData, {
               node:node.data.id,
-              parent_node:newParent.data.id
+              parent_node:newParent.data.id,
+              selected_nodes:Ext.JSON.encode(Ext.Array.map(selectedNodes, function(node, i) {
+                return node.data.id;
+              }))
             });
             Ext.Ajax.request({
               url: (self.initialConfig['controllerPath'] || '/erp_app/desktop/file_manager/base') + '/save_move',
@@ -164,7 +170,7 @@ Ext.define("Compass.ErpApp.Shared.FileManagerTree",{
               success: function(response) {
                 msg.hide();
                 var responseObj = Ext.decode(response.responseText);
-                Ext.Msg.alert('Status', responseObj.msg);
+                //Ext.Msg.alert('Status', responseObj.msg);
                 if(responseObj.success){
                   store.load({
                     node:newParent
@@ -190,22 +196,31 @@ Ext.define("Compass.ErpApp.Shared.FileManagerTree",{
             currentUser.showInvalidAccess();
             return false;
           }
-          var msg = Ext.Msg.wait("Loading", "Retrieving contents...");
-          Ext.Ajax.request({
-            url: (self.initialConfig['controllerPath'] || '/erp_app/desktop/file_manager/base') + '/get_contents',
-            method: 'POST',
-            params:{
-              node:record.data.id
-            },
-            success: function(response) {
-              msg.hide();
-              self.fireEvent('contentLoaded', this, record, response.responseText);
-            },
-            failure: function() {
-              Ext.Msg.alert('Status', 'Error loading contents');
-              msg.hide();
-            }
-          });
+
+          var fileType = record.data.id.split('.').pop();
+
+          if (Ext.Array.indexOf(['png','gif','jpg','jpeg','ico','bmp','tif','tiff'], fileType.toLowerCase()) > -1){
+            self.fireEvent('showImage', this, record);
+          }
+          else{
+            var msg = Ext.Msg.wait("Loading", "Retrieving contents...");
+            Ext.Ajax.request({
+              url: (self.initialConfig['controllerPath'] || '/erp_app/desktop/file_manager/base') + '/get_contents',
+              method: 'POST',
+              params:{
+                node:record.data.id
+              },
+              success: function(response) {
+                msg.hide();
+                self.fireEvent('contentLoaded', this, record, response.responseText);
+              },
+              failure: function() {
+                Ext.Msg.alert('Status', 'Error loading contents');
+                msg.hide();
+              }
+            });
+          }
+
         }
       },
       'itemcontextmenu':function(view, record, item, index, e){
@@ -317,59 +332,66 @@ Ext.define("Compass.ErpApp.Shared.FileManagerTree",{
               renameWindow.show();
             }
           }
-        },
-        {
-          text:'Delete',
-          iconCls:'icon-delete',
-          listeners:{
-            scope:this,
-            'click':function(){
-              if(!self.fireEvent('allowdelete', this)){
-                currentUser.showInvalidAccess();
-                return false;
-              }
-              Ext.MessageBox.confirm('Confirm', 'Are you sure you want to delete this file?', function(btn){
-                if(btn == 'no'){
-                  return false;
-                }
-                else
-                if(btn == 'yes')
-                {
-                  Ext.apply(self.extraPostData, {
-                    node:record.data.id,
-                    leaf:record.data.leaf
-                  });
-                  var msg = Ext.Msg.wait("Loading", "Deleting file...");
-                  Ext.Ajax.request({
-                    url: (self.initialConfig['controllerPath'] || '/erp_app/desktop/file_manager/base') + '/delete_file',
-                    method: 'POST',
-                    params:self.extraPostData,
-                    success: function(response) {
-                      var responseObj =  Ext.decode(response.responseText);
-                      msg.hide();
-                      if(responseObj.success){
-                        store.load({
-                          node:record.parentNode,
-                          params:self.extraPostData
-                        });
-                        self.fireEvent('fileDeleted', this, record);
-                      }
-                      else{
-                        Ext.Msg.alert("Error", responseObj.error);
-                      }
-                    },
-                    failure: function(response) {
-                      var responseObj =  Ext.decode(response.responseText);
-                      msg.hide();
-                      Ext.Msg.alert('Status', responseObj.msg);
-                    }
-                  });
-                }
-              });
-            }
-          }
         }
         ];
+
+        // if root node don't show delete menu item
+        if(record.data['id'] != 'root_node'){
+          menuItems.push({
+            text:'Delete',
+            iconCls:'icon-delete',
+            listeners:{
+              scope:this,
+              'click':function(){
+                selectedNodes = self.getSelectionModel().getSelection();
+
+                if(!self.fireEvent('allowdelete', this)){
+                  currentUser.showInvalidAccess();
+                  return false;
+                }
+                Ext.MessageBox.confirm('Confirm', 'Are you sure you want to delete this file?', function(btn){
+                  if(btn == 'no'){
+                    return false;
+                  }
+                  else if(btn == 'yes'){
+                    Ext.apply(self.extraPostData, {
+                      node:record.data.id,
+                      leaf:record.data.leaf,
+                      selected_nodes:Ext.JSON.encode(Ext.Array.map(selectedNodes, function(node, i) {
+                        return node.data.id;
+                      }))
+                    });
+                    var msg = Ext.Msg.wait("Loading", "Deleting file...");
+                    Ext.Ajax.request({
+                      url: (self.initialConfig['controllerPath'] || '/erp_app/desktop/file_manager/base') + '/delete_file',
+                      method: 'POST',
+                      params:self.extraPostData,
+                      success: function(response) {
+                        var responseObj =  Ext.decode(response.responseText);
+                        msg.hide();
+                        if(responseObj.success){
+                          store.load({
+                            node:record.parentNode,
+                            params:self.extraPostData
+                          });
+                          self.fireEvent('fileDeleted', this, record);
+                        }
+                        else{
+                          Ext.Msg.alert("Error", responseObj.error);
+                        }
+                      },
+                      failure: function(response) {
+                        var responseObj =  Ext.decode(response.responseText);
+                        msg.hide();
+                        Ext.Msg.alert('Status', responseObj.msg);
+                      }
+                    });
+                  }
+                });
+              }
+            }
+          });
+        }
 
         //add additional menu items if they are passed in the config
         //check to see where the should show, folders, leafs, or all
@@ -542,22 +564,30 @@ Ext.define("Compass.ErpApp.Shared.FileManagerTree",{
                     currentUser.showInvalidAccess();
                     return false;
                   }
-                  var msg = Ext.Msg.wait("Loading", "Retrieving contents...");
-                  Ext.Ajax.request({
-                    url: (self.initialConfig['controllerPath'] || '/erp_app/desktop/file_manager/base') + '/get_contents',
-                    method: 'POST',
-                    params:{
-                      node:record.data.id
-                    },
-                    success: function(response) {
-                      msg.hide();
-                      self.fireEvent('contentLoaded', this, record, response.responseText);
-                    },
-                    failure: function() {
-                      Ext.Msg.alert('Status', 'Error loading contents');
-                      msg.hide();
-                    }
-                  });
+
+                  var fileType = record.data.id.split('.').pop();
+
+                  if (Ext.Array.indexOf(['png','gif','jpg','jpeg','ico','bmp','tif','tiff'], fileType.toLowerCase()) > -1){
+                    self.fireEvent('showImage', this, record);
+                  }
+                  else{
+                    var msg = Ext.Msg.wait("Loading", "Retrieving contents...");
+                    Ext.Ajax.request({
+                      url: (self.initialConfig['controllerPath'] || '/erp_app/desktop/file_manager/base') + '/get_contents',
+                      method: 'POST',
+                      params:{
+                        node:record.data.id
+                      },
+                      success: function(response) {
+                        msg.hide();
+                        self.fireEvent('contentLoaded', this, record, response.responseText);
+                      },
+                      failure: function() {
+                        Ext.Msg.alert('Status', 'Error loading contents');
+                        msg.hide();
+                      }
+                    });
+                  }
                 }
               }
             });
@@ -598,6 +628,7 @@ Ext.define("Compass.ErpApp.Shared.FileManagerTree",{
 
     config = Ext.apply({
       clearOnLoad: false, 
+      multiSelect:true,
       store:store,
       animate:false,
       containerScroll: true,
@@ -609,15 +640,17 @@ Ext.define("Compass.ErpApp.Shared.FileManagerTree",{
         loadMask: true,
         plugins: {
           ptype: 'treeviewdragdrop'
-        },
-        listeners:{
-          'beforedrop':function(node, data, overModel, dropPosition,dropFunction,options){
-            self.fireEvent('beforedrop_view', node, data, overModel, dropPosition,dropFunction,options);
-          },
-          'drop':function(node, data, overModel, dropPosition, options){
-            self.fireEvent('drop_view', node, data, overModel, dropPosition, options);
-          }
         }
+        // these events were throwing extjs errors when trying to move multiple files in file manager when hovering over drop node
+        // Since they are not being used I am commenting them out
+        // listeners:{
+        //   'beforedrop':function(node, data, overModel, dropPosition,dropFunction,options){
+        //     self.fireEvent('beforedrop_view', node, data, overModel, dropPosition,dropFunction,options);
+        //   },
+        //   'drop':function(node, data, overModel, dropPosition, options){
+        //     self.fireEvent('drop_view', node, data, overModel, dropPosition, options);
+        //   }
+        // }
       }
     }, config);
 

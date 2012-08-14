@@ -85,20 +85,27 @@ module Knitkit
           path            = params[:node]
           new_parent_path = params[:parent_node]
           new_parent_path = @root_node if new_parent_path == ROOT_NODE
-
-          if Rails.application.config.erp_tech_svcs.file_storage == :filesystem and !File.exists?(File.join(@file_support.root, path))
-            result = {:success => false, :msg => 'File does not exist.'}
-          else
-            #path = path[1..path.length] if path[0] == "/"
-            file = @assets_model.files.find(:first, :conditions => ['name = ? and directory = ?', ::File.basename(path), ::File.dirname(path)])
-            file.move(new_parent_path)
-            result = {:success => true, :msg => "#{File.basename(path)} was moved to #{new_parent_path} successfully"}
+          
+          nodes_to_move = (params[:selected_nodes] ? JSON(params[:selected_nodes]) : [params[:node]])
+          begin
+            nodes_to_move.each do |path|
+              if ErpTechSvcs::Config.file_storage == :filesystem and !File.exists?(File.join(@file_support.root, path))
+                result = {:success => false, :msg => 'File does not exist.'}
+              else
+                file = @assets_model.files.find(:first, :conditions => ['name = ? and directory = ?', ::File.basename(path), ::File.dirname(path)])
+                file.move(new_parent_path)
+                result = {:success => true, :msg => "#{File.basename(path)} was moved to #{new_parent_path} successfully"}
+              end
+            end
+            render :json => result
+          rescue Exception => e
+            result = {:success => false, :msg => e.message}
           end
-
-          render :json => result
         end
 
         def delete_file
+          messages = []
+
           if @context == Website
             capability_type = "view"
             capability_resource = "SiteFileAsset"
@@ -107,27 +114,31 @@ module Knitkit
             capability_resource = "GlobalFileAsset"
           end
 
+          nodes_to_delete = (params[:selected_nodes] ? JSON(params[:selected_nodes]) : [params[:node]])
+
           model = DesktopApplication.find_by_internal_identifier('knitkit')
           begin
-            current_user.with_capability(model, capability_type, capability_resource) do
-              path = params[:node]
-              path = "#{path}/" if params[:leaf] == 'false' and path.match(/\/$/).nil?
-              result = {}
-              begin
-                name = File.basename(path)
-                result, message, is_folder = @file_support.delete_file(File.join(@file_support.root,path))
-                if result && !is_folder
-                  file = @assets_model.files.find(:first, :conditions => ['name = ? and directory = ?', ::File.basename(path), ::File.dirname(path)])
-                  file.destroy
+            nodes_to_delete.each do |path|
+              current_user.with_capability(model, capability_type, capability_resource) do
+                path = "#{path}/" if params[:leaf] == 'false' and path.match(/\/$/).nil?
+                result = {}
+                begin
+                  name = File.basename(path)
+                  result, message, is_folder = @file_support.delete_file(File.join(@file_support.root,path))
+                  if result && !is_folder
+                    file = @assets_model.files.find(:first, :conditions => ['name = ? and directory = ?', ::File.basename(path), ::File.dirname(path)])
+                    file.destroy
+                  end
+                  messages << message
+                rescue Exception=>ex
+                  logger.error ex.message
+                  logger.error ex.backtrace.join("\n")
+                  result = {:success => false, :error => "Error deleting #{name}"}
                 end
-                result = {:success => result, :error => message}
-              rescue Exception=>ex
-                logger.error ex.message
-                logger.error ex.backtrace.join("\n")
-                result = {:success => false, :error => "Error deleting #{name}"}
-              end
-              render :json => result
-            end
+              end # end current_user.with_capability
+            end # end nodes_to_delete.each
+
+            render :json => {:success => true, :error => messages.join(',')}
           rescue ErpTechSvcs::Utils::CompassAccessNegotiator::Errors::UserDoesNotHaveCapability=>ex
             render :json => {:success => false, :message => ex.message}
           end
