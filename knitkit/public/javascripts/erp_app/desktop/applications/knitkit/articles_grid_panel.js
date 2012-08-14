@@ -401,7 +401,7 @@ var columnItems = [];
                                 xtype:'textfield',
                                 fieldLabel:'Tags',
                                 allowBlank:true,
-                                name:'tags',
+                                name:'tags'
                                 // id: 'tag_list'
                             }]
                         }),

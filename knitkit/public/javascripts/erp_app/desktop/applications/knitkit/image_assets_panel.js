@@ -17,6 +17,7 @@ Compass.ErpApp.Desktop.Applications.Knitkit.ImageAssetsPanel = function(module) 
     allowDownload:false,
     addViewContentsToContextMenu:false,
     rootVisible:true,
+    multiSelect:true,
     controllerPath:'/knitkit/erp_app/desktop/image_assets/shared',
     standardUploadUrl:'/knitkit/erp_app/desktop/image_assets/shared/upload_file',
     xhrUploadUrl:'/knitkit/erp_app/desktop/image_assets/shared/upload_file',
@@ -37,18 +38,6 @@ Compass.ErpApp.Desktop.Applications.Knitkit.ImageAssetsPanel = function(module) 
                                    '<br /> Width: ' + node.data.width + ' px' +
                                    '<br /> Height: ' + node.data.height + ' px' 
                         );
-        }
-      }
-    },
-		{
-      nodeType:'leaf',
-      text:'Insert image at cursor',
-      iconCls:'icon-add',
-      listeners:{
-        scope:self,
-        'click':function(){
-          var node = this.sharedImageAssetsTreePanel.selectedNode;
-					self.module.centerRegion.insertHtmlIntoActiveCkEditor('<img src="/download/'+node.data.text+'?path='+node.data.downloadPath+'" alt="'+node.data.text+'" height="" width="" />');
         }
       }
     },
@@ -123,6 +112,7 @@ Compass.ErpApp.Desktop.Applications.Knitkit.ImageAssetsPanel = function(module) 
     allowDownload:false,
     addViewContentsToContextMenu:false,
     rootVisible:true,
+    multiSelect:true,
     controllerPath:'/knitkit/erp_app/desktop/image_assets/website',
     standardUploadUrl:'/knitkit/erp_app/desktop/image_assets/website/upload_file',
     xhrUploadUrl:'/knitkit/erp_app/desktop/image_assets/website/upload_file',
@@ -143,18 +133,6 @@ Compass.ErpApp.Desktop.Applications.Knitkit.ImageAssetsPanel = function(module) 
                                    '<br /> Width: ' + node.data.width + ' px' +
                                    '<br /> Height: ' + node.data.height + ' px' 
                         );
-        }
-      }
-    },
-		{
-      nodeType:'leaf',
-      text:'Insert image at cursor',
-      iconCls:'icon-add',
-      listeners:{
-        scope:self,
-        'click':function(){
-          var node = this.websiteImageAssetsTreePanel.selectedNode;
-					self.module.centerRegion.insertHtmlIntoActiveCkEditor('<img src="/download/'+node.data.text+'?path='+node.data.downloadPath+'" alt="'+node.data.text+'" height="" width="" />');
         }
       }
     },
@@ -196,7 +174,7 @@ Compass.ErpApp.Desktop.Applications.Knitkit.ImageAssetsPanel = function(module) 
       'fileDeleted':function(fileTreePanel, node){
         self.websiteImageAssetsDataView.getStore().load({
           params:{
-            directory:node.parentNode.data.downloadPath,
+            directory:node.data.downloadPath,
             website_id:self.websiteId
           }
         });
