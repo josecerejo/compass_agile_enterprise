@@ -43,6 +43,16 @@ Ext.define("Compass.ErpApp.Desktop.Applications.FileManager",{
         width: 250,
         frame:true,
         listeners:{
+          'showImage':function(fileManager, record){
+            contentCardPanel.removeAll(true);
+            contentCardPanel.add(Ext.create('Ext.panel.Panel',{
+              closable:true,
+              layout:'fit',
+              html: '<img src="/erp_app/desktop/file_manager/base/download_file/?path=' + record.data.id + '" />'
+            }));
+            contentCardPanel.getLayout().setActiveItem(0);
+            return false;
+          },
           'contentLoaded':function(fileManager, record, content){
             var path = record.data.id;
             var fileType = path.split('.').pop();

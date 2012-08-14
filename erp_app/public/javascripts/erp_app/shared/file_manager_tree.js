@@ -72,7 +72,8 @@ Ext.define("Compass.ErpApp.Shared.FileManagerTree",{
      * @event drop_view
      * call through for drop view event.
      */
-      'drop_view'
+      'drop_view',
+      'showImage'
       );
   },
 
@@ -194,22 +195,31 @@ Ext.define("Compass.ErpApp.Shared.FileManagerTree",{
             currentUser.showInvalidAccess();
             return false;
           }
-          var msg = Ext.Msg.wait("Loading", "Retrieving contents...");
-          Ext.Ajax.request({
-            url: (self.initialConfig['controllerPath'] || '/erp_app/desktop/file_manager/base') + '/get_contents',
-            method: 'POST',
-            params:{
-              node:record.data.id
-            },
-            success: function(response) {
-              msg.hide();
-              self.fireEvent('contentLoaded', this, record, response.responseText);
-            },
-            failure: function() {
-              Ext.Msg.alert('Status', 'Error loading contents');
-              msg.hide();
-            }
-          });
+
+          var fileType = record.data.id.split('.').pop();
+
+          if (Ext.Array.indexOf(['png','gif','jpg','jpeg','ico','bmp','tif','tiff'], fileType.toLowerCase()) > -1){
+            self.fireEvent('showImage', this, record);
+          }
+          else{
+            var msg = Ext.Msg.wait("Loading", "Retrieving contents...");
+            Ext.Ajax.request({
+              url: (self.initialConfig['controllerPath'] || '/erp_app/desktop/file_manager/base') + '/get_contents',
+              method: 'POST',
+              params:{
+                node:record.data.id
+              },
+              success: function(response) {
+                msg.hide();
+                self.fireEvent('contentLoaded', this, record, response.responseText);
+              },
+              failure: function() {
+                Ext.Msg.alert('Status', 'Error loading contents');
+                msg.hide();
+              }
+            });
+          }
+
         }
       },
       'itemcontextmenu':function(view, record, item, index, e){
@@ -553,22 +563,30 @@ Ext.define("Compass.ErpApp.Shared.FileManagerTree",{
                     currentUser.showInvalidAccess();
                     return false;
                   }
-                  var msg = Ext.Msg.wait("Loading", "Retrieving contents...");
-                  Ext.Ajax.request({
-                    url: (self.initialConfig['controllerPath'] || '/erp_app/desktop/file_manager/base') + '/get_contents',
-                    method: 'POST',
-                    params:{
-                      node:record.data.id
-                    },
-                    success: function(response) {
-                      msg.hide();
-                      self.fireEvent('contentLoaded', this, record, response.responseText);
-                    },
-                    failure: function() {
-                      Ext.Msg.alert('Status', 'Error loading contents');
-                      msg.hide();
-                    }
-                  });
+
+                  var fileType = record.data.id.split('.').pop();
+
+                  if (Ext.Array.indexOf(['png','gif','jpg','jpeg','ico','bmp','tif','tiff'], fileType.toLowerCase()) > -1){
+                    self.fireEvent('showImage', this, record);
+                  }
+                  else{
+                    var msg = Ext.Msg.wait("Loading", "Retrieving contents...");
+                    Ext.Ajax.request({
+                      url: (self.initialConfig['controllerPath'] || '/erp_app/desktop/file_manager/base') + '/get_contents',
+                      method: 'POST',
+                      params:{
+                        node:record.data.id
+                      },
+                      success: function(response) {
+                        msg.hide();
+                        self.fireEvent('contentLoaded', this, record, response.responseText);
+                      },
+                      failure: function() {
+                        Ext.Msg.alert('Status', 'Error loading contents');
+                        msg.hide();
+                      }
+                    });
+                  }
                 }
               }
             });

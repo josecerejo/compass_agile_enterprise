@@ -265,43 +265,52 @@ Ext.define("Compass.ErpApp.Desktop.Applications.ThemesTreePanel",{
       {
         name:'isTheme'
       },
-
       {
         name:'isActive'
       },
-
       {
         name:'siteId'
       },
-
       {
         name:'text'
       },
-
       {
         name:'id'
       },
-
+      {
+        name:'url'
+      },
       {
         name:'leaf'
       },
-
       {
         name:'handleContextMenu'
       },
-
       {
         name:'contextMenuDisabled'
       }
       ],
       containerScroll: true,
       listeners:{
+        'showImage':function(fileManager, node, themeId){
+          var themeId = null;
+          var themeNode = node;
+          while(themeId == null && !Compass.ErpApp.Utility.isBlank(themeNode.parentNode)){
+            if(themeNode.data.isTheme){
+              themeId = themeNode.data.id;
+            }
+            else{
+              themeNode = themeNode.parentNode;
+            }
+          }
+          self.initialConfig['centerRegion'].showImage(node, themeId);
+        },
         'contentLoaded':function(fileManager, node, content){
           var themeId = null;
           var themeNode = node;
           while(themeId == null && !Compass.ErpApp.Utility.isBlank(themeNode.parentNode)){
             if(themeNode.data.isTheme){
-              themeId = themeNode.data.id
+              themeId = themeNode.data.id;
             }
             else{
               themeNode = themeNode.parentNode;
