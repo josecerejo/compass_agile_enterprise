@@ -292,6 +292,12 @@ Ext.define("Compass.ErpApp.Desktop.Applications.ThemesTreePanel",{
       ],
       containerScroll: true,
       listeners:{
+        'load':function(store){
+          store.getRootNode().expandChildren();
+          store.getRootNode().eachChild(function(child){
+            child.expandChildren();
+          });
+        },
         'showImage':function(fileManager, node, themeId){
           var themeId = null;
           var themeNode = node;
