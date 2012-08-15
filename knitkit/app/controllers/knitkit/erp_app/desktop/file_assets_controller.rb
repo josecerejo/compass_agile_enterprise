@@ -81,8 +81,9 @@ module Knitkit
         end
 
         def save_move
-          result          = {}
-          path            = params[:node]
+          messages = []
+          result = {}
+          path = params[:node]
           new_parent_path = params[:parent_node]
           new_parent_path = @root_node if new_parent_path == ROOT_NODE
           
@@ -93,13 +94,13 @@ module Knitkit
                 result = {:success => false, :msg => 'File does not exist.'}
               else
                 file = @assets_model.files.find(:first, :conditions => ['name = ? and directory = ?', ::File.basename(path), ::File.dirname(path)])
-                file.move(new_parent_path)
-                result = {:success => true, :msg => "#{File.basename(path)} was moved to #{new_parent_path} successfully"}
+                result, message = file.move(new_parent_path)
               end
+              messages << message
             end
-            render :json => result
+            render :json => {:success => true, :msg => messages.join(',')}
           rescue Exception => e
-            result = {:success => false, :msg => e.message}
+           render :json => {:success => false, :msg => e.message}
           end
         end
 
@@ -138,7 +139,7 @@ module Knitkit
               end # end current_user.with_capability
             end # end nodes_to_delete.each
 
-            render :json => {:success => true, :error => messages.join(',')}
+            render :json => {:success => true, :message => messages.join(',')}
           rescue ErpTechSvcs::Utils::CompassAccessNegotiator::Errors::UserDoesNotHaveCapability=>ex
             render :json => {:success => false, :message => ex.message}
           end
