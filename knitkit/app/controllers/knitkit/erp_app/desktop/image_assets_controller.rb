@@ -59,27 +59,30 @@ module Knitkit
 
           model = DesktopApplication.find_by_internal_identifier('knitkit')
           begin
+            result = false
             nodes_to_delete.each do |path|
               current_user.with_capability(model, capability_type, capability_resource) do
                 path = "#{path}/" if params[:leaf] == 'false' and path.match(/\/$/).nil?
-                result = {}
                 begin
                   name = File.basename(path)
                   result, message, is_folder = @file_support.delete_file(File.join(@file_support.root,path))
-                  if result && !is_folder
+                  if result and !is_folder
                     file = @assets_model.files.find(:first, :conditions => ['name = ? and directory = ?', ::File.basename(path), ::File.dirname(path)])
                     file.destroy
                   end
                   messages << message
                 rescue Exception=>ex
-                  logger.error ex.message
-                  logger.error ex.backtrace.join("\n")
-                  result = {:success => false, :error => "Error deleting #{name}"}
+                  Rails.logger.error ex.message
+                  Rails.logger.error ex.backtrace.join("\n")
+                  render :json => {:success => false, :error => "Error deleting #{name}"} and return
                 end
               end # end current_user.with_capability
             end # end nodes_to_delete.each
-
-            render :json => {:success => true, :error => messages.join(',')}
+            if result
+              render :json => {:success => true, :message => messages.join(',')}
+            else
+              render :json => {:success => false, :error => messages.join(',')}
+            end
           rescue ErpTechSvcs::Utils::CompassAccessNegotiator::Errors::UserDoesNotHaveCapability=>ex
             render :json => {:success => false, :message => ex.message}
           end
