@@ -77,7 +77,7 @@ Compass.ErpApp.Desktop.Applications.Knitkit.FileAssetsPanel = function(module) {
           var node = this.sharedFileAssetsTreePanel.selectedNode;
           Ext.MessageBox.prompt('Display Name', 'Please enter display name:', function(btn, text){
             if(btn == 'ok'){
-              self.module.centerRegion.insertHtmlIntoActiveCkEditor('<a href="/download/'+node.data.text+'?path='+node.data.downloadPath+'">'+text+'</a>');
+              self.module.centerRegion.insertHtmlIntoActiveCkEditorOrCodemirror('<a href="/download/'+node.data.text+'?path='+node.data.downloadPath+'">'+text+'</a>');
             }
           });
         }
@@ -93,7 +93,7 @@ Compass.ErpApp.Desktop.Applications.Knitkit.FileAssetsPanel = function(module) {
           var node = this.sharedFileAssetsTreePanel.selectedNode;
           Ext.MessageBox.prompt('Display Name', 'Please enter display name:', function(btn, text){
             if(btn == 'ok'){
-              self.module.centerRegion.insertHtmlIntoActiveCkEditor('<a href="/download/'+node.data.text+'?path='+node.data.downloadPath+'&disposition=inline">'+text+'</a>');
+              self.module.centerRegion.insertHtmlIntoActiveCkEditorOrCodemirror('<a href="/download/'+node.data.text+'?path='+node.data.downloadPath+'&disposition=inline">'+text+'</a>');
             }
           });
         }
@@ -109,7 +109,7 @@ Compass.ErpApp.Desktop.Applications.Knitkit.FileAssetsPanel = function(module) {
           var node = this.sharedFileAssetsTreePanel.selectedNode;
           Ext.MessageBox.prompt('Display Name', 'Please enter display name:', function(btn, text){
             if(btn == 'ok'){
-              self.module.centerRegion.insertHtmlIntoActiveCkEditor('<a href="/download/'+node.data.text+'?path='+node.data.downloadPath+'&disposition=attachment">'+text+'</a>');
+              self.module.centerRegion.insertHtmlIntoActiveCkEditorOrCodemirror('<a href="/download/'+node.data.text+'?path='+node.data.downloadPath+'&disposition=attachment">'+text+'</a>');
             }
           });
         }
@@ -192,7 +192,7 @@ Compass.ErpApp.Desktop.Applications.Knitkit.FileAssetsPanel = function(module) {
           var node = this.websiteFileAssetsTreePanel.selectedNode;
           Ext.MessageBox.prompt('Display Name', 'Please enter display name:', function(btn, text){
             if(btn == 'ok'){
-              self.module.centerRegion.insertHtmlIntoActiveCkEditor('<a href="/download/'+node.data.text+'?path='+node.data.downloadPath+'">'+text+'</a>');
+              self.module.centerRegion.insertHtmlIntoActiveCkEditorOrCodemirror('<a href="/download/'+node.data.text+'?path='+node.data.downloadPath+'">'+text+'</a>');
             }
           });
         }
@@ -208,7 +208,7 @@ Compass.ErpApp.Desktop.Applications.Knitkit.FileAssetsPanel = function(module) {
           var node = this.websiteFileAssetsTreePanel.selectedNode;
           Ext.MessageBox.prompt('Display Name', 'Please enter display name:', function(btn, text){
             if(btn == 'ok'){
-              self.module.centerRegion.insertHtmlIntoActiveCkEditor('<a href="/download/'+node.data.text+'?path='+node.data.downloadPath+'&disposition=inline">'+text+'</a>');
+              self.module.centerRegion.insertHtmlIntoActiveCkEditorOrCodemirror('<a href="/download/'+node.data.text+'?path='+node.data.downloadPath+'&disposition=inline">'+text+'</a>');
             }
           });
         }
@@ -224,7 +224,7 @@ Compass.ErpApp.Desktop.Applications.Knitkit.FileAssetsPanel = function(module) {
           var node = this.websiteFileAssetsTreePanel.selectedNode;
           Ext.MessageBox.prompt('Display Name', 'Please enter display name:', function(btn, text){
             if(btn == 'ok'){
-              self.module.centerRegion.insertHtmlIntoActiveCkEditor('<a href="/download/'+node.data.text+'?path='+node.data.downloadPath+'&disposition=attachment">'+text+'</a>');
+              self.module.centerRegion.insertHtmlIntoActiveCkEditorOrCodemirror('<a href="/download/'+node.data.text+'?path='+node.data.downloadPath+'&disposition=attachment">'+text+'</a>');
             }
           });
         }

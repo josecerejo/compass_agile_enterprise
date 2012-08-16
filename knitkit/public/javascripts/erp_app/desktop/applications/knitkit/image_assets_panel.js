@@ -49,7 +49,7 @@ Compass.ErpApp.Desktop.Applications.Knitkit.ImageAssetsPanel = function(module) 
         scope:self,
         'click':function(){
           var node = this.sharedImageAssetsTreePanel.selectedNode;
-          self.module.centerRegion.insertHtmlIntoActiveCkEditor('<img width="'+node.data.width+'" height="'+node.data.height+'" alt="'+node.data.text+'" src="/download/'+node.data.text+'?path='+node.data.downloadPath+'" />');
+          self.module.centerRegion.insertHtmlIntoActiveCkEditorOrCodemirror('<img width="'+node.data.width+'" height="'+node.data.height+'" alt="'+node.data.text+'" src="/download/'+node.data.text+'?path='+node.data.downloadPath+'" />');
         }
       }
     }
@@ -144,7 +144,7 @@ Compass.ErpApp.Desktop.Applications.Knitkit.ImageAssetsPanel = function(module) 
         scope:self,
         'click':function(){
           var node = this.websiteImageAssetsTreePanel.selectedNode;
-          self.module.centerRegion.insertHtmlIntoActiveCkEditor('<img width="'+node.data.width+'" height="'+node.data.height+'" alt="'+node.data.text+'" src="/download/'+node.data.text+'?path='+node.data.downloadPath+'" />');
+          self.module.centerRegion.insertHtmlIntoActiveCkEditorOrCodemirror('<img width="'+node.data.width+'" height="'+node.data.height+'" alt="'+node.data.text+'" src="/download/'+node.data.text+'?path='+node.data.downloadPath+'" />');
         }
       }
     }
