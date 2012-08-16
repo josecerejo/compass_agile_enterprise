@@ -1,10 +1,10 @@
 class Contact < ActiveRecord::Base
     has_and_belongs_to_many :contact_purposes
     belongs_to :party
-    belongs_to :contact_mechanism, :polymorphic => true
+    belongs_to :contact_mechanism, :polymorphic => true, :dependent => :destroy
   
     #rather than carry our own description for the abstract -contact-, we'll
-    #delegate that call to the implementor of the -contact_mechanism- interface
+    #delegate that call to the implementer of the -contact_mechanism- interface
 
     def description
         @description = contact_mechanism.description
@@ -14,7 +14,7 @@ class Contact < ActiveRecord::Base
         @description=d
     end
 
-    #delegate our need to provide a label to scaffolds to the implementor of
+    #delegate our need to provide a label to scaffolds to the implementer of
     #the -contact_mechanism- interface.
 
     def to_label

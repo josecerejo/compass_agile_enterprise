@@ -39,7 +39,7 @@ module ErpBaseErpSvcs
 				  end
 
 				  def destroy_contact
-					  self.contact.destroy
+					  self.contact.destroy unless self.contact.nil?
 				  end
 
 				  def initialize_contact
