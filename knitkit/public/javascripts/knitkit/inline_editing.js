@@ -3,10 +3,57 @@ Knitkit.InlineEditing = {
     websiteId:null,
     contentId:null,
 
-    closeEditor:function(editor){
+    closeEditor:function (editor) {
         editor.destroy();
-        jQuery('#light').remove();
-        jQuery('#fade').remove();
+        jQuery('#editableContentContainer').remove();
+        jQuery('#editableContentOverlay').remove();
+    },
+
+    saved:function (editor, result, status, xhr) {
+        if (result.success === true) {
+            jQuery('#inlineEditLastUpdate').html(result.last_update);
+            editor.resetDirty();
+        }
+        else {
+            jQuery('#inlineEditLastUpdate').html(jQuery('#inlineEditLastUpdate').html() + " Could not update.  Please try again.");
+        }
+    },
+
+    error:function (xhr, status, error) {
+        jQuery('#inlineEditLastUpdate').html(jQuery('#inlineEditLastUpdate').html() + " Could not update.  Please try again.");
+    },
+
+    closeEditorClick:function () {
+        //make sure modal is not already showing
+        if ($("#warning-modal").length === 0) {
+            var editor = CKEDITOR.instances['inlineEditTextarea'];
+            if (editor.checkDirty()) {
+                jQuery('#editableContentOverlay').css('z-index','1003');
+
+                var warningModal = jQuery("<div id='warning-modal'></div>");
+                warningModal.append('<span>You have unsaved changes. Are you sure you want to exit?</span><br/><br/>');
+
+                var noBtn = jQuery('<input class="warning-btn" type="button" value="No" />');
+                noBtn.bind('click', function () {
+                    warningModal.remove();
+                    jQuery('#editableContentOverlay').css('z-index','1001');
+                });
+
+                var yesBtn = jQuery('<input class="warning-btn" type="button" value="Yes" />');
+                yesBtn.bind('click', function () {
+                    Knitkit.InlineEditing.closeEditor(editor);
+                    warningModal.remove();
+                });
+
+                warningModal.append(noBtn);
+                warningModal.append(yesBtn);
+                jQuery("body").append(warningModal);
+            }
+            else {
+                Knitkit.InlineEditing.closeEditor(editor);
+            }
+        }
+        return false;
     },
 
     setup:function (websiteId) {
@@ -14,43 +61,41 @@ Knitkit.InlineEditing = {
 
         jQuery('div.knitkit_content').bind('mouseenter', function () {
             var div = jQuery(this);
-            div.addClass('knitkit-inlineedit-editable')
+            div.addClass('knitkit-inlineedit-editable');
         });
 
         jQuery('div.knitkit_content').bind('mouseleave', function () {
             var div = jQuery(this);
-            div.removeClass('knitkit-inlineedit-editable')
+            div.removeClass('knitkit-inlineedit-editable');
         });
 
         jQuery('div.knitkit_content').bind('click', function () {
             var self = Knitkit.InlineEditing;
             var div = jQuery(this);
-            self.contentId = div.attr('content_id');
+            self.contentId = div.attr('contentid');
+            self.lastUpdate = div.attr('lastupdate');
             var data = div.html();
 
-            var whiteContent = jQuery("<div id='light' class='white_content'></div>");
-            var fade = jQuery("<div id='fade' class='black_overlay'></div>");
-            var closeLink = jQuery("<a href='javascript:void(0);'>Close</a>");
             var textarea = jQuery('<textarea name="inline-edit-textarea" id="inlineEditTextarea" ></textarea>');
-            whiteContent.append(textarea);
-            whiteContent.append(closeLink);
+            var closeLink = jQuery("<a class='inline-edit-close'><img src='images/knitkit/close.png' /></a>");
+            var messageSpan = jQuery("<span class='inline-edit-message' id='inlineEditMessage'>Last Update: <span id='inlineEditLastUpdate'>" + self.lastUpdate + "</span></span>");
 
-            closeLink.bind('click', function () {
-                var editor = CKEDITOR.instances['inlineEditTextarea'];
-                if(editor.checkDirty()){
-                    var result = confirm("You have unsaved content, are you sure you want to close this editor?");
-                    if (result===true)
-                    {
-                        self.closeEditor(editor);
-                    }
-                }
-                else{
-                    self.closeEditor(editor);
-                }
-            });
+            var editableContentContainer = jQuery("<div id='editableContentContainer' class='modal-container'></div>");
+            var ckeditorWrapper = jQuery("<div class='ckeditor_wrapper'></div>");
+            var actionResultDiv = jQuery("<div class='editable-content-actionresult'></div>");
 
-            jQuery("body").append(whiteContent);
-            jQuery("body").append(fade);
+            editableContentContainer.append(ckeditorWrapper);
+            ckeditorWrapper.append(textarea);
+            editableContentContainer.append(actionResultDiv);
+            actionResultDiv.append(closeLink);
+            actionResultDiv.append(messageSpan);
+
+            var overlay = jQuery("<div id='editableContentOverlay' class='modal-overlay'></div>");
+
+            jQuery("body").append(editableContentContainer);
+            jQuery("body").append(overlay);
+
+            closeLink.bind('click', self.closeEditorClick);
 
             CKEDITOR.replace('inline-edit-textarea',
                 {
@@ -80,7 +125,7 @@ Knitkit.InlineEditing = {
                             this.setData(data);
                             this.focus();
                         },
-                        dataReady:function(ev){
+                        dataReady:function (ev) {
                             this.resetDirty();
                         }
                     }

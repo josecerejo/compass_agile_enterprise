@@ -414,36 +414,3 @@ ul#side_menu li a:hover, ul#side_menu li.selected a, ul#side_menu li.selected a:
 a.tooltip {text-decoration:none;}
 a.tooltip span {display:none; padding:2px 3px; margin-left:8px; width:130px;}
 a.tooltip:hover span{display:inline; position:absolute; border:1px solid #cccccc; background:#ffffff; color:#6c6c6c;}
-
-div.knitkit-inlineedit-editable{
-    -moz-box-shadow:    3px 3px 5px 6px #ccc;
-    -webkit-box-shadow: 3px 3px 5px 6px #ccc;
-    box-shadow:         3px 3px 5px 6px #ccc;
-    cursor: pointer;
-}
-
-/*simple overlay*/
-.black_overlay{
-    position: absolute;
-    top: 0%;
-    left: 0%;
-    width: 100%;
-    height: 100%;
-    background-color: black;
-    z-index:1001;
-    -moz-opacity: 0.8;
-    opacity:.80;
-    filter: alpha(opacity=80);
-}
-.white_content {
-    position: absolute;
-    top: 25%;
-    left: 25%;
-    width: 50%;
-    height: 50%;
-    padding: 16px;
-    border: 16px solid #CCC;
-    background-color: white;
-    z-index:1002;
-    overflow: auto;
-}

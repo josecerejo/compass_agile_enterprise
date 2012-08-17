@@ -18,6 +18,8 @@ module Knitkit
                   website = Website.find(params[:site_id])
                   content.publish(website, 'Auto Publish', content.version, current_user) if website.publish_on_save?
                 end
+                #added for inline editing
+                result[:last_update] = content.updated_at.strftime("%m/%d/%Y %I:%M%p")
               else
                 result = {:success => false}
               end

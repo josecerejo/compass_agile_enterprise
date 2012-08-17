@@ -5,18 +5,23 @@ module Knitkit
         module Helpers
           module ContentHelper
 
-            def setup_inline_editing(user, website)
-              if user and user.has_role?(:admin)
-                raw "<script type='text/javascript'>
+            def setup_inline_editing
+              model = DesktopApplication.find_by_internal_identifier('knitkit')
+              unless (current_user === false)
+                if current_user.has_capability?(model, 'edit_html', 'Article')
+                  raw "<script type='text/javascript'>
                       jQuery(document).ready(function() {
-                          Knitkit.InlineEditing.setup(#{website.id});
+                          Knitkit.InlineEditing.setup(#{@website.id});
                       });
                     </script>"
+                end
               end
             end
 
-            def render_editable_content(content_version, css_class='knitkit_content')
-              raw "<div class='#{css_class}' content_id='#{content_version.content.id}'>#{content_version.body_html}</div>"
+            def render_editable_content(content_version, additional_css_classes=[])
+              raw "<div class='knitkit_content #{additional_css_classes.join(' ')}'
+                        contentid='#{content_version.content.id}'
+                        lastupdate='#{content_version.content.updated_at.strftime("%m/%d/%Y %I:%M%p")}'>#{content_version.body_html}</div>"
             end
 
             # render a piece of content by internal identifier regardless if it belongs to a section or not
@@ -28,7 +33,10 @@ module Knitkit
               if content_version.nil?
                 ''
               else
-                raw "<div class='knitkit_content' content_id='#{content.id}'>#{(content_version.body_html.nil? ? '' : content_version.body_html)}</div>"
+                raw "<div class='knitkit_content'
+                        content_id='#{content.id}'
+                        lastupdate='#{content_version.content.updated_at.strftime("%m/%d/%Y %I:%M%p")}'>
+                        #{(content_version.body_html.nil? ? '' : content_version.body_html)}</div>"
               end
             end
 

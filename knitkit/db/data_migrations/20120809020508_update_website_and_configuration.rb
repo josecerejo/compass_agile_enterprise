@@ -52,17 +52,6 @@ class UpdateWebsiteAndConfiguration < ActiveRecord::Migration
 
     configuration.configuration_item_types << publish_on_save_config_item_type
 
-    #add auto publish on save
-    enable_comments_config_item_type = ConfigurationItemType.create(
-        :description => 'Enable publish comments',
-        :internal_identifier => 'enable_publish_comments'
-    )
-    enable_comments_config_item_type.configuration_options << yes_option
-    enable_comments_config_item_type.add_default_option(no_option)
-    CategoryClassification.create(:category => content_work_flow_category, :classification => enable_comments_config_item_type)
-
-    configuration.configuration_item_types << enable_comments_config_item_type
-
     configuration.save
 
     Website.all.each do |website|
@@ -70,12 +59,10 @@ class UpdateWebsiteAndConfiguration < ActiveRecord::Migration
       #add types
       website_config.configuration_item_types << email_inquiries_config_item_type
       website_config.configuration_item_types << auto_activate_config_item_type
-      website_config.configuration_item_types << publish_on_save_config_item_type
       website_config.configuration_item_types << enable_comments_config_item_type
 
       website_config.add_configuration_item(email_inquiries_config_item_type, (website.email_inquiries ? yes_option : no_option))
       website_config.add_configuration_item(auto_activate_config_item_type, (website.auto_activate_publication ? yes_option : no_option))
-      website_config.add_configuration_item(publish_on_save_config_item_type, (website.auto_activate_publication ? yes_option : no_option))
       website_config.add_configuration_item(enable_comments_config_item_type, (website.auto_activate_publication ? no_option : yes_option))
 
       website_config.save
