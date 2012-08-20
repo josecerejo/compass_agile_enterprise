@@ -209,9 +209,9 @@ module Knitkit
           begin
             current_user.with_capability(model, 'view', 'Theme') do
               result = {}
-              upload_path = request.env['HTTP_EXTRAPOSTDATA_DIRECTORY'].blank? ? params[:directory] : request.env['HTTP_EXTRAPOSTDATA_DIRECTORY']
-              name = request.env['HTTP_X_FILE_NAME'].blank? ? params[:file_data].original_filename : request.env['HTTP_X_FILE_NAME']
-              data = request.env['HTTP_X_FILE_NAME'].blank? ? params[:file_data] : request.raw_post
+              upload_path = params[:directory]
+              name = params[:name]
+              data = request.raw_post
 
               theme = get_theme(upload_path)
               name = File.join(@file_support.root, upload_path, name)

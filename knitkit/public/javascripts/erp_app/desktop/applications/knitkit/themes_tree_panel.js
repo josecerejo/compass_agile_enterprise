@@ -259,7 +259,6 @@ Ext.define("Compass.ErpApp.Desktop.Applications.ThemesTreePanel",{
       allowDownload:true,
       addViewContentsToContextMenu:true,
       standardUploadUrl:'/knitkit/erp_app/desktop/theme/upload_file',
-      xhrUploadUrl:'/knitkit/erp_app/desktop/theme/upload_file',
       url:'/knitkit/erp_app/desktop/theme/index',
       fields:[
       {

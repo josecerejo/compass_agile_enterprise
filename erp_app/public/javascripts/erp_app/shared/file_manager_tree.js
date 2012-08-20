@@ -453,8 +453,6 @@ Ext.define("Compass.ErpApp.Shared.FileManagerTree",{
                 });
                 var uploadWindow = new Compass.ErpApp.Shared.UploadWindow({
                   standardUploadUrl:this.initialConfig['standardUploadUrl'],
-                  flashUploadUrl:this.initialConfig['flashUploadUrl'],
-                  xhrUploadUrl:this.initialConfig['xhrUploadUrl'],
                   extraPostData:self.extraPostData,
                   listeners:{
                     'fileuploaded':function(){

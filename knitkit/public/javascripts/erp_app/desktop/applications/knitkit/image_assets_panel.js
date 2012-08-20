@@ -20,7 +20,6 @@ Compass.ErpApp.Desktop.Applications.Knitkit.ImageAssetsPanel = function(module) 
     multiSelect:true,
     controllerPath:'/knitkit/erp_app/desktop/image_assets/shared',
     standardUploadUrl:'/knitkit/erp_app/desktop/image_assets/shared/upload_file',
-    xhrUploadUrl:'/knitkit/erp_app/desktop/image_assets/shared/upload_file',
     url:'/knitkit/erp_app/desktop/image_assets/shared/expand_directory',
     containerScroll: true,
     height:200,
@@ -115,7 +114,6 @@ Compass.ErpApp.Desktop.Applications.Knitkit.ImageAssetsPanel = function(module) 
     multiSelect:true,
     controllerPath:'/knitkit/erp_app/desktop/image_assets/website',
     standardUploadUrl:'/knitkit/erp_app/desktop/image_assets/website/upload_file',
-    xhrUploadUrl:'/knitkit/erp_app/desktop/image_assets/website/upload_file',
     url:'/knitkit/erp_app/desktop/image_assets/website/expand_directory',
     containerScroll: true,
     height:200,
@@ -262,8 +260,7 @@ Compass.ErpApp.Desktop.Applications.Knitkit.ImageAssetsPanel = function(module) 
 
   this.reloadWebsiteImageAssetsTreePanel = function(websiteId){
     this.websiteImageAssetsTreePanel.extraPostData = {
-      website_id:websiteId,
-      websiteid:websiteId // for xhrFileUpload to work      
+      website_id:websiteId
     };
     this.websiteImageAssetsTreePanel.getStore().setProxy({
       type: 'ajax',

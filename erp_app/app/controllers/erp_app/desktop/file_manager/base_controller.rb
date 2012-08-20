@@ -105,12 +105,7 @@ module ErpApp
         end
 
         def upload_file
-          if request.env['HTTP_EXTRAPOSTDATA_DIRECTORY'].blank?
-            upload_path = params[:directory]
-          else
-            upload_path = request.env['HTTP_EXTRAPOSTDATA_DIRECTORY']
-          end
-
+          upload_path = params[:directory]
           upload_path = base_path if upload_path == ROOT_NODE
 
           result = upload_file_to_path(upload_path)
@@ -127,10 +122,11 @@ module ErpApp
             FileUtils.mkdir_p(upload_path)
           end
 
-          upload_path = request.env['HTTP_X_DIRECTORY'].blank? ? params[:directory] : request.env['HTTP_X_DIRECTORY']
-          name = request.env['HTTP_X_FILE_NAME'].blank? ? params[:file_data].original_filename : request.env['HTTP_X_FILE_NAME']
-          contents = request.env['HTTP_X_FILE_NAME'].blank? ? params[:file_data].read : request.raw_post
-          Rails.logger.info contents
+          upload_path = params[:directory]
+          name = params[:name]
+          contents = request.raw_post
+
+          #Rails.logger.info contents
           if !valid_file_type_regex.nil? && name !=~ valid_file_type_regex
             result[:success] = false
             result[:error]   = "Invalid file type"

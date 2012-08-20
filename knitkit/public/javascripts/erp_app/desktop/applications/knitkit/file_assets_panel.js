@@ -49,7 +49,6 @@ Compass.ErpApp.Desktop.Applications.Knitkit.FileAssetsPanel = function(module) {
     multiSelect:true,
     controllerPath:'/knitkit/erp_app/desktop/file_assets/shared',
     standardUploadUrl:'/knitkit/erp_app/desktop/file_assets/shared/upload_file',
-    xhrUploadUrl:'/knitkit/erp_app/desktop/file_assets/shared/upload_file',
     url:'/knitkit/erp_app/desktop/file_assets/shared/expand_directory',
     containerScroll: true,
     additionalContextMenuItems:[{
@@ -164,7 +163,6 @@ Compass.ErpApp.Desktop.Applications.Knitkit.FileAssetsPanel = function(module) {
     multiSelect:true,
     controllerPath:'/knitkit/erp_app/desktop/file_assets/website',
     standardUploadUrl:'/knitkit/erp_app/desktop/file_assets/website/upload_file',
-    xhrUploadUrl:'/knitkit/erp_app/desktop/file_assets/website/upload_file',
     url:'/knitkit/erp_app/desktop/file_assets/website/expand_directory',
     containerScroll: true,
     additionalContextMenuItems:[{
@@ -299,8 +297,7 @@ Compass.ErpApp.Desktop.Applications.Knitkit.FileAssetsPanel = function(module) {
 
   this.reloadWebsiteFileAssetsTreePanel = function(websiteId){
     this.websiteFileAssetsTreePanel.extraPostData = {
-      website_id:websiteId,
-      websiteid:websiteId // for xhrFileUpload to work
+      website_id:websiteId
     };
     this.websiteFileAssetsTreePanel.getStore().setProxy({
       type: 'ajax',

@@ -59,9 +59,9 @@ module Knitkit
           begin
             current_user.with_capability(model, capability_type, capability_resource) do
               result = {}
-              upload_path = request.env['HTTP_X_DIRECTORY'].blank? ? params[:directory] : request.env['HTTP_X_DIRECTORY']
-              name = request.env['HTTP_X_FILE_NAME'].blank? ? params[:file_data].original_filename : request.env['HTTP_X_FILE_NAME']
-              data = request.env['HTTP_X_FILE_NAME'].blank? ? params[:file_data] : request.raw_post
+              upload_path = params[:directory]
+              name = params[:name]
+              data = request.raw_post
 
               begin
                 upload_path == 'root_node' ? @assets_model.add_file(data, File.join(@file_support.root,base_path,name)) : @assets_model.add_file(data, File.join(@file_support.root,upload_path,name))
@@ -224,8 +224,7 @@ module Knitkit
           @context = params[:context].to_sym
 
           if @context == :website
-            #get website id this can be an xhr request or regular
-            website_id = request.env['HTTP_X_WEBSITEID'].blank? ? params[:website_id] : request.env['HTTP_X_WEBSITEID']
+            website_id = params[:website_id]
             (@assets_model = website_id.blank? ? nil : Website.find(website_id))
 
             render :inline => {:success => false, :error => "No Website Selected"}.to_json if (@assets_model.nil? && params[:action] != "base_path")
