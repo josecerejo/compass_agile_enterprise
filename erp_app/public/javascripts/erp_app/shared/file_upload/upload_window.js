@@ -30,10 +30,16 @@ Ext.define("Compass.ErpApp.Shared.UploadWindow",{
       query_string += '&product_type_id=' + config['extraPostData']['product_type_id']
     }
 
+    if (typeof ErpApp.FileUpload.maxSize == 'number'){
+      max_file_size = ErpApp.FileUpload.maxSize + 'mb'
+    }else{
+      max_file_size = ErpApp.FileUpload.maxSize
+    }
+
     this.plUploader = new Ext.create("Ext.ux.panel.UploadPanel",{
       region:'center',
       url: (config['standardUploadUrl'] || './file_manager/base/upload_file') + query_string,
-      max_file_size: ErpApp.FileUpload.maxSize,
+      max_file_size: max_file_size,
       listeners:{
         scope:this,
         'uploadcomplete':function(pluploader, success, failed){

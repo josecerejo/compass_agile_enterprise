@@ -14,7 +14,7 @@ module ErpApp
             end
       
             def set_max_file_upload
-              raw "<script type='text/javascript'>Ext.ns('ErpApp.FileUpload'); ErpApp.FileUpload.maxSize = #{Rails.application.config.erp_tech_svcs.max_file_size_in_mb.megabytes};</script>"
+              raw "<script type='text/javascript'>Ext.ns('ErpApp.FileUpload'); ErpApp.FileUpload.maxSize = #{Rails.application.config.erp_tech_svcs.max_file_size_in_mb};</script>"
             end
 
             def include_extjs(opt={})
