@@ -7,7 +7,7 @@ module Knitkit
 
             def setup_inline_editing
               model = DesktopApplication.find_by_internal_identifier('knitkit')
-              unless (current_user === false)
+              if (!current_user.nil? and current_user != false)
                 if current_user.has_capability?(model, 'edit_html', 'Article')
                   raw "<script type='text/javascript'>
                       jQuery(document).ready(function() {
@@ -16,6 +16,7 @@ module Knitkit
                     </script>"
                 end
               end
+
             end
 
             def render_editable_content(content_version, additional_css_classes=[])
@@ -43,7 +44,9 @@ module Knitkit
             def render_content_area(name)
               html = ''
 
-              section_contents = WebsiteSectionContent.include(:content).where(:website_section_id => @website_section.id, :content_area => name.to_s).order(:position)
+              section_contents = WebsiteSectionContent.includes(:content)
+                                 .where(:website_section_id => @website_section.id, :content_area => name.to_s)
+                                 .order(:position).all
               published_contents = []
               section_contents.each do |sc|
                 content_version = Content.get_published_version(@active_publication, sc.content)
@@ -51,8 +54,11 @@ module Knitkit
               end
 
               published_contents.each do |content|
-                body_html = content.body_html.nil? ? '' : content.body_html
-                html << body_html
+                html << "<div class='knitkit_content'
+                        content_id='#{content.id}'
+                        lastupdate='#{content.updated_at.strftime("%m/%d/%Y %I:%M%p")}'>
+                        #{(content.body_html.nil? ? '' : content.body_html)}</div>"
+
               end
 
               raw html
