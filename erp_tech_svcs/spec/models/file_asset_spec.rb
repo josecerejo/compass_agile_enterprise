@@ -57,7 +57,6 @@ describe FileAsset do
     end
 
     it "should allow you to move a file" do
-      puts ErpTechSvcs::Config.file_storage
       new_path = File.join('move_test_tmp')
 
       File.exists?(@base_path).should eq true
