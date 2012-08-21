@@ -3,7 +3,12 @@ class Website < ActiveRecord::Base
   after_create  :setup_website
 
   has_file_assets
-  has_permalink :name, :internal_identifier, :update => false
+
+  extend FriendlyId
+  friendly_id :name, :use => [:slugged], :slug_column => :internal_identifier
+  def should_generate_new_friendly_id?
+    new_record?
+  end
 
   has_many :published_websites, :dependent => :destroy
   has_many :website_hosts, :dependent => :destroy

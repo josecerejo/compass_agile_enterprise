@@ -2,7 +2,7 @@
 require 'erp_app'
 require 'erp_forms'
 
-require "permalink_fu/lib/permalink_fu"
+require "friendly_id"
 require 'routing_filter'
 require "knitkit/version"
 require "knitkit/routing_filter/section_router.rb"

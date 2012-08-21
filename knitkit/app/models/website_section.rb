@@ -2,7 +2,12 @@ class WebsiteSection < ActiveRecord::Base
   after_create :update_paths
   before_save  :update_path, :check_internal_indentifier
 
-  has_permalink :title, :url_attribute => :permalink, :sync_url => true, :only_when_blank => true, :scope => [:website_id, :parent_id]
+  extend FriendlyId
+  friendly_id :title, :use => [:slugged, :scoped], :slug_column => :permalink, :scope => [:website_id, :parent_id]
+  def should_generate_new_friendly_id?
+    new_record?
+  end
+
   acts_as_nested_set
   include ErpTechSvcs::Utils::DefaultNestedSetMethods
   acts_as_versioned :table_name => :website_section_versions, :non_versioned_columns => %w{parent_id lft rgt}

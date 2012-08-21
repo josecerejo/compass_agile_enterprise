@@ -2,7 +2,6 @@ class OnlineDocumentSection < WebsiteSection
   has_one :documented_item, :dependent => :destroy
   delegate :content, :to => :documented_item, :prefix => true
   delegate :published_content, :to => :documented_item, :prefix => true
-  has_permalink :title, :url_attribute => :permalink, :sync_url => true, :only_when_blank => true, :scope => [:website_id, :parent_id]
   
   def documented_item_content_html
     documented_item_content.body_html

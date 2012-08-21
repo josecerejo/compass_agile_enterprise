@@ -1,5 +1,5 @@
 class DocumentedContent < Content
-  has_permalink :title
+
   before_save :check_internal_indentifier
 
   def to_param
