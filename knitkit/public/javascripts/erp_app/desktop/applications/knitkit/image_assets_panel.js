@@ -20,7 +20,6 @@ Compass.ErpApp.Desktop.Applications.Knitkit.ImageAssetsPanel = function(module) 
     multiSelect:true,
     controllerPath:'/knitkit/erp_app/desktop/image_assets/shared',
     standardUploadUrl:'/knitkit/erp_app/desktop/image_assets/shared/upload_file',
-    xhrUploadUrl:'/knitkit/erp_app/desktop/image_assets/shared/upload_file',
     url:'/knitkit/erp_app/desktop/image_assets/shared/expand_directory',
     containerScroll: true,
     height:200,
@@ -49,7 +48,7 @@ Compass.ErpApp.Desktop.Applications.Knitkit.ImageAssetsPanel = function(module) 
         scope:self,
         'click':function(){
           var node = this.sharedImageAssetsTreePanel.selectedNode;
-          self.module.centerRegion.insertHtmlIntoActiveCkEditor('<img width="'+node.data.width+'" height="'+node.data.height+'" alt="'+node.data.text+'" src="/download/'+node.data.text+'?path='+node.data.downloadPath+'" />');
+          self.module.centerRegion.insertHtmlIntoActiveCkEditorOrCodemirror('<img width="'+node.data.width+'" height="'+node.data.height+'" alt="'+node.data.text+'" src="/download/'+node.data.text+'?path='+node.data.downloadPath+'" />');
         }
       }
     }
@@ -115,7 +114,6 @@ Compass.ErpApp.Desktop.Applications.Knitkit.ImageAssetsPanel = function(module) 
     multiSelect:true,
     controllerPath:'/knitkit/erp_app/desktop/image_assets/website',
     standardUploadUrl:'/knitkit/erp_app/desktop/image_assets/website/upload_file',
-    xhrUploadUrl:'/knitkit/erp_app/desktop/image_assets/website/upload_file',
     url:'/knitkit/erp_app/desktop/image_assets/website/expand_directory',
     containerScroll: true,
     height:200,
@@ -144,7 +142,7 @@ Compass.ErpApp.Desktop.Applications.Knitkit.ImageAssetsPanel = function(module) 
         scope:self,
         'click':function(){
           var node = this.websiteImageAssetsTreePanel.selectedNode;
-          self.module.centerRegion.insertHtmlIntoActiveCkEditor('<img width="'+node.data.width+'" height="'+node.data.height+'" alt="'+node.data.text+'" src="/download/'+node.data.text+'?path='+node.data.downloadPath+'" />');
+          self.module.centerRegion.insertHtmlIntoActiveCkEditorOrCodemirror('<img width="'+node.data.width+'" height="'+node.data.height+'" alt="'+node.data.text+'" src="/download/'+node.data.text+'?path='+node.data.downloadPath+'" />');
         }
       }
     }
@@ -262,8 +260,7 @@ Compass.ErpApp.Desktop.Applications.Knitkit.ImageAssetsPanel = function(module) 
 
   this.reloadWebsiteImageAssetsTreePanel = function(websiteId){
     this.websiteImageAssetsTreePanel.extraPostData = {
-      website_id:websiteId,
-      websiteid:websiteId // for xhrFileUpload to work      
+      website_id:websiteId
     };
     this.websiteImageAssetsTreePanel.getStore().setProxy({
       type: 'ajax',

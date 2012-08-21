@@ -39,7 +39,6 @@ class FileAsset < ActiveRecord::Base
   end
 
   after_create :set_sti
-  after_save   :set_data_file_name, :save_dimensions
 
   belongs_to :file_asset_holder, :polymorphic => true
   instantiates_with_sti
@@ -55,6 +54,9 @@ class FileAsset < ActiveRecord::Base
     :path => ":file_path",
     :url => ":file_url",
     :validations => { :extension => lambda { |data, file| validate_extension(data, file) } }
+
+  # must fire after paperclip's after_save :save_attached_files
+  after_save   :set_data_file_name, :save_dimensions
 
   before_post_process :set_content_type
 
@@ -207,13 +209,13 @@ end
 
 class Image < FileAsset
   self.file_type = :image
-  self.valid_extensions = %w(.jpg .jpeg .gif .png .ico .PNG .JPEG .JPG)
+  self.valid_extensions = %w(.jpg .JPG .jpeg .JPEG .gif .GIF .png .PNG .ico .ICO .bmp .BMP .tif .tiff .TIF .TIFF)
 end
 
 class TextFile < FileAsset
   self.file_type = :textfile
   self.content_type = 'text/plain'
-  self.valid_extensions = %w(.txt .text)
+  self.valid_extensions = %w(.txt .TXT .text)
 
   def data=(data)
     data = StringIO.new(data) if data.is_a?(String)
@@ -228,13 +230,13 @@ end
 class Javascript < TextFile
   self.file_type = :javascript
   self.content_type = 'text/javascript'
-  self.valid_extensions = %w(.js)
+  self.valid_extensions = %w(.js .JS)
 end
 
 class Stylesheet < TextFile
   self.file_type = :stylesheet
   self.content_type = 'text/css'
-  self.valid_extensions = %w(.css)
+  self.valid_extensions = %w(.css .CSS)
 end
 
 class Template < TextFile
@@ -246,17 +248,17 @@ end
 class HtmlFile < TextFile
   self.file_type = :html
   self.content_type = 'text/html'
-  self.valid_extensions = %w(.html)
+  self.valid_extensions = %w(.html .HTML)
 end
 
 class Pdf < TextFile
   self.file_type = :pdf
   self.content_type = 'application/pdf'
-  self.valid_extensions = %w(.pdf)
+  self.valid_extensions = %w(.pdf .PDF)
 end
 
 class Swf < TextFile
   self.file_type = :swf
   self.content_type = 'application/x-shockwave-flash'
-  self.valid_extensions = %w(.swf)
+  self.valid_extensions = %w(.swf .SWF)
 end

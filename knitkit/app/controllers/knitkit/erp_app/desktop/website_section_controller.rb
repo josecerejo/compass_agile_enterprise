@@ -146,11 +146,42 @@ module Knitkit
           end
         end
 
-        def available_articles
-          current_articles = Article.joins("INNER JOIN website_section_contents ON website_section_contents.content_id = contents.id").where("website_section_id = #{params[:section_id]}").all
-          available_articles = Article.order('LOWER(internal_identifier) ASC').all - current_articles
+        def available_articles_filter
+          menu = []
+          websites = Website.all
+          all_articles = [{:name => 'All Articles', :id => 0}]
+          orphaned_articles = [{:name => 'Orphaned Articles Only', :id => -1}]
+          
+          websites_array = []
+          websites.each do |w| 
+            websites_array << { :name => "Website: #{w.name}", :id => w.id } 
+          end
 
-          render :inline => "{\"articles\":#{available_articles.to_json(:only => [:internal_identifier, :id])}}"
+          menu = all_articles + orphaned_articles + websites_array
+
+          render :inline => "{\"websites\":#{menu.to_json(:only => [:name, :id])}}"
+        end
+
+        def available_articles
+          website_id = params[:website_id]
+          current_articles = Article.joins(:website_section_contents).where("website_section_id = #{params[:section_id]}").all
+
+          # Defaults to retrieving all articles
+          available_articles = Article.order('LOWER(contents.internal_identifier) ASC')
+
+          # Orphaned Articles
+          if !website_id.blank? and website_id.to_i == -1
+            available_articles = available_articles.includes(:website_section_contents).where( :website_section_contents => { :content_id => nil } )     
+          end
+
+          # Website Articles
+          if !website_id.blank? and website_id.to_i > 0
+            available_articles = available_articles.joins(:website_sections).where("website_sections.website_id = #{website_id}")
+          end
+
+          available_articles = available_articles.all - current_articles
+
+          render :inline => "{\"articles\":#{available_articles.to_json(:only => [:title, :internal_identifier, :id], :methods => [:combobox_display_value])}}"
         end
   
         def existing_sections

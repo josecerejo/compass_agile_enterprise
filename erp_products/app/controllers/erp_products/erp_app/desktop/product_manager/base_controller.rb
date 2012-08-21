@@ -104,18 +104,18 @@ module ErpProducts
             result = {}
 
             begin
-              name = request.env['HTTP_X_FILE_NAME'].blank? ? params[:file_data].original_filename : request.env['HTTP_X_FILE_NAME']
-              data = request.env['HTTP_X_FILE_NAME'].blank? ? params[:file_data] : request.raw_post
+              name = params[:name]
+              data = request.raw_post
 
               product_type = ProductType.find(params[:product_type_id])
               #build path
               path = File.join(product_type.images_path,name)
-
+              Rails.logger.info "@@@@@@@@ #{path}"
               product_type.add_file(data, path)
               result = {:success => true}
             rescue Exception=>ex
-              logger.error ex.message
-              logger.error ex.backtrace.join("\n")
+              Rails.logger.error ex.message
+              Rails.logger.error ex.backtrace.join("\n")
               result = {:success => false, :error => "Error uploading #{name}"}
             end
             

@@ -42,8 +42,6 @@ Ext.define("Compass.ErpApp.Shared.BillingAccountsGridPanel",{
   addDocument : function(rec){
     var uploadWindow = new Compass.ErpApp.Shared.UploadWindow({
       standardUploadUrl:'/erp_invoicing/erp_app/shared/billing_accounts/'+rec.get('id')+'/upload_file',
-      flashUploadUrl:'/erp_invoicing/erp_app/shared/billing_accounts/'+rec.get('id')+'/upload_file',
-      xhrUploadUrl:'/erp_invoicing/erp_app/shared/billing_accounts/'+rec.get('id')+'/upload_file',
       extraPostData:{}
     });
     uploadWindow.show();
@@ -262,7 +260,7 @@ Ext.define("Compass.ErpApp.Shared.BillingAccountsGridPanel",{
         width:100,
         dataIndex: 'payment_due',
         renderer:function(v){
-          return v.toFixed(2);
+          return parseFloat(v).toFixed(2);
         },
         editor:{
           xtype:'numberfield'
@@ -273,7 +271,7 @@ Ext.define("Compass.ErpApp.Shared.BillingAccountsGridPanel",{
         width:100,
         dataIndex: 'balance',
         renderer:function(v){
-          return v.toFixed(2);
+          return parseFloat(v).toFixed(2);
         },
         editor:{
           xtype:'numberfield'

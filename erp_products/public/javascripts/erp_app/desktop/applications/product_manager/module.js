@@ -240,8 +240,6 @@ Ext.define("Compass.ErpApp.Desktop.Applications.ProductManager.ProductImagesPane
           handler:function(btn){
             var uploadWindow = Ext.create("Compass.ErpApp.Shared.UploadWindow",{
               standardUploadUrl:uploadUrl,
-              flashUploadUrl:uploadUrl,
-              xhrUploadUrl:uploadUrl,
               extraPostData:{
                 product_type_id:productTypeId
               },

@@ -209,9 +209,9 @@ module Knitkit
           begin
             current_user.with_capability(model, 'view', 'Theme') do
               result = {}
-              upload_path = request.env['HTTP_EXTRAPOSTDATA_DIRECTORY'].blank? ? params[:directory] : request.env['HTTP_EXTRAPOSTDATA_DIRECTORY']
-              name = request.env['HTTP_X_FILE_NAME'].blank? ? params[:file_data].original_filename : request.env['HTTP_X_FILE_NAME']
-              data = request.env['HTTP_X_FILE_NAME'].blank? ? params[:file_data] : request.raw_post
+              upload_path = params[:directory]
+              name = params[:name]
+              data = request.raw_post
 
               theme = get_theme(upload_path)
               name = File.join(@file_support.root, upload_path, name)
@@ -237,9 +237,9 @@ module Knitkit
           nodes_to_delete = (params[:selected_nodes] ? JSON(params[:selected_nodes]) : [params[:node]])
           model = DesktopApplication.find_by_internal_identifier('knitkit')
           begin
+            result = false
             nodes_to_delete.each do |path|
-              current_user.with_capability(model, 'view', 'Theme') do
-                result = {}
+              current_user.with_capability(model, 'view', 'Theme') do                
                 begin
                   name = File.basename(path)
                   result, message, is_folder = @file_support.delete_file(File.join(@file_support.root,path))
@@ -249,14 +249,17 @@ module Knitkit
                   end
                   messages << message
                 rescue Exception=>ex
-                  logger.error ex.message
-                  logger.error ex.backtrace.join("\n")
-                  result = {:success => false, :error => "Error deleting #{name}"}
+                  Rails.logger.error ex.message
+                  Rails.logger.error ex.backtrace.join("\n")
+                  render :json => {:success => false, :error => "Error deleting #{name}"} and return
                 end
               end # end current_user.with_capability
             end # end nodes_to_delete.each
-
-            render :json => {:success => true, :error => messages.join(',')}
+            if result
+              render :json => {:success => true, :message => messages.join(',')}
+            else
+              render :json => {:success => false, :error => messages.join(',')}
+            end
           rescue ErpTechSvcs::Utils::CompassAccessNegotiator::Errors::UserDoesNotHaveCapability=>ex
             render :json => {:success => false, :message => ex.message}
           end
