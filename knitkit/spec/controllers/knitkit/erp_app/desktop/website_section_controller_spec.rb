@@ -201,7 +201,7 @@ describe Knitkit::ErpApp::Desktop::WebsiteSectionController do
                      :section_id => @website_section.id}
 
       parsed_res = JSON.parse(response.body)
-      puts parsed_res.inspect
+      #puts parsed_res.inspect
       parsed_res['articles'][0]["internal_identifier"].should eq(@article_2.internal_identifier)
       parsed_res['articles'][0]["id"].should eq(@article_2.id)
     end

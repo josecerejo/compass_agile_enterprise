@@ -63,10 +63,9 @@ describe Knitkit::ErpApp::Desktop::WebsiteController do
   describe "Post activate_publication" do
     it "should call set_publication_version with version number on website and return success:true" do
       @website.published_websites << Factory.create(:published_website, :version => 1, :comment => "published_website test", :published_by_id => 1)
-      @website_double = double("Website")
-      Website.should_receive(:find).and_return(@website_double)
-      @website_double.should_receive(:id).and_return(1)
-      @website_double.should_receive(:set_publication_version).with(1.0, @user)
+      Website.should_receive(:find).and_return(@website)
+      @website.should_receive(:id).and_return(1)
+      @website.should_receive(:set_publication_version).with(1.0, @user)
 
       post :activate_publication, {:use_route => :knitkit,
                  :action => "activate_publication",
