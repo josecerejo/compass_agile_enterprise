@@ -6,17 +6,13 @@ module Knitkit
           module ContentHelper
 
             def setup_inline_editing
-              model = DesktopApplication.find_by_internal_identifier('knitkit')
-              if (!current_user.nil? and current_user != false)
-                if current_user.has_capability?(model, 'edit_html', 'Article')
+                if can_inline_edit?
                   raw "<script type='text/javascript'>
                       jQuery(document).ready(function() {
                           Knitkit.InlineEditing.setup(#{@website.id});
                       });
                     </script>"
                 end
-              end
-
             end
 
             def render_editable_content(content_version, additional_css_classes=[])
@@ -62,6 +58,17 @@ module Knitkit
               end
 
               raw html
+            end
+
+            private
+            
+            def can_inline_edit?
+              result = false
+              model = DesktopApplication.find_by_internal_identifier('knitkit')
+              if ((!current_user.nil? and current_user != false)) and (current_user.has_capability?(model, 'edit_html', 'Article')) and @website.configurations.first.get_configuration_item(:auto_active_publications).options.first.value == 'yes' and @website.configurations.first.get_configuration_item(:publish_on_save).options.first.value == 'yes'
+                result = true
+              end
+              result
             end
 
           end #ContentHelper
