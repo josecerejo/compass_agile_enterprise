@@ -49,7 +49,6 @@ Compass.ErpApp.Desktop.Applications.Knitkit.FileAssetsPanel = function(module) {
     multiSelect:true,
     controllerPath:'/knitkit/erp_app/desktop/file_assets/shared',
     standardUploadUrl:'/knitkit/erp_app/desktop/file_assets/shared/upload_file',
-    xhrUploadUrl:'/knitkit/erp_app/desktop/file_assets/shared/upload_file',
     url:'/knitkit/erp_app/desktop/file_assets/shared/expand_directory',
     containerScroll: true,
     additionalContextMenuItems:[{
@@ -77,7 +76,7 @@ Compass.ErpApp.Desktop.Applications.Knitkit.FileAssetsPanel = function(module) {
           var node = this.sharedFileAssetsTreePanel.selectedNode;
           Ext.MessageBox.prompt('Display Name', 'Please enter display name:', function(btn, text){
             if(btn == 'ok'){
-              self.module.centerRegion.insertHtmlIntoActiveCkEditor('<a href="/download/'+node.data.text+'?path='+node.data.downloadPath+'">'+text+'</a>');
+              self.module.centerRegion.insertHtmlIntoActiveCkEditorOrCodemirror('<a href="/download/'+node.data.text+'?path='+node.data.downloadPath+'">'+text+'</a>');
             }
           });
         }
@@ -93,7 +92,7 @@ Compass.ErpApp.Desktop.Applications.Knitkit.FileAssetsPanel = function(module) {
           var node = this.sharedFileAssetsTreePanel.selectedNode;
           Ext.MessageBox.prompt('Display Name', 'Please enter display name:', function(btn, text){
             if(btn == 'ok'){
-              self.module.centerRegion.insertHtmlIntoActiveCkEditor('<a href="/download/'+node.data.text+'?path='+node.data.downloadPath+'&disposition=inline">'+text+'</a>');
+              self.module.centerRegion.insertHtmlIntoActiveCkEditorOrCodemirror('<a href="/download/'+node.data.text+'?path='+node.data.downloadPath+'&disposition=inline">'+text+'</a>');
             }
           });
         }
@@ -109,7 +108,7 @@ Compass.ErpApp.Desktop.Applications.Knitkit.FileAssetsPanel = function(module) {
           var node = this.sharedFileAssetsTreePanel.selectedNode;
           Ext.MessageBox.prompt('Display Name', 'Please enter display name:', function(btn, text){
             if(btn == 'ok'){
-              self.module.centerRegion.insertHtmlIntoActiveCkEditor('<a href="/download/'+node.data.text+'?path='+node.data.downloadPath+'&disposition=attachment">'+text+'</a>');
+              self.module.centerRegion.insertHtmlIntoActiveCkEditorOrCodemirror('<a href="/download/'+node.data.text+'?path='+node.data.downloadPath+'&disposition=attachment">'+text+'</a>');
             }
           });
         }
@@ -164,7 +163,6 @@ Compass.ErpApp.Desktop.Applications.Knitkit.FileAssetsPanel = function(module) {
     multiSelect:true,
     controllerPath:'/knitkit/erp_app/desktop/file_assets/website',
     standardUploadUrl:'/knitkit/erp_app/desktop/file_assets/website/upload_file',
-    xhrUploadUrl:'/knitkit/erp_app/desktop/file_assets/website/upload_file',
     url:'/knitkit/erp_app/desktop/file_assets/website/expand_directory',
     containerScroll: true,
     additionalContextMenuItems:[{
@@ -192,7 +190,7 @@ Compass.ErpApp.Desktop.Applications.Knitkit.FileAssetsPanel = function(module) {
           var node = this.websiteFileAssetsTreePanel.selectedNode;
           Ext.MessageBox.prompt('Display Name', 'Please enter display name:', function(btn, text){
             if(btn == 'ok'){
-              self.module.centerRegion.insertHtmlIntoActiveCkEditor('<a href="/download/'+node.data.text+'?path='+node.data.downloadPath+'">'+text+'</a>');
+              self.module.centerRegion.insertHtmlIntoActiveCkEditorOrCodemirror('<a href="/download/'+node.data.text+'?path='+node.data.downloadPath+'">'+text+'</a>');
             }
           });
         }
@@ -208,7 +206,7 @@ Compass.ErpApp.Desktop.Applications.Knitkit.FileAssetsPanel = function(module) {
           var node = this.websiteFileAssetsTreePanel.selectedNode;
           Ext.MessageBox.prompt('Display Name', 'Please enter display name:', function(btn, text){
             if(btn == 'ok'){
-              self.module.centerRegion.insertHtmlIntoActiveCkEditor('<a href="/download/'+node.data.text+'?path='+node.data.downloadPath+'&disposition=inline">'+text+'</a>');
+              self.module.centerRegion.insertHtmlIntoActiveCkEditorOrCodemirror('<a href="/download/'+node.data.text+'?path='+node.data.downloadPath+'&disposition=inline">'+text+'</a>');
             }
           });
         }
@@ -224,7 +222,7 @@ Compass.ErpApp.Desktop.Applications.Knitkit.FileAssetsPanel = function(module) {
           var node = this.websiteFileAssetsTreePanel.selectedNode;
           Ext.MessageBox.prompt('Display Name', 'Please enter display name:', function(btn, text){
             if(btn == 'ok'){
-              self.module.centerRegion.insertHtmlIntoActiveCkEditor('<a href="/download/'+node.data.text+'?path='+node.data.downloadPath+'&disposition=attachment">'+text+'</a>');
+              self.module.centerRegion.insertHtmlIntoActiveCkEditorOrCodemirror('<a href="/download/'+node.data.text+'?path='+node.data.downloadPath+'&disposition=attachment">'+text+'</a>');
             }
           });
         }
@@ -299,8 +297,7 @@ Compass.ErpApp.Desktop.Applications.Knitkit.FileAssetsPanel = function(module) {
 
   this.reloadWebsiteFileAssetsTreePanel = function(websiteId){
     this.websiteFileAssetsTreePanel.extraPostData = {
-      website_id:websiteId,
-      websiteid:websiteId // for xhrFileUpload to work
+      website_id:websiteId
     };
     this.websiteFileAssetsTreePanel.getStore().setProxy({
       type: 'ajax',

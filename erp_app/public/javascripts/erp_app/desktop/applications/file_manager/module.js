@@ -38,7 +38,6 @@ Ext.define("Compass.ErpApp.Desktop.Applications.FileManager",{
         rootVisible:true,
         containerScroll: true,
         standardUploadUrl:'/erp_app/desktop/file_manager/base/upload_file',
-        xhrUploadUrl:'/erp_app/desktop/file_manager/base/upload_file',
         border: false,
         width: 250,
         frame:true,

@@ -543,6 +543,25 @@ Ext.define("Compass.ErpApp.Desktop.Applications.Knitkit.CenterRegion",{
     this.workArea.setActiveTab(item);
   },
 
+  insertHtmlIntoActiveCkEditorOrCodemirror : function(html){
+    var activeTab = this.workArea.getActiveTab();
+    if(Compass.ErpApp.Utility.isBlank(activeTab)){
+      Ext.Msg.alert('Error', 'No editor');
+    }
+    else{
+      if(activeTab.query('ckeditor').length > 0){
+        activeTab.query('ckeditor')[0].insertHtml(html);
+      }
+      else if (activeTab.query('codemirror').length > 0){
+        activeTab.query('codemirror')[0].insertContent(html);        
+      }
+      else{
+        Ext.Msg.alert('Error', 'No ckeditor or codemirror found');
+      }
+    }
+    return false;
+  },
+
   insertHtmlIntoActiveCkEditor : function(html){
     var activeTab = this.workArea.getActiveTab();
     if(Compass.ErpApp.Utility.isBlank(activeTab)){

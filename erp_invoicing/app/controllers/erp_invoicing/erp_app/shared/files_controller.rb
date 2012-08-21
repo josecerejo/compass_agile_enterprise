@@ -12,16 +12,16 @@ module ErpInvoicing
           clear_files
 
           result = {}
-          upload_path = request.env['HTTP_EXTRAPOSTDATA_DIRECTORY'].blank? ? params[:directory] : request.env['HTTP_EXTRAPOSTDATA_DIRECTORY']
-          name = request.env['HTTP_X_FILE_NAME'].blank? ? params[:file_data].original_filename : request.env['HTTP_X_FILE_NAME']
-          data = request.env['HTTP_X_FILE_NAME'].blank? ? params[:file_data] : request.raw_post
+          upload_path = params[:directory]
+          name = params[:name]
+          data = request.raw_post
 
           begin
             @invoice.add_file(data, File.join(base_path, name))
             result = {:success => true}
           rescue Exception=>ex
-            logger.error ex.message
-            logger.error ex.backtrace.join("\n")
+            Rails.logger.error ex.message
+            Rails.logger.error ex.backtrace.join("\n")
             result = {:success => false, :error => "Error uploading file."}
           end
 

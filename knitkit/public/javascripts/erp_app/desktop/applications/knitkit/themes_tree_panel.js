@@ -259,7 +259,6 @@ Ext.define("Compass.ErpApp.Desktop.Applications.ThemesTreePanel",{
       allowDownload:true,
       addViewContentsToContextMenu:true,
       standardUploadUrl:'/knitkit/erp_app/desktop/theme/upload_file',
-      xhrUploadUrl:'/knitkit/erp_app/desktop/theme/upload_file',
       url:'/knitkit/erp_app/desktop/theme/index',
       fields:[
       {
@@ -292,6 +291,12 @@ Ext.define("Compass.ErpApp.Desktop.Applications.ThemesTreePanel",{
       ],
       containerScroll: true,
       listeners:{
+        'load':function(store){
+          store.getRootNode().expandChildren();
+          store.getRootNode().eachChild(function(child){
+            child.expandChildren();
+          });
+        },
         'showImage':function(fileManager, node, themeId){
           var themeId = null;
           var themeNode = node;

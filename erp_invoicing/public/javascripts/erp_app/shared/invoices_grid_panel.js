@@ -5,8 +5,6 @@ Ext.define("Compass.ErpApp.Shared.InvoicesGridPanel",{
   addDocument : function(rec){
     var uploadWindow = new Compass.ErpApp.Shared.UploadWindow({
       standardUploadUrl:'/erp_invoicing/erp_app/shared/invoices/files/'+rec.get('id')+'/upload_file',
-      flashUploadUrl:'/erp_invoicing/erp_app/shared/invoices/files/'+rec.get('id')+'/upload_file',
-      xhrUploadUrl:'/erp_invoicing/erp_app/shared/invoices/files/'+rec.get('id')+'/upload_file',
       extraPostData:{}
     });
     uploadWindow.show();

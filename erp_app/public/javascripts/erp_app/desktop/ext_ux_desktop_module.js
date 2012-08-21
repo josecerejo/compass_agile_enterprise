@@ -52,8 +52,15 @@ Ext.define("Ext.ux.desktop.Desktop",{
   app:null,
   shortcuts:null,
   shortcutItemSelector:"div.ux-desktop-shortcut",
-  shortcutTpl:['<div style="width:100%"><tpl for=".">','<div class="ux-desktop-shortcut" id="{name}-shortcut">','<div class="ux-desktop-shortcut-icon {iconCls}">','<img src="',Ext.BLANK_IMAGE_URL,'" title="{name}">',"</div>",'<span class="ux-desktop-shortcut-text">{name}</span>',"</div>","</tpl></div>",'<div class="x-clear"></div>'],
-//  shortcutTpl: ['<tpl for=".">', '<div class="ux-desktop-shortcut" id="{name}-shortcut">', '<div class="ux-desktop-shortcut-icon {iconCls}">', '<img src="', Ext.BLANK_IMAGE_URL, '" title="{name}">', "</div>", '<span class="ux-desktop-shortcut-text">{name}</span>', "</div>", "</tpl>", '<div class="x-clear"></div>'],
+  shortcutTpl:['<tpl for=".">',
+                 '<tpl if="(xindex-1) % 6 === 0">','</div>','</tpl>',
+                 '<tpl if="xindex == 1 || (xindex-1) % 6 === 0">','<div style="float: left; width:66px;">','</tpl>',
+                 '<div class="ux-desktop-shortcut" id="{name}-shortcut">',
+                 '<div class="ux-desktop-shortcut-icon {iconCls}">',
+                 '<img src="',Ext.BLANK_IMAGE_URL,'" title="{name}">',"</div>",
+                 '<span class="ux-desktop-shortcut-text">{name}</span>',"</div>",
+                 '<tpl if="xindex == xcount">','</div>','</tpl>',
+               "</tpl>",'<div class="x-clear"></div>'],
   taskbarConfig:null,
   windowMenu:null,
   initComponent:function(){
@@ -103,19 +110,19 @@ Ext.define("Ext.ux.desktop.Desktop",{
       }
     }
   },
-  // addShortcut:function(shortcut){
-  //   var a=this;
-  //   if(a.shortcuts.findExact("module", shortcut.data.module) == -1){
-  //     a.shortcuts.add(shortcut);
-  //   }
-  // },
-  // removeShortcut:function(shortcut){
-  //   var a=this;
-  //   var index = a.shortcuts.findExact("module", shortcut.data.module)
-  //   if(index != -1){
-  //     a.shortcuts.removeAt(index);
-  //   }
-  // },
+  addShortcut:function(shortcut){
+    var a=this;
+    if(a.shortcuts.findExact("module", shortcut.data.module) == -1){
+      a.shortcuts.add(shortcut);
+    }
+  },
+  removeShortcut:function(shortcut){
+    var a=this;
+    var index = a.shortcuts.findExact("module", shortcut.data.module)
+    if(index != -1){
+      a.shortcuts.removeAt(index);
+    }
+  },
   createDesktopMenu:function(){
     var b=this,a={
       items:b.contextMenuItems||[]

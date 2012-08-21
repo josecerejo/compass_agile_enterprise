@@ -22,7 +22,7 @@ module ErpTechSvcs
 
       def save_move(path, new_parent_path)
         old_path = File.join(path)
-        new_path = File.join(new_parent_path)
+        new_path = File.join(Rails.root,new_parent_path)
         result = false
         unless File.exists? old_path
           message = FILE_DOES_NOT_EXIST
@@ -73,7 +73,7 @@ module ErpTechSvcs
             entries.delete_if{|entry| entry =~ REMOVE_FILES_REGEX}
             if entries.count > 0 && !options[:force]
               message = FOLDER_IS_NOT_EMPTY
-              result = false;
+              result = false
             else
               FileUtils.rm_rf(path)
               message = "Folder #{name} was deleted #{name} successfully"

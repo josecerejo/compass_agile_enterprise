@@ -59,9 +59,9 @@ module Knitkit
           begin
             current_user.with_capability(model, capability_type, capability_resource) do
               result = {}
-              upload_path = request.env['HTTP_X_DIRECTORY'].blank? ? params[:directory] : request.env['HTTP_X_DIRECTORY']
-              name = request.env['HTTP_X_FILE_NAME'].blank? ? params[:file_data].original_filename : request.env['HTTP_X_FILE_NAME']
-              data = request.env['HTTP_X_FILE_NAME'].blank? ? params[:file_data] : request.raw_post
+              upload_path = params[:directory]
+              name = params[:name]
+              data = request.raw_post
 
               begin
                 upload_path == 'root_node' ? @assets_model.add_file(data, File.join(@file_support.root,base_path,name)) : @assets_model.add_file(data, File.join(@file_support.root,upload_path,name))
@@ -81,8 +81,9 @@ module Knitkit
         end
 
         def save_move
-          result          = {}
-          path            = params[:node]
+          messages = []
+          result = {}
+          path = params[:node]
           new_parent_path = params[:parent_node]
           new_parent_path = @root_node if new_parent_path == ROOT_NODE
           
@@ -93,13 +94,13 @@ module Knitkit
                 result = {:success => false, :msg => 'File does not exist.'}
               else
                 file = @assets_model.files.find(:first, :conditions => ['name = ? and directory = ?', ::File.basename(path), ::File.dirname(path)])
-                file.move(new_parent_path)
-                result = {:success => true, :msg => "#{File.basename(path)} was moved to #{new_parent_path} successfully"}
+                result, message = file.move(new_parent_path)
               end
+              messages << message
             end
-            render :json => result
+            render :json => {:success => true, :msg => messages.join(',')}
           rescue Exception => e
-            result = {:success => false, :msg => e.message}
+           render :json => {:success => false, :msg => e.message}
           end
         end
 
@@ -118,27 +119,30 @@ module Knitkit
 
           model = DesktopApplication.find_by_internal_identifier('knitkit')
           begin
+            result = false
             nodes_to_delete.each do |path|
               current_user.with_capability(model, capability_type, capability_resource) do
-                path = "#{path}/" if params[:leaf] == 'false' and path.match(/\/$/).nil?
-                result = {}
+                path = "#{path}/" if params[:leaf] == 'false' and path.match(/\/$/).nil?                
                 begin
                   name = File.basename(path)
                   result, message, is_folder = @file_support.delete_file(File.join(@file_support.root,path))
-                  if result && !is_folder
+                  if result and !is_folder
                     file = @assets_model.files.find(:first, :conditions => ['name = ? and directory = ?', ::File.basename(path), ::File.dirname(path)])
                     file.destroy
                   end
                   messages << message
                 rescue Exception=>ex
-                  logger.error ex.message
-                  logger.error ex.backtrace.join("\n")
-                  result = {:success => false, :error => "Error deleting #{name}"}
+                  Rails.logger.error ex.message
+                  Rails.logger.error ex.backtrace.join("\n")
+                  render :json => {:success => false, :error => "Error deleting #{name}"} and return
                 end
               end # end current_user.with_capability
             end # end nodes_to_delete.each
-
-            render :json => {:success => true, :error => messages.join(',')}
+            if result
+              render :json => {:success => true, :message => messages.join(',')}
+            else
+              render :json => {:success => false, :error => messages.join(',')}
+            end
           rescue ErpTechSvcs::Utils::CompassAccessNegotiator::Errors::UserDoesNotHaveCapability=>ex
             render :json => {:success => false, :message => ex.message}
           end
@@ -220,8 +224,7 @@ module Knitkit
           @context = params[:context].to_sym
 
           if @context == :website
-            #get website id this can be an xhr request or regular
-            website_id = request.env['HTTP_X_WEBSITEID'].blank? ? params[:website_id] : request.env['HTTP_X_WEBSITEID']
+            website_id = params[:website_id]
             (@assets_model = website_id.blank? ? nil : Website.find(website_id))
 
             render :inline => {:success => false, :error => "No Website Selected"}.to_json if (@assets_model.nil? && params[:action] != "base_path")
