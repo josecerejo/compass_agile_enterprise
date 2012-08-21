@@ -45,8 +45,10 @@ describe Website do
   describe "publish_element" do
     it "should add record to published_elements for given element" do
       comment = "some comment"
-      WorkflowProcess.create(:internal_identifier => "test_content_mgmt", :process_template => true)
-      WorkflowStep.create(:internal_identifier => "Start", :executable_command_id => 1, :executable_command_type => "ManualWorkflowStep", :workflow_process_id => 1, :initial_step => true)
+      if Object.const_defined?('WorkflowProcess')
+        WorkflowProcess.create(:internal_identifier => "test_content_mgmt", :process_template => true)
+        WorkflowStep.create(:internal_identifier => "Start", :executable_command_id => 1, :executable_command_type => "ManualWorkflowStep", :workflow_process_id => 1, :initial_step => true)
+      end
       element = Article.create(:title => "some_article", :created_by_id => 1)
       version = 1
       
