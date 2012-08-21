@@ -31,6 +31,9 @@ class Configuration < ActiveRecord::Base
   end
 
   def add_configuration_item(configuration_item_type, *option_internal_identifiers)
+    option_internal_identifiers = option_internal_identifiers.collect{|item| item.to_s}
+    configuration_item_type = (configuration_item_type.is_a? ConfigurationItemType) ? configuration_item_type : ConfigurationItemType.find_by_internal_identifier(configuration_item_type.to_s)
+
     item = get_configuration_item(configuration_item_type)
     if item
       update_configuration_item(configuration_item_type, option_internal_identifiers)

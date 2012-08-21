@@ -52,18 +52,16 @@ class UpdateWebsiteAndConfiguration < ActiveRecord::Migration
 
     configuration.configuration_item_types << publish_on_save_config_item_type
 
-    configuration.save
-
     Website.all.each do |website|
       website_config = website.configurations.first
       #add types
       website_config.configuration_item_types << email_inquiries_config_item_type
       website_config.configuration_item_types << auto_activate_config_item_type
-      website_config.configuration_item_types << enable_comments_config_item_type
+      website_config.configuration_item_types << publish_on_save_config_item_type
 
-      website_config.add_configuration_item(email_inquiries_config_item_type, (website.email_inquiries ? yes_option : no_option))
-      website_config.add_configuration_item(auto_activate_config_item_type, (website.auto_activate_publication ? yes_option : no_option))
-      website_config.add_configuration_item(enable_comments_config_item_type, (website.auto_activate_publication ? no_option : yes_option))
+      website_config.add_configuration_item(email_inquiries_config_item_type, (website.email_inquiries ? :yes : :no))
+      website_config.add_configuration_item(auto_activate_config_item_type, (website.auto_activate_publication ? :yes : :no))
+      website_config.add_configuration_item(publish_on_save_config_item_type, (website.auto_activate_publication ? :no : :yes))
 
       website_config.save
     end
