@@ -46,9 +46,12 @@ describe Content do
 
   describe "self.find_published_by_section" do
     it "should return all content versions that belong to the given website version and section" do
+      user = User.find(1)
       @website = Website.create(:name => "Some Site")
       @website.hosts << WebsiteHost.create(:host => "some_host")
       @website.website_sections << WebsiteSection.create(:title => "section title")
+      @website.publish("Publish Sections", user)
+
       if Object.const_defined?('WorkflowProcess')
         WorkflowProcess.create(:internal_identifier => "test_content_mgmt", :process_template => true)
         WorkflowStep.create(:internal_identifier => "Start", :executable_command_id => 1, :executable_command_type => "ManualWorkflowStep", :workflow_process_id => 1, :initial_step => true)
@@ -58,8 +61,8 @@ describe Content do
       website_section = WebsiteSection.find(1)
       article.website_sections << website_section
 
-      article.publish(Website.find(1), "some comment", 1, User.find(1))
-      @website.set_publication_version(1.1, 1)
+      article.publish(Website.find(1), "some comment", 1, user)
+      @website.set_publication_version(1.1, user)
 
       article2 = Article.create(:created_by_id => 1, :title => "some article 2")
       article2.website_sections << website_section
@@ -67,7 +70,7 @@ describe Content do
       article_version = article.versions.first
       article_version2 = article2.versions.first
 
-      results = Content.find_published_by_section(PublishedWebsite.find_by_version(0.1), WebsiteSection.find(1))
+      results = Content.find_published_by_section(PublishedWebsite.find_by_version(1.1), WebsiteSection.find(1))
       results.should include(article_version)
       results.should_not include(article_version2)
     end
@@ -75,9 +78,12 @@ describe Content do
 
   describe "self.find_published_by_section_with_tag" do
     it "should return all content version that belong to the given active_publication and section that have the given tag" do
+      user = User.find(1)
       @website = Website.create(:name => "Some Site")
       @website.hosts << WebsiteHost.create(:host => "some_host")
       @website.website_sections << WebsiteSection.create(:title => "section title")
+      @website.publish("Publish Sections", user)
+
       if Object.const_defined?('WorkflowProcess')
         WorkflowProcess.create(:internal_identifier => "test_content_mgmt", :process_template => true)
         WorkflowStep.create(:internal_identifier => "Start", :executable_command_id => 1, :executable_command_type => "ManualWorkflowStep", :workflow_process_id => 1, :initial_step => true)
@@ -87,8 +93,8 @@ describe Content do
       website_section = WebsiteSection.find(1)
       article.website_sections << website_section
 
-      article.publish(Website.find(1), "some comment", 1, User.find(1))
-      @website.set_publication_version(1.1, 1)
+      article.publish(Website.find(1), "some comment", 1, user)
+      @website.set_publication_version(1.1, user)
 
       article2 = Article.create(:created_by_id => 1, :title => "some article 2")
       article2.website_sections << website_section
@@ -98,7 +104,7 @@ describe Content do
 
       tag = ActsAsTaggableOn::Tag.find_by_name("some tag")
 
-      results = Content.find_published_by_section_with_tag(PublishedWebsite.find_by_version(0.1), WebsiteSection.find(1), tag)
+      results = Content.find_published_by_section_with_tag(PublishedWebsite.find_by_version(1.1), WebsiteSection.find(1), tag)
       results.should include(article_version)
       results.should_not include(article_version2)
     end
