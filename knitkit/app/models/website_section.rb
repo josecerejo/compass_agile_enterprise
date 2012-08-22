@@ -1,5 +1,6 @@
 class WebsiteSection < ActiveRecord::Base
-  after_create :update_paths
+  has_roles
+  after_create :update_paths # must happen after has_roles so that after_create :save_secured_model fires first
   before_save  :update_path, :check_internal_indentifier
 
   extend FriendlyId
@@ -12,7 +13,6 @@ class WebsiteSection < ActiveRecord::Base
   include ErpTechSvcs::Utils::DefaultNestedSetMethods
   acts_as_versioned :table_name => :website_section_versions, :non_versioned_columns => %w{parent_id lft rgt}
   can_be_published
-  has_roles
 
   belongs_to :website
   has_many :website_section_contents, :dependent => :destroy

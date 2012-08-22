@@ -18,12 +18,20 @@ describe OnlineDocumentSection, "#build_section_hash" do
                                             
   before do
     root_section.update_path!
-    @root_section_hash = {:name=>"Parent", :has_layout=>false, :type=>"OnlineDocumentSection", :in_menu=>true, :roles=>[], 
-      :path=>"/parent", :permalink=>"parent", :internal_identifier=>"parent", 
-      :online_document_sections=>[{:name=>"Child", :has_layout=>false, :type=>"OnlineDocumentSection", :in_menu=>true, 
-        :roles=>[], :path=>"/parent/child", :permalink=>"child", :internal_identifier=>"child", :online_document_sections=>[], 
-        :documented_item=>{:name=>"Child", :display_title=>nil, :internal_identifier=>"child"}}], 
-      :documented_item=>{:name=>"Parent", :display_title=>nil, :internal_identifier=>"parent"}}
+    @root_section_hash = {  :name=>"Parent", :has_layout=>false, :type=>"OnlineDocumentSection", :in_menu=>true, :roles=>[], 
+                            :path=>"/parent", :permalink=>"parent", :internal_identifier=>"parent", :position=>0,
+                            :online_document_sections=>[{
+                              :name=>"Child", :has_layout=>false, :type=>"OnlineDocumentSection", :in_menu=>true, 
+                              :roles=>[], :path=>"/parent/child", :permalink=>"child", :internal_identifier=>"child", :position=>0, :online_document_sections=>[], :articles=>[],
+                              :documented_item=>{
+                                :name=>"Child", :display_title=>nil, :internal_identifier=>"child"
+                              }
+                            }], 
+                            :articles=>[],
+                            :documented_item=>{
+                              :name=>"Parent", :display_title=>nil, :internal_identifier=>"parent"
+                            }
+                          }
   end
   
   it "should output the correct hash" do
