@@ -32,8 +32,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.Knitkit.ArticlesGridPanel", {
     deleteAttribute:function (id) {
         var self = this;
         this.initialConfig['centerRegion'].setWindowStatus('Deleting...');
-        var conn = new Ext.data.Connection();
-        conn.request({
+        Ext.Ajax.request({
             url:'/knitkit/erp_app/desktop/articles/delete_attribute',
             method:'POST',
             params:{
@@ -164,7 +163,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.Knitkit.ArticlesGridPanel", {
                         text:'Add Attribute',
                         iconCls:'icon-add',
                         handler:function () {
-                            var addAttributeWindow = new Ext.Window({
+                            var addAttributeWindow = Ext.create("Ext.window.Window", {
                                 layout:'fit',
                                 width:375,
                                 title:'New Attribute',
@@ -620,7 +619,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.Knitkit.ArticlesGridPanel", {
                     text:'New Article',
                     iconCls:'icon-add',
                     handler:function () {
-                        var addArticleWindow = new Ext.Window({
+                        var addArticleWindow = Ext.create("Ext.window.Window", {
                             layout:'fit',
                             width:375,
                             title:'New Article',
@@ -752,7 +751,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.Knitkit.ArticlesGridPanel", {
                 text:'Advanced',
                 iconCls:'icon-search',
                 handler:function () {
-                    var advancedSearchWindow = new Ext.Window({
+                    var advancedSearchWindow = Ext.create("Ext.window.Window", {
                         layout:'fit',
                         width:375,
                         title:'Advanced Search',
@@ -872,7 +871,6 @@ Ext.define("Compass.ErpApp.Desktop.Applications.Knitkit.ArticlesGridPanel", {
                                     name:'show_orphaned',
                                     inputValue:1,
                                     uncheckedValue:0
-
                                 },
                                 {
                                     xtype:'radiogroup',
