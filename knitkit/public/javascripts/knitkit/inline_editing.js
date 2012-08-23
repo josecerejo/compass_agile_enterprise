@@ -15,12 +15,12 @@ Knitkit.InlineEditing = {
             editor.resetDirty();
         }
         else {
-            jQuery('#inlineEditLastUpdate').html(jQuery('#inlineEditLastUpdate').html() + " Could not update.  Please try again.");
+            jQuery('#inlineEditSaveResult').html(" Could not update.  Please try again.");
         }
     },
 
     error:function (xhr, status, error) {
-        jQuery('#inlineEditLastUpdate').html(jQuery('#inlineEditLastUpdate').html() + " Could not update.  Please try again.");
+        jQuery('#inlineEditSaveResult').html(" Could not update.  Please try again.");
     },
 
     closeEditorClick:function () {
@@ -78,7 +78,7 @@ Knitkit.InlineEditing = {
 
             var textarea = jQuery('<textarea name="inline-edit-textarea" id="inlineEditTextarea" ></textarea>');
             var closeLink = jQuery("<a class='inline-edit-close'><img src='images/knitkit/close.png' /></a>");
-            var messageSpan = jQuery("<span class='inline-edit-message' id='inlineEditMessage'>Last Update: <span id='inlineEditLastUpdate'>" + self.lastUpdate + "</span></span>");
+            var messageSpan = jQuery("<span class='inline-edit-message' id='inlineEditMessage'>Last Update: <span id='inlineEditLastUpdate'>" + self.lastUpdate + "</span><span id='inlineEditSaveResult'></span></span>");
 
             var editableContentContainer = jQuery("<div id='editableContentContainer' class='modal-container'></div>");
             var ckeditorWrapper = jQuery("<div class='ckeditor_wrapper'></div>");

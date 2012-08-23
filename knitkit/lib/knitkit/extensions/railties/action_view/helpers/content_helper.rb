@@ -31,7 +31,7 @@ module Knitkit
                 ''
               else
                 raw "<div class='knitkit_content'
-                        content_id='#{content.id}'
+                        contentid='#{content.id}'
                         lastupdate='#{content_version.content.updated_at.strftime("%m/%d/%Y %I:%M%p")}'>
                         #{(content_version.body_html.nil? ? '' : content_version.body_html)}</div>"
               end
@@ -51,7 +51,7 @@ module Knitkit
 
               published_contents.each do |content|
                 html << "<div class='knitkit_content'
-                        content_id='#{content.id}'
+                        contentid='#{content.content.id}'
                         lastupdate='#{content.updated_at.strftime("%m/%d/%Y %I:%M%p")}'>
                         #{(content.body_html.nil? ? '' : content.body_html)}</div>"
 
@@ -65,9 +65,13 @@ module Knitkit
             def can_inline_edit?
               result = false
               model = DesktopApplication.find_by_internal_identifier('knitkit')
-              if ((!current_user.nil? and current_user != false)) and (current_user.has_capability?(model, 'edit_html', 'Article')) and @website.configurations.first.get_configuration_item(:auto_active_publications).options.first.value == 'yes' and @website.configurations.first.get_configuration_item(:publish_on_save).options.first.value == 'yes'
-                result = true
-              end
+              unless ((current_user.nil? or current_user === false))
+                if (current_user.has_capability?(model, 'edit_html', 'Article'))
+                  if (@website.configurations.first.get_configuration_item(:auto_active_publications).options.first.value == 'yes' and @website.configurations.first.get_configuration_item(:publish_on_save).options.first.value == 'yes')
+                    result = true
+                  end #make sure auto acitvate and publish on save our set
+                end #make sure they have this capability
+              end #check for user
               result
             end
 

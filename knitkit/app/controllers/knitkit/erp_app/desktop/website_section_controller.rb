@@ -135,10 +135,11 @@ module Knitkit
           model = DesktopApplication.find_by_internal_identifier('knitkit')
           begin
             current_user.with_capability(model, 'edit', 'Layout') do
-		      result = Knitkit::SyntaxValidator.validate_content(:erb, params[:content])
-
+		          result = Knitkit::SyntaxValidator.validate_content(:erb, params[:content])
               unless result
+                website = @website_section.website
                 @website_section.layout = params[:content]
+                @website_section.publish(website, 'Auto Publish', @website_section.version, current_user) if website.publish_on_save?
                 render :json => @website_section.save ? {:success => true} : {:success => false}
               else
                 render :json => {:success => false, :message => result}

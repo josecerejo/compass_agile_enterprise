@@ -94,11 +94,11 @@ class Website < ActiveRecord::Base
   end
 
   def auto_activate_publication?
-    self.configurations.first.get_item(ConfigurationItemType.find_by_internal_identifier('auto_active_publications')).options.first.value == 'yes'
+    self.configurations.first.get_item(:auto_active_publications).options.first.value == 'yes'
   end
 
   def publish_on_save?
-    self.configurations.first.get_item(ConfigurationItemType.find_by_internal_identifier('publish_on_save')).options.first.value == 'yes'
+    self.configurations.first.get_item(:publish_on_save).options.first.value == 'yes'
   end
 
   def role

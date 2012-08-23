@@ -3,15 +3,17 @@
     var a = {
         exec:function(editor){
             if(editor.checkDirty()){
-                data = editor.getData();
-                Knitkit.InlineEditing.contentDiv.html(data);
+                content = editor.getData();
+                Knitkit.InlineEditing.contentDiv.html(content);
 
                 jQuery.ajax({
-                    url: "/knitkit/erp_app/desktop/content/update",
+                    type:'POST',
+					url: "/knitkit/erp_app/desktop/content/update",
                     data: {
-                        id:Knitkit.InlineEditing.contentId,
-                        html:data,
-                        site_id:Knitkit.InlineEditing.websiteId
+                        html:content,
+                        authenticity_token:Compass.ErpApp.AuthentictyToken,
+                        site_id:Knitkit.InlineEditing.websiteId,
+                        id:Knitkit.InlineEditing.contentId
                     },
                     success:function(result, status, xhr){
                         Knitkit.InlineEditing.saved(editor, result, status, xhr);
