@@ -66,7 +66,7 @@ module Knitkit
               result = false
               model = DesktopApplication.find_by_internal_identifier('knitkit')
               unless ((current_user.nil? or current_user === false))
-                if (current_user.has_capability?(model, 'edit_html', 'Article'))
+                if ((current_user.has_capability?(model, 'edit_html', 'Article') rescue false))
                   if (@website.configurations.first.get_configuration_item(:auto_active_publications).options.first.value == 'yes' and @website.configurations.first.get_configuration_item(:publish_on_save).options.first.value == 'yes')
                     result = true
                   end #make sure auto acitvate and publish on save our set
