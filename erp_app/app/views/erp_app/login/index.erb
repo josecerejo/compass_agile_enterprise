@@ -16,7 +16,7 @@
     <script type="text/javascript">
       Ext.onReady(function(){
           var appContainers = [['/erp_app/desktop/','Compass Desktop'],['/erp_app/organizer/','Compass Organizer']];
-          var loginWindow = new Compass.ErpApp.Login.Window({appContainers:appContainers, selectedAppContainerValue:'/erp_app/desktop/',redirectTo:'/erp_app/desktop/', logoutTo:'/erp_app/login', message:'<%=flash[:notice]%>', authenticity_token:'<%=form_authenticity_token%>'});
+          var loginWindow = Ext.create('Compass.ErpApp.Login.Window',{appContainers:appContainers, selectedAppContainerValue:'/erp_app/desktop/',redirectTo:'/erp_app/desktop/', logoutTo:'/erp_app/login', message:'<%=flash[:notice]%>', authenticity_token:'<%=form_authenticity_token%>'});
           loginWindow.show();
       });
     </script>

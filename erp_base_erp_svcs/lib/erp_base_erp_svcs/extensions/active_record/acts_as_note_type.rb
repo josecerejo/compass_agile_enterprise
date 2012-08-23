@@ -33,7 +33,7 @@ module ErpBaseErpSvcs
 				  end
 
 				  def initialize_note_type
-					  if (self.note_type_record.nil?)
+					  if self.new_record? and self.note_type_record.nil?
 					    note_type_record = NoteType.new
 					    self.note_type_record = note_type_record
 					    self.note_type_record.note_type_record = self

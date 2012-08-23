@@ -153,6 +153,7 @@ Ext.define('Compass.ErpApp.Desktop.Applications.AuditLogViewer.AuditLogGrid', {
         {
             header:'Audit Log Type',
             dataIndex:'audit_log_type',
+            sortable:false,
             width:200
         }
 

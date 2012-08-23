@@ -49,7 +49,7 @@ module ErpTxnsAndAccts
         module InstanceMethods
 
           def initialize_financial_txn_account
-            if (self.financial_txn_account.nil?)
+            if self.new_record? and self.financial_txn_account.nil?
               f = FinancialTxnAccount.new
               self.financial_txn_account = f
               f.financial_account = self
