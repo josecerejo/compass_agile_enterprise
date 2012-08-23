@@ -742,7 +742,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.Knitkit.ArticlesGridPanel", {
                             totalProperty:'total'
                         },
                         extraParams:{
-                            iid:ii
+                            iid:iid
                         }
                     });
                     store.load();
@@ -975,5 +975,4 @@ Ext.define("Compass.ErpApp.Desktop.Applications.Knitkit.ArticlesGridPanel", {
         this.callParent([config]);
     }
 });
-
 
