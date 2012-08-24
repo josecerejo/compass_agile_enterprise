@@ -91,28 +91,34 @@ module ErpInvoicing
               end
             end
 
-            if financial_txn.apply_date == Date.today
-              case @payment_account.class.to_s
+            #if financial_txn.apply_date == Date.today
+            case @payment_account.class.to_s
               when "BankAccount"
                 financial_txn.txn_type = BizTxnType.ach_sale
                 financial_txn.save
-                result = @payment_account.purchase(financial_txn, ErpCommerce::Config.active_merchant_gateway_wrapper)
-                if !result[:payment].nil? and result[:payment].success
-                  @authorization_code = result[:payment].authorization_code
-                else
-                  @message = result[:message]
+                
+                if financial_txn.apply_date == Date.today
+                  result = @payment_account.purchase(financial_txn, ErpCommerce::Config.active_merchant_gateway_wrapper)
+                  if !result[:payment].nil? and result[:payment].success
+                    @authorization_code = result[:payment].authorization_code
+                  else
+                    @message = result[:message]
+                  end
                 end
               when "CreditCardAccount"
                 financial_txn.txn_type = BizTxnType.cc_sale
                 financial_txn.save
-                result = @payment_account.purchase(financial_txn, params[:cvv], ErpCommerce::Config.active_merchant_gateway_wrapper)
-                if !result[:payment].nil? and result[:payment].success
-                  @authorization_code = result[:payment].authorization_code
-                else
-                  @message = result[:message]
+                
+                if financial_txn.apply_date == Date.today
+                  result = @payment_account.purchase(financial_txn, params[:cvv], ErpCommerce::Config.active_merchant_gateway_wrapper)
+                  if !result[:payment].nil? and result[:payment].success
+                    @authorization_code = result[:payment].authorization_code
+                  else
+                    @message = result[:message]
+                  end
                 end
-              end
             end
+            
 
             if @message.nil?
               render :json => {:success => true, :message => "Payment Successful!" }

@@ -31,6 +31,9 @@ class Configuration < ActiveRecord::Base
   end
 
   def add_configuration_item(configuration_item_type, *option_internal_identifiers)
+    option_internal_identifiers = option_internal_identifiers.collect{|item| item.to_s}
+    configuration_item_type = (configuration_item_type.is_a? ConfigurationItemType) ? configuration_item_type : ConfigurationItemType.find_by_internal_identifier(configuration_item_type.to_s)
+
     item = get_configuration_item(configuration_item_type)
     if item
       update_configuration_item(configuration_item_type, option_internal_identifiers)
@@ -49,6 +52,8 @@ class Configuration < ActiveRecord::Base
   alias :add_item :add_configuration_item
 
   def update_configuration_item(configuration_item_type, *option_internal_identifiers)
+    configuration_item_type = (configuration_item_type.is_a? ConfigurationItemType) ? configuration_item_type : ConfigurationItemType.find_by_internal_identifier(configuration_item_type.to_s)
+    
     item = self.items.where('configuration_item_type_id = ?', configuration_item_type.id).first
     raise "Configuration item #{configuration_item_type.description} does not exist for configuration #{self.description}" if item.nil?
 
@@ -59,6 +64,8 @@ class Configuration < ActiveRecord::Base
   alias :update_item :update_configuration_item
 
   def get_configuration_item(configuration_item_type)
+    configuration_item_type = (configuration_item_type.is_a? ConfigurationItemType) ? configuration_item_type : ConfigurationItemType.find_by_internal_identifier(configuration_item_type.to_s)
+    
     self.items.where('configuration_item_type_id = ?', configuration_item_type.id).first
   end
 

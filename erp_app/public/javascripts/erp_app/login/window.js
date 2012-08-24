@@ -5,7 +5,6 @@ Ext.define("Compass.ErpApp.Login.Window",{
   layout:'fit',
   width:200,
   height:240,
-  title:'Compass AE Single Sign On',
   defaultButton:'login',
   buttonAlign:'center',
   closable:false,
@@ -92,6 +91,7 @@ Ext.define("Compass.ErpApp.Login.Window",{
     });
 	    
     config = Ext.apply({
+      title:'Compass AE Single Sign On' || config['title'],
       items:formPanel,
       buttons: [{
         text:'Submit',
