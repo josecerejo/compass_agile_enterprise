@@ -28,130 +28,130 @@ Ext.define("Compass.ErpApp.Desktop.Applications.Knitkit.ArticlesGridPanel",{
 
   editArticle : function(record){
     var self = this;
-		var itemId = 'editArticle-'+record.get('id');
-		var editArticleWindow = Ext.ComponentQuery.query('#'+itemId).first();
+    var itemId = 'editArticle-'+record.get('id');
+    var editArticleWindow = Ext.ComponentQuery.query('#'+itemId).first();
 
-		if(Compass.ErpApp.Utility.isBlank(editArticleWindow)){
-	    var editArticleWindow = Ext.create("Ext.window.Window",{
-	      layout:'fit',
-	      width:375,
-	      title:'Edit Article',
-				itemId:itemId,
-				// minimizable:true,
-	      plain: true,
-	      buttonAlign:'center',
-	      items: {
-	        xtype: 'form',
-	        labelWidth: 110,
-	        frame:false,
-	        bodyStyle:'padding:5px 5px 0',
-	        width: 425,
-	        url:'/knitkit/erp_app/desktop/articles/update/',
-	        defaults: {width: 225},
-	        items: [
-	        {
-	          xtype:'textfield',
-	          fieldLabel:'Title',
-	          allowBlank:false,
-	          name:'title',
-	          value: record.data.title
-	        },
-	        {
-	          xtype:'radiogroup',
-	          fieldLabel:'Display title?',
-	          name:'display_title',
-	          columns:2,
-	          items:[
-	          {
-	            boxLabel:'Yes',
-	            name:'display_title',
-	            inputValue: 'yes',
-	            checked:record.data.display_title
-	          },
+    if(Compass.ErpApp.Utility.isBlank(editArticleWindow)){
+      var editArticleWindow = Ext.create("Ext.window.Window",{
+        layout:'fit',
+        width:375,
+        title:'Edit Article',
+        itemId:itemId,
+        // minimizable:true,
+        plain: true,
+        buttonAlign:'center',
+        items: {
+          xtype: 'form',
+          labelWidth: 110,
+          frame:false,
+          bodyStyle:'padding:5px 5px 0',
+          width: 425,
+          url:'/knitkit/erp_app/desktop/articles/update/',
+          defaults: {width: 225},
+          items: [
+          {
+            xtype:'textfield',
+            fieldLabel:'Title',
+            allowBlank:false,
+            name:'title',
+            value: record.data.title
+          },
+          {
+            xtype:'radiogroup',
+            fieldLabel:'Display title?',
+            name:'display_title',
+            columns:2,
+            items:[
+            {
+              boxLabel:'Yes',
+              name:'display_title',
+              inputValue: 'yes',
+              checked:record.data.display_title
+            },
 
-	          {
-	            boxLabel:'No',
-	            name:'display_title',
-	            inputValue:'no',
-	            checked:!record.data.display_title
-	          }]
-	        },
-	        {
-	          xtype:'textfield',
-	          fieldLabel:'Unique Name',
-	          allowBlank:true,
-	          name:'internal_identifier',
-	          value: record.data.internal_identifier
-	        },
-	        {
-	          xtype:'textfield',
-	          fieldLabel:'Tags',
-	          allowBlank:true,
-	          name:'tags',
-	          itemId: 'tag_list',
-	          value: record.data.tag_list
-	        },
-	        {
-	          xtype: 'displayfield',
-	          fieldLabel: 'Created At',
-	          name: 'created_at',
-	          value: record.data.created_at
-	        },
-	        {
-	          xtype: 'displayfield',
-	          fieldLabel: 'Updated At',
-	          name: 'updated_at',
-	          value: record.data.updated_at
-	        },        
-	        {
-	          xtype:'hidden',
-	          allowBlank:false,
-	          name:'id',
-	          itemId: 'record_id',
-	          value: record.data.id
-	        }
-	        ]
-	      },
-	      buttons: [{
-	        text:'Submit',
-	        listeners:{
-	          'click':function(button){
-	            var window = button.findParentByType('window');
-	            var formPanel = window.query('form')[0];
-	            self.initialConfig['centerRegion'].setWindowStatus('Updating article...');
-	            formPanel.getForm().submit({
-	              reset:false,
-	              success:function(form, action){
-	                self.initialConfig['centerRegion'].clearWindowStatus();
-	                var obj = Ext.decode(action.response.responseText);
-	                if(obj.success){
-	                  self.getStore().load();
-	                  if(formPanel.getForm().findField('tag_list')){
-	                    var tag_list = formPanel.getForm().findField('tag_list').getValue();
-	                    record.set('tag_list', tag_list);
-	                  }
-	                  editArticleWindow.close();
-	                }
-	                else{
-	                  Ext.Msg.alert("Error", obj.msg);
-	                }
-	              },
-	              failure:function(form, action){
-	                self.initialConfig['centerRegion'].clearWindowStatus();
-	                Ext.Msg.alert("Error", "Error updating article");
-	              }
-	            });
-	          }
-	        }
-	      },{
-	        text: 'Close',
-	        handler: function(){
-	          editArticleWindow.close();
-	        }
-	      }]
-	    });
-		}
-		editArticleWindow.show();
+            {
+              boxLabel:'No',
+              name:'display_title',
+              inputValue:'no',
+              checked:!record.data.display_title
+            }]
+          },
+          {
+            xtype:'textfield',
+            fieldLabel:'Unique Name',
+            allowBlank:true,
+            name:'internal_identifier',
+            value: record.data.internal_identifier
+          },
+          {
+            xtype:'textfield',
+            fieldLabel:'Tags',
+            allowBlank:true,
+            name:'tags',
+            itemId: 'tag_list',
+            value: record.data.tag_list
+          },
+          {
+            xtype: 'displayfield',
+            fieldLabel: 'Created At',
+            name: 'created_at',
+            value: record.data.created_at
+          },
+          {
+            xtype: 'displayfield',
+            fieldLabel: 'Updated At',
+            name: 'updated_at',
+            value: record.data.updated_at
+          },        
+          {
+            xtype:'hidden',
+            allowBlank:false,
+            name:'id',
+            itemId: 'record_id',
+            value: record.data.id
+          }
+          ]
+        },
+        buttons: [{
+          text:'Submit',
+          listeners:{
+            'click':function(button){
+              var window = button.findParentByType('window');
+              var formPanel = window.query('form')[0];
+              self.initialConfig['centerRegion'].setWindowStatus('Updating article...');
+              formPanel.getForm().submit({
+                reset:false,
+                success:function(form, action){
+                  self.initialConfig['centerRegion'].clearWindowStatus();
+                  var obj = Ext.decode(action.response.responseText);
+                  if(obj.success){
+                    self.getStore().load();
+                    if(formPanel.getForm().findField('tag_list')){
+                      var tag_list = formPanel.getForm().findField('tag_list').getValue();
+                      record.set('tag_list', tag_list);
+                    }
+                    editArticleWindow.close();
+                  }
+                  else{
+                    Ext.Msg.alert("Error", obj.msg);
+                  }
+                },
+                failure:function(form, action){
+                  self.initialConfig['centerRegion'].clearWindowStatus();
+                  Ext.Msg.alert("Error", "Error updating article");
+                }
+              });
+            }
+          }
+        },{
+          text: 'Close',
+          handler: function(){
+            editArticleWindow.close();
+          }
+        }]
+      });
+    }
+    editArticleWindow.show();
   },
 
   initComponent: function() {
@@ -172,16 +172,16 @@ Ext.define("Compass.ErpApp.Desktop.Applications.Knitkit.ArticlesGridPanel",{
       },
       remoteSort: true,
       fields:[
-	      {name:'id'},
-	      {name:'title'},
-	      {name:'tag_list'},
-	      {name:'excerpt_html'},
-	      {name:'body_html'},
-	      {name:'sections'},
-	      {name:'internal_identifier'},
-	      {name:'display_title'},
-	      {name:'created_at'},
-	      {name:'updated_at'}
+        {name:'id'},
+        {name:'title'},
+        {name:'tag_list'},
+        {name:'excerpt_html'},
+        {name:'body_html'},
+        {name:'sections'},
+        {name:'internal_identifier'},
+        {name:'display_title'},
+        {name:'created_at'},
+        {name:'updated_at'}
       ]
     });
 
@@ -203,7 +203,7 @@ var columnItems = [];
             align:'center',
             width:50,
             items:[{
-								iconCls:'actioncolumn_hover',
+                iconCls:'actioncolumn_hover',
                 getClass: function(v, meta, rec) {  // Or return a class from a function
                     this.items[0].tooltip = rec.get('sections');
                     return 'info-col';
@@ -230,7 +230,7 @@ var columnItems = [];
                 width:40,
                 items:[{
                     icon:'/images/icons/edit/edit_16x16.png',
-										iconCls:'actioncolumn_hover',
+                    iconCls:'actioncolumn_hover',
                     tooltip:'Edit',
                     handler :function(grid, rowIndex, colIndex){
                         var rec = grid.getStore().getAt(rowIndex);
@@ -250,7 +250,7 @@ var columnItems = [];
             width:60,
             items:[{
                 icon:'/images/icons/document_text/document_text_16x16.png',
-   							iconCls:'actioncolumn_hover',
+                iconCls:'actioncolumn_hover',
                 tooltip:'Comments',
                 handler :function(grid, rowIndex, colIndex){
                     var rec = grid.getStore().getAt(rowIndex);
@@ -275,7 +275,7 @@ var columnItems = [];
                 width:50,
                 items:[{
                     icon:'/images/icons/edit/edit_16x16.png',
-										iconCls:'actioncolumn_hover',
+                    iconCls:'actioncolumn_hover',
                     tooltip:'Edit Excerpt',
                     handler :function(grid, rowIndex, colIndex){
                         var rec = grid.getStore().getAt(rowIndex);
@@ -295,7 +295,7 @@ var columnItems = [];
             width:40,
             items:[{
                 icon:'/images/icons/edit/edit_16x16.png',
-								iconCls:'actioncolumn_hover',
+                iconCls:'actioncolumn_hover',
                 tooltip:'Edit Content',
                 handler :function(grid, rowIndex, colIndex){
                     var rec = grid.getStore().getAt(rowIndex);
@@ -320,7 +320,7 @@ var columnItems = [];
                 width:40,
                 items:[{
                     icon:'/images/icons/delete/delete_16x16.png',
-										iconCls:'actioncolumn_hover',
+                    iconCls:'actioncolumn_hover',
                     tooltip:'Delete',
                     handler :function(grid, rowIndex, colIndex){
                         var rec = grid.getStore().getAt(rowIndex);

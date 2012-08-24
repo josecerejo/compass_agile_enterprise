@@ -201,7 +201,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.Knitkit.CenterRegion",{
     return false;
   },
 
-  saveExcerpt : function(id, content){
+  saveExcerpt : function(id, content, siteId){
     var self = this;
     this.setWindowStatus('Saving...');
     Ext.Ajax.request({
@@ -209,7 +209,8 @@ Ext.define("Compass.ErpApp.Desktop.Applications.Knitkit.CenterRegion",{
       method: 'POST',
       params:{
         id:id,
-        html:content
+        html:content,
+        site_id:siteId
       },
       success: function(response) {
         var obj =  Ext.decode(response.responseText);
@@ -249,7 +250,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.Knitkit.CenterRegion",{
         },
         listeners:{
           'save':function(ckEditor, content){
-            self.saveExcerpt(id, content);
+            self.saveExcerpt(id, content, siteId);
             contentGridStore.load();
           }
         }
@@ -307,7 +308,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.Knitkit.CenterRegion",{
     this.workArea.setActiveTab(item);
   },
 
-  saveContent : function(id, content, contentType){
+  saveContent : function(id, content, contentType, siteId){
     var self = this;
     this.setWindowStatus('Saving...');
     Ext.Ajax.request({
@@ -315,7 +316,8 @@ Ext.define("Compass.ErpApp.Desktop.Applications.Knitkit.CenterRegion",{
       method: 'POST',
       params:{
         id:id,
-        html:content
+        html:content,
+        site_id:siteId
       },
       success: function(response) {
         var obj =  Ext.decode(response.responseText);
@@ -384,7 +386,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.Knitkit.CenterRegion",{
               resource:'Article'
             }))
             {
-              self.saveContent(id, content, contentType);
+              self.saveContent(id, content, contentType, siteId);
 							if (contentGridStore){
 								contentGridStore.load();
 							}

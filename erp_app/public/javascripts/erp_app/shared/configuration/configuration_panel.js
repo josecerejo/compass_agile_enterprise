@@ -42,29 +42,31 @@ Ext.define("Compass.ErpApp.Shared.ConfigurationPanel",{
       listeners:{
         'itemclick':function(view, record, item, index, e){
           e.stopEvent();
-          var sharedConfigurationPanel = view.up('sharedconfigurationpanel');
-          var tabPanel = sharedConfigurationPanel.query('#configurationFormsTabPanel').first();
-          var itemId = 'configurationForm-'+record.get('categoryId');
-          var configurationForm = tabPanel.query('#'+itemId).first();
+          if(!record.isRoot()){
+			var sharedConfigurationPanel = view.up('sharedconfigurationpanel');
+	          var tabPanel = sharedConfigurationPanel.query('#configurationFormsTabPanel').first();
+	          var itemId = 'configurationForm-'+record.get('categoryId');
+	          var configurationForm = tabPanel.query('#'+itemId).first();
 
-          if(Ext.isEmpty(configurationForm)){
-            configurationForm = {
-              closable:true,
-              xtype:'sharedconfigurationform',
-              itemId:itemId,
-              title:record.get('text'),
-              configurationId:sharedConfigurationPanel.initialConfig.configurationId,
-              categoryId:record.get('categoryId'),
-              listeners:{
-                activate:function(form){
-                  form.setup();
-                }
-              }
-            };
-            tabPanel.add(configurationForm);
-            configurationForm = tabPanel.query('#'+itemId).first();
-          }
-          tabPanel.setActiveTab(configurationForm);
+	          if(Ext.isEmpty(configurationForm)){
+	            configurationForm = {
+	              closable:true,
+	              xtype:'sharedconfigurationform',
+	              itemId:itemId,
+	              title:record.get('text'),
+	              configurationId:sharedConfigurationPanel.initialConfig.configurationId,
+	              categoryId:record.get('categoryId'),
+	              listeners:{
+	                activate:function(form){
+	                  form.setup();
+	                }
+	              }
+	            };
+	            tabPanel.add(configurationForm);
+	            configurationForm = tabPanel.query('#'+itemId).first();
+	          }
+	          tabPanel.setActiveTab(configurationForm);
+			}
         }
       }
     };
