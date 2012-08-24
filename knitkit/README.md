@@ -12,9 +12,6 @@ Knitkit is an application that sits on top of the Compass AE framework that adds
 - ignored\_prefix\_paths
   - Array of paths for Knitkit to ignore.
   - Default : []
-- file\_assets\_location
-  - Location, in respect to Rails.root, that you want files to upload to and created in within knikit.
-  - Default : 'knitkit_assets'
 
 ### Override Initializer
 
@@ -23,6 +20,5 @@ To override these settings simple create a knikit.rb file in your initializers a
     Rails.application.config.knitkit.configure do |config|
       config.unauthorized_url     = '/unauthorized'
       config.ignored_prefix_paths = []
-      config.file_assets_location = 'knitkit_assets'
     end
     Rails.application.config.knitkit.configure!
