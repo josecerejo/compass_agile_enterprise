@@ -3,7 +3,8 @@ module ErpTechSvcs
     class << self
 
       #log when a user logs out
-      def successful_logout(user)
+      def successful_logout(user_id)
+        user = User.find(user_id)
         AuditLog.create(
             :party_id => user.party.id,
             :event_record => user,

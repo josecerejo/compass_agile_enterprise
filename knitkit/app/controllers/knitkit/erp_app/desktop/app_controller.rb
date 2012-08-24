@@ -22,10 +22,7 @@ module Knitkit
               :title => website.title,
               :subtitle => website.subtitle,
               :isWebsite => true,
-              :email => website.email,
               :siteName => website.name,
-              :emailInquiries =>  website.email_inquiries?,
-              :autoActivatePublication => website.auto_activate_publication?,
               :children => []
             }
 

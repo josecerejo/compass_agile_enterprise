@@ -8,5 +8,4 @@ ActionView::Base.class_eval do
   include ErpApp::Extensions::Railties::ActionView::Helpers::TagHelper
   include ErpApp::Extensions::Railties::ActionView::Helpers::ExtjsHelper
   include ErpApp::Extensions::Railties::ActionView::Helpers::ActiveExtHelper
-  
 end
