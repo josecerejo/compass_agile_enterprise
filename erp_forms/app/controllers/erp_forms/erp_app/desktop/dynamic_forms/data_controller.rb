@@ -15,8 +15,8 @@ class ErpForms::ErpApp::Desktop::DynamicForms::DataController < ErpForms::ErpApp
       columns << DynamicGridColumn.build_column({ :fieldLabel => "Created By", :name => 'created_username', :xtype => 'textfield' })
       columns << DynamicGridColumn.build_column({ :fieldLabel => "Created At", :name => 'created_at', :xtype => 'datefield', :width => 75 })
       columns << DynamicGridColumn.build_column({ :fieldLabel => "Updated At", :name => 'updated_at', :xtype => 'datefield', :width => 75 })
-      columns << DynamicGridColumn.build_edit_column("Ext.getCmp('DynamicFormDataGridPanel').editRecord(rec,'#{params[:model_name]}');")
-      columns << DynamicGridColumn.build_delete_column("Ext.getCmp('DynamicFormDataGridPanel').deleteRecord(rec,'#{params[:model_name]}');")
+      columns << DynamicGridColumn.build_edit_column("Ext.getCmp('#{params[:model_name]}').editRecord(rec,'#{params[:model_name]}');")
+      columns << DynamicGridColumn.build_delete_column("Ext.getCmp('#{params[:model_name]}').deleteRecord(rec,'#{params[:model_name]}');")
 
       definition << DynamicFormField.textfield({ :fieldLabel => "Updated By", :name => 'updated_username' })
       definition << DynamicFormField.textfield({ :fieldLabel => "Created By", :name => 'created_username' })

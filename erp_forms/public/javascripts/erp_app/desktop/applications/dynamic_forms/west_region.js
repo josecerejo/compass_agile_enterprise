@@ -152,12 +152,20 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.WestRegion",{
 
   getDynamicData : function(record, title){
     var self = this;
+    dynamic_data = Ext.getCmp('centerRegionLayout_'+record.data.text);
+    if (dynamic_data){
+      this.centerRegion.workArea.setActiveTab(dynamic_data);
+      return;
+    }
+
     var centerRegionLayout = Ext.create("Ext.panel.Panel",{
+      id: 'centerRegionLayout_'+record.data.text,
       layout:'border',
       title: record.data.text + " Dynamic Data",
       closable:true,
       items:[
       {
+        id: record.data.text,
         xtype:'dynamic_forms_DynamicDataGridPanel',
         model_name:record.data.text,
         dataUrl: '/erp_forms/erp_app/desktop/dynamic_forms/data/index/'+record.data.text,

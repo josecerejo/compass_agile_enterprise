@@ -53,7 +53,7 @@ class DynamicForm < ActiveRecord::Base
   # returns true if field does not exist
   def deprecated_field?(field_name)
     result = true
-	definition_object.each do |field|
+	  definition_object.each do |field|
       result = false if field[:name] == field_name.to_s
     end
     
@@ -67,7 +67,7 @@ class DynamicForm < ActiveRecord::Base
   def to_extjs_formpanel(options={})    
     form_hash = {
       :xtype => 'form',
-      :id => 'dynamic_form_panel',
+      :id => "dynamic_form_panel_#{model_name}",
       :url => options[:url],
       :title => self.description,
       :frame => true,
@@ -80,20 +80,23 @@ class DynamicForm < ActiveRecord::Base
     form_hash[:baseParams][:dynamic_form_id] = self.id
     form_hash[:baseParams][:dynamic_form_model_id] = self.dynamic_form_model_id
     form_hash[:baseParams][:model_name] = self.model_name
-    form_hash[:listeners] = {:afterrender => NonEscapeJsonString.new("function(form) {Ext.getCmp('dynamic_form_panel').getComponent(0).focus(false);}")}
+    form_hash[:listeners] = {
+      :afterrender => NonEscapeJsonString.new("function(form) {Ext.getCmp('dynamic_form_panel_#{model_name}').getComponent(0).focus(false);}")
+    }
     form_hash[:items] = definition_with_validation
     form_hash[:buttons] = []
     form_hash[:buttons][0] = {
       :text => 'Submit',
       :listeners => NonEscapeJsonString.new("{
           \"click\":function(button){
-              var formPanel = Ext.getCmp('dynamic_form_panel');
+              var formPanel = Ext.getCmp('dynamic_form_panel_#{model_name}');
               formPanel.getForm().submit({
                   reset:true,
                   success:function(form, action){
-                      Ext.getCmp('dynamic_form_panel').findParentByType('window').close();
-                      if (Ext.getCmp('DynamicFormDataGridPanel')){
-                          Ext.getCmp('DynamicFormDataGridPanel').query('shared_dynamiceditablegrid')[0].store.load();                                                                      
+                      Ext.getCmp('dynamic_form_panel_#{model_name}').findParentByType('window').close();
+
+                      if (Ext.getCmp('#{model_name}')){
+                          Ext.getCmp('#{model_name}').query('shared_dynamiceditablegrid')[0].store.load();                                                                      
                       }
                   },
                   failure:function(form, action){
@@ -107,7 +110,7 @@ class DynamicForm < ActiveRecord::Base
       :text => 'Cancel',
       :listeners => NonEscapeJsonString.new("{
           \"click\":function(button){
-              Ext.getCmp('dynamic_form_panel').findParentByType('window').close();
+              Ext.getCmp('dynamic_form_panel_#{model_name}').findParentByType('window').close();
           }
       }")
     }
@@ -131,7 +134,7 @@ class DynamicForm < ActiveRecord::Base
           Ext.QuickTips.init();
 
           var dynamic_form = Ext.create('Ext.form.Panel',{
-              id: 'dynamic_form_panel',
+              id: 'dynamic_form_panel_#{model_name}',
               url:'#{options[:url]}',
               title: '#{self.description}',"
 
@@ -148,7 +151,7 @@ class DynamicForm < ActiveRecord::Base
               items: #{definition_with_validation},
               listeners: {
                   afterrender: function(form) {
-                      Ext.getCmp('dynamic_form_panel').getComponent(0).focus(false);
+                      Ext.getCmp('dynamic_form_panel_#{model_name}').getComponent(0).focus(false);
                   }
               },
               buttons: [{
@@ -156,7 +159,7 @@ class DynamicForm < ActiveRecord::Base
                   listeners:{
                       'click':function(button){
 
-                          var formPanel = Ext.getCmp('dynamic_form_panel');
+                          var formPanel = Ext.getCmp('dynamic_form_panel_#{model_name}');
                           formPanel.getForm().submit({
                               reset:true,
                               success:function(form, action){
