@@ -4,8 +4,14 @@ class CreateTicketForm
     #insert data here
     fields = []
 
-    fields << DynamicFormField.textfield({:fieldLabel => 'Title', :name => 'title', :width => 250, :allowblank => false })
-    fields << DynamicFormField.combobox([['open', 'Open'],['closed', 'Closed']],{:fieldLabel => 'Status', :name => 'status', :width => 250, :allowblank => false })
+    fields << DynamicFormField.textfield({:fieldLabel => 'Title', :name => 'title', :width => 250, :allowBlank => false })
+    fields << DynamicFormField.combobox([['open', 'Open'],['closed', 'Closed']],{:fieldLabel => 'Status', :name => 'status', :width => 250, :allowBlank => false })
+    fields << DynamicFormField.combobox([ ['defect', 'Defect'],
+                                          ['feature', 'Feature'],
+                                          ['issue', 'Issue'],
+                                          ['task', 'Task'],
+                                        ],{:fieldLabel => 'Type', :name => 'type', :width => 250, :allowBlank => false })
+    fields << DynamicFormField.combobox([['high', 'High'],['medium', 'Medium'],['low', 'Low']],{:fieldLabel => 'Priority', :name => 'priority', :width => 250, :allowBlank => false })
     fields << DynamicFormField.combobox([ ['compass_ae_console', 'compass_ae_console'],
                                           ['compass_ae_starter_kit', 'compass_ae_starter_kit'],
                                           ['data_migrator', 'data_migrator'],
@@ -35,10 +41,10 @@ class CreateTicketForm
                                           ['tenancy', 'tenancy'],
                                           ['timeshare', 'timeshare']
                                         ],
-                                        {:fieldLabel => 'Product', :name => 'product', :width => 250, :allowblank => false })
-    fields << DynamicFormField.combobox([['none', 'None']],{:fieldLabel => 'Project', :name => 'project', :width => 250, :allowblank => false })
-    fields << DynamicFormField.related_combobox('User','username',{:fieldLabel => 'Assigned To', :name => 'assigned_to_id', :width => 250, :allowblank => false })
-    fields << DynamicFormField.textarea({:fieldLabel => 'Body', :name => 'body', :width => 400, :height => 200, :allowblank => false })    
+                                        {:fieldLabel => 'Product', :name => 'product', :width => 300, :allowBlank => true })
+    fields << DynamicFormField.combobox([['none', 'None']],{:fieldLabel => 'Project', :name => 'project', :width => 250, :allowBlank => true })
+    fields << DynamicFormField.related_combobox('User','username',{:fieldLabel => 'Assigned To', :name => 'assigned_to_id', :width => 250, :allowBlank => true })
+    fields << DynamicFormField.ckeditor({:fieldLabel => 'Body', :name => 'body', :width => 850, :autoHeight => true, :allowBlank => false })    
 
     d = DynamicForm.new
     d.description = 'Ticket Form'

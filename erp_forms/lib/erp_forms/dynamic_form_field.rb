@@ -5,13 +5,14 @@ class DynamicFormField
 
   Field Types TODO
   special:
-  password
-  file upload
-
+  codemirror
+  file upload - use has_file_assets and plupload
+  test password field
+  
   complex (for future implementation):
   concatenated
   calculated
-  related
+  related with search ahead for relations with huge datasets
 =end
 
 #  options = {
@@ -37,6 +38,11 @@ class DynamicFormField
     DynamicFormField.basic_field('numberfield', options)
   end
 
+  def self.password(options={})
+    options[:inputType] = 'password'
+    DynamicFormField.basic_field('textfield', options)
+  end
+
   def self.datefield(options={})
     DynamicFormField.basic_field('datefield', options)
   end
@@ -60,8 +66,8 @@ class DynamicFormField
     }
 
     options[:fields] = [
-        { :name => 'id' },
-        { :name => displayField }
+      { :name => 'id' },
+      { :name => displayField }
     ]
 
     options[:url] = '/erp_forms/erp_app/desktop/dynamic_forms/forms/related_field' if options[:url].blank?
@@ -69,9 +75,42 @@ class DynamicFormField
     DynamicFormField.basic_field('related_combobox', options)
   end
 
+  def self.ckeditor(options={})
+    options[:width] = 850 if options[:width].nil? 
+    options[:autoHeight] = true if options[:autoHeight].nil?
+
+    if options[:ckEditorConfig].nil?
+      options[:ckEditorConfig] = {
+          :extraPlugins => 'compasssave,jwplayer',
+          :toolbar => [
+            ['Source','-','CompassSave','Preview','Print'],
+            ['Cut','Copy','Paste','PasteText','PasteFromWord'],
+            ['Undo','Redo'],
+            ['Find','Replace'],
+            ['SpellChecker','-','SelectAll'],
+            ['TextColor','BGColor'],
+            ['Bold','Italic','Underline','Strike'],
+            ['Subscript','Superscript','-','jwplayer'],
+            ['Table','NumberedList','BulletedList'],
+            ['Outdent','Indent','Blockquote'],
+            ['JustifyLeft','JustifyCenter','JustifyRight','JustifyBlock'],
+            ['BidiLtr','BidiRtl'],
+            ['Link','Unlink','Anchor'],
+            ['HorizontalRule','SpecialChar','PageBreak'],
+            ['ShowBlocks','RemoveFormat'],
+            ['Styles','Format','Font','FontSize' ],
+            ['Maximize','-','About']
+          ]
+        }
+    end
+
+    DynamicFormField.basic_field('ckeditor', options)
+  end
+
   ################
   # BASIC FIELDS #
-  ################  
+  ################
+  # ComboBox with a static store, if you need a dynamic store use DynamicFormField.related_combobox
   # selections is an array of tuples, i.e. [['AL', 'Alabama'],['AK', 'Alaska']] - [value, text]
   def self.combobox(selections=[], options={})
     DynamicFormField.basic_field('combobox', options, selections)
