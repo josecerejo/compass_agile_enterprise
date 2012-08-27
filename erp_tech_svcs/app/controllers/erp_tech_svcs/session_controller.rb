@@ -22,7 +22,7 @@ module ErpTechSvcs
     end
 
     def destroy
-      message = "You have successfully logged out."
+      message = "You have logged out."
       logged_out_user = current_user
       logout_to       =  session[:logout_to]
 
