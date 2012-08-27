@@ -24,6 +24,10 @@ module Knitkit
       include Knitkit::Extensions::ActionController::ThemeSupport::ActsAsThemedController
     end
 
+    ActiveSupport.on_load(:action_mailer) do
+      include Knitkit::Extensions::ActionMailer::ThemeSupport::ActsAsThemedMailer
+    end
+
     engine = self
     config.to_prepare do
       ErpBaseErpSvcs.register_compass_ae_engine(engine)
