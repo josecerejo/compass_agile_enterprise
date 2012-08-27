@@ -392,7 +392,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.WestRegion",{
     var layout = new Ext.Panel({
       layout: 'border',
       autoDestroy:true,
-      title:'Dynamic Forms',
+      title:'Dynamic Models & Forms',
       items: [this.sitesTree],
       tbar:{
         items:[
@@ -483,7 +483,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.WestRegion",{
       id: 'westregionPanel',
       region:'west',
       split:true,
-      width:200,
+      width:175,
       collapsible:false
     }, config);
 

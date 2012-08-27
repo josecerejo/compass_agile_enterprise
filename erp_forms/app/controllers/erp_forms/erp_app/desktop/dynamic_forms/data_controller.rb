@@ -7,8 +7,10 @@ class ErpForms::ErpApp::Desktop::DynamicForms::DataController < ErpForms::ErpApp
 
       columns = []
       definition.each do |field_hash|
-        field_hash[:width] = 120
-        columns << DynamicGridColumn.build_column(field_hash)
+        if field_hash[:display_in_grid]
+          field_hash[:width] = (field_hash[:width].to_f * 0.56).round.to_i # for some reason grid column widths are greater than form field widths
+          columns << DynamicGridColumn.build_column(field_hash)
+        end
       end
 
       columns << DynamicGridColumn.build_column({ :fieldLabel => "Updated By", :name => 'updated_username', :xtype => 'textfield' })

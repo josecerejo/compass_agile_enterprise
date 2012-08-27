@@ -76,11 +76,13 @@ class DynamicFormField
   end
 
   def self.ckeditor(options={})
+    options[:height] = 300 if options[:height].nil? 
     options[:width] = 850 if options[:width].nil? 
-    options[:autoHeight] = true if options[:autoHeight].nil?
 
     if options[:ckEditorConfig].nil?
       options[:ckEditorConfig] = {
+      #    :width => options[:width],
+      #    :height => options[:height],
           :extraPlugins => 'compasssave,jwplayer',
           :toolbar => [
             ['Source','-','CompassSave','Preview','Print'],
@@ -145,7 +147,8 @@ class DynamicFormField
         :readOnly => options[:readOnly],
         :width =>options[:width],
         :height => options[:height],
-        :labelWidth => options[:labelWidth]
+        :labelWidth => options[:labelWidth],
+        :display_in_grid => options[:display_in_grid]
     }
 
     field[:displayField] = options[:displayField] unless options[:displayField].blank?
@@ -187,6 +190,7 @@ class DynamicFormField
     options[:height] = nil if options[:height].nil?
     options[:validation_regex] = '' if options[:validation_regex].nil?
     options[:labelWidth] = 75 if options[:labelWidth].nil?
+    options[:display_in_grid] = true if options[:display_in_grid].nil?
     
     options
   end
