@@ -14,3 +14,6 @@ require 'knitkit/extensions/active_record/acts_as_document'
 
 #active_controller extensions
 require 'knitkit/extensions/action_controller/theme_support/acts_as_themed_controller'
+
+#action_mailer extensions
+require 'knitkit/extensions/action_mailer/theme_support/acts_as_themed_mailer'
