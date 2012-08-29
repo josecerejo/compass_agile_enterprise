@@ -4,7 +4,8 @@
     paths = widget[:view_paths]
 
     website.themes.active.map{ |theme| {:path => theme.path.to_s, :url => theme.url.to_s}}.each do |theme|
-      paths << File.join(theme[:url],'widgets',self.widget_name,'views')
+      path = File.join(theme[:path],'widgets',self.widget_name,'views')
+      paths << path unless paths.include?(path)
     end if website
  
     paths.reverse!
