@@ -58,6 +58,7 @@ class DynamicFormField
 
   # a combobox that dynamically pulls options from a related model
   def self.related_combobox(model='', displayField = '', options={})
+    options[:forceSelection] = true if options[:forceSelection].nil?
     options[:displayField] = displayField
 
     options[:extraParams] = {
@@ -115,6 +116,7 @@ class DynamicFormField
   # ComboBox with a static store, if you need a dynamic store use DynamicFormField.related_combobox
   # selections is an array of tuples, i.e. [['AL', 'Alabama'],['AK', 'Alaska']] - [value, text]
   def self.combobox(selections=[], options={})
+    options[:forceSelection] = true if options[:forceSelection].nil?
     DynamicFormField.basic_field('combobox', options, selections)
   end
 
