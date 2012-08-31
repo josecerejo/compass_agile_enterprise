@@ -31,6 +31,55 @@ Ext.define("Compass.ErpApp.Desktop.Applications.Knitkit",{
                 animCollapse:false,
                 constrainHeader:true,
                 layout: 'border',
+                tbar:{
+                    items:[
+                        '->',
+                        {
+                            text:'Left Panel',
+                            handler:function(btn){
+                                var panel = btn.up('window').down('knitkit_westregion');
+                                if(panel.collapsed){
+                                    panel.expand();
+                                }
+                                else{
+                                    panel.collapse(Ext.Component.DIRECTION_LEFT);
+                                }
+                            }
+                        },
+                        {
+                            text:'Right Panel',
+                            handler:function(btn){
+                                var panel = btn.up('window').down('knitkit_eastregion');
+                                if(panel.collapsed){
+                                    panel.expand();
+                                }
+                                else{
+                                    panel.collapse(Ext.Component.DIRECTION_RIGHT);
+                                }
+                            }
+                        },
+                        {
+                            text:'No Panel',
+                            handler:function(btn){
+                                var east = btn.up('window').down('knitkit_eastregion');
+                                var west = btn.up('window').down('knitkit_westregion');
+                                if(west.collapsed){
+                                    west.expand();
+                                }
+                                else{
+                                    west.collapse(Ext.Component.DIRECTION_LEFT);
+                                }
+                                if(east.collapsed){
+                                    east.expand();
+                                }
+                                else{
+                                    east.collapse(Ext.Component.DIRECTION_RIGHT);
+                                }
+
+                            }
+                        }
+                    ]
+                },
                 items:[
                 this.centerRegion,
                 {

@@ -89,7 +89,6 @@ Ext.define("Compass.ErpApp.Desktop.Applications.Knitkit.CenterRegion",{
           parser:'erb',
           region:'center',
           sourceCode:content,
-          closable:true,
           listeners:{
             'save':function(codeMirror, content){
               self.saveSectionLayout(websiteSectionId, content);
@@ -162,7 +161,6 @@ Ext.define("Compass.ErpApp.Desktop.Applications.Knitkit.CenterRegion",{
           xtype:'codemirror',
           parser:fileType,
           sourceCode:content,
-          closable:true,
           listeners:{
             'save':function(codeMirror, content){
               self.saveTemplateFile(node.data.id, content);
