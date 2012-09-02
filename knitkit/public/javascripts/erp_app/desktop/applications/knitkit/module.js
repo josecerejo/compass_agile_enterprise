@@ -35,14 +35,14 @@ Ext.define("Compass.ErpApp.Desktop.Applications.Knitkit",{
                 tbar:{
                     items:[
                         {
-							iconCls:'icon-save',
+							iconCls:'btn-save',
 							text:'Save',
                             handler:function(btn){
                                 centerRegion.saveCurrent();
                             }
                         },
 						{
-							iconCls:'icon-save',
+							iconCls:'btn-save-all',
 							text:'Save All',
                             handler:function(btn){
                                 centerRegion.saveAll();    
@@ -50,7 +50,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.Knitkit",{
                         },
 						'->',
                         {
-							iconCls:'icon-left-panel',
+							iconCls:'btn-left-panel',
                             handler:function(btn){
                                 var panel = btn.up('window').down('knitkit_westregion');
                                 if(panel.collapsed){
@@ -62,7 +62,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.Knitkit",{
                             }
                         },
                         {
-							iconCls:'icon-right-panel',
+							iconCls:'btn-right-panel',
                             handler:function(btn){
                                 var panel = btn.up('window').down('knitkit_eastregion');
                                 if(panel.collapsed){
@@ -74,7 +74,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.Knitkit",{
                             }
                         },
                         {
-							iconCls:'icon-left-right-panel',
+							iconCls:'btn-left-right-panel',
                             handler:function(btn){
                                 var east = btn.up('window').down('knitkit_eastregion');
                                 var west = btn.up('window').down('knitkit_westregion');
