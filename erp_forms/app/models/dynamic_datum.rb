@@ -18,19 +18,14 @@ class DynamicDatum < ActiveRecord::Base
     attrs
   end
 
-=begin
-  # this was used for sorting dynamic sttributes under Ruby 1.8.7 which did not have ordered hashes
-  # it is now obsolete under Ruby 1.9  
-  # leave it here for reference for the time being in case we find that dynamic attributes are stored in the wrong order in the DB
-  # using ordered hashes assumes that dynamic attributes are stored in order in the database
-  def sorted_dynamic_attributes(with_prefix=true)    
-    if !self.updated_with_form.nil?
-      form = self.updated_with_form
-    elsif !self.created_with_form.nil?
-      form = self.created_with_form
-    else
-      form = nil
-    end
+  # we cannot assume that dynamic attributes are stored in order in the database as this is often not the case
+  # this method will sort them according to the order of the fields in the form definition
+  # method returns an ordered hash
+  def sorted_dynamic_attributes(with_prefix=false)    
+    
+    form = self.updated_with_form if form.nil? and !self.updated_with_form.nil?
+    form = self.created_with_form if form.nil? and !self.created_with_form.nil?
+    form = DynamicForm.get_form(self.reference_type) if form.nil?
     
     unless form.nil?
       if with_prefix
@@ -39,16 +34,13 @@ class DynamicDatum < ActiveRecord::Base
         keys = form.definition_object.collect{|f| f[:name]}
       end
 
-      sorted = []
+      sorted = {}      
       keys.each do |key|
-        attribute = {}      
         if with_prefix
-          attribute[key] = self.dynamic_attributes[key]
+          sorted[key] = self.dynamic_attributes[key]
         else
-          attribute[key] = self.dynamic_attributes_without_prefix[key]
-        end
-        
-        sorted << attribute
+          sorted[key] = self.dynamic_attributes_without_prefix[key]
+        end        
       end
       
       return sorted
@@ -60,6 +52,5 @@ class DynamicDatum < ActiveRecord::Base
       end
     end
   end
-=end
   
 end
