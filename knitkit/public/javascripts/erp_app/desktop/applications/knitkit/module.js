@@ -17,7 +17,8 @@ Ext.define("Compass.ErpApp.Desktop.Applications.Knitkit",{
         //***********************************************************
         var desktop = this.app.getDesktop();
         var win = desktop.getWindow('knitkit');
-        this.centerRegion = new Compass.ErpApp.Desktop.Applications.Knitkit.CenterRegion();
+        var centerRegion = Ext.create('Compass.ErpApp.Desktop.Applications.Knitkit.CenterRegion');
+		this.centerRegion = centerRegion;
         if(!win){
             win = desktop.createWindow({
                 id: 'knitkit',
@@ -33,9 +34,23 @@ Ext.define("Compass.ErpApp.Desktop.Applications.Knitkit",{
                 layout: 'border',
                 tbar:{
                     items:[
-                        '->',
                         {
-                            text:'Left Panel',
+							iconCls:'icon-save',
+							text:'Save',
+                            handler:function(btn){
+                                centerRegion.saveCurrent();
+                            }
+                        },
+						{
+							iconCls:'icon-save',
+							text:'Save All',
+                            handler:function(btn){
+                                centerRegion.saveAll();    
+                            }
+                        },
+						'->',
+                        {
+							iconCls:'icon-left-panel',
                             handler:function(btn){
                                 var panel = btn.up('window').down('knitkit_westregion');
                                 if(panel.collapsed){
@@ -47,7 +62,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.Knitkit",{
                             }
                         },
                         {
-                            text:'Right Panel',
+							iconCls:'icon-right-panel',
                             handler:function(btn){
                                 var panel = btn.up('window').down('knitkit_eastregion');
                                 if(panel.collapsed){
@@ -59,23 +74,19 @@ Ext.define("Compass.ErpApp.Desktop.Applications.Knitkit",{
                             }
                         },
                         {
-                            text:'No Panel',
+							iconCls:'icon-left-right-panel',
                             handler:function(btn){
                                 var east = btn.up('window').down('knitkit_eastregion');
                                 var west = btn.up('window').down('knitkit_westregion');
-                                if(west.collapsed){
-                                    west.expand();
-                                }
-                                else{
-                                    west.collapse(Ext.Component.DIRECTION_LEFT);
-                                }
-                                if(east.collapsed){
-                                    east.expand();
-                                }
-                                else{
-                                    east.collapse(Ext.Component.DIRECTION_RIGHT);
-                                }
-
+                                if(west.collapsed || east.collapsed){
+									west.expand();
+									east.expand();
+								}
+								else
+								if(!west.collapsed && !east.collapsed){
+									west.collapse(Ext.Component.DIRECTION_LEFT);
+									east.collapse(Ext.Component.DIRECTION_RIGHT);
+								}
                             }
                         }
                     ]

@@ -2,7 +2,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.Knitkit.CenterRegion",{
   extend:"Ext.panel.Panel",
   alias:'widget.knitkit_centerregion',
   ckEditorToolbar:[
-  ['Source','-','CompassSave','Preview','Print'],
+  ['Source','-','Preview','Print'],
   ['Cut','Copy','Paste','PasteText','PasteFromWord'],
   ['Undo','Redo'],
   ['Find','Replace'],
@@ -20,7 +20,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.Knitkit.CenterRegion",{
   ['Styles','Format','Font','FontSize' ],
   ['Maximize','-','About']
   ],
-
+ 
   setWindowStatus : function(status){
     this.findParentByType('statuswindow').setStatus(status);
   },
@@ -57,7 +57,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.Knitkit.CenterRegion",{
         var obj =  Ext.decode(response.responseText);
         if(obj.success){
           var activeTab = self.workArea.getActiveTab();
-          activeTab.query('knitkit_versionswebsitesectiongridpanel')[0].store.load();
+          if(activeTab.query('knitkit_versionswebsitesectiongridpanel').[0].store.load();
         }
         else{
           Ext.Msg.alert('Error', obj.message);
@@ -79,21 +79,21 @@ Ext.define("Compass.ErpApp.Desktop.Applications.Knitkit.CenterRegion",{
       item = Ext.create("Ext.panel.Panel",{
         layout:'border',
         title:sectionName,
+		save:function(comp){
+		  	var content = comp.down('codemirror').getValue();
+			self.saveSectionLayout(websiteSectionId, content);
+		},
         closable:true,
         itemId:itemId,
         items:[
         {
           title:sectionName + ' - Layout',
           tbarItems:tbarItems,
-          xtype:'codemirror',
+		  disableSave:true,
+		  xtype:'codemirror',
           parser:'erb',
           region:'center',
-          sourceCode:content,
-          listeners:{
-            'save':function(codeMirror, content){
-              self.saveSectionLayout(websiteSectionId, content);
-            }
-          }
+          sourceCode:content
         },
         {
           xtype:'knitkit_versionswebsitesectiongridpanel',
@@ -156,16 +156,16 @@ Ext.define("Compass.ErpApp.Desktop.Applications.Knitkit.CenterRegion",{
         title:fileName,
         itemId:itemId,
         layout:'fit',
-        items:[{
+        save:function(comp){
+		  	var content = comp.down('codemirror').getValue();
+			self.saveTemplateFile(node.data.id, content);
+		},
+		items:[{
           tbarItems:tbarItems,
+		  disableSave:true,
           xtype:'codemirror',
           parser:fileType,
-          sourceCode:content,
-          listeners:{
-            'save':function(codeMirror, content){
-              self.saveTemplateFile(node.data.id, content);
-            }
-          }
+          sourceCode:content
         }]
       });
 
@@ -220,14 +220,8 @@ Ext.define("Compass.ErpApp.Desktop.Applications.Knitkit.CenterRegion",{
         autoHeight:true,
         value:content,
         ckEditorConfig:{
-          extraPlugins:'compasssave,jwplayer', // removed codemirror plugin as it is unstable
+          extraPlugins:'jwplayer',
           toolbar:self.ckEditorToolbar
-        },
-        listeners:{
-          'save':function(ckEditor, content){
-            self.saveExcerpt(id, content, siteId);
-            contentGridStore.load();
-          }
         }
       });
 
@@ -267,6 +261,19 @@ Ext.define("Compass.ErpApp.Desktop.Applications.Knitkit.CenterRegion",{
         title:title,
         closable:true,
         items:items,
+		save:function(comp){
+		  	if (currentUser.hasApplicationCapability('knitkit', {
+              capability_type_iid:'edit_html',
+              resource:'Article'
+            }))
+            {
+              var content = comp.down('ckeditor').getValue();
+			  self.saveExcerpt(id, content, siteId);
+		      contentGridStore.load();
+            }else{
+              currentUser.showInvalidAccess();
+            }
+		},
         itemId:itemId,
         listeners:{
           'show':function(panel){
@@ -351,25 +358,8 @@ Ext.define("Compass.ErpApp.Desktop.Applications.Knitkit.CenterRegion",{
         autoHeight:true,
         //value:content,
         ckEditorConfig:{
-          extraPlugins:'compasssave,jwplayer', // removed codemirror plugin as it is unstable
+          extraPlugins:'jwplayer',
           toolbar:self.ckEditorToolbar
-        },
-        listeners:{
-          'save':function(ckEditor, content){
-            if (currentUser.hasApplicationCapability('knitkit', {
-              capability_type_iid:'edit_html',
-              resource:'Article'
-            }))
-            {
-              self.saveContent(id, content, contentType, siteId);
-							if (contentGridStore){
-								contentGridStore.load();
-							}
-              
-            }else{
-              currentUser.showInvalidAccess();
-            }
-          }
         }
       });
 
@@ -415,6 +405,22 @@ Ext.define("Compass.ErpApp.Desktop.Applications.Knitkit.CenterRegion",{
         itemId:itemId,
         closable:true,
         items:items,
+		save:function(comp){
+		  	if (currentUser.hasApplicationCapability('knitkit', {
+              capability_type_iid:'edit_html',
+              resource:'Article'
+            }))
+            {
+              var content = comp.down('ckeditor').getValue();
+	          self.saveContent(id, content, contentType, siteId);
+			  if (contentGridStore){
+			  	contentGridStore.load();
+			  }
+              
+            }else{
+              currentUser.showInvalidAccess();
+            }
+		},
         listeners:{
           'show':function(panel){
             if(!Compass.ErpApp.Utility.isBlank(siteId)){
@@ -582,6 +588,21 @@ Ext.define("Compass.ErpApp.Desktop.Applications.Knitkit.CenterRegion",{
       }
     }
     return false;
+  },
+
+  saveCurrent : function(){
+	var activeTab = this.workArea.getActiveTab();
+	if(!Ext.isEmpty(activeTab) && !Ext.isEmpty(activeTab.initialConfig.save)){
+		activeTab.initialConfig.save(activeTab);
+	}
+  },
+
+  saveAll : function(){
+	this.workArea.items.each(function(comp){
+		if(!Ext.isEmpty(comp) && !Ext.isEmpty(comp.initialConfig.save)){
+			comp.initialConfig.save(comp);
+		}
+	});
   },
   
   constructor : function(config) {
