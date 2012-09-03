@@ -52,7 +52,7 @@ class ErpForms::ErpApp::Desktop::DynamicForms::DataController < ErpForms::ErpApp
         wihash[:updated_username] = i.data.updated_by.nil? ? '' : i.data.updated_by.username
         wihash[:created_at] = i.data.created_at
         wihash[:updated_at] = i.data.updated_at
-        wihash[:form_id] = i.data.created_with_form_id
+        wihash[:form_id] = (i.data.updated_with_form_id ? i.data.updated_with_form_id : i.data.created_with_form_id)
         wihash[:model_name] = params[:model_name]
         wi << wihash
       end

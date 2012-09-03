@@ -53,14 +53,10 @@ class ErpForms::ErpApp::Desktop::DynamicForms::FormsController < ErpForms::ErpAp
 
   # get a single form
   def get
-    if params[:model_name]
-      myDynamicObject = DynamicFormModel.get_constant(params[:model_name])
-      record = myDynamicObject.find(params[:record_id]) unless params[:record_id].blank?
-      dform = (DynamicForm.find(record.data.created_with_form_id) rescue nil) if record and !record.data.created_with_form_id.blank?
-      dform = DynamicForm.find_by_model_name_and_default(params[:model_name], true) if dform.nil?
-    elsif params[:id]
-      dform = DynamicForm.find(params[:id])
-    else 
+    dform = DynamicForm.find_by_id(params[:id]) if params[:id]
+    dform = DynamicForm.get_form(params[:model_name]) if dform.nil? and params[:model_name]
+
+    if dform.nil? 
       render :json => {:success => false, :error => "Don't know how to find form"} and return
     end      
 

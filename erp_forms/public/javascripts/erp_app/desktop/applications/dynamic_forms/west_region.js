@@ -192,15 +192,19 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.WestRegion",{
               success: function(response) {
                 self.clearWindowStatus();
                 form_definition = Ext.decode(response.responseText);
-                var newRecordWindow = Ext.create("Ext.window.Window",{
-                  layout:'fit',
-                  title:'New Record',
-                  y: 100, // this fixes chrome and safari rendering the window at the bottom of the screen
-                  plain: true,
-                  buttonAlign:'center',
-                  items: form_definition
-                });
-                newRecordWindow.show();
+                if (form_definition.success == false){
+                    Ext.Msg.alert('Error', form_definition.error);
+                }else{
+                  var newRecordWindow = Ext.create("Ext.window.Window",{
+                    layout:'fit',
+                    title:'New Record',
+                    y: 100, // this fixes chrome and safari rendering the window at the bottom of the screen
+                    plain: true,
+                    buttonAlign:'center',
+                    items: form_definition
+                  });
+                  newRecordWindow.show();
+                }
               },
               failure: function(response) {
                 self.clearWindowStatus();

@@ -156,16 +156,20 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.DynamicDataGridPane
             success: function(response) {
                 Ext.getCmp('westregionPanel').clearWindowStatus();
                 form_definition = Ext.decode(response.responseText);
-                var editRecordWindow = Ext.create("Ext.window.Window",{
-                    layout:'fit',
-                    title:'Update Record',
-                    y: 100, // this fixes chrome and safari rendering the window at the bottom of the screen
-                    plain: true,
-                    buttonAlign:'center',
-                    items: form_definition                            
-                });
-                Ext.getCmp('dynamic_form_panel_'+model_name).getForm().loadRecord(rec);                
-                editRecordWindow.show();  
+                if (form_definition.success == false){
+                    Ext.Msg.alert('Error', form_definition.error);
+                }else{
+                    var editRecordWindow = Ext.create("Ext.window.Window",{
+                        layout:'fit',
+                        title:'Update Record',
+                        y: 100, // this fixes chrome and safari rendering the window at the bottom of the screen
+                        plain: true,
+                        buttonAlign:'center',
+                        items: form_definition                            
+                    });
+                    Ext.getCmp('dynamic_form_panel_'+model_name).getForm().loadRecord(rec);                
+                    editRecordWindow.show();
+                }
             },
             failure: function(response) {
                 Ext.getCmp('westregionPanel').clearWindowStatus();
