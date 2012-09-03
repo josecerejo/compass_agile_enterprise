@@ -650,7 +650,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.Knitkit.CenterRegion", {
             autoDestroy:true,
             layout:'border',
             region:'center',
-            split:true,
+            //split:true,
             items:[this.workArea]
         }, config);
 

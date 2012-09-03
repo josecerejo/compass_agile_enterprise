@@ -43,7 +43,6 @@ Ext.define("Compass.ErpApp.Desktop.Applications.Knitkit.EastRegion",{
             region:'east',
             width:300,
             split:true,
-            autoDestroy:true,
             collapsible:true
         }, config);
 

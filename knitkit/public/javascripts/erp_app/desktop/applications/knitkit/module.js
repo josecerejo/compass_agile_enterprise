@@ -84,8 +84,12 @@ Ext.define("Compass.ErpApp.Desktop.Applications.Knitkit",{
 								}
 								else
 								if(!west.collapsed && !east.collapsed){
-									west.collapse(Ext.Component.DIRECTION_LEFT);
-									east.collapse(Ext.Component.DIRECTION_RIGHT);
+                                    var task = new Ext.util.DelayedTask(function(){
+                                        west.collapse(Ext.Component.DIRECTION_LEFT);
+                                    });
+                                    east.collapse(Ext.Component.DIRECTION_RIGHT);
+                                    task.delay(400);
+
 								}
                             }
                         }
