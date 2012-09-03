@@ -31,7 +31,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.DynamicDataGridPane
                             var randomnumber=Math.floor(Math.random()*1024)
                             var target_div = 'new-comment-'+randomnumber;
                             string = '<div id="'+target_div+'" class="comment" style="border: 1px solid black; padding: 5px; margin-top: 5px;">';
-                            string += 'by you, just now <br />';
+                            string += '<i>by you, just now</i><br />';
                             string += formPanel.getForm().findField('comment').getValue();
                             string += '</div>';
                             document.getElementById(comment_div_id).innerHTML += string;
@@ -85,8 +85,18 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.DynamicDataGridPane
                 var center_region = self.findParentByType('dynamic_forms_centerregion');
 
                 string = '<div style="padding: 10px;">';
+                string += '<div class="metadata">';
+                string += 'Created by '+response_text.metadata.created_username+' at '+response_text.metadata.created_at+'<br/>';
+                string += 'Updated';
+                if (response_text.metadata.updated_username){
+                    string += ' by '+response_text.metadata.updated_username;                    
+                }
+                if (response_text.metadata.updated_at){
+                    string += ' at '+response_text.metadata.updated_at;                    
+                }
+                string += '</div>';
                 for(var index in response_text.data) {
-                    string += '<b>'+ index + '</b> ' + response_text.data[index] + '<br />';
+                    string += '<b>'+ index + ':</b> ' + response_text.data[index] + '<br />';
                 }
                 string += '</div>';
 

@@ -4,24 +4,24 @@ class DynamicForm < ActiveRecord::Base
   validates_uniqueness_of :internal_identifier, :scope => :model_name
   
   def self.class_exists?(class_name)
-	result = nil
-	begin
-	  klass = Module.const_get(class_name)
-      result = klass.is_a?(Class) ? ((klass.superclass == ActiveRecord::Base or klass.superclass == DynamicModel) ? true : nil) : nil
-	rescue NameError
-	  result = nil
-	end
-	result
+  	result = nil
+  	begin
+  	  klass = Module.const_get(class_name)
+        result = klass.is_a?(Class) ? ((klass.superclass == ActiveRecord::Base or klass.superclass == DynamicModel) ? true : nil) : nil
+  	rescue NameError
+  	  result = nil
+  	end
+  	result
   end
   
   def self.get_form(klass_name, internal_identifier='')
     result = nil
-	if internal_identifier and internal_identifier != ''
-	  result = DynamicForm.find_by_model_name_and_internal_identifier(klass_name, internal_identifier)
-	else
-	  result = DynamicForm.find_by_model_name_and_default(klass_name, true)
-	end
-	result
+  	unless internal_identifier.blank?
+  	  result = DynamicForm.find_by_model_name_and_internal_identifier(klass_name, internal_identifier)
+  	else
+  	  result = DynamicForm.find_by_model_name_and_default(klass_name, true)
+  	end
+  	result
   end
   
   # parse JSON definition into a ruby object 
@@ -49,6 +49,16 @@ class DynamicForm < ActiveRecord::Base
     def_object
   end
   
+  # will return an array of field names that are of xtype 'related_combobox'
+  def related_fields
+    related_fields = []
+    definition_object.each do |f|
+      related_fields << f if f[:xtype] == 'related_combobox'
+    end
+
+    related_fields
+  end
+
   # check field against form definition to see if field still exists
   # returns true if field does not exist
   def deprecated_field?(field_name)

@@ -64,7 +64,17 @@ class ErpForms::ErpApp::Desktop::DynamicForms::DataController < ErpForms::ErpApp
       myDynamicObject = DynamicFormModel.get_constant(params[:model_name])
       @record = myDynamicObject.find(params[:id])
 
-      result_hash = {:success => true, :data => @record.data.sorted_dynamic_attributes}      
+      related_fields = @record.form.related_fields
+      data = @record.data.dynamic_attributes_with_related_data(related_fields, true)
+
+      metadata = {
+        :created_username => (@record.data.created_by.nil? ? '' : @record.data.created_by.username),
+        :updated_username => (@record.data.updated_by.nil? ? '' : @record.data.updated_by.username),
+        :created_at => @record.data.created_at,
+        :updated_at => @record.data.updated_at        
+      }
+
+      result_hash = {:success => true, :data => data, :metadata => metadata}      
       result_hash[:comments] = @record.comments.order('id ASC') if @record.comments
 
       render :json => @record ? result_hash : {:success => false}    
