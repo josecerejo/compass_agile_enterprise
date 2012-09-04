@@ -30,7 +30,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.DynamicDataGridPane
                         if(obj.success){
                             var randomnumber=Math.floor(Math.random()*1024)
                             var target_div = 'new-comment-'+randomnumber;
-                            string = '<div id="'+target_div+'" class="comment" style="border: 1px solid black; padding: 5px; margin-top: 5px;">';
+                            string = '<div id="'+target_div+'" class="comment">';
                             string += '<i>by you, just now</i><br />';
                             string += formPanel.getForm().findField('comment').getValue();
                             string += '</div>';
@@ -84,7 +84,9 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.DynamicDataGridPane
                 var response_text = Ext.decode(response.responseText);
                 var center_region = self.findParentByType('dynamic_forms_centerregion');
 
-                string = '<div style="padding: 10px;">';
+                var ticket_div_id = gridpanel_id+'_ticket';
+
+                string = '<div id="'+ticket_div_id+'" style="padding: 10px;">';
                 string += '<div class="metadata">';
                 string += 'Created by '+response_text.metadata.created_username+' at '+response_text.metadata.created_at+'<br/>';
                 string += 'Updated';
@@ -103,11 +105,11 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.DynamicDataGridPane
                 var comment_div_id = gridpanel_id+'_comments';
 
                 if (response_text.comments){
-                    string += '<div id="'+comment_div_id+'" style="padding: 10px;" class="comments"><h1>Comments ';
+                    string += '<div id="'+comment_div_id+'" class="comments"><h1>Comments ';
                     string += '<a onclick="javascript: Ext.getCmp(\''+gridpanel_id+'\').addCommentWindow('+rec.get("id")+',\''+rec.get("model_name")+'\',\''+comment_div_id+'\');" href="#">Add Comment</a></h1>';
 
                     Ext.each(response_text.comments, function(comment){
-                        string += '<div class="comment" style="border: 1px solid black; padding: 5px; margin-top: 5px;">';
+                        string += '<div class="comment">';
                         string += '<i>by '+comment.commentor_name+ ', '+comment.created_at+'</i><br />';
                         string += comment.comment;
                         string += '</div>';
@@ -126,6 +128,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.DynamicDataGridPane
                     items: [],
                     listeners:{
                         'afterrender':function(){
+                            codemirrorHighlight(ticket_div_id);
                             codemirrorHighlight(comment_div_id);
                         }
                     }
