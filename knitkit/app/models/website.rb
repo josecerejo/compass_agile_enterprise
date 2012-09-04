@@ -69,6 +69,10 @@ class Website < ActiveRecord::Base
     self.configurations.first.get_configuration_item(primary_host_config_item_type).options.first.value
   end
 
+  def email_inquiries?
+    config_value('email_inquiries') == 'yes'
+  end
+
   def self.find_by_host(host)
     website = nil
     unless host.nil?
