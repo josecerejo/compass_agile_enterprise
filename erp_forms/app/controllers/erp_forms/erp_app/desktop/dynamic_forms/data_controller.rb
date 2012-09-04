@@ -45,10 +45,11 @@ module ErpForms::ErpApp::Desktop::DynamicForms
       myDynamicObject = DynamicFormModel.get_constant(params[:model_name])
       
       dynamic_records = myDynamicObject.paginate(:page => page, :per_page => per_page, :order => "#{sort} #{dir}")
+      related_fields = dynamic_records.first.form.related_fields
 
       wi = []
       dynamic_records.each do |i|
-        wihash = i.data.dynamic_attributes_without_prefix
+        wihash = i.data.dynamic_attributes_with_related_data(related_fields, false)
         wihash[:id] = i.id
         wihash[:created_username] = i.data.created_by.nil? ? '' : i.data.created_by.username
         wihash[:updated_username] = i.data.updated_by.nil? ? '' : i.data.updated_by.username
