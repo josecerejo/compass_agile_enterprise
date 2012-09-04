@@ -10,14 +10,13 @@ class UpdateContactForm
     
     d = DynamicForm.find_by_internal_identifier('contact_us')
     unless d.nil?
-      puts "updating form"
       d.definition = fields.to_json
       d.save    
     end    
   end
   
   def self.down
-    # do nothing
+    #remove data here
   end
 
 end
