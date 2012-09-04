@@ -1,4 +1,6 @@
-class ErpForms::ErpApp::Desktop::DynamicForms::DataController < ErpForms::ErpApp::Desktop::DynamicForms::BaseController
+module ErpForms::ErpApp::Desktop::DynamicForms
+  class DataController < ErpForms::ErpApp::Desktop::DynamicForms::BaseController
+    @@datetime_format = "%m/%d/%Y %l:%M%P"
 
     # setup dynamic data grid
     def setup
@@ -70,12 +72,20 @@ class ErpForms::ErpApp::Desktop::DynamicForms::DataController < ErpForms::ErpApp
       metadata = {
         :created_username => (@record.data.created_by.nil? ? '' : @record.data.created_by.username),
         :updated_username => (@record.data.updated_by.nil? ? '' : @record.data.updated_by.username),
-        :created_at => @record.data.created_at,
-        :updated_at => @record.data.updated_at        
+        :created_at => @record.data.created_at.getlocal.strftime(@@datetime_format),
+        :updated_at => @record.data.updated_at.getlocal.strftime(@@datetime_format)
       }
 
-      result_hash = {:success => true, :data => data, :metadata => metadata}      
-      result_hash[:comments] = @record.comments.order('id ASC') if @record.comments
+      result_hash = {:success => true, :data => data, :metadata => metadata}
+
+      if @record.comments
+        result_hash[:comments] = @record.comments.order('id ASC').all
+        result_hash[:comments].each_with_index do |c, i|
+          result_hash[:comments][i] = c.to_hash
+          result_hash[:comments][i][:created_at] = c.created_at.getlocal.strftime(@@datetime_format)
+          result_hash[:comments][i][:updated_at] = c.updated_at.getlocal.strftime(@@datetime_format)
+        end
+      end
 
       render :json => @record ? result_hash : {:success => false}    
     end
@@ -109,4 +119,5 @@ class ErpForms::ErpApp::Desktop::DynamicForms::DataController < ErpForms::ErpApp
       render :json => {:success => true}
     end
       
+  end
 end
