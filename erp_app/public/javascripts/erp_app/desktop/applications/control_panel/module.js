@@ -28,7 +28,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.ControlPanel",{
           xtype:'controlpanel_applicationmanagementpanel'
         },
         {
-          xtype:'controlpanel_profilemanagementpanel'
+          xtype:'shared_profilemanagementpanel'
         }
         ]
       });
