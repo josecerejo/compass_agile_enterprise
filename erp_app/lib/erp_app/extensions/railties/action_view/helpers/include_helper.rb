@@ -36,6 +36,8 @@ module ErpApp
               else
                 resources << static_stylesheet_link_tag("extjs/resources/css/ext-all.css")
               end
+
+              resources << add_authenticity_token_to_extjs
         
               raw resources
             end
@@ -116,7 +118,7 @@ module ErpApp
             end
 
             def add_authenticity_token_to_extjs
-              raw "<script type='text/javascript'>Ext.Ajax.extraParams = { authenticity_token: '#{form_authenticity_token}' }; Compass.ErpApp.AuthentictyToken = '#{form_authenticity_token}';</script>"
+              raw "<script type='text/javascript'>Ext.ns('Compass.ErpApp'); Ext.Ajax.extraParams = { authenticity_token: '#{form_authenticity_token}' }; Compass.ErpApp.AuthentictyToken = '#{form_authenticity_token}';</script>"
             end
 
             def create_authenticity_token_sencha_touch_field
