@@ -139,11 +139,9 @@ class DynamicForm < ActiveRecord::Base
     options[:width] = "'auto'" if options[:width].nil?
 
     #NOTE: The random nbsp; forces IE to eval this javascript!
-    javascript = "&nbsp<script type=\"text/javascript\">
-      Ext.onReady(function(){
-          Ext.QuickTips.init();
+    javascript = "Ext.QuickTips.init();
 
-          var dynamic_form = Ext.create('Ext.form.Panel',{
+          Ext.create('Ext.form.Panel',{
               id: 'dynamic_form_panel_#{model_name}',
               url:'#{options[:url]}',
               title: '#{self.description}',"
@@ -158,7 +156,7 @@ class DynamicForm < ActiveRecord::Base
                 dynamic_form_model_id: #{self.dynamic_form_model_id},
                 model_name: '#{self.model_name}'
               },
-              items: #{definition_with_validation},
+              items: #{definition_with_validation.to_json},
               listeners: {
                   afterrender: function(form) {
                       Ext.getCmp('dynamic_form_panel_#{model_name}').getComponent(0).focus(false);
@@ -168,7 +166,6 @@ class DynamicForm < ActiveRecord::Base
                   text: 'Submit',
                   listeners:{
                       'click':function(button){
-
                           var formPanel = Ext.getCmp('dynamic_form_panel_#{model_name}');
                           formPanel.getForm().submit({
                               reset:true,
@@ -193,10 +190,7 @@ class DynamicForm < ActiveRecord::Base
               },{
                   text: 'Cancel'
               }]
-          });        
-      });        
-
-       </script>"
+          });"
       #logger.info javascript
     javascript
   end
