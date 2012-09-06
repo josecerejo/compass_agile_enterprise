@@ -57,7 +57,6 @@ ErpApp::Engine.routes.draw do
   #control_panel
   match '/desktop/control_panel/application_management/:action(/:id)' => "desktop/control_panel/application_management"
   match '/desktop/control_panel/desktop_management/:action' => "desktop/control_panel/desktop_management"
-  match '/desktop/control_panel/profile_management/:action' => "desktop/control_panel/profile_management"
 
   #file_manager
   match '/desktop/file_manager/base/:action' => "desktop/file_manager/base"
@@ -76,6 +75,7 @@ ErpApp::Engine.routes.draw do
 
   #shared
   match '/shared/configuration/(/:action(/:id(/:category_id)))' => "shared/configuration"
+  match '/shared/profile_management/:action' => "shared/profile_management"
 end
 
 

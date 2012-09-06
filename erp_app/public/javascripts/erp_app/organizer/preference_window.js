@@ -80,7 +80,7 @@ Ext.define("Compass.ErpApp.Organizer.PreferencesWindow",{
 
         config = Ext.apply({
             title:'Preferences',
-            height:300,
+            height:150,
             width:300,
             items:[this.form],
             layout:'fit'

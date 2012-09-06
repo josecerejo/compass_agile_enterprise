@@ -1,6 +1,7 @@
 module ErpApp
 	module Shared
 		class Shared::NotesController < ErpApp::ApplicationController
+      before_filter :require_login
 
 		  def view
         if params[:party_id].to_i == 0

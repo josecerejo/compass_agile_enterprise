@@ -1,24 +1,18 @@
-Ext.define("Compass.ErpApp.Desktop.Applications.ControlPanel.ProfileManagementPanel",{
+Ext.define("Compass.ErpApp.Shared.ProfileManagementPanel",{
   extend:"Ext.Panel",
-  alias:"widget.controlpanel_profilemanagementpanel",
-  setWindowStatus : function(status){
-    this.findParentByType('statuswindow').setStatus(status);
-  },
-    
-  clearWindowStatus : function(){
-    this.findParentByType('statuswindow').clearStatus();
-  },
+  alias:"widget.shared_profilemanagementpanel",
 
   constructor : function(config) {
     var self = this;
     this.emailForm = {
       xtype:'form',
       labelWidth: 110,
+      border:false,
       title:'Update Email',
-      anchor:'100% 50%',
+      anchor:'100% 40%',
       bodyStyle:'padding:5px 5px 0',
       buttonAlign:'left',
-      url: '/erp_app/desktop/control_panel/profile_management/update_email',
+      url: '/erp_app/shared/profile_management/update_email',
       items: [
       {
         xtype:'textfield',
@@ -31,15 +25,14 @@ Ext.define("Compass.ErpApp.Desktop.Applications.ControlPanel.ProfileManagementPa
       ],
       buttons:[
       {
-        text:'Submit',
+        text:'Update',
         listeners:{
           'click':function(button){
-            var formPanel = button.findParentByType('form');
-            self.setWindowStatus('Updating email ...');
+            var formPanel = button.up('form');
             formPanel.getForm().submit({
+              waitMsg:'Updating Email ...',
               reset:false,
               success:function(form, action){
-                self.clearWindowStatus();
                 var obj =  Ext.decode(action.response.responseText);
                 if(obj.success){
                   var newEmail = form.getValues().email;
@@ -51,8 +44,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.ControlPanel.ProfileManagementPa
                 }
               },
               failure:function(form, action){
-                self.clearWindowStatus();
-                var obj =  Ext.decode(action.response.responseText);
+                var obj = Ext.decode(action.response.responseText);
                 if(Compass.ErpApp.Utility.isBlank(obj.message)){
                   Ext.Msg.alert("Error", 'Error updating email.');
                 }
@@ -69,9 +61,10 @@ Ext.define("Compass.ErpApp.Desktop.Applications.ControlPanel.ProfileManagementPa
         
     this.passwordForm = {
       xtype:'form',
+      border:false,
       labelWidth: 110,
       title:'Update Password',
-      anchor:'100% 50%',
+      anchor:'100% 60%',
       bodyStyle:'padding:5px 5px 0',
       buttonAlign:'left',
       url: '/users/update_password',
@@ -103,15 +96,14 @@ Ext.define("Compass.ErpApp.Desktop.Applications.ControlPanel.ProfileManagementPa
       ],
       buttons:[
       {
-        text:'Submit',
+        text:'Update',
         listeners:{
           'click':function(button){
             var formPanel = button.findParentByType('form');
-            self.setWindowStatus('Updating password ...');
             formPanel.getForm().submit({
+              waitMsg:'Updating password ...',
               reset:true,
               success:function(form, action){
-                self.clearWindowStatus();
                 var obj =  Ext.decode(action.response.responseText);
                 if(obj.success){
                   Ext.Msg.alert("Success", 'Password changed.');
@@ -121,7 +113,6 @@ Ext.define("Compass.ErpApp.Desktop.Applications.ControlPanel.ProfileManagementPa
                 }
               },
               failure:function(form, action){
-                self.clearWindowStatus();
                 var obj =  Ext.decode(action.response.responseText);
                 if(Compass.ErpApp.Utility.isBlank(obj.message)){
                   Ext.Msg.alert("Error", 'Error updating password.');
@@ -140,7 +131,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.ControlPanel.ProfileManagementPa
     config = Ext.apply({
       title:'Profile',
       layout:'anchor',
-      items:[this.passwordForm, this.emailForm]
+      items:[this.emailForm, this.passwordForm]
     }, config);
 
     this.callParent([config]);

@@ -323,7 +323,9 @@ Compass.ErpApp.Utility.JsLoader = {
     },
 
     onSuccess:function () {
-        this.successCallBack();
+        if(!Ext.isEmpty(this.successCallBack) && this.successCallBack){
+            this.successCallBack();
+        }
     },
     onFailure:function () {
     }

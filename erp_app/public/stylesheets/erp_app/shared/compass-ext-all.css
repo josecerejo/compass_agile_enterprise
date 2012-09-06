@@ -1,3 +1,32 @@
+/****Buttons Icons****/
+
+.btn-right-panel {
+    background-image: url(/images/btn/right_panel/right_panel_16x16.png) !important;
+    filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='/images/icons/btn/right_panel/right_panel_16x16.png', sizingMethod='crop');
+}
+
+.btn-left-panel {
+    background-image: url(/images/btn/left_panel/left_panel_16x16.png) !important;
+    filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='/images/icons/btn/left_panel/left_panel_16x16.png', sizingMethod='crop');
+}
+
+.btn-left-right-panel {
+    background-image: url(/images/btn/left_right_panel/left_right_panel_16x16.png) !important;
+    filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='/images/icons/btn/left_right_panel/right_panel_16x16.png', sizingMethod='crop');
+}
+
+.btn-save {
+    background-image: url(/images/btn/save/save_16x16.png) !important;
+    filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='/images/icons/btn/save/save_16x16.png', sizingMethod='crop');
+}
+
+.btn-save-all {
+    background-image: url(/images/btn/save_all/save_all_16x16.png) !important;
+    filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='/images/icons/btn/save_all/save_all_16x16.png', sizingMethod='crop');
+}
+
+/****Buttons Icons****/
+
 .ext_tooltip li {
     padding : 5px;
 }

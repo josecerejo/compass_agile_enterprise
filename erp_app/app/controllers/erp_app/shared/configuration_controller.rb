@@ -1,6 +1,7 @@
 module ErpApp
 	module Shared
 		class ConfigurationController < ErpApp::ApplicationController
+      before_filter :require_login
 
       def setup_categories
         configuration = ::Configuration.find(params[:id])
