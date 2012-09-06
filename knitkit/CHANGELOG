@@ -3,9 +3,8 @@ Version 2.0.6 - 08-06-2012
 - Drop down Font in article editor has been set to Arial.
 - Edit article link now finds and activates existing edit window or creates a new edit window. Articles tab and section articles grid panel.
 - Removed and or replaced IDs being set on elements.  Setting IDs created conflicts with extjs' IDs.
-- Upgraded extjs to 4.1.1
 - Fixed bug with duplicates in file tree
-- Root node expands automatically
+- Root node of file trees expands automatically
 - Knitkit assumes first website for website files/images on open if you haven't selected a website
 - File trees only reload node that has changed
 - Fixed bug so that image data view reloads the folder that has changed instead of root node
@@ -17,5 +16,18 @@ Version 2.0.6 - 08-06-2012
 - File size, image height and width added to view details, img size added to img tag on insert image at cursor
 - Bugfix: prevent double loading of website images and files trees
 - Website images and files show website name on root node
-- websiteId check prevents website asset trees loading without website selected
 - Improved article search and advanced search
+- Check websiteId to prevent website asset trees loading without website selected
+- Menu item "delete" no longer shown on root_node
+- Delete multiple files at once via Images, Files, Themes or File Manager
+- Move multiple files at once via Images, Files, Themes or File Manager
+- Images now display in panel rather than codemirror for Themes and File Manager
+- Upgraded codemirror to 2.32 which fixed highlighting issues
+- Turned on lineWrapping for codemirror which fixed horizontal scrollbar issue 
+- Theme tree autoexpands to theme level
+- Improved ckeditor source formatting (indentation)
+- Insert image/link at cursor now works with both codemirror and ckeditor
+- Replaced awesome uploader with plupload which improves stability and feature support (i.e. html5 drag & drop)
+- Added filter to Attach Articles to Section feature
+
+- Upgraded extjs to 4.1.1
