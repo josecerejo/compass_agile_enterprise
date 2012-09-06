@@ -43,7 +43,9 @@ Ext.define("Compass.ErpApp.Organizer.DefaultMenuTreePanel",{
     
     constructor: function(config) {
         var setActiveCenterItemFn = function(view, record, item, index, e){
-            Compass.ErpApp.Organizer.Layout.setActiveCenterItem(record.data.applicationCardId);
+            if (record.data.applicationCardId) {
+                Compass.ErpApp.Organizer.Layout.setActiveCenterItem(record.data.applicationCardId);
+            }
         };
 
         if(!config['listeners'])
