@@ -21,9 +21,8 @@ module Knitkit
         end
 
         module InstanceMethods
-
         end
-      end
-    end
-  end
-end
+      end #ActsAsCommentable
+    end #ActiveRecord
+  end #Extensions
+end #Knitkit
