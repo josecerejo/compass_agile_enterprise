@@ -7,6 +7,7 @@ Ext.define("Compass.ErpApp.Shared.ProfileManagementPanel",{
     this.emailForm = {
       xtype:'form',
       labelWidth: 110,
+      border:false,
       title:'Update Email',
       anchor:'100% 40%',
       bodyStyle:'padding:5px 5px 0',
@@ -60,6 +61,7 @@ Ext.define("Compass.ErpApp.Shared.ProfileManagementPanel",{
         
     this.passwordForm = {
       xtype:'form',
+      border:false,
       labelWidth: 110,
       title:'Update Password',
       anchor:'100% 60%',
