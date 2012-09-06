@@ -73,7 +73,7 @@ module ErpTechSvcs
             entries.delete_if{|entry| entry =~ REMOVE_FILES_REGEX}
             if entries.count > 0 && !options[:force]
               message = FOLDER_IS_NOT_EMPTY
-              result = false;
+              result = false
             else
               FileUtils.rm_rf(path)
               message = "Folder #{name} was deleted #{name} successfully"
@@ -96,7 +96,6 @@ module ErpTechSvcs
           message = FILE_DOES_NOT_EXIST
         else
           contents = File.open(path, 'rb') {|file| file.read }
-          #contents = IO.read(path).force_encoding('ASCII-8BIT')
         end
         return contents, message
       end

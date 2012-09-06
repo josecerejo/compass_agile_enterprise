@@ -126,7 +126,7 @@ class Theme < ActiveRecord::Base
           self.summary = about['summary'] if about['summary']
         else
           name = entry.name.sub(/__MACOSX\//, '')
-          name = Theme.strip_path(entry.name, theme_root)
+          name = Theme.strip_path(name, theme_root)
           data = ''
           entry.get_input_stream { |io| data = io.read }
           data = StringIO.new(data) if data.present?
@@ -153,7 +153,6 @@ class Theme < ActiveRecord::Base
           relative_path = file.directory.sub("#{url}",'')
           path = FileUtils.mkdir_p(File.join(tmp_dir,relative_path))
           full_path = File.join(path,file.name)
-          #File.open(full_path, 'w+:ASCII-8BIT') {|f| f.puts(contents) }
           File.open(full_path, 'wb+') {|f| f.puts(contents) }
           zip.add(File.join(relative_path[1..relative_path.length],file.name), full_path) if ::File.exists?(full_path)
         }
