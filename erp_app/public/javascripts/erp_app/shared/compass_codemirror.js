@@ -91,13 +91,6 @@ Ext.define("Compass.ErpApp.Shared.CodeMirror",{
         this.codeMirrorInstance.redo();
       },
       scope: this
-    }, {
-      text: 'Indent',
-      iconCls:'icon-arrow-right-blue',
-      handler: function() {
-        this.codeMirrorInstance.reindent();
-      },
-      scope: this
     }]);
 
     if(!Compass.ErpApp.Utility.isBlank(config['tbarItems'])){
@@ -108,7 +101,7 @@ Ext.define("Compass.ErpApp.Shared.CodeMirror",{
       config['tbar'] = tbarItems
     }
 
-    config = Ext.apply({
+    config = Ext.applyIf({
       layout:'fit',
       autoScroll:true,
       items: [{

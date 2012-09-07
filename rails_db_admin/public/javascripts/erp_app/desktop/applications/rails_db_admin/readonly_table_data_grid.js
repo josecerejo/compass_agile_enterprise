@@ -5,15 +5,12 @@ Ext.define("Compass.ErpApp.Desktop.Applications.RailsDbAdmin.ReadOnlyTableDataGr
     var jsonStore = new Ext.data.JsonStore({
       fields:config.fields,
       data:config.data
-    })
+    });
 
     config = Ext.apply({
       store:jsonStore,
-      layout:'fit',
-      frame: false,
-      closable: true,
       autoScroll:true,
-      region:'center',
+      height:'100%',
       loadMask:true
     }, config);
 		
