@@ -45,7 +45,7 @@ module ErpForms::ErpApp::Desktop::DynamicForms
       myDynamicObject = DynamicFormModel.get_constant(params[:model_name])
       
       dynamic_records = myDynamicObject.paginate(:page => page, :per_page => per_page, :order => "#{sort} #{dir}")
-      related_fields = dynamic_records.first.form.related_fields
+      related_fields = dynamic_records.first.form.related_fields rescue []
 
       wi = []
       dynamic_records.each do |i|
@@ -79,7 +79,7 @@ module ErpForms::ErpApp::Desktop::DynamicForms
 
       result_hash = {:success => true, :data => data, :metadata => metadata}
 
-      if @record.comments
+      if @record.respond_to?(:comments)
         result_hash[:comments] = @record.comments.order('id ASC').all
         result_hash[:comments].each_with_index do |c, i|
           result_hash[:comments][i] = c.to_hash
