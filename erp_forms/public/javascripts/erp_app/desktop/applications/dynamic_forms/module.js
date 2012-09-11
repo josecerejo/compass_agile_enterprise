@@ -18,8 +18,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms",{
             win = desktop.createWindow({
                 id: 'dynamic_forms',
                 title:'Dynamic Forms',
-                width:1150,
-                height:550,
+                maximized:true,
                 iconCls: 'icon-document',
                 shim:false,
                 animCollapse:false,

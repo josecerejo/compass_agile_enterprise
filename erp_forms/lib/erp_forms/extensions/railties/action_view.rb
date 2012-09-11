@@ -7,14 +7,17 @@ ActionView::Base.class_eval do
   #   :width => 'width of form in pixels'
   # }
   def render_dynamic_form(name, options={})
-    
-    form = DynamicForm.get_form(name.to_s, options[:internal_identifier]).to_extjs_widget(
+    output = raw '&nbsp<script type="text/javascript">'
+    output += raw "Compass.ErpApp.Utility.JsLoader.load(['/javascripts/erp_app/shared/dynamic_forms/dynamic_form_fields.js'], function(){"
+
+    output += raw DynamicForm.get_form(name.to_s, options[:internal_identifier]).to_extjs_widget(
                 { :url => build_widget_url(:new),
                   :widget_result_id => widget_result_id,
                   :width => options[:width] 
                 })
 
-    form
+    output += raw '});</script>'
+    output
   end
   
 end

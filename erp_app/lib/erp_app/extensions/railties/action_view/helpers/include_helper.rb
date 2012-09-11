@@ -36,6 +36,8 @@ module ErpApp
               else
                 resources << static_stylesheet_link_tag("extjs/resources/css/ext-all.css")
               end
+
+              resources << add_authenticity_token_to_extjs
         
               raw resources
             end
@@ -92,11 +94,14 @@ module ErpApp
 
             def include_code_mirror_library
               resources = static_javascript_include_tag("erp_app/codemirror/lib/codemirror.js")
+              resources << static_javascript_include_tag("erp_app/codemirror/mode/htmlmixed/htmlmixed.js")              
               resources << static_javascript_include_tag("erp_app/codemirror/mode/xml/xml.js")
               resources << static_javascript_include_tag("erp_app/codemirror/mode/css/css.js")
               resources << static_javascript_include_tag("erp_app/codemirror/mode/javascript/javascript.js")
               resources << static_javascript_include_tag("erp_app/codemirror/mode/ruby/ruby.js")
               resources << static_javascript_include_tag("erp_app/codemirror/mode/yaml/yaml.js")
+              resources << static_javascript_include_tag("erp_app/codemirror/lib/util/runmode.js")
+              resources << static_javascript_include_tag("erp_app/codemirror_highlight.js")
               resources << (raw "<link rel=\"stylesheet\" type=\"text/css\" href=\"/javascripts/erp_app/codemirror/lib/codemirror.css\" />")
               resources
             end
@@ -113,7 +118,7 @@ module ErpApp
             end
 
             def add_authenticity_token_to_extjs
-              raw "<script type='text/javascript'>Ext.Ajax.extraParams = { authenticity_token: '#{form_authenticity_token}' }; Compass.ErpApp.AuthentictyToken = '#{form_authenticity_token}';</script>"
+              raw "<script type='text/javascript'>Ext.ns('Compass.ErpApp'); Ext.Ajax.extraParams = { authenticity_token: '#{form_authenticity_token}' }; Compass.ErpApp.AuthentictyToken = '#{form_authenticity_token}';</script>"
             end
 
             def create_authenticity_token_sencha_touch_field

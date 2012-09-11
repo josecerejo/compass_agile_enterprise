@@ -17,8 +17,8 @@ class DynamicGridColumn
         \"type\":\"#{type}\",
         \"dataIndex\":\"#{data_index}\""
    
-    if options[:width]
-      col << ",\"width\":#{options[:width]}"
+    if field_hash[:width]
+      col << ",\"width\":#{field_hash[:width]}"
     end
 
     col += ",
