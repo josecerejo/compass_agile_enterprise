@@ -44,7 +44,7 @@ class CreateTicketForm
                                         {:fieldLabel => 'Product', :name => 'product', :width => 270, :allowBlank => true })
     fields << DynamicFormField.combobox([['None', 'None']],{:fieldLabel => 'Project', :name => 'project', :width => 175, :allowBlank => true })
     fields << DynamicFormField.related_combobox('User','username',{:fieldLabel => 'Assigned To', :name => 'assigned_to_id', :width => 175, :allowBlank => true })
-    fields << DynamicFormField.textarea({:fieldLabel => 'Body', :name => 'body', :width => 850, :height => 300, :allowBlank => false, :display_in_grid => false })    
+    fields << DynamicFormField.textarea({:fieldLabel => 'Body', :name => 'body', :width => 400, :height => 300, :allowBlank => false, :display_in_grid => false })    
 
     d = DynamicForm.new
     d.description = 'Ticket Form'
