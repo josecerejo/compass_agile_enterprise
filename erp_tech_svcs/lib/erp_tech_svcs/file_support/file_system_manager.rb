@@ -96,7 +96,6 @@ module ErpTechSvcs
           message = FILE_DOES_NOT_EXIST
         else
           contents = File.open(path, 'rb') {|file| file.read }
-          #contents = IO.read(path).force_encoding('ASCII-8BIT')
         end
         return contents, message
       end

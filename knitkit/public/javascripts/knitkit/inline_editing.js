@@ -11,8 +11,7 @@ Knitkit.InlineEditing = {
 
     saved:function (editor, result, status, xhr) {
         if (result.success === true) {
-            jQuery('#inlineEditLastUpdate').html(result.last_update);
-            editor.resetDirty();
+            this.closeEditor(editor);
         }
         else {
             jQuery('#inlineEditSaveResult').html(" Could not update.  Please try again.");

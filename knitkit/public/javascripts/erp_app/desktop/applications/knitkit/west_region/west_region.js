@@ -472,7 +472,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.Knitkit.WestRegion", {
             }
         };
 
-        this.sitesTree = new Ext.tree.TreePanel({
+        this.sitesTree = new Ext.create('Ext.tree.TreePanel',{
             viewConfig:viewConfigItems,
             store:store,
             region:'center',
@@ -975,10 +975,9 @@ Ext.define("Compass.ErpApp.Desktop.Applications.Knitkit.WestRegion", {
             }
         });
 
-        this.contentsCardPanel = new Ext.Panel({
+        this.contentsCardPanel = Ext.create('Ext.Panel',{
             layout:'card',
             region:'south',
-            autoDestroy:true,
             split:true,
             height:300,
             collapsible:true
@@ -1156,7 +1155,6 @@ Ext.define("Compass.ErpApp.Desktop.Applications.Knitkit.WestRegion", {
 
         var layout = new Ext.Panel({
             layout:'border',
-            autoDestroy:true,
             title:'Websites',
             items:[this.sitesTree, this.contentsCardPanel],
             tbar:{

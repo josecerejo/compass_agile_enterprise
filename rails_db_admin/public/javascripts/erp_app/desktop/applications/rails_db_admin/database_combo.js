@@ -4,7 +4,6 @@ Ext.define("Compass.ErpApp.Desktop.Applications.RailsDbAdmin.DatabaseComboBox",{
     initComponent: function() {
 
         var databaseJsonStore = new Ext.data.Store({
-            autoLoad:true,
             timeout:60000,
             proxy: {
                 type: 'ajax',
@@ -38,12 +37,14 @@ Ext.define("Compass.ErpApp.Desktop.Applications.RailsDbAdmin.DatabaseComboBox",{
             triggerAction:'all',
             editable:false,
             forceSelection:true,
-            mode:'local',
-            //value:'development',
+            queryMode: 'local',
             listeners:{
                 'select':function(combo, record, index){
                   // switch databases                  
                   combo.initialConfig.module.connectToDatatbase();
+                },
+                render:function(combo){
+                    combo.getStore().load();
                 }
             }
         }, config);

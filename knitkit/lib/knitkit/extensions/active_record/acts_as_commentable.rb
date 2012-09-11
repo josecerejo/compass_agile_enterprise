@@ -21,8 +21,13 @@ module Knitkit
         end
 
         module InstanceMethods
+
+          def add_comment(options={})
+            self.comments.create(options)
+          end
+
         end
-      end
-    end
-  end
-end
+      end #ActsAsCommentable
+    end #ActiveRecord
+  end #Extensions
+end #Knitkit
