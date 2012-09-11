@@ -8,7 +8,7 @@ class ErpForms::ErpApp::Desktop::DynamicForms::ModelsController < ErpForms::ErpA
     dynamic_form_models.each do |m|
       model_hash = {
         :id => m.id,
-        :model_name => m.model_name,      
+        :model_name => m.model_name   
       }
       
       models << model_hash
@@ -22,7 +22,7 @@ class ErpForms::ErpApp::Desktop::DynamicForms::ModelsController < ErpForms::ErpA
     myDynamicObject = DynamicFormModel.get_constant(params[:model_name])    
     myDynamicObject.set_default(params[:id])
 	
-    render :json => {success => true}
+    render :json => {:success => true}
   end
 
   # delete a dynamic form model
