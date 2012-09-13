@@ -48,7 +48,7 @@ module ErpApp
           helpers.delete_if{|name| name =~ /^\./}
           helpers.each do |helper|
             load File.join(path,helper)
-            ActionView::Base.send(:include, File.basename(helper, ".rb").classify.constantize)
+            ActionView::Base.send(:include, File.basename(helper, ".rb").camelize.constantize)
           end
         end
 
@@ -57,7 +57,7 @@ module ErpApp
           helpers.delete_if{|name| name =~ /^\./}
           helpers.each do |helper|
             load File.join(path,helper)
-            "Widgets::#{widget_hash[:name].classify}::Base".constantize.send(:include, File.basename(helper, ".rb").classify.constantize)
+            "Widgets::#{widget_hash[:name].camelize}::Base".constantize.send(:include, File.basename(helper, ".rb").camelize.constantize)
           end
         end
 
