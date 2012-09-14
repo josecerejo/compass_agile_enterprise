@@ -124,7 +124,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.WestRegion",{
               height:100,
               plain: true,
               buttonAlign:'center',
-              items: new Ext.FormPanel({
+              items: Ext.create("Ext.form.Panel",{
                 labelWidth: 110,
                 frame:false,
                 bodyStyle:'padding:5px 5px 0',
@@ -136,11 +136,23 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.WestRegion",{
                   xtype:'textfield',
                   fieldLabel:'Form Name',
                   allowBlank:false,
-                  name:'form_name'
+                  name:'form_name',
+                  listeners:{
+                    afterrender:function(field){
+                        field.focus(false, 200);
+                    },
+                    'specialkey': function(field, e){
+                      if (e.getKey() == e.ENTER) {
+                        var button = field.findParentByType('window').query('#submitButton').first();
+                        button.fireEvent('click', button);
+                      }
+                    }
+                  }
                 }
                 ]
               }),
               buttons: [{
+                itemId: 'submitButton',
                 text:'Submit',
                 listeners:{
                   'click':function(button){
