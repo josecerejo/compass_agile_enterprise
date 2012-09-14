@@ -132,6 +132,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.FormBuilder",{
         }
 
         config = Ext.apply({
+            id: 'formBuilder_'+config.title,
             layout:'border',
             title: config.title || 'New Form',
             border: false,
@@ -141,7 +142,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.FormBuilder",{
             buttonAlign:'center',
             items: [{
                     xtype: 'form',
-                    id: 'formBuilder_'+(Compass.ErpApp.Utility.isBlank(config.form_id) ? config.title : config.form_id),
+                    itemId: 'dynamicForm',
                     region: 'center',
                     autoScroll: true,
                     bodyPadding: 10,
@@ -318,7 +319,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.FormBuilder",{
                                     // get formPanel
                                     var updateFieldForm = button.findParentByType('form');
                                     if (updateFieldForm.getForm().isValid()){
-                                        var formPanel = Ext.getCmp('formBuilder_'+(Compass.ErpApp.Utility.isBlank(config.form_id) ? config.title : config.form_id));
+                                        var formPanel = Ext.getCmp('formBuilder_'+config.title).query('#dynamicForm').first();
                                         var formBuilder = formPanel.findParentByType('dynamic_forms_FormBuilder');
                                         var updateLabelField = updateFieldForm.getForm().findField('updateLabel');
                                         var updateNameField = updateFieldForm.getForm().findField('updateName');
@@ -342,7 +343,6 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.FormBuilder",{
                                         formBuilder.addFieldToForm(formPanel);
 
                                         // re-highlight form item
-                                        console.log('re-highlight');
                                         formPanel.getForm().findField(updateNameField.getValue()).getEl().dom.click();
                                     }
                                   }
