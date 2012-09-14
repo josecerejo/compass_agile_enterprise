@@ -15,6 +15,25 @@
 end
 
 ::ErpApp::Widgets::Base.class_eval do
+  #adding ability to pass website
+  def initialize(proxy_controller=nil, name=nil, view=nil, uuid=nil, widget_params=nil, passed_website=nil)
+    ErpApp::Widgets::Base.view_resolver_cache = [] if ErpApp::Widgets::Base.view_resolver_cache.nil?
+    self.name = name
+    self.proxy_controller = proxy_controller
+    self.view = view
+    self.uuid = uuid
+    self.widget_params = widget_params
+    @website = passed_website
+    add_view_paths
+    store_widget_params
+    merge_params
+  end
+
+  #adding ability to get website
+  def website
+    @website
+  end
+
   private
 
   def add_view_paths
