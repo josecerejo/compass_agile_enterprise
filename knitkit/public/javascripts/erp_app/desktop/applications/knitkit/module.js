@@ -17,7 +17,8 @@ Ext.define("Compass.ErpApp.Desktop.Applications.Knitkit",{
         //***********************************************************
         var desktop = this.app.getDesktop();
         var win = desktop.getWindow('knitkit');
-        this.centerRegion = new Compass.ErpApp.Desktop.Applications.Knitkit.CenterRegion();
+        var centerRegion = Ext.create('Compass.ErpApp.Desktop.Applications.Knitkit.CenterRegion');
+		this.centerRegion = centerRegion;
         if(!win){
             win = desktop.createWindow({
                 id: 'knitkit',
@@ -31,6 +32,69 @@ Ext.define("Compass.ErpApp.Desktop.Applications.Knitkit",{
                 animCollapse:false,
                 constrainHeader:true,
                 layout: 'border',
+                tbar:{
+                    items:[
+                        {
+							iconCls:'btn-save',
+							text:'Save',
+                            handler:function(btn){
+                                centerRegion.saveCurrent();
+                            }
+                        },
+						{
+							iconCls:'btn-save-all',
+							text:'Save All',
+                            handler:function(btn){
+                                centerRegion.saveAll();    
+                            }
+                        },
+						'->',
+                        {
+							iconCls:'btn-left-panel',
+                            handler:function(btn){
+                                var panel = btn.up('window').down('knitkit_westregion');
+                                if(panel.collapsed){
+                                    panel.expand();
+                                }
+                                else{
+                                    panel.collapse(Ext.Component.DIRECTION_LEFT);
+                                }
+                            }
+                        },
+                        {
+							iconCls:'btn-right-panel',
+                            handler:function(btn){
+                                var panel = btn.up('window').down('knitkit_eastregion');
+                                if(panel.collapsed){
+                                    panel.expand();
+                                }
+                                else{
+                                    panel.collapse(Ext.Component.DIRECTION_RIGHT);
+                                }
+                            }
+                        },
+                        {
+							iconCls:'btn-left-right-panel',
+                            handler:function(btn){
+                                var east = btn.up('window').down('knitkit_eastregion');
+                                var west = btn.up('window').down('knitkit_westregion');
+                                if(west.collapsed || east.collapsed){
+									west.expand();
+									east.expand();
+								}
+								else
+								if(!west.collapsed && !east.collapsed){
+                                    var task = new Ext.util.DelayedTask(function(){
+                                        west.collapse(Ext.Component.DIRECTION_LEFT);
+                                    });
+                                    east.collapse(Ext.Component.DIRECTION_RIGHT);
+                                    task.delay(400);
+
+								}
+                            }
+                        }
+                    ]
+                },
                 items:[
                 this.centerRegion,
                 {

@@ -9,6 +9,9 @@ module RailsDbAdmin
           Rails.configuration.database_configuration.each do |k, v|
             result[:databases] << {:display => k, :value => k}
           end
+
+          result[:databases].delete_if{|v| v[:value] == Rails.env}
+          result[:databases].unshift({:value => Rails.env, :display => Rails.env})
 		
           render :json => result
         end
