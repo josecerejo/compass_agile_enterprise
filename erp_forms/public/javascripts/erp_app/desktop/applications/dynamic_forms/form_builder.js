@@ -97,8 +97,8 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.FormBuilder",{
         }
         formPanel.removeAll();
         var items = formPanel.add(formPanel.form_definition);
-        //console.log(formPanel.form_definition);
 
+        // add listener to highlight selected field
         Ext.each(items, function(item){
             item.getEl().addListener('click', function(){    
                 var highlight_border = '1px solid green';            
@@ -125,6 +125,11 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.FormBuilder",{
                 }
             });
         });
+
+        // highlight newly added field
+        if (fieldDefinition){
+            formPanel.getForm().findField(fieldDefinition.name).getEl().dom.click();
+        }
     },
 
     constructor : function(config) {
