@@ -78,15 +78,16 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.FormBuilder",{
 		this.callParent(arguments);
     },
 
-    getIndexOfFieldByName : function(formPanel, fieldName){
-        i=0;
+    validateFieldNameUnique : function(formPanel, fieldName){
+        return ((this.getIndexOfFieldByName(formPanel, fieldName) < 0) ? true : false);
+    },
 
+    getIndexOfFieldByName : function(formPanel, fieldName){
         for (var i = 0; i < formPanel.form_definition.length; i++) {
             if (formPanel.form_definition[i].name == fieldName){
                 return i;
             }
         }
-
         return -1;
     },
 
@@ -254,13 +255,19 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.FormBuilder",{
                                             var window = button.findParentByType('window');
                                             var addFieldFormPanel = window.query('form')[0];
                                             var field_name = addFieldFormPanel.getForm().findField('field_name').getValue();
+                                            var formBuilder = formPanel.findParentByType('dynamic_forms_FormBuilder');
+                                            
+                                            if (!formBuilder.validateFieldNameUnique(formPanel, field_name)){
+                                                Ext.Msg.alert('Error', 'Field Name must be unique.');
+                                                return;
+                                            }
 
                                             var fieldDefinition = {
                                                 fieldLabel: droppedField.get('fieldLabel'),
                                                 xtype: droppedField.get('field_xtype'),
                                                 name: field_name
                                             };
-                                            formPanel.findParentByType('dynamic_forms_FormBuilder').addFieldToForm(formPanel, fieldDefinition);
+                                            formBuilder.addFieldToForm(formPanel, fieldDefinition);
 
                                             addFieldWindow.close();
                                           }
