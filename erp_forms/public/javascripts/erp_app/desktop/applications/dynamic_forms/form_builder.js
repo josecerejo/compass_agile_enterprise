@@ -23,17 +23,45 @@ var fieldData = {
     expandable: false,
     children: [
         {
+            text: 'Checkbox',
+            field_xtype: 'checkbox',
+            leaf: true
+        },
+        {
+            text: 'Combo Box',
+            field_xtype: 'combobox',
+            leaf: true
+        },
+        {
+            text: 'Date Field',
+            field_xtype: 'datefield',
+            leaf: true
+        },
+        {
+            text: 'Display Field',
+            field_xtype: 'displayfield',
+            leaf: true
+        },
+        {
+            text: 'Number Field',
+            field_xtype: 'numberfield',
+            leaf: true
+        },
+        {
             text: 'Text Field',
-            leaf: true,
             field_xtype: 'textfield',
-            fieldLabel: 'Label'
+            leaf: true
         },
         {
             text: 'Text Area',
-            leaf: true,
             field_xtype: 'textarea',
-            fieldLabel: 'Label'
-        }
+            leaf: true
+        },
+        {
+            text: 'Time Field',
+            field_xtype: 'timefield',
+            leaf: true
+        },
     ]};
 
 var fieldTreeRootNode = fieldStore.setRootNode(fieldData);
@@ -78,6 +106,137 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.FormBuilder",{
 		this.callParent(arguments);
     },
 
+    getFieldOptionsForXtype : function(xtype){
+        console.log(xtype);
+        var common = [
+            {
+                fieldLabel: 'Label',
+                name: 'updateLabel',
+                xtype: 'textfield',
+                allowBlank: false
+            },
+            {
+                fieldLabel: 'Name',
+                name: 'updateName',
+                xtype: 'textfield',
+                allowBlank: false
+            },
+            {
+                fieldLabel: 'Allow Blank',
+                name: 'updateAllowBlank',
+                xtype: 'checkbox'
+            },
+            {
+                fieldLabel: 'Read Only',
+                name: 'updateReadOnly',
+                xtype: 'checkbox'
+            },
+            {
+                fieldLabel: 'Display In Grid',
+                name: 'updateDisplayInGrid',
+                xtype: 'checkbox'
+            },
+            {
+                fieldLabel: 'Width',
+                name: 'updateWidth',
+                xtype: 'numberfield'
+            },
+            {
+                fieldLabel: 'Label Width',
+                name: 'updateLabelWidth',
+                xtype: 'numberfield'
+            }
+        ];
+
+        var combobox = [
+            {
+                fieldLabel: 'Force Selection',
+                name: 'updateForceSelection',
+                xtype: 'checkbox'
+            }
+        ];
+
+        var minMaxLength = [
+            {
+                fieldLabel: 'Min Length',
+                name: 'updateMinLength',
+                xtype: 'numberfield'
+            },
+            {
+                fieldLabel: 'Max Length',
+                name: 'updateMaxLength',
+                xtype: 'numberfield'
+            }
+        ];
+
+        var numberMinMaxValue = [
+            {
+                fieldLabel: 'Min Value',
+                name: 'updateMinValue',
+                xtype: 'numberfield'
+            },
+            {
+                fieldLabel: 'Max Value',
+                name: 'updateMaxValue',
+                xtype: 'numberfield'
+            }
+        ];
+
+        var dateMinMaxValue = [
+            {
+                fieldLabel: 'Min Value',
+                name: 'updateMinValue',
+                xtype: 'datefield'
+            },
+            {
+                fieldLabel: 'Max Value',
+                name: 'updateMaxValue',
+                xtype: 'datefield'
+            }
+        ];
+
+        var timeMinMaxValue = [
+            {
+                fieldLabel: 'Min Value',
+                name: 'updateMinValue',
+                xtype: 'timefield'
+            },
+            {
+                fieldLabel: 'Max Value',
+                name: 'updateMaxValue',
+                xtype: 'timefield'
+            }
+        ];
+
+        var result = common;
+        switch(xtype){
+            case 'combo':
+              result = result.concat(combobox);
+              break;
+            case 'combobox':
+              result = result.concat(combobox);
+              break;
+            case 'textfield':
+              result = result.concat(minMaxLength);
+              break;
+            case 'textarea':
+              result = result.concat(minMaxLength);
+              break;
+            case 'numberfield':
+              result = result.concat(numberMinMaxValue);
+              break;
+            case 'datefield':
+              result = result.concat(dateMinMaxValue);
+              break;
+            case 'timefield':
+              result = result.concat(timeMinMaxValue);
+              break;
+            default:
+        }
+
+          return result;
+    },
+
     validateFieldNameUnique : function(formPanel, fieldName){
         return ((this.getIndexOfFieldByName(formPanel, fieldName) < 0) ? true : false);
     },
@@ -113,15 +272,42 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.FormBuilder",{
                     var label = item.getEl().query('label').first();
                     label.style.width = (parseInt(label.style.width) - 2) + 'px';
                     item.getEl().setStyle('border', highlight_border);
-                    var east_tabs = Ext.getCmp('east_tabs_'+(Compass.ErpApp.Utility.isBlank(formPanel.form_id) ? 'new' : formPanel.form_id));
-                    east_tabs.setActiveTab(1);
+
+                    // set field properties as active tab
+                    var formBuilder = formPanel.findParentByType('dynamic_forms_FormBuilder');
+                    var east_tabs = formBuilder.query('#east_tabs').first();
+                    east_tabs.setActiveTab('field_props');
 
                     formPanel.selected_field = item;
 
                     //TODO: populate field properties
-                    var prop_form = east_tabs.query('#field_props').first().getForm();
+                    var prop_formPanel = east_tabs.query('#field_props').first();
+                    var prop_form = prop_formPanel.getForm();
+                    prop_formPanel.removeAll();
+                    prop_formPanel.add(formBuilder.getFieldOptionsForXtype(item.xtype));                    
+
+                    // common
                     prop_form.findField('updateName').setValue(item.name);
                     prop_form.findField('updateLabel').setValue(item.fieldLabel);
+                    prop_form.findField('updateAllowBlank').setValue(item.allowBlank);
+                    prop_form.findField('updateDisplayInGrid').setValue(item.display_in_grid);
+                    prop_form.findField('updateReadOnly').setValue(item.readOnly);
+                    prop_form.findField('updateWidth').setValue(item.width);
+                    prop_form.findField('updateLabelWidth').setValue(item.labelWidth);
+
+                    if (item.xtype == 'datefield' || item.xtype == 'timefield' || item.xtype == 'numberfield'){
+                        prop_form.findField('updateMinValue').setValue(item.minValue);
+                        prop_form.findField('updateMaxValue').setValue(item.maxValue);
+                    }
+
+                    if (item.xtype == 'textfield' || item.xtype == 'textarea'){
+                        prop_form.findField('updateMinLength').setValue(item.minLength);
+                        prop_form.findField('updateMaxLength').setValue(item.maxLength);
+                    }
+
+                    if (item.xtype == 'combobox' || item.xtype == 'combo'){
+                        prop_form.findField('updateForceSelection').setValue(item.forceSelection);
+                    }
                 }
             });
         });
@@ -268,9 +454,10 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.FormBuilder",{
                                             }
 
                                             var fieldDefinition = {
-                                                fieldLabel: droppedField.get('fieldLabel'),
                                                 xtype: droppedField.get('field_xtype'),
-                                                name: field_name
+                                                name: field_name,
+                                                fieldLabel: field_name,
+                                                display_in_grid: true
                                             };
                                             formBuilder.addFieldToForm(formPanel, fieldDefinition);
 
@@ -296,10 +483,13 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.FormBuilder",{
                 },
                 {
                     xtype: 'tabpanel',
-                    id: 'east_tabs_'+(Compass.ErpApp.Utility.isBlank(config.form_id) ? 'new' : config.form_id),
+                    itemId: 'east_tabs',
                     region: 'east',
-                    width: 250,
+                    width: 255,
                     activeTab: 0,
+                    defaults:{
+                        width: 255,
+                    },
                     items: [
                         {
                             xtype: 'treepanel',
@@ -312,14 +502,12 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.FormBuilder",{
                             },                            
                             id: 'availableFields',                            
                             title: 'Field Types',
-                            width: 250,
                             root: fieldTreeRootNode
                         },
                         {
                             xtype: 'form',
                             title: 'Field Properties',
                             itemId: 'field_props',
-                            width: 250,
                             bodyPadding: 10,
                             tbar: [
                               { xtype: 'button', 
@@ -335,14 +523,36 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.FormBuilder",{
                                         var formBuilder = formPanel.findParentByType('dynamic_forms_FormBuilder');
                                         var updateLabelField = updateFieldForm.getForm().findField('updateLabel');
                                         var updateNameField = updateFieldForm.getForm().findField('updateName');
+                                        var updateWidth = updateFieldForm.getForm().findField('updateWidth');
+                                        var updateLabelWidth = updateFieldForm.getForm().findField('updateLabelWidth');
+                                        var updateReadOnly = updateFieldForm.getForm().findField('updateReadOnly');
+                                        var updateAllowBlank = updateFieldForm.getForm().findField('updateAllowBlank');
+                                        var updateDisplayInGrid = updateFieldForm.getForm().findField('updateDisplayInGrid');
 
                                         // build field json
                                         var fieldDefinition = {
-                                            fieldLabel: updateLabelField.getValue(),
                                             xtype: formPanel.selected_field.xtype,
-                                            name: updateNameField.getValue()
+                                            name: updateNameField.getValue(),
+                                            fieldLabel: updateLabelField.getValue()
                                         };
-                                        //console.log(fieldDefinition);
+
+                                        if (updateLabelWidth.getValue()){
+                                            fieldDefinition.labelWidth = updateLabelWidth.getValue();
+                                        }
+                                        if (updateWidth.getValue()){
+                                            fieldDefinition.width = updateWidth.getValue();
+                                        }
+                                        if (updateReadOnly.getValue()){
+                                            fieldDefinition.readOnly = updateReadOnly.getValue();
+                                        }
+                                        if (updateAllowBlank.getValue()){
+                                            fieldDefinition.allowBlank = updateAllowBlank.getValue();
+                                        }
+                                        if (updateDisplayInGrid.getValue()){
+                                            fieldDefinition.display_in_grid = updateDisplayInGrid.getValue();
+                                        }
+
+                                        console.log(fieldDefinition);
 
                                         // use getIndexOfFieldByName and splice to replace field in definition to preserve field order
                                         var indexOfField = formBuilder.getIndexOfFieldByName(formPanel, formPanel.selected_field.name);
@@ -362,27 +572,15 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.FormBuilder",{
                               }
                             ],
                             defaults:{
-                                width: 200,
-                                allowBlank: false
+                                width: 230,
+                                labelWidth: 85
                             },
-                            items:[
-                                {
-                                    fieldLabel: 'Field Label',
-                                    name: 'updateLabel',
-                                    xtype: 'textfield'
-                                },
-                                {
-                                    fieldLabel: 'Field Name',
-                                    name: 'updateName',
-                                    xtype: 'textfield'
-                                }
-                            ]
+                            items:[]
                         },
                         {
                             xtype: 'form',
                             title: 'Form Properties',
                             itemId: 'form_props',
-                            width: 250,
                             bodyPadding: 10,
                             items:[
                                 {
