@@ -98,7 +98,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.ProductManager.ProductDescriptio
           ['JustifyLeft','JustifyCenter','JustifyRight','JustifyBlock','-','BidiLtr','BidiRtl'],
           ['BidiLtr', 'BidiRtl' ],
           ['Link','Unlink','Anchor'],
-          ['jwplayer','Flash','Table','HorizontalRule',,'SpecialChar','PageBreak',],
+          ['jwplayer','Flash','Table','HorizontalRule','SpecialChar','PageBreak',],
           [ 'Styles','Format','Font','FontSize' ],
           ['Maximize', 'ShowBlocks','-','About']
           ]

@@ -74,6 +74,10 @@ class Website < ActiveRecord::Base
     self.configurations.first.get_configuration_item(primary_host_config_item_type).options.first.value
   end
 
+  def email_inquiries?
+    config_value('email_inquiries') == 'yes'
+  end
+
   def self.find_by_host(host)
     website = nil
     unless host.nil?
@@ -105,6 +109,14 @@ class Website < ActiveRecord::Base
     self.published_websites.where(:active => true).first
   end
 
+  def auto_activate_publication?
+    self.configurations.first.get_item(:auto_active_publications).options.first.value == 'yes'
+  end
+
+  def publish_on_save?
+    self.configurations.first.get_item(:publish_on_save).options.first.value == 'yes'
+  end
+
   def role
     Role.iid(website_role_iid)
   end
@@ -115,7 +127,6 @@ class Website < ActiveRecord::Base
     configuration = ::Configuration.find_template('default_website_configuration').clone(true)
     configuration.description = "Website #{self.name} Configuration"
     configuration.internal_identifier = configuration.description.underscore
-    configuration.update_configuration_item(ConfigurationItemType.find_by_internal_identifier('contact_us_email_address'), self.email)
     configuration.update_configuration_item(ConfigurationItemType.find_by_internal_identifier('login_url'), '/login')
     configuration.update_configuration_item(ConfigurationItemType.find_by_internal_identifier('homepage_url'), '/home')
     self.configurations << configuration
@@ -166,14 +177,13 @@ class Website < ActiveRecord::Base
       :title => title,
       :subtitle => subtitle,
       :internal_identifier => internal_identifier,
-      :email => email,
-      :auto_activate_publication => auto_activate_publication,
-      :email_inquiries => email_inquiries,
       :sections => [],
       :images => [],
       :files => [],
       :website_navs => []
     }
+
+    #TODO update to handle configurations
 
     setup_hash[:sections] = sections.positioned.collect do |website_section|
       website_section.build_section_hash
@@ -221,32 +231,32 @@ class Website < ActiveRecord::Base
 
     sections.each do |website_section|
       unless website_section.layout.blank?
-        File.open(File.join(sections_path,"#{website_section.internal_identifier}.rhtml"), 'w+') {|f| f.puts(website_section.layout) }
+        File.open(File.join(sections_path,"#{website_section.internal_identifier}.rhtml"), 'wb+') {|f| f.puts(website_section.layout) }
       end
     end
 
     contents = sections.collect(&:contents).flatten.uniq
     contents.each do |content|
-      File.open(File.join(articles_path,"#{content.internal_identifier}.html"), 'w+') {|f| f.puts(content.body_html) }
+      File.open(File.join(articles_path,"#{content.internal_identifier}.html"), 'wb+') {|f| f.puts(content.body_html) }
       unless content.excerpt_html.blank?
-        File.open(File.join(excerpts_path,"#{content.internal_identifier}.html"), 'w+') {|f| f.puts(content.excerpt_html) }
+        File.open(File.join(excerpts_path,"#{content.internal_identifier}.html"), 'wb+') {|f| f.puts(content.excerpt_html) }
       end
     end
 
     online_document_sections.each do |online_documented_section|
-      File.open(File.join(documented_contents_path,"#{online_documented_section.internal_identifier}.html"), 'w+') {|f| f.puts(online_documented_section.documented_item_published_content_html(active_publication)) }
+      File.open(File.join(documented_contents_path,"#{online_documented_section.internal_identifier}.html"), 'wb+') {|f| f.puts(online_documented_section.documented_item_published_content_html(active_publication)) }
     end
 
     self.files.where("directory like '%/sites/#{self.iid}/images%'").all.each do |image_asset|
       contents = file_support.get_contents(File.join(file_support.root,image_asset.directory,image_asset.name))
       FileUtils.mkdir_p(File.join(image_assets_path,image_asset.directory))
-      File.open(File.join(image_assets_path,image_asset.directory,image_asset.name), 'w+:ASCII-8BIT') {|f| f.puts(contents) }
+      File.open(File.join(image_assets_path,image_asset.directory,image_asset.name), 'wb+') {|f| f.puts(contents) }
     end
 
     self.files.where("directory like '%/#{Rails.application.config.erp_tech_svcs.file_assets_location}/sites/#{self.iid}%'").all.each do |file_asset|
       contents = file_support.get_contents(File.join(file_support.root,file_asset.directory,file_asset.name))
       FileUtils.mkdir_p(File.join(file_assets_path,file_asset.directory))
-      File.open(File.join(file_assets_path,file_asset.directory,file_asset.name), 'w+:ASCII-8BIT') {|f| f.puts(contents) }
+      File.open(File.join(file_assets_path,file_asset.directory,file_asset.name), 'wb+') {|f| f.puts(contents) }
     end
 
     files = []
@@ -258,7 +268,7 @@ class Website < ActiveRecord::Base
       files << {:path => path, :name => entry}
     end
 
-    File.open(tmp_dir + 'setup.yml', 'w') { |f| f.puts(export_setup.to_yaml) }
+    File.open(tmp_dir + 'setup.yml', 'wb+') { |f| f.puts(export_setup.to_yaml) }
 
     (tmp_dir + "#{name}.zip").tap do |file_name|
       file_name.unlink if file_name.exist?
@@ -325,11 +335,11 @@ class Website < ActiveRecord::Base
           :name => setup_hash[:name],
           :title => setup_hash[:title],
           :subtitle => setup_hash[:subtitle],
-          :internal_identifier => setup_hash[:internal_identifier],
-          :email => setup_hash[:email],
-          :email_inquiries => setup_hash[:email_inquiries],
-          :auto_activate_publication => setup_hash[:auto_activate_publication]
+          :internal_identifier => setup_hash[:internal_identifier]
         )
+
+        #TODO update to handle configurations
+
         website.save!
 
         #set default publication published by user

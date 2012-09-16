@@ -53,10 +53,11 @@ class ErpForms::ErpApp::Desktop::DynamicForms::FormsController < ErpForms::ErpAp
 
   # get a single form
   def get
-    if params[:id]
-      dform = DynamicForm.find(params[:id])
-    else
-      dform = DynamicForm.find_by_model_name_and_default(params[:model_name], true)
+    dform = DynamicForm.find_by_id(params[:id]) if params[:id]
+    dform = DynamicForm.get_form(params[:model_name]) if dform.nil? and params[:model_name]
+
+    if dform.nil? 
+      render :json => {:success => false, :error => "Don't know how to find form"} and return
     end      
 
     form = dform.to_extjs_formpanel(
@@ -65,6 +66,14 @@ class ErpForms::ErpApp::Desktop::DynamicForms::FormsController < ErpForms::ErpAp
                 })
 
     render :json => form
+  end
+
+  # get related data for a related field
+  def related_field
+    related_model = params[:model].camelize.constantize
+    data = related_model.all
+
+    render :inline => data.to_json(:only => [:id, params[:displayField].to_sym])
   end
 
   # delete dynamic form

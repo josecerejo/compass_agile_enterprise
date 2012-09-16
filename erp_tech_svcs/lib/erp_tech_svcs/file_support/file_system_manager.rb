@@ -8,12 +8,12 @@ module ErpTechSvcs
       end
 
       def update_file(path, content)
-        File.open(path, 'w+:ASCII-8BIT') {|f| f.write(content) }
+        File.open(path, 'wb+') {|f| f.write(content) }
       end
 
       def create_file(path, name, contents)
         FileUtils.mkdir_p path unless File.exists? path
-        File.open(File.join(path,name), 'w+:ASCII-8BIT') {|f| f.write(contents) }
+        File.open(File.join(path,name), 'wb+') {|f| f.write(contents) }
       end
 
       def create_folder(path, name)
@@ -95,7 +95,7 @@ module ErpTechSvcs
         unless File.exists? path
           message = FILE_DOES_NOT_EXIST
         else
-          contents = IO.read(path).force_encoding('ASCII-8BIT')
+          contents = File.open(path, 'rb') {|file| file.read }
         end
         return contents, message
       end

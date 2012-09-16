@@ -33,7 +33,7 @@ if ($) {
 
     Compass.ErpApp.JQuerySupport.IsJsonString = function (str) {
         try {
-            JSON.parse(str);
+            jQuery.parseJSON(str);
         } catch (e) {
             return false;
         }

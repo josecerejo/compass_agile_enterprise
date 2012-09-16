@@ -88,9 +88,6 @@ module Knitkit
               website.subtitle                  = params[:subtitle]
               website.title                     = params[:title]
               website.name                      = params[:name]
-              website.email                     = params[:email]
-              website.auto_activate_publication = params[:auto_activate_publication] == 'yes'
-              website.email_inquiries           = params[:email_inquiries] == 'yes'
 
               # create homepage
               website_section = WebsiteSection.new
@@ -129,12 +126,9 @@ module Knitkit
           model = DesktopApplication.find_by_internal_identifier('knitkit')
           begin
             current_user.with_capability(model, 'edit', 'Website') do
-              @website.email                     = params[:email]
               @website.name                      = params[:name]
               @website.title                     = params[:title]
               @website.subtitle                  = params[:subtitle]
-              @website.auto_activate_publication = params[:auto_activate_publication] == 'yes'
-              @website.email_inquiries           = params[:email_inquiries] == 'yes'
 
               render :json => @website.save ? {:success => true} : {:success => false}
             end

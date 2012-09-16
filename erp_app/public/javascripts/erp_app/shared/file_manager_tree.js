@@ -89,7 +89,6 @@ Ext.define("Compass.ErpApp.Shared.FileManagerTree",{
     };
 
     if(!Compass.ErpApp.Utility.isBlank(config['autoLoadRoot']) && !config['autoLoadRoot']){
-      rootConfig.expanded = false,
       rootConfig.children = [];
       rootConfig.autoLoad = false;
     }
@@ -232,108 +231,111 @@ Ext.define("Compass.ErpApp.Shared.FileManagerTree",{
         }
 
         self.selectedNode = record;
-        var menuItems = [
-        {
-          text:'Rename',
-          iconCls:'icon-edit',
-          listeners:{
-            'click':function(){
-              if(!self.fireEvent('allowrename', this)){
-                currentUser.showInvalidAccess();
-                return false;
-              }
-              var renameForm = {
-                xtype:'form',
-                autoDestroy:true,
-                width: 500,
-                frame: true,
-                buttonAlign:'center',
-                bodyStyle: 'padding: 10px 10px 0 10px;',
-                labelWidth: 50,
-                defaults: {
-                  anchor: '95%',
-                  allowBlank: false,
-                  msgTarget: 'side',
-                  labelWidth:50
-                },
-                items: [{
-                  xtype: 'textfield',
-                  fieldLabel: 'Name',
-                  name:'file_name',
-                  value:record.data["text"]
-                },{
-                  xtype:'hidden',
-                  name:'node',
-                  value:record.data.id
-                }],
-                buttons: [{
-                  text: 'Save',
-                  handler: function(btn){
-                    var renameForm = btn.findParentByType('form');
-                    if(renameForm.getForm().isValid()){
-                      Ext.apply(self.extraPostData, renameForm.getValues());
-                      var msg = Ext.Msg.wait("Loading", "Renaming file...");
-                      Ext.Ajax.request({
-                        url: (self.initialConfig['controllerPath'] || '/erp_app/desktop/file_manager/base') + '/rename_file',
-                        method: 'POST',
-                        params:self.extraPostData,
-                        success: function(response) {
-                          msg.close();
-                          var responseObj =  Ext.decode(response.responseText);
-                          
-                          if(responseObj.success){
-                            store.load({
-                              node:record.parentNode,
-                              params:self.extraPostData
-                            });
-                            var window = renameForm.findParentByType('window');
-                            window.close()
+        var menuItems = [];
+
+        // if root node don't show rename menu item
+        if(record.data['id'] != 'root_node' && !(self.initialConfig.showRenameMenuItem === false)){
+          menuItems.push({
+            text:'Rename',
+            iconCls:'icon-edit',
+            listeners:{
+              'click':function(){
+                if(!self.fireEvent('allowrename', this)){
+                  currentUser.showInvalidAccess();
+                  return false;
+                }
+                var renameForm = {
+                  xtype:'form',
+                  autoDestroy:true,
+                  width: 500,
+                  frame: true,
+                  buttonAlign:'center',
+                  bodyStyle: 'padding: 10px 10px 0 10px;',
+                  labelWidth: 50,
+                  defaults: {
+                    anchor: '95%',
+                    allowBlank: false,
+                    msgTarget: 'side',
+                    labelWidth:50
+                  },
+                  items: [{
+                    xtype: 'textfield',
+                    fieldLabel: 'Name',
+                    name:'file_name',
+                    value:record.data["text"]
+                  },{
+                    xtype:'hidden',
+                    name:'node',
+                    value:record.data.id
+                  }],
+                  buttons: [{
+                    text: 'Save',
+                    handler: function(btn){
+                      var renameForm = btn.findParentByType('form');
+                      if(renameForm.getForm().isValid()){
+                        Ext.apply(self.extraPostData, renameForm.getValues());
+                        var msg = Ext.Msg.wait("Loading", "Renaming file...");
+                        Ext.Ajax.request({
+                          url: (self.initialConfig['controllerPath'] || '/erp_app/desktop/file_manager/base') + '/rename_file',
+                          method: 'POST',
+                          params:self.extraPostData,
+                          success: function(response) {
+                            msg.close();
+                            var responseObj =  Ext.decode(response.responseText);
+                            
+                            if(responseObj.success){
+                              store.load({
+                                node:record.parentNode,
+                                params:self.extraPostData
+                              });
+                              var window = renameForm.findParentByType('window');
+                              window.close()
+                            }
+                            else{
+                              Ext.Msg.alert("Error", responseObj.error);
+                            }
+                          },
+                          failure: function(response) {
+                            msg.close();
+                            var responseObj =  Ext.decode(response.responseText);
+                            msg.hide();
+                            Ext.Msg.alert('Status', responseObj.msg);
                           }
-                          else{
-                            Ext.Msg.alert("Error", responseObj.error);
-                          }
-                        },
-                        failure: function(response) {
-                          msg.close();
-                          var responseObj =  Ext.decode(response.responseText);
-                          msg.hide();
-                          Ext.Msg.alert('Status', responseObj.msg);
-                        }
-                      });
+                        });
+                      }
                     }
-                  }
-                },{
-                  text: 'Reset',
-                  handler: function(btn){
-                    var renameForm = btn.findParentByType('form');
-                    renameForm.getForm().reset();
-                  }
-                }]
-              };
+                  },{
+                    text: 'Reset',
+                    handler: function(btn){
+                      var renameForm = btn.findParentByType('form');
+                      renameForm.getForm().reset();
+                    }
+                  }]
+                };
 
-              var type = '';
-              if(record.data["leaf"]){
-                type = 'file'
+                var type = '';
+                if(record.data["leaf"]){
+                  type = 'file'
+                }
+                else{
+                  type = 'directory'
+                }
+
+                var renameWindow = Ext.create('Ext.window.Window', {
+                  title:'Rename ' + type,
+                  layout: 'fit',
+                  width:500,
+                  height:120,
+                  items:[
+                  renameForm
+                  ]
+                });
+
+                renameWindow.show();
               }
-              else{
-                type = 'directory'
-              }
-
-              var renameWindow = Ext.create('Ext.window.Window', {
-                title:'Rename ' + type,
-                layout: 'fit',
-                width:500,
-                height:120,
-                items:[
-                renameForm
-                ]
-              });
-
-              renameWindow.show();
             }
-          }
+          });
         }
-        ];
 
         // if root node don't show delete menu item
         if(record.data['id'] != 'root_node'){
@@ -423,17 +425,20 @@ Ext.define("Compass.ErpApp.Shared.FileManagerTree",{
                   currentUser.showInvalidAccess();
                   return false;
                 }
+                
+                // prevent double reload
+                if (!store.isLoading()){
+                  // bugfix (clearOnLoad) 
+                  while (delNode = self.selectedNode.childNodes[0]) {
+                    self.selectedNode.removeChild(delNode);
+                  }
 
-                // bugfix (clearOnLoad) 
-                while (delNode = self.selectedNode.childNodes[0]) {
-                  self.selectedNode.removeChild(delNode);
+                  store.load({
+                    node:self.selectedNode,
+                    params:self.extraPostData,
+                    callback: function(){ view.refresh(); }
+                  });
                 }
-
-                store.load({
-                  node:self.selectedNode,
-                  params:self.extraPostData,
-                  callback: function(){ view.refresh(); }
-                });
               }
             }
           });
@@ -471,84 +476,88 @@ Ext.define("Compass.ErpApp.Shared.FileManagerTree",{
           });
 
           /*new file*/
-          menuItems.push({
-            text:'New File',
-            iconCls:'icon-document',
-            listeners:{
-              scope:self,
-              'click':function(){
-                if(!self.fireEvent('allownewfile', this)){
-                  currentUser.showInvalidAccess();
-                  return false;
-                }
-                Ext.MessageBox.prompt('New File', 'Please enter new file name:', function(btn, text){
-                  if(btn == 'ok'){
-                    Ext.apply(self.extraPostData, {
-                      path:record.data.id,
-                      name:text
-                    });
-                    var msg = Ext.Msg.wait("Processing", "Creating new file...");
-                    Ext.Ajax.request({
-                      url: (self.initialConfig['controllerPath'] || '/erp_app/desktop/file_manager/base') + '/create_file',
-                      method: 'POST',
-                      params:self.extraPostData,
-                      success: function(response) {
-                        msg.hide();
-                        store.load({
-                          node:record,
-                          params:self.extraPostData
-                        });
-                      },
-                      failure: function() {
-                        Ext.Msg.alert('Status', 'Error creating file.');
-                        msg.hide();
-                      }
-                    });
+          if (!(self.initialConfig.showNewFileMenuItem === false)){
+            menuItems.push({
+              text:'New File',
+              iconCls:'icon-document',
+              listeners:{
+                scope:self,
+                'click':function(){
+                  if(!self.fireEvent('allownewfile', this)){
+                    currentUser.showInvalidAccess();
+                    return false;
                   }
-                });
+                  Ext.MessageBox.prompt('New File', 'Please enter new file name:', function(btn, text){
+                    if(btn == 'ok'){
+                      Ext.apply(self.extraPostData, {
+                        path:record.data.id,
+                        name:text
+                      });
+                      var msg = Ext.Msg.wait("Processing", "Creating new file...");
+                      Ext.Ajax.request({
+                        url: (self.initialConfig['controllerPath'] || '/erp_app/desktop/file_manager/base') + '/create_file',
+                        method: 'POST',
+                        params:self.extraPostData,
+                        success: function(response) {
+                          msg.hide();
+                          store.load({
+                            node:record,
+                            params:self.extraPostData
+                          });
+                        },
+                        failure: function() {
+                          Ext.Msg.alert('Status', 'Error creating file.');
+                          msg.hide();
+                        }
+                      });
+                    }
+                  });
+                }
               }
-            }
-          });
+            });
+          }
 
           /*new folder menu item*/
-          menuItems.push({
-            text:'New Folder',
-            iconCls:'icon-content',
-            listeners:{
-              scope:this,
-              'click':function(){
-                if(!self.fireEvent('allownewfolder', this)){
-                  currentUser.showInvalidAccess();
-                  return false;
-                }
-                Ext.MessageBox.prompt('New Folder', 'Please enter new folder name:', function(btn, text){
-                  if(btn == 'ok'){
-                    Ext.apply(self.extraPostData, {
-                      path:record.data.id,
-                      name:text
-                    });
-                    var msg = Ext.Msg.wait("Processing", "Creating new folder...");
-                    Ext.Ajax.request({
-                      url: (self.initialConfig['controllerPath'] || '/erp_app/desktop/file_manager/base') + '/create_folder',
-                      method: 'POST',
-                      params:self.extraPostData,
-                      success: function(response) {
-                        msg.hide();
-                        store.load({
-                          node:record,
-                          params:self.extraPostData
-                        });
-                      },
-                      failure: function() {
-                        Ext.Msg.alert('Status', 'Error creating folder.');
-                        msg.hide();
-                      }
-                    });
+          if (!(self.initialConfig.showNewFolderMenuItem === false)){
+            menuItems.push({
+              text:'New Folder',
+              iconCls:'icon-content',
+              listeners:{
+                scope:this,
+                'click':function(){
+                  if(!self.fireEvent('allownewfolder', this)){
+                    currentUser.showInvalidAccess();
+                    return false;
                   }
-                });
+                  Ext.MessageBox.prompt('New Folder', 'Please enter new folder name:', function(btn, text){
+                    if(btn == 'ok'){
+                      Ext.apply(self.extraPostData, {
+                        path:record.data.id,
+                        name:text
+                      });
+                      var msg = Ext.Msg.wait("Processing", "Creating new folder...");
+                      Ext.Ajax.request({
+                        url: (self.initialConfig['controllerPath'] || '/erp_app/desktop/file_manager/base') + '/create_folder',
+                        method: 'POST',
+                        params:self.extraPostData,
+                        success: function(response) {
+                          msg.hide();
+                          store.load({
+                            node:record,
+                            params:self.extraPostData
+                          });
+                        },
+                        failure: function() {
+                          Ext.Msg.alert('Status', 'Error creating folder.');
+                          msg.hide();
+                        }
+                      });
+                    }
+                  });
+                }
               }
-            }
-          });
+            });
+          }
         }
         else{
           //check if we are allowing to view contents

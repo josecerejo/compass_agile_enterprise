@@ -152,12 +152,20 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.WestRegion",{
 
   getDynamicData : function(record, title){
     var self = this;
+    dynamic_data = Ext.getCmp('centerRegionLayout_'+record.data.text);
+    if (dynamic_data){
+      this.centerRegion.workArea.setActiveTab(dynamic_data);
+      return;
+    }
+
     var centerRegionLayout = Ext.create("Ext.panel.Panel",{
+      id: 'centerRegionLayout_'+record.data.text,
       layout:'border',
       title: record.data.text + " Dynamic Data",
       closable:true,
       items:[
       {
+        id: record.data.text,
         xtype:'dynamic_forms_DynamicDataGridPanel',
         model_name:record.data.text,
         dataUrl: '/erp_forms/erp_app/desktop/dynamic_forms/data/index/'+record.data.text,
@@ -184,15 +192,19 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.WestRegion",{
               success: function(response) {
                 self.clearWindowStatus();
                 form_definition = Ext.decode(response.responseText);
-                var newRecordWindow = Ext.create("Ext.window.Window",{
-                  layout:'fit',
-                  title:'New Record',
-                  y: 100, // this fixes chrome and safari rendering the window at the bottom of the screen
-                  plain: true,
-                  buttonAlign:'center',
-                  items: form_definition
-                });
-                newRecordWindow.show();
+                if (form_definition.success == false){
+                    Ext.Msg.alert('Error', form_definition.error);
+                }else{
+                  var newRecordWindow = Ext.create("Ext.window.Window",{
+                    layout:'fit',
+                    title:'New Record',
+                    y: 100, // this fixes chrome and safari rendering the window at the bottom of the screen
+                    plain: true,
+                    buttonAlign:'center',
+                    items: form_definition
+                  });
+                  newRecordWindow.show();
+                }
               },
               failure: function(response) {
                 self.clearWindowStatus();
@@ -384,7 +396,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.WestRegion",{
     var layout = new Ext.Panel({
       layout: 'border',
       autoDestroy:true,
-      title:'Dynamic Forms',
+      title:'Dynamic Models & Forms',
       items: [this.sitesTree],
       tbar:{
         items:[
@@ -475,7 +487,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.WestRegion",{
       id: 'westregionPanel',
       region:'west',
       split:true,
-      width:200,
+      width:175,
       collapsible:false
     }, config);
 

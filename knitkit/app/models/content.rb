@@ -93,10 +93,6 @@ class Content < ActiveRecord::Base
     position
   end
 
-  def add_comment(options={})
-    self.comments.create(options)
-  end
-
   def get_comments(limit)
     self.comments.recent.limit(limit).all
   end
