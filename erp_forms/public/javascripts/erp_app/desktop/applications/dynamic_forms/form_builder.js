@@ -107,7 +107,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.FormBuilder",{
     },
 
     getFieldOptionsForXtype : function(xtype){
-        console.log(xtype);
+        //console.log(xtype);
         var common = [
             {
                 fieldLabel: 'Label',
@@ -223,7 +223,8 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.FormBuilder",{
               result = result.concat(minMaxLength);
               break;
             case 'numberfield':
-              result = result.concat(numberMinMaxValue);
+              result = result.concat(minMaxLength);
+              result = result.concat(numberMinMaxValue);              
               break;
             case 'datefield':
               result = result.concat(dateMinMaxValue);
@@ -295,14 +296,25 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.FormBuilder",{
                     prop_form.findField('updateWidth').setValue(item.width);
                     prop_form.findField('updateLabelWidth').setValue(item.labelWidth);
 
-                    if (item.xtype == 'datefield' || item.xtype == 'timefield' || item.xtype == 'numberfield'){
+                    if (item.xtype == 'datefield' || item.xtype == 'timefield'){
                         prop_form.findField('updateMinValue').setValue(item.minValue);
                         prop_form.findField('updateMaxValue').setValue(item.maxValue);
+                    } 
+
+                    if (item.xtype == 'numberfield'){
+                        if (item.minValue != Number.NEGATIVE_INFINITY){
+                            prop_form.findField('updateMinValue').setValue(item.minValue);
+                        }
+                        if (item.maxValue != Number.MAX_VALUE){
+                            prop_form.findField('updateMaxValue').setValue(item.maxValue);                        
+                        }
                     }
 
-                    if (item.xtype == 'textfield' || item.xtype == 'textarea'){
+                    if (item.xtype == 'textfield' || item.xtype == 'textarea' || item.xtype == 'numberfield'){
                         prop_form.findField('updateMinLength').setValue(item.minLength);
-                        prop_form.findField('updateMaxLength').setValue(item.maxLength);
+                        if (item.maxLength != Number.MAX_VALUE){
+                            prop_form.findField('updateMaxLength').setValue(item.maxLength);
+                        }
                     }
 
                     if (item.xtype == 'combobox' || item.xtype == 'combo'){
@@ -517,23 +529,31 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.FormBuilder",{
                                 listeners:{
                                   click: function(button){
                                     // get formPanel
-                                    var updateFieldForm = button.findParentByType('form');
-                                    if (updateFieldForm.getForm().isValid()){
+                                    var updateFieldForm = button.findParentByType('form').getForm();
+                                    if (updateFieldForm.isValid()){
                                         var formPanel = Ext.getCmp('formBuilder_'+config.title).query('#dynamicForm').first();
                                         var formBuilder = formPanel.findParentByType('dynamic_forms_FormBuilder');
-                                        var updateLabelField = updateFieldForm.getForm().findField('updateLabel');
-                                        var updateNameField = updateFieldForm.getForm().findField('updateName');
-                                        var updateWidth = updateFieldForm.getForm().findField('updateWidth');
-                                        var updateLabelWidth = updateFieldForm.getForm().findField('updateLabelWidth');
-                                        var updateReadOnly = updateFieldForm.getForm().findField('updateReadOnly');
-                                        var updateAllowBlank = updateFieldForm.getForm().findField('updateAllowBlank');
-                                        var updateDisplayInGrid = updateFieldForm.getForm().findField('updateDisplayInGrid');
+                                        var updateLabelField = updateFieldForm.findField('updateLabel');
+                                        var updateNameField = updateFieldForm.findField('updateName');
+                                        var updateWidth = updateFieldForm.findField('updateWidth');
+                                        var updateLabelWidth = updateFieldForm.findField('updateLabelWidth');
+                                        var updateReadOnly = updateFieldForm.findField('updateReadOnly');
+                                        var updateAllowBlank = updateFieldForm.findField('updateAllowBlank');
+                                        var updateDisplayInGrid = updateFieldForm.findField('updateDisplayInGrid');
+                                        var updateMinValue = updateFieldForm.findField('updateMinValue');
+                                        var updateMaxValue = updateFieldForm.findField('updateMaxValue');
+                                        var updateMinLength = updateFieldForm.findField('updateMinLength');
+                                        var updateMaxLength = updateFieldForm.findField('updateMaxLength');
+                                        var updateForceSelection = updateFieldForm.findField('updateForceSelection');
 
                                         // build field json
                                         var fieldDefinition = {
                                             xtype: formPanel.selected_field.xtype,
                                             name: updateNameField.getValue(),
-                                            fieldLabel: updateLabelField.getValue()
+                                            fieldLabel: updateLabelField.getValue(),
+                                            readOnly: updateReadOnly.getValue(),
+                                            allowBlank: updateAllowBlank.getValue(),
+                                            display_in_grid: updateDisplayInGrid.getValue()
                                         };
 
                                         if (updateLabelWidth.getValue()){
@@ -542,17 +562,32 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.FormBuilder",{
                                         if (updateWidth.getValue()){
                                             fieldDefinition.width = updateWidth.getValue();
                                         }
-                                        if (updateReadOnly.getValue()){
-                                            fieldDefinition.readOnly = updateReadOnly.getValue();
-                                        }
-                                        if (updateAllowBlank.getValue()){
-                                            fieldDefinition.allowBlank = updateAllowBlank.getValue();
-                                        }
-                                        if (updateDisplayInGrid.getValue()){
-                                            fieldDefinition.display_in_grid = updateDisplayInGrid.getValue();
+
+                                        if (formPanel.selected_field.xtype == 'datefield' || formPanel.selected_field.xtype == 'timefield' || formPanel.selected_field.xtype == 'numberfield'){
+                                            if(updateMinValue.getValue()){
+                                                fieldDefinition.minValue = updateMinValue.getValue();
+                                            }
+                                            if(updateMaxValue.getValue()){
+                                                fieldDefinition.maxValue = updateMaxValue.getValue();
+                                            }
+                                        } 
+
+                                        if (formPanel.selected_field.xtype == 'textfield' || formPanel.selected_field.xtype == 'textarea' || formPanel.selected_field.xtype == 'numberfield'){
+                                            if(updateMinLength.getValue()){
+                                                fieldDefinition.minLength = updateMinLength.getValue();
+                                            }
+                                            if(updateMaxLength.getValue()){
+                                                fieldDefinition.maxLength = updateMaxLength.getValue();
+                                            }
                                         }
 
-                                        console.log(fieldDefinition);
+                                        if (formPanel.selected_field.xtype == 'combobox' || formPanel.selected_field.xtype == 'combo'){
+                                            if(updateForceSelection.getValue()){
+                                                fieldDefinition.forceSelection = updateForceSelection.getValue();
+                                            }
+                                        }
+
+                                        //console.log(fieldDefinition);
 
                                         // use getIndexOfFieldByName and splice to replace field in definition to preserve field order
                                         var indexOfField = formBuilder.getIndexOfFieldByName(formPanel, formPanel.selected_field.name);
