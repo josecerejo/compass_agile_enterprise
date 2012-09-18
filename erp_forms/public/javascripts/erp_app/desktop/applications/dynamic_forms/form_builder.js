@@ -150,8 +150,22 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.FormBuilder",{
 
         var combobox = [
             {
+                fieldLabel: 'Options',
+                name: 'updateOptions',
+                xtype: 'textarea',
+                labelWidth: 50,
+                width: 235,
+                height: 200,
+                toolTip: "Add options with a comma separated list. Example: value,Description,option2,Option 2"
+            },
+            {
                 fieldLabel: 'Force Selection',
                 name: 'updateForceSelection',
+                xtype: 'checkbox'
+            },
+            {
+                fieldLabel: 'Multi Select',
+                name: 'updateMultiSelect',
                 xtype: 'checkbox'
             }
         ];
@@ -318,7 +332,9 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.FormBuilder",{
                     }
 
                     if (item.xtype == 'combobox' || item.xtype == 'combo'){
+                        prop_form.findField('updateOptions').setValue(item.store.proxy.reader.rawData);
                         prop_form.findField('updateForceSelection').setValue(item.forceSelection);
+                        prop_form.findField('updateMultiSelect').setValue(item.multiSelect);
                     }
                 }
             });
@@ -471,6 +487,11 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.FormBuilder",{
                                                 fieldLabel: field_name,
                                                 display_in_grid: true
                                             };
+
+                                            if (fieldDefinition.xtype == 'combobox'){
+                                                fieldDefinition.forceSelection = true;
+                                            }
+
                                             formBuilder.addFieldToForm(formPanel, fieldDefinition);
 
                                             addFieldWindow.close();
@@ -544,7 +565,9 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.FormBuilder",{
                                         var updateMaxValue = updateFieldForm.findField('updateMaxValue');
                                         var updateMinLength = updateFieldForm.findField('updateMinLength');
                                         var updateMaxLength = updateFieldForm.findField('updateMaxLength');
+                                        var updateOptions = updateFieldForm.findField('updateOptions');
                                         var updateForceSelection = updateFieldForm.findField('updateForceSelection');
+                                        var updateMultiSelect = updateFieldForm.findField('updateMultiSelect');
 
                                         // build field json
                                         var fieldDefinition = {
@@ -582,8 +605,26 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.FormBuilder",{
                                         }
 
                                         if (formPanel.selected_field.xtype == 'combobox' || formPanel.selected_field.xtype == 'combo'){
+                                            if(updateOptions.getValue()){
+                                                var options = updateOptions.getValue().split(',');
+                                                var optionsArray = [], subArray = [], i = 1;
+                                                Ext.each(options, function(option){
+                                                    subArray.push(option.trim());
+                                                    if (i%2==0){
+                                                        optionsArray.push(subArray);
+                                                        subArray = [];
+                                                    }
+                                                    i++;
+                                                });
+
+                                                fieldDefinition.store = optionsArray;
+                                            }
+
                                             if(updateForceSelection.getValue()){
                                                 fieldDefinition.forceSelection = updateForceSelection.getValue();
+                                            }
+                                            if(updateMultiSelect.getValue()){
+                                                fieldDefinition.multiSelect = updateMultiSelect.getValue();
                                             }
                                         }
 
