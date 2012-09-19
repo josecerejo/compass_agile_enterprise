@@ -160,6 +160,7 @@ class FileAsset < ActiveRecord::Base
         Rails.logger.error('Could not save width and height of image. Make sure Image Magick and the identify command are accessible')
       end
     end
+    return true
   end 
 
   def basename
