@@ -233,7 +233,33 @@ Ext.define("Compass.ErpApp.Shared.FileManagerTree",{
 
         self.selectedNode = record;
         var menuItems = [];
-
+		
+		menuItems.push({
+	      nodeType:'leaf',
+	      text:'View Details',
+	      iconCls:'icon-add',
+	      listeners:{
+	        scope:self,
+	        'click':function(){
+	          var details = 'Filename: '+record.data.text;
+		
+		      if(record.data.url){
+			    details += '<br /> URL: '+record.data.url 	
+			  }
+			  if(record.data.size){
+			    details += '<br /> Size: '+record.data.size + ' bytes' 	
+			  }
+			  if(record.data.width){
+			    details += '<br /> Width: '+record.data.width + ' px' 	
+			  }
+			  if(record.data.height){
+			    details += '<br /> Height: '+record.data.height + ' px' 	
+			  }
+			  Ext.Msg.alert('Details',details);
+	        }
+	      }
+	    });
+		
         // if root node don't show rename menu item
         if(record.data['id'] != 'root_node' && !(self.initialConfig.showRenameMenuItem === false)){
           menuItems.push({

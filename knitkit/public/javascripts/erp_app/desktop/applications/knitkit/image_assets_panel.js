@@ -23,23 +23,7 @@ Compass.ErpApp.Desktop.Applications.Knitkit.ImageAssetsPanel = function(module) 
     url:'/knitkit/erp_app/desktop/image_assets/shared/expand_directory',
     containerScroll: true,
     height:200,
-    additionalContextMenuItems:[{
-      nodeType:'leaf',
-      text:'View Details',
-      iconCls:'icon-add',
-      listeners:{
-        scope:self,
-        'click':function(){
-          var node = this.sharedImageAssetsTreePanel.selectedNode;
-          Ext.Msg.alert('Details', 'Filename: '+node.data.text +
-                                   '<br /> URL: '+node.data.url +
-                                   '<br /> Size: ' + node.data.size + ' bytes' +
-                                   '<br /> Width: ' + node.data.width + ' px' +
-                                   '<br /> Height: ' + node.data.height + ' px' 
-                        );
-        }
-      }
-    },
+    additionalContextMenuItems:[
     {
       nodeType:'leaf',
       text:'Insert image at cursor',
@@ -48,7 +32,12 @@ Compass.ErpApp.Desktop.Applications.Knitkit.ImageAssetsPanel = function(module) 
         scope:self,
         'click':function(){
           var node = this.sharedImageAssetsTreePanel.selectedNode;
-          self.module.centerRegion.insertHtmlIntoActiveCkEditorOrCodemirror('<img width="'+node.data.width+'" height="'+node.data.height+'" alt="'+node.data.text+'" src="/download/'+node.data.text+'?path='+node.data.downloadPath+'" />');
+          var imgTagHtml = '<img';
+		  if(!Ext.isEmpty(node.data.width) && !Ext.isEmpty(node.data.height)){
+		    imgTagHtml += (' width="'+node.data.width+'" height="'+node.data.height+'"');
+		  }
+		  imgTagHtml += ' alt="'+node.data.text+'" src="/download/'+node.data.text+'?path='+node.data.downloadPath+'" />'
+		  self.module.centerRegion.insertHtmlIntoActiveCkEditorOrCodemirror(imgTagHtml);
         }
       }
     }
@@ -117,23 +106,7 @@ Compass.ErpApp.Desktop.Applications.Knitkit.ImageAssetsPanel = function(module) 
     url:'/knitkit/erp_app/desktop/image_assets/website/expand_directory',
     containerScroll: true,
     height:200,
-    additionalContextMenuItems:[{
-      nodeType:'leaf',
-      text:'View Details',
-      iconCls:'icon-add',
-      listeners:{
-        scope:self,
-        'click':function(){
-          var node = this.websiteImageAssetsTreePanel.selectedNode;
-          Ext.Msg.alert('Details', 'Filename: '+node.data.text +
-                                   '<br /> URL: '+node.data.url +
-                                   '<br /> Size: ' + node.data.size + ' bytes' +
-                                   '<br /> Width: ' + node.data.width + ' px' +
-                                   '<br /> Height: ' + node.data.height + ' px' 
-                        );
-        }
-      }
-    },
+    additionalContextMenuItems:[
     {
       nodeType:'leaf',
       text:'Insert image at cursor',
@@ -142,7 +115,12 @@ Compass.ErpApp.Desktop.Applications.Knitkit.ImageAssetsPanel = function(module) 
         scope:self,
         'click':function(){
           var node = this.websiteImageAssetsTreePanel.selectedNode;
-          self.module.centerRegion.insertHtmlIntoActiveCkEditorOrCodemirror('<img width="'+node.data.width+'" height="'+node.data.height+'" alt="'+node.data.text+'" src="/download/'+node.data.text+'?path='+node.data.downloadPath+'" />');
+          var imgTagHtml = '<img';
+		  if(!Ext.isEmpty(node.data.width) && !Ext.isEmpty(node.data.height)){
+		    imgTagHtml += (' width="'+node.data.width+'" height="'+node.data.height+'"');
+		  }
+		  imgTagHtml += ' alt="'+node.data.text+'" src="/download/'+node.data.text+'?path='+node.data.downloadPath+'" />'
+		  self.module.centerRegion.insertHtmlIntoActiveCkEditorOrCodemirror(imgTagHtml);
         }
       }
     }
