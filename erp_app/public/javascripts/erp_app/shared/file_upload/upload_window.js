@@ -18,11 +18,9 @@ Ext.define("Compass.ErpApp.Shared.UploadWindow",{
       config = {};
     }
     var self = this;
-    
-    var query_string = '?authenticity_token=' + Compass.ErpApp.AuthentictyToken
-    Ext.iterate(config.extraPostData, function(key, value) {
-      query_string += '&'+key+'=' + value
-    });
+
+    config.extraPostData = Ext.applyIf({authenticity_token:Compass.ErpApp.AuthentictyToken}, config.extraPostData);
+    query_string = '?' + Ext.Object.toQueryString(config.extraPostData);
 
     if (typeof ErpApp.FileUpload.maxSize == 'number'){
       max_file_size = ErpApp.FileUpload.maxSize + 'mb'
@@ -30,7 +28,7 @@ Ext.define("Compass.ErpApp.Shared.UploadWindow",{
       max_file_size = ErpApp.FileUpload.maxSize
     }
 
-    this.plUploader = new Ext.create("Ext.ux.panel.UploadPanel",{
+    this.plUploader = Ext.create("Ext.ux.panel.UploadPanel",{
       region:'center',
       url: (config.standardUploadUrl || './file_manager/base/upload_file') + query_string,
       max_file_size: max_file_size,
@@ -38,6 +36,8 @@ Ext.define("Compass.ErpApp.Shared.UploadWindow",{
         scope:this,
         'uploadcomplete':function(pluploader, success, failed){
           if(success){
+
+
             this.fireEvent('fileuploaded', this);
             self.close();
           }else{
