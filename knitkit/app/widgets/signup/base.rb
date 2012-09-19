@@ -1,4 +1,3 @@
-
 module Widgets
   module Signup
     class Base < ErpApp::Widgets::Base
@@ -34,7 +33,6 @@ module Widgets
             @user.party = individual.party
             @user.save
             render :update => {:id => "#{@uuid}_result", :view => :success}
-            render :update => {:id => "#{@uuid}_result_form", :view => :success}
           else
             render :update => {:id => "#{@uuid}_result_form", :view => :error}
              

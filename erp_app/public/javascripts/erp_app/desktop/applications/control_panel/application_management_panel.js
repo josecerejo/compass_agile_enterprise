@@ -92,8 +92,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.ControlPanel.ApplicationManageme
         this.settingsCard = new Ext.Panel({
             layout:'card',
             region:'center',
-            split:true,
-            autoDestroy:true
+            border:false
         });
 
         config = Ext.apply({
