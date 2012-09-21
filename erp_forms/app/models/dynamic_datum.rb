@@ -24,7 +24,7 @@ class DynamicDatum < ActiveRecord::Base
     related_fields.each do |r|
       data.each do |k,v|
         if k == r[key]
-          data[k] = r[:extraParams]['model'].camelize.constantize.find(v).send(r[:displayField])
+          data[k] = r[:extraParams]['model'].camelize.constantize.find(v).send(r[:displayField]) rescue nil
         end
       end
     end

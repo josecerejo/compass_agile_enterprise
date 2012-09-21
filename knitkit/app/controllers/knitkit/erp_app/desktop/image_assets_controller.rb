@@ -28,7 +28,7 @@ module Knitkit
               data = request.raw_post
 
               begin
-                upload_path == 'root_node' ? @assets_model.add_file(data, File.join(@file_support.root,base_path,name)) : @assets_model.add_file(data, File.join(@file_support.root,upload_path,name))
+                upload_path == 'root_node' ? @assets_model.add_file(data, File.join(base_path,name)) : @assets_model.add_file(data, File.join(@file_support.root,upload_path,name))
                 result = {:success => true}
               rescue Exception=>ex
                 logger.error ex.message

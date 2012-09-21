@@ -99,13 +99,13 @@ Ext.define ('Ext.ux.panel.UploadPanel',
 		{
 			enableOverflow: true,
 			items: [
-				new Ext.Button ({
+				Ext.create('widget.button', {
 					text	: this.texts.addButtonText
 				,	itemId	: 'addButton'
 				,	iconCls	: config.addButtonCls || 'icon-add'
 				,	disabled: true
 				})
-			,	new Ext.Button ({
+			,	Ext.create('widget.button', {
 					text		: this.texts.uploadButtonText
 				,	handler		: this.onStart
 				,	scope		: this
@@ -113,7 +113,7 @@ Ext.define ('Ext.ux.panel.UploadPanel',
 				,	itemId		: 'upload'
 				,	iconCls		: config.uploadButtonCls || 'icon-upload'
 				})
-			,	new Ext.Button ({
+			,	Ext.create('widget.button', {
 					text		: this.texts.cancelButtonText
 				,	handler		: this.onCancel
 				,	scope		: this
@@ -121,20 +121,24 @@ Ext.define ('Ext.ux.panel.UploadPanel',
 				,	itemId		: 'cancel'
 				,	iconCls		: config.cancelButtonCls || 'icon-delete'
 				})
-			,	new Ext.SplitButton ({
+			,	Ext.create('widget.splitbutton', {
 					text		: this.texts.deleteButtonText
+                ,	iconCls		: config.cancelButtonCls || 'icon-delete'
 				,	handler		: this.onDeleteSelected
-				,	menu		: new Ext.menu.Menu({
+				,	menu		: Ext.create('widget.menu',{
 						items		: [{
 							text		: this.texts.deleteUploadedText
 						,	handler		: this.onDeleteUploaded
+                        ,	iconCls		: config.cancelButtonCls || 'icon-delete'
 						,	scope		: this
 						},'-',{
 							text		: this.texts.deleteAllText
+                        ,	iconCls		: config.cancelButtonCls || 'icon-delete'
 						,	handler		: this.onDeleteAll
 						,	scope		: this
 						},'-',{
 							text		: this.texts.deleteSelectedText
+                        ,	iconCls		: config.cancelButtonCls || 'icon-delete'
 						,	handler		: this.onDeleteSelected
 						,	scope		: this
 						}]
@@ -148,11 +152,11 @@ Ext.define ('Ext.ux.panel.UploadPanel',
 		};
 
 		// Progress-Bar (bottom)
-		this.progressBarSingle = new Ext.ProgressBar(
+		this.progressBarSingle = Ext.create('widget.progressbar',
 		{	flex: 1,
 			animate: true
 		});
-		this.progressBarAll = new Ext.ProgressBar(
+		this.progressBarAll = Ext.create('widget.progressbar',
 		{	flex: 2,
 			animate: true
 		});

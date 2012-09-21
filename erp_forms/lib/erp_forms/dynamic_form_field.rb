@@ -124,6 +124,10 @@ class DynamicFormField
     DynamicFormField.basic_field('textfield', options)
   end
 
+  def self.displayfield(options={})
+    DynamicFormField.basic_field('displayfield', options)
+  end
+
   def self.textarea(options={})
     options[:height] = 100 if options[:height].nil? 
     DynamicFormField.basic_field('textarea', options)

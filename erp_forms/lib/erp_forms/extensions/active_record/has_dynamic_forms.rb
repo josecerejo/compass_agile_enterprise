@@ -15,8 +15,8 @@ module ErpForms
         		  include HasDynamicForms::InstanceMethods  
 
       				def set_default(form_id)
-      				  DynamicForm.update_all({ :default => false }, conditions={ :model_name => self.class_name.to_s })
-      				  DynamicForm.update_all({ :default => true }, conditions={ :id => form_id })
+      				  DynamicForm.update_all({ :default => false }, { :model_name => self.name })
+      				  DynamicForm.update_all({ :default => true }, { :id => form_id })
       				end	
       		  end
 
@@ -59,8 +59,8 @@ module ErpForms
             end
 
             def set_default(internal_identifier)
-              DynamicForm.update_all('default=0', conditions="model_name=#{self.class.to_s}")
-              DynamicForm.update_all('default=1', conditions="model_name=#{self.class.to_s} AND internal_identifier=#{internal_identifier}")
+              DynamicForm.update_all({:default => false}, "model_name=#{self.class.to_s}")
+              DynamicForm.update_all({:default => true}, "model_name=#{self.class.to_s} AND internal_identifier=#{internal_identifier}")
             end
 
       		end	

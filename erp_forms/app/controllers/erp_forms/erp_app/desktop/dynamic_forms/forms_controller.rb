@@ -17,6 +17,7 @@ class ErpForms::ErpApp::Desktop::DynamicForms::FormsController < ErpForms::ErpAp
         :isModel => true, 
         :isForm => false, 
         :leaf => false,
+        :expanded => true,
         :children => []
       }
 
@@ -46,15 +47,16 @@ class ErpForms::ErpApp::Desktop::DynamicForms::FormsController < ErpForms::ErpAp
 
   # get a single form definition
   def get_definition
-    form = DynamicForm.get_form(params[:model_name], params[:internal_identifier])
+    dform = DynamicForm.find_by_id(params[:id]) if params[:id]
+    dform = DynamicForm.get_form(params[:model_name], params[:internal_identifier]) if dform.nil? and params[:model_name]
 
-    render :json => form.definition
+    render :json => dform.definition
   end
 
   # get a single form
   def get
     dform = DynamicForm.find_by_id(params[:id]) if params[:id]
-    dform = DynamicForm.get_form(params[:model_name]) if dform.nil? and params[:model_name]
+    dform = DynamicForm.get_form(params[:model_name], params[:internal_identifier]) if dform.nil? and params[:model_name]
 
     if dform.nil? 
       render :json => {:success => false, :error => "Don't know how to find form"} and return
@@ -78,17 +80,50 @@ class ErpForms::ErpApp::Desktop::DynamicForms::FormsController < ErpForms::ErpAp
 
   # delete dynamic form
   def delete
-    
+    dform = DynamicForm.find_by_id(params[:id])
+    unless dform.nil?
+      begin
+         dform.destroy 
+         render :json => {:success => true}
+      rescue Exception => e
+        render :json => {:success => false, :error => e.message} 
+      end         
+    else
+      render :json => {:success => false, :error => 'Could not find form.'}
+    end
   end
 
   # update dynamic form
   def update
-    
+    dform = DynamicForm.find_by_id(params[:id])
+    dform.description = params[:description] if params[:description]
+    dform.definition = params[:form_definition] if params[:form_definition]
+    dform.updated_by_id = current_user.id
+    if dform.save
+      render :json => {:success => true}
+    else
+      render :json => {:success => false}
+    end
   end
   
   # create dynamic form
   def create
-    
+    if params[:form_definition] and params[:description] and params[:model_name]
+      dform = DynamicForm.new
+      dform.description = params[:description]
+      dform.definition = params[:form_definition]
+      dform.model_name = params[:model_name]
+      dform.dynamic_form_model_id = DynamicFormModel.find_by_model_name(params[:model_name]).id
+      dform.default = false
+      dform.created_by_id = current_user.id
+      if dform.save
+        render :json => {:success => true, :id => dform.id}
+      else
+        render :json => {:success => false}
+      end    
+    else
+      render :json => {:success => false, :error => 'Insufficient info to create form.'}
+    end
   end
   
 end
