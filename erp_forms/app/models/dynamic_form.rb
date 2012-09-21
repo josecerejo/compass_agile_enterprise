@@ -2,6 +2,8 @@ class DynamicForm < ActiveRecord::Base
   belongs_to :dynamic_form_model
 
   validates_uniqueness_of :internal_identifier, :scope => :model_name
+
+  has_permalink :description, :internal_identifier, :update => false
   
   def self.class_exists?(class_name)
   	result = nil

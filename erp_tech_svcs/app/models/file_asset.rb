@@ -148,12 +148,17 @@ class FileAsset < ActiveRecord::Base
 
   def save_dimensions 
     if type == 'Image'
-      f = Paperclip::Geometry.from_file(self.path)
-      w = f.width.to_i
-      h = f.height.to_i
-      update_attribute(:width, w) if width != w
-      update_attribute(:height, h) if height != h
+      begin
+        f = Paperclip::Geometry.from_file(self.path)
+        w = f.width.to_i
+        h = f.height.to_i
+        update_attribute(:width, w) if width != w
+        update_attribute(:height, h) if height != h
+      rescue Exception=>ex
+        Rails.logger.error('Could not save width and height of image. Make sure Image Magick and the identify command are accessible')
+      end
     end
+    #return true
   end 
 
   def basename

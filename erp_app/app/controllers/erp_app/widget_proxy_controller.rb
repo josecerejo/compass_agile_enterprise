@@ -2,6 +2,7 @@ module ErpApp
 	class WidgetProxyController < ErpApp::ApplicationController
 	  
     attr_accessor :performed_redirect
+    before_filter :set_website
 
 	  def index
 		  @widget_name   = params[:widget_name]
@@ -16,7 +17,7 @@ module ErpApp
 
       result = widget_obj.process(@widget_action)
       result.nil? ? return : (render result)
-		end
+    end
     
 	end
 end
