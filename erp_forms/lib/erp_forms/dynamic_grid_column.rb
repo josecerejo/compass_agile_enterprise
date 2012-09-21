@@ -4,7 +4,7 @@ class DynamicGridColumn
     field_hash.symbolize_keys!
     header = field_hash[:fieldLabel]
     type = DynamicGridColumn.convert_xtype_to_column_type(field_hash[:xtype])
-    data_index = field_hash[:name]
+    data_index = (field_hash[:dataIndex] ? field_hash[:dataIndex] : field_hash[:name])
     
     if type == 'date'
       renderer = "Ext.util.Format.dateRenderer('m/d/Y')"
@@ -17,15 +17,17 @@ class DynamicGridColumn
         \"type\":\"#{type}\",
         \"dataIndex\":\"#{data_index}\""
    
-    if field_hash[:width]
-      col << ",\"width\":#{field_hash[:width]}"
-    end
+    
+    col << ",\"width\":#{field_hash[:width]}" if field_hash[:width]
+
+    sortable = field_hash[:sortable].nil? ? true : field_hash[:sortable]
+    col << ",\"sortable\":#{sortable}"
 
     col += ",
         \"renderer\": #{renderer}" if renderer != ''
 
     if options[:editor]
-      readonly = field_hash[:readonly].blank? ? false : field_hash[:readonly]
+      readonly = field_hash[:readOnly].blank? ? false : field_hash[:readOnly]
       col += ",
       {
         \"xtype\": \"#{field_hash[:xtype]}\",
