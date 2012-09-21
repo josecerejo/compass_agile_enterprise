@@ -16,6 +16,7 @@ Ext.define("Compass.ErpApp.Shared.DynamicEditableGrid",{
                     root: 'data',
                     messageProperty: 'message'
                 },
+                timeout: (config.timeout || 30000),
                 writer: {
                     type: 'json',
                     writeAllFields:true,
