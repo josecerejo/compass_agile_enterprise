@@ -77,7 +77,7 @@
 }
 
 /* this corrects a rendering issue */
-.x-panel, .x-panel-header, #main
+.x-panel, .x-panel-header, #main, #menu *, #site_content, #footer
 {
 	-moz-box-sizing:content-box;
 	-ms-box-sizing:content-box;
