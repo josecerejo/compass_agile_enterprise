@@ -448,6 +448,62 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.FormBuilder",{
                             }
                           }
                         }
+                      },
+                      { xtype: 'button', 
+                        text: 'Move Field Up',
+                        iconCls: 'icon-arrow-up-blue',
+                        listeners:{
+                          click: function(button){
+                            var formPanel = button.findParentByType('form');
+
+                            if (Compass.ErpApp.Utility.isBlank(formPanel.selected_field)){
+                                Ext.Msg.alert('Error', 'Please select a field to move.');
+                            }else{       
+                                var i = 0;
+                                // find selected field in definition to remove it
+                                Ext.each(formPanel.form_definition, function(field){
+                                    if (field.name == formPanel.selected_field.name){ idx = i; }
+                                    i++;
+                                });
+                                if (idx == 0){
+                                    Ext.Msg.alert('Error', 'Cannot move. Field is already at top.');
+                                }else{
+                                    formPanel.form_definition.splice(idx, 1); // remove field from definition
+                                    formPanel.form_definition.splice(idx-1, 0, formPanel.selected_field); // add field to definition
+                                    formPanel.findParentByType('dynamic_forms_FormBuilder').addFieldToForm(formPanel); // redraw form from definition
+                                    formPanel.getForm().findField(formPanel.selected_field.name).getEl().dom.click(); // highlight selected field
+                                }
+                            }
+                          }
+                        }
+                      },
+                      { xtype: 'button', 
+                        text: 'Move Field Down',
+                        iconCls: 'icon-arrow-down-blue',
+                        listeners:{
+                          click: function(button){
+                            var formPanel = button.findParentByType('form');
+
+                            if (Compass.ErpApp.Utility.isBlank(formPanel.selected_field)){
+                                Ext.Msg.alert('Error', 'Please select a field to move.');
+                            }else{       
+                                var i = 0;
+                                // find selected field in definition to remove it
+                                Ext.each(formPanel.form_definition, function(field){
+                                    if (field.name == formPanel.selected_field.name){ idx = i; }
+                                    i++;
+                                });
+                                if (idx == (formPanel.form_definition.length-1)){
+                                    Ext.Msg.alert('Error', 'Cannot move. Field is already at bottom.');
+                                }else{
+                                    formPanel.form_definition.splice(idx, 1); // remove field from definition
+                                    formPanel.form_definition.splice(idx+1, 0, formPanel.selected_field); // add field to definition
+                                    formPanel.findParentByType('dynamic_forms_FormBuilder').addFieldToForm(formPanel); // redraw form from definition
+                                    formPanel.getForm().findField(formPanel.selected_field.name).getEl().dom.click(); // highlight selected field
+                                }
+                            }
+                          }
+                        }
                       }
                     ],
                     listeners:{
@@ -564,7 +620,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.FormBuilder",{
                                     enableDrop: false
                                 }
                             },                            
-                            id: 'availableFields',                            
+                            itemId: 'field_types',                            
                             title: 'Field Types',
                             root: fieldTreeRootNode
                         },
