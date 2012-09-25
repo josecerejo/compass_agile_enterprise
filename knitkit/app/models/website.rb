@@ -110,11 +110,21 @@ class Website < ActiveRecord::Base
   end
 
   def auto_activate_publication?
-    self.configurations.first.get_item(:auto_active_publications).options.first.value == 'yes'
+    configuration_item = self.configurations.first.get_item(:auto_active_publications)
+    unless configuration_item.nil?
+      configuration_item.options.first.value == 'yes'
+    else
+      false
+    end
   end
 
   def publish_on_save?
-    self.configurations.first.get_item(:publish_on_save).options.first.value == 'yes'
+    configuration_item = self.configurations.first.get_item(:publish_on_save)
+    unless configuration_item.nil?
+      configuration_item.options.first.value == 'yes'
+    else
+      false
+    end
   end
 
   def role
