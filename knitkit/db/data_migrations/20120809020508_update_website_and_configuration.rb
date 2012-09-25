@@ -66,9 +66,10 @@ class UpdateWebsiteAndConfiguration < ActiveRecord::Migration
       website_config.save
     end
 
-    remove_column :websites, :email
-    remove_column :websites, :auto_activate_publication
-    remove_column :websites, :email_inquiries
+    remove_column(:websites, :email) if columns(:websites).collect {|c| c.name}.include?('email')
+
+    remove_column(:websites, :auto_activate_publication) if columns(:websites).collect {|c| c.name}.include?('auto_activate_publication')
+    remove_column(:websites, :email_inquiries) if columns(:websites).collect {|c| c.name}.include?('email_inquiries')
   end
 
   def self.down
