@@ -67,7 +67,7 @@ var fieldData = {
 var fieldTreeRootNode = fieldStore.setRootNode(fieldData);
 
 Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.FormBuilder",{
-    extend:"Ext.container.Container",
+    extend:"Ext.panel.Panel",
     alias:'widget.dynamic_forms_FormBuilder',
 
     height: 458,
@@ -382,8 +382,6 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.FormBuilder",{
                             }else{                                
                                 var url = '/erp_forms/erp_app/desktop/dynamic_forms/forms/update';
                             }
-
-                            var self = this;
                             formBuilder.setWindowStatus('Saving form ...');
                             Ext.Ajax.request({
                               url: url,
@@ -415,6 +413,39 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.FormBuilder",{
                                 Ext.Msg.alert('Error', 'Error saving form');
                               }
                             });
+                          }
+                        }
+                      },
+                      { xtype: 'button', 
+                        text: 'Remove Selected Field',
+                        iconCls: 'icon-delete',
+                        listeners:{
+                          click: function(button){
+                            var formPanel = button.findParentByType('form');
+
+                            if (Compass.ErpApp.Utility.isBlank(formPanel.selected_field)){
+                                Ext.Msg.alert('Error', 'Please select a field to remove.');
+                            }else{       
+                                Ext.MessageBox.confirm('Confirm', 'Are you sure you want to remove this field?',
+                                  function(btn){
+                                    if(btn == 'no'){
+                                        return false;
+                                    }
+                                    else if(btn == 'yes')
+                                    {
+                                        var i = 0;
+                                        // find selected field in definition to remove it
+                                        Ext.each(formPanel.form_definition, function(field){
+                                            if (field.name == formPanel.selected_field.name){ idx = i; }
+                                            i++;
+                                        });
+                                        formPanel.form_definition.splice(idx, 1); // remove field from definition
+                                        formPanel.selected_field = null; // deselect field that was removed
+                                        formPanel.findParentByType('dynamic_forms_FormBuilder').addFieldToForm(formPanel); // redraw form from definition
+                                    }
+                                  }
+                                );
+                            }
                           }
                         }
                       }
@@ -668,41 +699,8 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.FormBuilder",{
                         }
                     ]
                 }
-            ],
-            buttons: [{
-                text:'Submit',
-                listeners:{
-                    'click':function(button){
-                        var win = button.findParentByType('dynamic_forms_form_builer');
-                        var formPanel = win.findByType('form')[0];
-                        formPanel.getForm().submit({
-                            method:'POST',
-                            waitMsg:'Publishing...',
-                            success:function(form, action){
-                                var response =  Ext.util.JSON.decode(action.response.responseText);
-                                win.fireEvent('publish_success', win, response);
-                                win.close();
-                            },
-                            failure:function(form, action){
-                                var response =  Ext.util.JSON.decode(action.response.responseText);
-                                win.fireEvent('publish_failure', win, response);
-                                win.close();
-                            }
-                        });
-                    }
-                }
-            },
-            {
-                text: 'Cancel',
-                listeners:{
-                    'click':function(button){
-                        var win = button.findParentByType('dynamic_forms_form_builer');
-                        var form = win.findByType('form')[0];
-                        form.getForm().reset();
-                        win.close();
-                    }
-                }
-            }]
+            ]
+            
         }, config);
 
         this.callParent([config]);

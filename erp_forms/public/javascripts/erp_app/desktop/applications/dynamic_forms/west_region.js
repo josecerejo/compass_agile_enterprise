@@ -357,7 +357,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.WestRegion",{
       }
     });
 
-    this.formsTree = new Ext.tree.TreePanel({
+    this.formsTree = Ext.create("Ext.tree.Panel",{
       store:store,
       dataUrl: '/erp_forms/erp_app/desktop/dynamic_forms/forms/get_tree',
       region: 'center',
@@ -466,7 +466,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.WestRegion",{
       }
     });
 
-    var layout = new Ext.Panel({
+    var layout = Ext.create("Ext.panel.Panel",{
       layout: 'border',
       autoDestroy:true,
       title:'Dynamic Models & Forms',
@@ -484,7 +484,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.WestRegion",{
               height:100,
               plain: true,
               buttonAlign:'center',
-              items: new Ext.FormPanel({
+              items: Ext.create("Ext.form.Panel",{
                 labelWidth: 110,
                 frame:false,
                 bodyStyle:'padding:5px 5px 0',
