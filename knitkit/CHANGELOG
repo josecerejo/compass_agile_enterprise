@@ -29,5 +29,7 @@ Version 2.0.6 - 08-06-2012
 - Insert image/link at cursor now works with both codemirror and ckeditor
 - Replaced awesome uploader with plupload which improves stability and feature support (i.e. html5 drag & drop)
 - Added filter to Attach Articles to Section feature
-
 - Upgraded extjs to 4.1.1
+
+Version 2.0.7 - 09-26-2012
+- fixed js validation so that desktop will load in IE7
