@@ -460,16 +460,20 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.FormBuilder",{
                                 Ext.Msg.alert('Error', 'Please select a field to move.');
                             }else{       
                                 var i = 0;
+                                var field_in_definition = null;
                                 // find selected field in definition to remove it
                                 Ext.each(formPanel.form_definition, function(field){
-                                    if (field.name == formPanel.selected_field.name){ idx = i; }
+                                    if (field.name == formPanel.selected_field.name){ 
+                                        idx = i; 
+                                        field_in_definition = field;
+                                    }
                                     i++;
                                 });
                                 if (idx == 0){
                                     Ext.Msg.alert('Error', 'Cannot move. Field is already at top.');
                                 }else{
                                     formPanel.form_definition.splice(idx, 1); // remove field from definition
-                                    formPanel.form_definition.splice(idx-1, 0, formPanel.selected_field); // add field to definition
+                                    formPanel.form_definition.splice(idx-1, 0, field_in_definition); // add field to definition
                                     formPanel.findParentByType('dynamic_forms_FormBuilder').addFieldToForm(formPanel); // redraw form from definition
                                     formPanel.getForm().findField(formPanel.selected_field.name).getEl().dom.click(); // highlight selected field
                                 }
@@ -488,16 +492,22 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.FormBuilder",{
                                 Ext.Msg.alert('Error', 'Please select a field to move.');
                             }else{       
                                 var i = 0;
+                                var field_in_definition = null;
                                 // find selected field in definition to remove it
                                 Ext.each(formPanel.form_definition, function(field){
-                                    if (field.name == formPanel.selected_field.name){ idx = i; }
+                                    if (field.name == formPanel.selected_field.name){ 
+                                        idx = i; 
+                                        field_in_definition = field;
+                                    }
                                     i++;
                                 });
                                 if (idx == (formPanel.form_definition.length-1)){
                                     Ext.Msg.alert('Error', 'Cannot move. Field is already at bottom.');
                                 }else{
+                                    console.log(formPanel.selected_field);
+                                    console.log(formPanel.form_definition);
                                     formPanel.form_definition.splice(idx, 1); // remove field from definition
-                                    formPanel.form_definition.splice(idx+1, 0, formPanel.selected_field); // add field to definition
+                                    formPanel.form_definition.splice(idx+1, 0, field_in_definition); // add field to definition
                                     formPanel.findParentByType('dynamic_forms_FormBuilder').addFieldToForm(formPanel); // redraw form from definition
                                     formPanel.getForm().findField(formPanel.selected_field.name).getEl().dom.click(); // highlight selected field
                                 }
