@@ -265,6 +265,34 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.FormBuilder",{
         return -1;
     },
 
+    moveField : function(formPanel, direction){
+        if (Compass.ErpApp.Utility.isBlank(formPanel.selected_field)){
+            Ext.Msg.alert('Error', 'Please select a field to move.');
+        }else{       
+            var i = 0;
+            var field_in_definition = null;
+            // find selected field in definition to remove it
+            Ext.each(formPanel.form_definition, function(field){
+                if (field.name == formPanel.selected_field.name){ 
+                    idx = i; 
+                    field_in_definition = field;
+                }
+                i++;
+            });
+            if (direction == 'up' && idx == 0){
+                Ext.Msg.alert('Error', 'Cannot move. Field is already at top.');
+            }else if (direction == 'down' && idx == (formPanel.form_definition.length-1)){
+                Ext.Msg.alert('Error', 'Cannot move. Field is already at bottom.');
+            }else{
+                var new_index = (direction == 'up' ? idx-1 : idx+1)
+                formPanel.form_definition.splice(idx, 1); // remove field from definition
+                formPanel.form_definition.splice(new_index, 0, field_in_definition); // add field to definition
+                formPanel.findParentByType('dynamic_forms_FormBuilder').addFieldToForm(formPanel); // redraw form from definition
+                formPanel.getForm().findField(formPanel.selected_field.name).getEl().dom.click(); // highlight selected field
+            }
+        }
+    },
+
     addFieldToForm : function(formPanel, fieldDefinition){
         if (fieldDefinition){
             formPanel.form_definition.push(fieldDefinition);
@@ -455,29 +483,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.FormBuilder",{
                         listeners:{
                           click: function(button){
                             var formPanel = button.findParentByType('form');
-
-                            if (Compass.ErpApp.Utility.isBlank(formPanel.selected_field)){
-                                Ext.Msg.alert('Error', 'Please select a field to move.');
-                            }else{       
-                                var i = 0;
-                                var field_in_definition = null;
-                                // find selected field in definition to remove it
-                                Ext.each(formPanel.form_definition, function(field){
-                                    if (field.name == formPanel.selected_field.name){ 
-                                        idx = i; 
-                                        field_in_definition = field;
-                                    }
-                                    i++;
-                                });
-                                if (idx == 0){
-                                    Ext.Msg.alert('Error', 'Cannot move. Field is already at top.');
-                                }else{
-                                    formPanel.form_definition.splice(idx, 1); // remove field from definition
-                                    formPanel.form_definition.splice(idx-1, 0, field_in_definition); // add field to definition
-                                    formPanel.findParentByType('dynamic_forms_FormBuilder').addFieldToForm(formPanel); // redraw form from definition
-                                    formPanel.getForm().findField(formPanel.selected_field.name).getEl().dom.click(); // highlight selected field
-                                }
-                            }
+                            formPanel.findParentByType('dynamic_forms_FormBuilder').moveField(formPanel, 'up');
                           }
                         }
                       },
@@ -487,31 +493,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.FormBuilder",{
                         listeners:{
                           click: function(button){
                             var formPanel = button.findParentByType('form');
-
-                            if (Compass.ErpApp.Utility.isBlank(formPanel.selected_field)){
-                                Ext.Msg.alert('Error', 'Please select a field to move.');
-                            }else{       
-                                var i = 0;
-                                var field_in_definition = null;
-                                // find selected field in definition to remove it
-                                Ext.each(formPanel.form_definition, function(field){
-                                    if (field.name == formPanel.selected_field.name){ 
-                                        idx = i; 
-                                        field_in_definition = field;
-                                    }
-                                    i++;
-                                });
-                                if (idx == (formPanel.form_definition.length-1)){
-                                    Ext.Msg.alert('Error', 'Cannot move. Field is already at bottom.');
-                                }else{
-                                    console.log(formPanel.selected_field);
-                                    console.log(formPanel.form_definition);
-                                    formPanel.form_definition.splice(idx, 1); // remove field from definition
-                                    formPanel.form_definition.splice(idx+1, 0, field_in_definition); // add field to definition
-                                    formPanel.findParentByType('dynamic_forms_FormBuilder').addFieldToForm(formPanel); // redraw form from definition
-                                    formPanel.getForm().findField(formPanel.selected_field.name).getEl().dom.click(); // highlight selected field
-                                }
-                            }
+                            formPanel.findParentByType('dynamic_forms_FormBuilder').moveField(formPanel, 'down');
                           }
                         }
                       }
