@@ -1,2 +1,2 @@
-Version 3.0.8 - 09-26-2012
+Version 3.0.9 - 09-26-2012
 - fixed IE bug in MultiCellSelectionModel, replaced indexOf with Ext.Array.indexOf
