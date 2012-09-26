@@ -30,7 +30,7 @@ Ext.onReady(function() {
         for ( var e in CKEDITOR.tools.extend( {}, dtd.$list, dtd.$listItem, dtd.$tableContent ) )
         {
             ev.editor.dataProcessor.writer.setRules( e, {           
-                indent : true,
+                indent : true
             });
         }
      
