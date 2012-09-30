@@ -445,6 +445,60 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.FormBuilder",{
                         }
                       },
                       { xtype: 'button', 
+                        text: 'View Definition',
+                        iconCls: 'icon-document',
+                        listeners:{
+                          click: function(button){
+                            var formPanel = button.findParentByType('form');
+                            var form_definition = Ext.encode(formPanel.form_definition).replace(/,/gi,', ').replace(/\},/gi,'},<br />');
+                            // popup window panel with form definition
+                            //Ext.MessageBox.minWidth = 600;
+                            //var alertBox = Ext.create("Ext.MessageBox",{ width: 600 });
+                            //Ext.MessageBox.alert('Form Definition', );
+
+                            var defWindow = Ext.create("Ext.window.Window",{
+                                      layout:'fit',
+                                      title:'Form Definition',
+                                      //plain: true,
+                                      buttonAlign:'center',
+                                      items: Ext.create("Ext.panel.Panel",{                                        
+                                        bodyStyle:'padding:5px 5px 0',
+                                        html: form_definition
+                                      }),
+                                      buttons: [{
+                                        text:'Close',
+                                        listeners:{
+                                          'click':function(button){
+                                            defWindow.close();
+                                          }
+                                        }
+                                    }]
+                                });
+                            defWindow.show();
+                          }
+                        }
+                      },                      
+                      { xtype: 'button', 
+                        text: 'Move Field Up',
+                        iconCls: 'icon-arrow-up-blue',
+                        listeners:{
+                          click: function(button){
+                            var formPanel = button.findParentByType('form');
+                            formPanel.findParentByType('dynamic_forms_FormBuilder').moveField(formPanel, 'up');
+                          }
+                        }
+                      },
+                      { xtype: 'button', 
+                        text: 'Move Field Down',
+                        iconCls: 'icon-arrow-down-blue',
+                        listeners:{
+                          click: function(button){
+                            var formPanel = button.findParentByType('form');
+                            formPanel.findParentByType('dynamic_forms_FormBuilder').moveField(formPanel, 'down');
+                          }
+                        }
+                      },
+                      { xtype: 'button', 
                         text: 'Remove Selected Field',
                         iconCls: 'icon-delete',
                         listeners:{
@@ -476,27 +530,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.FormBuilder",{
                             }
                           }
                         }
-                      },
-                      { xtype: 'button', 
-                        text: 'Move Field Up',
-                        iconCls: 'icon-arrow-up-blue',
-                        listeners:{
-                          click: function(button){
-                            var formPanel = button.findParentByType('form');
-                            formPanel.findParentByType('dynamic_forms_FormBuilder').moveField(formPanel, 'up');
-                          }
-                        }
-                      },
-                      { xtype: 'button', 
-                        text: 'Move Field Down',
-                        iconCls: 'icon-arrow-down-blue',
-                        listeners:{
-                          click: function(button){
-                            var formPanel = button.findParentByType('form');
-                            formPanel.findParentByType('dynamic_forms_FormBuilder').moveField(formPanel, 'down');
-                          }
-                        }
-                      }
+                      }                     
                     ],
                     listeners:{
                         render:function(formPanel){
