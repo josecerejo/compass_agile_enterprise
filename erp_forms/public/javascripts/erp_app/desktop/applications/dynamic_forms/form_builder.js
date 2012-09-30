@@ -597,7 +597,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.FormBuilder",{
                                             var fieldDefinition = {
                                                 xtype: droppedField.get('field_xtype'),
                                                 name: field_name,
-                                                fieldLabel: field_name,
+                                                fieldLabel: field_name.titleize(),
                                                 display_in_grid: true
                                             };
 
