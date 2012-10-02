@@ -120,17 +120,27 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.FormBuilder",{
         //console.log(xtype);
         var common = [
             {
+                fieldLabel: 'Name',
+                name: 'updateName',
+                xtype: 'textfield',
+                allowBlank: false
+            },
+            {
                 fieldLabel: 'Label',
                 name: 'updateLabel',
                 xtype: 'textfield',
                 allowBlank: false
             },
             {
-                fieldLabel: 'Name',
-                name: 'updateName',
-                xtype: 'textfield',
-                allowBlank: false
+                fieldLabel: 'Default Value',
+                name: 'updateValue',
+                xtype: 'textfield'
             },
+            // {
+            //     fieldLabel: 'Empty Text',
+            //     name: 'updateEmptyText',
+            //     xtype: 'textfield'
+            // },
             {
                 fieldLabel: 'Allow Blank',
                 name: 'updateAllowBlank',
@@ -285,6 +295,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.FormBuilder",{
                 allowBlank: true,
                 hidden: true,
                 disabled: true
+                //emptyText: 'customFunction(v)'
             }
         ];
 
@@ -441,6 +452,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.FormBuilder",{
                     // common
                     prop_form.findField('updateName').setValue(item.name);
                     prop_form.findField('updateLabel').setValue(item.fieldLabel);
+                    prop_form.findField('updateValue').setValue(item.value);
                     prop_form.findField('updateAllowBlank').setValue(item.allowBlank);
                     prop_form.findField('updateDisplayInGrid').setValue(item.display_in_grid);
                     prop_form.findField('updateReadOnly').setValue(item.readOnly);
@@ -798,6 +810,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.FormBuilder",{
                                         var formBuilder = formPanel.findParentByType('dynamic_forms_FormBuilder');
                                         var updateLabel = updateFieldForm.findField('updateLabel').getValue();
                                         var updateName = updateFieldForm.findField('updateName').getValue();
+                                        var updateValue = updateFieldForm.findField('updateValue').getValue();
                                         var updateWidth = updateFieldForm.findField('updateWidth').getValue();
                                         var updateLabelWidth = updateFieldForm.findField('updateLabelWidth').getValue();
                                         var updateReadOnly = updateFieldForm.findField('updateReadOnly').getValue();
@@ -816,13 +829,10 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.FormBuilder",{
                                             display_in_grid: updateDisplayInGrid
                                         };
 
-                                        if (updateLabelWidth){
-                                            fieldDefinition.labelWidth = updateLabelWidth;
-                                        }
-                                        if (updateWidth){
-                                            fieldDefinition.width = updateWidth;
-                                        }
-
+                                        if (!Ext.isEmpty(updateValue)) fieldDefinition.value = updateValue;                                        
+                                        if (!Ext.isEmpty(updateLabelWidth)) fieldDefinition.labelWidth = updateLabelWidth;                                        
+                                        if (!Ext.isEmpty(updateWidth)) fieldDefinition.width = updateWidth;
+                                        
                                         if (selected_field.xtype != 'combobox' && selected_field.xtype != 'combo'){
                                             switch(updateFieldForm.findField('updateValidationType').getValue()){
                                                 case 'regex':
@@ -838,23 +848,15 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.FormBuilder",{
                                         if (selected_field.xtype == 'datefield' || selected_field.xtype == 'timefield' || selected_field.xtype == 'numberfield'){
                                             var updateMinValue = updateFieldForm.findField('updateMinValue').getValue();
                                             var updateMaxValue = updateFieldForm.findField('updateMaxValue').getValue();
-                                            if(!Ext.isEmpty(updateMinValue)){
-                                                fieldDefinition.minValue = updateMinValue;
-                                            }
-                                            if(!Ext.isEmpty(updateMaxValue)){
-                                                fieldDefinition.maxValue = updateMaxValue;
-                                            }
+                                            if(!Ext.isEmpty(updateMinValue)) fieldDefinition.minValue = updateMinValue;                                            
+                                            if(!Ext.isEmpty(updateMaxValue)) fieldDefinition.maxValue = updateMaxValue;                                            
                                         } 
 
                                         if (selected_field.xtype == 'textfield' || selected_field.xtype == 'textarea' || selected_field.xtype == 'numberfield'){
                                             var updateMinLength = updateFieldForm.findField('updateMinLength').getValue();
                                             var updateMaxLength = updateFieldForm.findField('updateMaxLength').getValue();
-                                            if(!Ext.isEmpty(updateMinLength)){
-                                                fieldDefinition.minLength = updateMinLength;
-                                            }
-                                            if(!Ext.isEmpty(updateMaxLength)){
-                                                fieldDefinition.maxLength = updateMaxLength;
-                                            }
+                                            if(!Ext.isEmpty(updateMinLength)) fieldDefinition.minLength = updateMinLength;                                            
+                                            if(!Ext.isEmpty(updateMaxLength)) fieldDefinition.maxLength = updateMaxLength;                                            
                                         }
 
                                         if (selected_field.xtype == 'combobox' || selected_field.xtype == 'combo'){
@@ -926,3 +928,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.FormBuilder",{
     
 });
 
+// potential fix for clearing emptyText in FF and Chrome
+Ext.onReady( function(){
+    if ( Ext.isGecko || Ext.isWebkit ) Ext.supports.Placeholder = false;
+});
