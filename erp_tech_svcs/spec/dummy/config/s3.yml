@@ -1,0 +1,23 @@
+common: &common
+  access_key_id: AKIAIK3DDLVVJUWSHVPQ
+  secret_access_key: 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
+    
+production:
+  <<: *common
+  bucket: terralab
+
+development:
+  <<: *common
+  bucket: terralabdev
+
+test:
+  <<: *common
+  bucket: terralabtest
+
+spec:
+  <<: *common
+  bucket: terralabtest
+
+adam:
+  <<: *common
+  bucket: terralab
