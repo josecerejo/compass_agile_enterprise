@@ -1,0 +1,4 @@
+Version 3.0.9 - 09-26-2012
+- fixed IE bug in MultiCellSelectionModel, replaced indexOf with Ext.Array.indexOf
+Version 3.0.10 - 09-26-2012
+- fixed js validation so that desktop will load in IE7
