@@ -1,4 +1,4 @@
-Version 2.0.6 - 08-06-2012
+Version 2.0.6 - 09-24-2012
 - Drop down Styles in article editor are now defined in Themes -> Websites -> Holiday Inn Club -> Themes -> hicv[hicv] -> stylesheets -> ckeditor_customer.js
 - Drop down Font in article editor has been set to Arial.
 - Edit article link now finds and activates existing edit window or creates a new edit window. Articles tab and section articles grid panel.
@@ -29,3 +29,5 @@ Version 2.0.6 - 08-06-2012
 - Insert image/link at cursor now works with both codemirror and ckeditor
 - Replaced awesome uploader with plupload which improves stability and feature support (i.e. html5 drag & drop)
 - Added filter to Attach Articles to Section feature
+Version 2.0.7 - 09-26-2012
+- fixed js validation so that desktop will load in IE7
