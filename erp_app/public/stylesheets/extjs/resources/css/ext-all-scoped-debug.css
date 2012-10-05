@@ -5,18 +5,15 @@ Copyright (c) 2011-2012 Sencha Inc
 
 Contact:  http://www.sencha.com/contact
 
-GNU General Public License Usage
-This file may be used under the terms of the GNU General Public License version 3.0 as
-published by the Free Software Foundation and appearing in the file LICENSE included in the
-packaging of this file.
-
-Please review the following information to ensure the GNU General Public License version 3.0
-requirements will be met: http://www.gnu.org/copyleft/gpl.html.
+Commercial Usage
+Licensees holding valid commercial licenses may use this file in accordance with the Commercial
+Software License Agreement provided with the Software or, alternatively, in accordance with the
+terms contained in a written agreement between you and Sencha.
 
 If you are unsure which license is appropriate for your use, please contact the sales department
 at http://www.sencha.com/contact.
 
-Build date: 2012-07-04 21:11:01 (65ff594cd80b9bad45df640c22cc0adb52c95a7b)
+Build date: 2012-09-07 16:54:29 (4861809b76e43ce65f9f8bfed1f258813adb26de)
 */
 /**
  * @class Global_CSS
@@ -327,19 +324,20 @@ Build date: 2012-07-04 21:11:01 (65ff594cd80b9bad45df640c22cc0adb52c95a7b)
 .x-hide-visibility {
   visibility: hidden !important; }
 
-/* line 56, ../themes/stylesheets/ext4/default/core/_core.scss */
+/* line 57, ../themes/stylesheets/ext4/default/core/_core.scss */
 .x-item-disabled .x-form-item-label,
 .x-item-disabled .x-form-field,
+.x-item-disabled .x-form-display-field,
 .x-item-disabled .x-form-cb-label,
 .x-item-disabled .x-form-trigger {
   filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=30);
   opacity: 0.3; }
 
-/* line 60, ../themes/stylesheets/ext4/default/core/_core.scss */
+/* line 61, ../themes/stylesheets/ext4/default/core/_core.scss */
 .x-ie6 .x-item-disabled {
   filter: none; }
 
-/* line 65, ../themes/stylesheets/ext4/default/core/_core.scss */
+/* line 66, ../themes/stylesheets/ext4/default/core/_core.scss */
 .x-hidden,
 .x-hide-offsets {
   display: block !important;
@@ -348,31 +346,25 @@ Build date: 2012-07-04 21:11:01 (65ff594cd80b9bad45df640c22cc0adb52c95a7b)
   left: -10000px !important;
   top: -10000px !important; }
 
-/* line 75, ../themes/stylesheets/ext4/default/core/_core.scss */
+/* line 76, ../themes/stylesheets/ext4/default/core/_core.scss */
 .x-hide-nosize {
   height: 0!important;
   width: 0!important; }
 
-/* line 80, ../themes/stylesheets/ext4/default/core/_core.scss */
+/* line 81, ../themes/stylesheets/ext4/default/core/_core.scss */
 .x-masked-relative {
   position: relative; }
 
 /* line 86, ../themes/stylesheets/ext4/default/core/_core.scss */
-.x-ie6 .x-masked select,
-.x-ie6.x-body-masked select {
-  visibility: hidden !important; }
-
-/* line 92, ../themes/stylesheets/ext4/default/core/_core.scss */
 .x-css-shadow {
   position: absolute;
-  -moz-border-radius: 5px 5px;
   -webkit-border-radius: 5px 5px;
-  -o-border-radius: 5px 5px;
+  -moz-border-radius: 5px 5px;
   -ms-border-radius: 5px 5px;
-  -khtml-border-radius: 5px 5px;
+  -o-border-radius: 5px 5px;
   border-radius: 5px 5px; }
 
-/* line 98, ../themes/stylesheets/ext4/default/core/_core.scss */
+/* line 92, ../themes/stylesheets/ext4/default/core/_core.scss */
 .x-ie-shadow {
   background-color: #777;
   display: none;
@@ -380,86 +372,86 @@ Build date: 2012-07-04 21:11:01 (65ff594cd80b9bad45df640c22cc0adb52c95a7b)
   overflow: hidden;
   zoom: 1; }
 
-/* line 107, ../themes/stylesheets/ext4/default/core/_core.scss */
+/* line 101, ../themes/stylesheets/ext4/default/core/_core.scss */
 .x-box-tl {
   background: transparent no-repeat 0 0;
   zoom: 1; }
 
-/* line 112, ../themes/stylesheets/ext4/default/core/_core.scss */
+/* line 106, ../themes/stylesheets/ext4/default/core/_core.scss */
 .x-box-tc {
   height: 8px;
   background: transparent repeat-x 0 0;
   overflow: hidden; }
 
-/* line 118, ../themes/stylesheets/ext4/default/core/_core.scss */
+/* line 112, ../themes/stylesheets/ext4/default/core/_core.scss */
 .x-box-tr {
   background: transparent no-repeat right -8px; }
 
-/* line 122, ../themes/stylesheets/ext4/default/core/_core.scss */
+/* line 116, ../themes/stylesheets/ext4/default/core/_core.scss */
 .x-box-ml {
   background: transparent repeat-y 0;
   padding-left: 4px;
   overflow: hidden;
   zoom: 1; }
 
-/* line 129, ../themes/stylesheets/ext4/default/core/_core.scss */
+/* line 123, ../themes/stylesheets/ext4/default/core/_core.scss */
 .x-box-mc {
   background: repeat-x 0 -16px;
   padding: 4px 10px; }
 
-/* line 134, ../themes/stylesheets/ext4/default/core/_core.scss */
+/* line 128, ../themes/stylesheets/ext4/default/core/_core.scss */
 .x-box-mc h3 {
   margin: 0 0 4px 0;
   zoom: 1; }
 
-/* line 139, ../themes/stylesheets/ext4/default/core/_core.scss */
+/* line 133, ../themes/stylesheets/ext4/default/core/_core.scss */
 .x-box-mr {
   background: transparent repeat-y right;
   padding-right: 4px;
   overflow: hidden; }
 
-/* line 145, ../themes/stylesheets/ext4/default/core/_core.scss */
+/* line 139, ../themes/stylesheets/ext4/default/core/_core.scss */
 .x-box-bl {
   background: transparent no-repeat 0 -16px;
   zoom: 1; }
 
-/* line 150, ../themes/stylesheets/ext4/default/core/_core.scss */
+/* line 144, ../themes/stylesheets/ext4/default/core/_core.scss */
 .x-box-bc {
   background: transparent repeat-x 0 -8px;
   height: 8px;
   overflow: hidden; }
 
-/* line 156, ../themes/stylesheets/ext4/default/core/_core.scss */
+/* line 150, ../themes/stylesheets/ext4/default/core/_core.scss */
 .x-box-br {
   background: transparent no-repeat right -24px; }
 
-/* line 160, ../themes/stylesheets/ext4/default/core/_core.scss */
+/* line 154, ../themes/stylesheets/ext4/default/core/_core.scss */
 .x-box-tl, .x-box-bl {
   padding-left: 8px;
   overflow: hidden; }
 
-/* line 165, ../themes/stylesheets/ext4/default/core/_core.scss */
+/* line 159, ../themes/stylesheets/ext4/default/core/_core.scss */
 .x-box-tr, .x-box-br {
   padding-right: 8px;
   overflow: hidden; }
 
-/* line 170, ../themes/stylesheets/ext4/default/core/_core.scss */
+/* line 164, ../themes/stylesheets/ext4/default/core/_core.scss */
 .x-box-tl {
   background-image: url('../../resources/themes/images/default/box/corners.gif'); }
 
-/* line 174, ../themes/stylesheets/ext4/default/core/_core.scss */
+/* line 168, ../themes/stylesheets/ext4/default/core/_core.scss */
 .x-box-tc {
   background-image: url('../../resources/themes/images/default/box/tb.gif'); }
 
-/* line 178, ../themes/stylesheets/ext4/default/core/_core.scss */
+/* line 172, ../themes/stylesheets/ext4/default/core/_core.scss */
 .x-box-tr {
   background-image: url('../../resources/themes/images/default/box/corners.gif'); }
 
-/* line 182, ../themes/stylesheets/ext4/default/core/_core.scss */
+/* line 176, ../themes/stylesheets/ext4/default/core/_core.scss */
 .x-box-ml {
   background-image: url('../../resources/themes/images/default/box/l.gif'); }
 
-/* line 186, ../themes/stylesheets/ext4/default/core/_core.scss */
+/* line 180, ../themes/stylesheets/ext4/default/core/_core.scss */
 .x-box-mc {
   background-color: #eee;
   background-image: url('../../resources/themes/images/default/box/tb.gif');
@@ -467,61 +459,61 @@ Build date: 2012-07-04 21:11:01 (65ff594cd80b9bad45df640c22cc0adb52c95a7b)
   color: #393939;
   font-size: 15px; }
 
-/* line 194, ../themes/stylesheets/ext4/default/core/_core.scss */
+/* line 188, ../themes/stylesheets/ext4/default/core/_core.scss */
 .x-box-mc h3 {
   font-size: 18px;
   font-weight: bold; }
 
-/* line 199, ../themes/stylesheets/ext4/default/core/_core.scss */
+/* line 193, ../themes/stylesheets/ext4/default/core/_core.scss */
 .x-box-mr {
   background-image: url('../../resources/themes/images/default/box/r.gif'); }
 
-/* line 203, ../themes/stylesheets/ext4/default/core/_core.scss */
+/* line 197, ../themes/stylesheets/ext4/default/core/_core.scss */
 .x-box-bl {
   background-image: url('../../resources/themes/images/default/box/corners.gif'); }
 
-/* line 207, ../themes/stylesheets/ext4/default/core/_core.scss */
+/* line 201, ../themes/stylesheets/ext4/default/core/_core.scss */
 .x-box-bc {
   background-image: url('../../resources/themes/images/default/box/tb.gif'); }
 
-/* line 211, ../themes/stylesheets/ext4/default/core/_core.scss */
+/* line 205, ../themes/stylesheets/ext4/default/core/_core.scss */
 .x-box-br {
   background-image: url('../../resources/themes/images/default/box/corners.gif'); }
 
-/* line 215, ../themes/stylesheets/ext4/default/core/_core.scss */
+/* line 209, ../themes/stylesheets/ext4/default/core/_core.scss */
 .x-box-blue .x-box-bl, .x-box-blue .x-box-br, .x-box-blue .x-box-tl, .x-box-blue .x-box-tr {
   background-image: url('../../resources/themes/images/default/box/corners-blue.gif'); }
 
-/* line 219, ../themes/stylesheets/ext4/default/core/_core.scss */
+/* line 213, ../themes/stylesheets/ext4/default/core/_core.scss */
 .x-box-blue .x-box-bc, .x-box-blue .x-box-mc, .x-box-blue .x-box-tc {
   background-image: url('../../resources/themes/images/default/box/tb-blue.gif'); }
 
-/* line 223, ../themes/stylesheets/ext4/default/core/_core.scss */
+/* line 217, ../themes/stylesheets/ext4/default/core/_core.scss */
 .x-box-blue .x-box-mc {
   background-color: #c3daf9; }
 
-/* line 227, ../themes/stylesheets/ext4/default/core/_core.scss */
+/* line 221, ../themes/stylesheets/ext4/default/core/_core.scss */
 .x-box-blue .x-box-mc h3 {
   color: #17385b; }
 
-/* line 231, ../themes/stylesheets/ext4/default/core/_core.scss */
+/* line 225, ../themes/stylesheets/ext4/default/core/_core.scss */
 .x-box-blue .x-box-ml {
   background-image: url('../../resources/themes/images/default/box/l-blue.gif'); }
 
-/* line 235, ../themes/stylesheets/ext4/default/core/_core.scss */
+/* line 229, ../themes/stylesheets/ext4/default/core/_core.scss */
 .x-box-blue .x-box-mr {
   background-image: url('../../resources/themes/images/default/box/r-blue.gif'); }
 
-/* line 239, ../themes/stylesheets/ext4/default/core/_core.scss */
+/* line 233, ../themes/stylesheets/ext4/default/core/_core.scss */
 .x-container {
   zoom: 1; }
-  /* line 244, ../themes/stylesheets/ext4/default/core/_core.scss */
+  /* line 238, ../themes/stylesheets/ext4/default/core/_core.scss */
   .x-container:before {
     content: "";
     clear: both;
     display: table; }
 
-/* line 254, ../themes/stylesheets/ext4/default/core/_core.scss */
+/* line 248, ../themes/stylesheets/ext4/default/core/_core.scss */
 table.x-container:before,
 tbody.x-container:before,
 tr.x-container:before {
@@ -695,7 +687,16 @@ tr.x-container:before {
   zoom: 1;
   background: #cccccc; }
 
-/* line 19, ../themes/stylesheets/ext4/default/widgets/_loadmask.scss */
+/* line 20, ../themes/stylesheets/ext4/default/widgets/_loadmask.scss */
+.x-mask-shim {
+  z-index: 100;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%; }
+
+/* line 30, ../themes/stylesheets/ext4/default/widgets/_loadmask.scss */
 .x-mask-msg {
   z-index: 20001;
   position: absolute;
@@ -706,7 +707,7 @@ tr.x-container:before {
   border-color: #99bce8;
   background-image: none;
   background-color: #dfe9f6; }
-  /* line 38, ../themes/stylesheets/ext4/default/widgets/_loadmask.scss */
+  /* line 49, ../themes/stylesheets/ext4/default/widgets/_loadmask.scss */
   .x-mask-msg div {
     padding: 5px 10px 5px 25px;
     background-image: url('../../resources/themes/images/default/grid/loading.gif');
@@ -1000,11 +1001,10 @@ tr.x-container:before {
     border-color: #d1d1d1; }
   /* line 69, ../themes/stylesheets/ext4/default/mixins/_frame.scss */
   .x-reset .x-btn-default-small {
-    -moz-border-radius: 3px;
     -webkit-border-radius: 3px;
-    -o-border-radius: 3px;
+    -moz-border-radius: 3px;
     -ms-border-radius: 3px;
-    -khtml-border-radius: 3px;
+    -o-border-radius: 3px;
     border-radius: 3px;
     padding: 2px 2px 2px 2px;
     border-width: 1px;
@@ -1025,11 +1025,10 @@ tr.x-container:before {
   .x-reset .x-nbr .x-btn-default-small {
     padding: 0 !important;
     border-width: 0 !important;
-    -moz-border-radius: 0px;
     -webkit-border-radius: 0px;
-    -o-border-radius: 0px;
+    -moz-border-radius: 0px;
     -ms-border-radius: 0px;
-    -khtml-border-radius: 0px;
+    -o-border-radius: 0px;
     border-radius: 0px;
     background-color: transparent;
     background-position: 1100303px 1000303px; }
@@ -1310,11 +1309,10 @@ tr.x-container:before {
     border-color: #d1d1d1; }
   /* line 69, ../themes/stylesheets/ext4/default/mixins/_frame.scss */
   .x-reset .x-btn-default-medium {
-    -moz-border-radius: 3px;
     -webkit-border-radius: 3px;
-    -o-border-radius: 3px;
+    -moz-border-radius: 3px;
     -ms-border-radius: 3px;
-    -khtml-border-radius: 3px;
+    -o-border-radius: 3px;
     border-radius: 3px;
     padding: 3px 3px 3px 3px;
     border-width: 1px;
@@ -1335,11 +1333,10 @@ tr.x-container:before {
   .x-reset .x-nbr .x-btn-default-medium {
     padding: 0 !important;
     border-width: 0 !important;
-    -moz-border-radius: 0px;
     -webkit-border-radius: 0px;
-    -o-border-radius: 0px;
+    -moz-border-radius: 0px;
     -ms-border-radius: 0px;
-    -khtml-border-radius: 0px;
+    -o-border-radius: 0px;
     border-radius: 0px;
     background-color: transparent;
     background-position: 1100303px 1000303px; }
@@ -1620,11 +1617,10 @@ tr.x-container:before {
     border-color: #d1d1d1; }
   /* line 69, ../themes/stylesheets/ext4/default/mixins/_frame.scss */
   .x-reset .x-btn-default-large {
-    -moz-border-radius: 3px;
     -webkit-border-radius: 3px;
-    -o-border-radius: 3px;
+    -moz-border-radius: 3px;
     -ms-border-radius: 3px;
-    -khtml-border-radius: 3px;
+    -o-border-radius: 3px;
     border-radius: 3px;
     padding: 3px 3px 3px 3px;
     border-width: 1px;
@@ -1645,11 +1641,10 @@ tr.x-container:before {
   .x-reset .x-nbr .x-btn-default-large {
     padding: 0 !important;
     border-width: 0 !important;
-    -moz-border-radius: 0px;
     -webkit-border-radius: 0px;
-    -o-border-radius: 0px;
+    -moz-border-radius: 0px;
     -ms-border-radius: 0px;
-    -khtml-border-radius: 0px;
+    -o-border-radius: 0px;
     border-radius: 0px;
     background-color: transparent;
     background-position: 1100303px 1000303px; }
@@ -1930,11 +1925,10 @@ tr.x-container:before {
     border-color: transparent; }
   /* line 69, ../themes/stylesheets/ext4/default/mixins/_frame.scss */
   .x-reset .x-btn-default-toolbar-small {
-    -moz-border-radius: 3px;
     -webkit-border-radius: 3px;
-    -o-border-radius: 3px;
+    -moz-border-radius: 3px;
     -ms-border-radius: 3px;
-    -khtml-border-radius: 3px;
+    -o-border-radius: 3px;
     border-radius: 3px;
     padding: 2px 2px 2px 2px;
     border-width: 1px;
@@ -1947,11 +1941,10 @@ tr.x-container:before {
   .x-reset .x-nbr .x-btn-default-toolbar-small {
     padding: 0 !important;
     border-width: 0 !important;
-    -moz-border-radius: 0px;
     -webkit-border-radius: 0px;
-    -o-border-radius: 0px;
+    -moz-border-radius: 0px;
     -ms-border-radius: 0px;
-    -khtml-border-radius: 0px;
+    -o-border-radius: 0px;
     border-radius: 0px;
     background-color: transparent;
     background-position: 1100303px 1000303px; }
@@ -2213,11 +2206,10 @@ tr.x-container:before {
     border-color: transparent; }
   /* line 69, ../themes/stylesheets/ext4/default/mixins/_frame.scss */
   .x-reset .x-btn-default-toolbar-medium {
-    -moz-border-radius: 3px;
     -webkit-border-radius: 3px;
-    -o-border-radius: 3px;
+    -moz-border-radius: 3px;
     -ms-border-radius: 3px;
-    -khtml-border-radius: 3px;
+    -o-border-radius: 3px;
     border-radius: 3px;
     padding: 3px 3px 3px 3px;
     border-width: 1px;
@@ -2230,11 +2222,10 @@ tr.x-container:before {
   .x-reset .x-nbr .x-btn-default-toolbar-medium {
     padding: 0 !important;
     border-width: 0 !important;
-    -moz-border-radius: 0px;
     -webkit-border-radius: 0px;
-    -o-border-radius: 0px;
+    -moz-border-radius: 0px;
     -ms-border-radius: 0px;
-    -khtml-border-radius: 0px;
+    -o-border-radius: 0px;
     border-radius: 0px;
     background-color: transparent;
     background-position: 1100303px 1000303px; }
@@ -2496,11 +2487,10 @@ tr.x-container:before {
     border-color: transparent; }
   /* line 69, ../themes/stylesheets/ext4/default/mixins/_frame.scss */
   .x-reset .x-btn-default-toolbar-large {
-    -moz-border-radius: 3px;
     -webkit-border-radius: 3px;
-    -o-border-radius: 3px;
+    -moz-border-radius: 3px;
     -ms-border-radius: 3px;
-    -khtml-border-radius: 3px;
+    -o-border-radius: 3px;
     border-radius: 3px;
     padding: 3px 3px 3px 3px;
     border-width: 1px;
@@ -2513,11 +2503,10 @@ tr.x-container:before {
   .x-reset .x-nbr .x-btn-default-toolbar-large {
     padding: 0 !important;
     border-width: 0 !important;
-    -moz-border-radius: 0px;
     -webkit-border-radius: 0px;
-    -o-border-radius: 0px;
+    -moz-border-radius: 0px;
     -ms-border-radius: 0px;
-    -khtml-border-radius: 0px;
+    -o-border-radius: 0px;
     border-radius: 0px;
     background-color: transparent;
     background-position: 1100303px 1000303px; }
@@ -2798,11 +2787,10 @@ tr.x-container:before {
     white-space: nowrap; }
   /* line 69, ../themes/stylesheets/ext4/default/mixins/_frame.scss */
   .x-reset .x-btn-group-default-framed {
-    -moz-border-radius: 2px;
     -webkit-border-radius: 2px;
-    -o-border-radius: 2px;
+    -moz-border-radius: 2px;
     -ms-border-radius: 2px;
-    -khtml-border-radius: 2px;
+    -o-border-radius: 2px;
     border-radius: 2px;
     padding: 1px 1px 1px 1px;
     border-width: 1px;
@@ -2815,11 +2803,10 @@ tr.x-container:before {
   .x-reset .x-nbr .x-btn-group-default-framed {
     padding: 0 !important;
     border-width: 0 !important;
-    -moz-border-radius: 0px;
     -webkit-border-radius: 0px;
-    -o-border-radius: 0px;
+    -moz-border-radius: 0px;
     -ms-border-radius: 0px;
-    -khtml-border-radius: 0px;
+    -o-border-radius: 0px;
     border-radius: 0px;
     background-color: transparent;
     background-position: 1000202px 1000202px; }
@@ -2852,9 +2839,8 @@ tr.x-container:before {
   /* line 60, ../themes/stylesheets/ext4/default/widgets/_btn-group.scss */
   .x-reset .x-btn-group-default-framed {
     border-color: #b7c8d7;
-    -moz-box-shadow: #e3ebf5 0 1px 0px 0 inset, #e3ebf5 0 -1px 0px 0 inset, #e3ebf5 -1px 0 0px 0 inset, #e3ebf5 1px 0 0px 0 inset;
     -webkit-box-shadow: #e3ebf5 0 1px 0px 0 inset, #e3ebf5 0 -1px 0px 0 inset, #e3ebf5 -1px 0 0px 0 inset, #e3ebf5 1px 0 0px 0 inset;
-    -o-box-shadow: #e3ebf5 0 1px 0px 0 inset, #e3ebf5 0 -1px 0px 0 inset, #e3ebf5 -1px 0 0px 0 inset, #e3ebf5 1px 0 0px 0 inset;
+    -moz-box-shadow: #e3ebf5 0 1px 0px 0 inset, #e3ebf5 0 -1px 0px 0 inset, #e3ebf5 -1px 0 0px 0 inset, #e3ebf5 1px 0 0px 0 inset;
     box-shadow: #e3ebf5 0 1px 0px 0 inset, #e3ebf5 0 -1px 0px 0 inset, #e3ebf5 -1px 0 0px 0 inset, #e3ebf5 1px 0 0px 0 inset; }
   /* line 68, ../themes/stylesheets/ext4/default/widgets/_btn-group.scss */
   .x-reset .x-btn-group-header-default-framed {
@@ -2865,15 +2851,13 @@ tr.x-container:before {
     background: #c2d8f0;
     -moz-border-radius-topleft: 2px;
     -webkit-border-top-left-radius: 2px;
-    -o-border-top-left-radius: 2px;
     -ms-border-top-left-radius: 2px;
-    -khtml-border-top-left-radius: 2px;
+    -o-border-top-left-radius: 2px;
     border-top-left-radius: 2px;
     -moz-border-radius-topright: 2px;
     -webkit-border-top-right-radius: 2px;
-    -o-border-top-right-radius: 2px;
     -ms-border-top-right-radius: 2px;
-    -khtml-border-top-right-radius: 2px;
+    -o-border-top-right-radius: 2px;
     border-top-right-radius: 2px; }
   /* line 80, ../themes/stylesheets/ext4/default/widgets/_btn-group.scss */
   .x-reset .x-btn-group-header-text-default-framed {
@@ -3294,32 +3278,35 @@ tr.x-container:before {
     height: 16px;
     position: absolute;
     top: 6px;
-    right: 4px;
+    right: 2px;
     background: no-repeat center center; }
   /* line 96, ../themes/stylesheets/ext4/default/widgets/_menu.scss */
   .x-reset .x-menu-item-text {
     font-size: 11px;
     color: #222222; }
-  /* line 102, ../themes/stylesheets/ext4/default/widgets/_menu.scss */
-  .x-reset .x-menu-item-checked .x-menu-item-icon {
+  /* line 101, ../themes/stylesheets/ext4/default/widgets/_menu.scss */
+  .x-reset .x-right-check-item-text {
+    padding-right: 22px; }
+  /* line 106, ../themes/stylesheets/ext4/default/widgets/_menu.scss */
+  .x-reset .x-menu-item-checked .x-menu-item-icon, .x-reset .x-menu-item-checked .x-menu-item-icon-right {
     background-image: url('../../resources/themes/images/default/menu/checked.gif'); }
-  /* line 105, ../themes/stylesheets/ext4/default/widgets/_menu.scss */
+  /* line 109, ../themes/stylesheets/ext4/default/widgets/_menu.scss */
   .x-reset .x-menu-item-checked .x-menu-group-icon {
     background-image: url('../../resources/themes/images/default/menu/group-checked.gif'); }
-  /* line 111, ../themes/stylesheets/ext4/default/widgets/_menu.scss */
-  .x-reset .x-menu-item-unchecked .x-menu-item-icon {
+  /* line 115, ../themes/stylesheets/ext4/default/widgets/_menu.scss */
+  .x-reset .x-menu-item-unchecked .x-menu-item-icon, .x-reset .x-menu-item-unchecked .x-menu-item-icon-right {
     background-image: url('../../resources/themes/images/default/menu/unchecked.gif'); }
-  /* line 114, ../themes/stylesheets/ext4/default/widgets/_menu.scss */
+  /* line 118, ../themes/stylesheets/ext4/default/widgets/_menu.scss */
   .x-reset .x-menu-item-unchecked .x-menu-group-icon {
     background-image: none; }
-  /* line 119, ../themes/stylesheets/ext4/default/widgets/_menu.scss */
+  /* line 123, ../themes/stylesheets/ext4/default/widgets/_menu.scss */
   .x-reset .x-menu-item-separator {
     height: 2px;
     border-top: solid 1px #e0e0e0;
     background-color: white;
     margin: 2px 0px;
     overflow: hidden; }
-  /* line 127, ../themes/stylesheets/ext4/default/widgets/_menu.scss */
+  /* line 131, ../themes/stylesheets/ext4/default/widgets/_menu.scss */
   .x-reset .x-menu-item-arrow {
     position: absolute;
     width: 12px;
@@ -3328,14 +3315,14 @@ tr.x-container:before {
     right: 0px;
     background: no-repeat center center;
     background-image: url('../../resources/themes/images/default/menu/menu-parent.gif'); }
-  /* line 137, ../themes/stylesheets/ext4/default/widgets/_menu.scss */
+  /* line 141, ../themes/stylesheets/ext4/default/widgets/_menu.scss */
   .x-reset .x-menu-item-indent {
     margin-left: 31px;
     /* The 2px is the width of the seperator */ }
-  /* line 141, ../themes/stylesheets/ext4/default/widgets/_menu.scss */
+  /* line 145, ../themes/stylesheets/ext4/default/widgets/_menu.scss */
   .x-reset .x-menu-item-active {
     cursor: pointer; }
-    /* line 144, ../themes/stylesheets/ext4/default/widgets/_menu.scss */
+    /* line 148, ../themes/stylesheets/ext4/default/widgets/_menu.scss */
     .x-reset .x-menu-item-active .x-menu-item-link {
       background-image: none;
       background-color: #d9e8fb;
@@ -3348,41 +3335,48 @@ tr.x-container:before {
       margin: 0px;
       border: 1px solid #a9cbf5;
       cursor: pointer;
-      -moz-border-radius: 3px;
       -webkit-border-radius: 3px;
-      -o-border-radius: 3px;
+      -moz-border-radius: 3px;
       -ms-border-radius: 3px;
-      -khtml-border-radius: 3px;
+      -o-border-radius: 3px;
       border-radius: 3px; }
-  /* line 153, ../themes/stylesheets/ext4/default/widgets/_menu.scss */
+  /* line 157, ../themes/stylesheets/ext4/default/widgets/_menu.scss */
   .x-reset .x-menu-item-disabled {
     filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=50);
     opacity: 0.5; }
-  /* line 160, ../themes/stylesheets/ext4/default/widgets/_menu.scss */
+  /* line 164, ../themes/stylesheets/ext4/default/widgets/_menu.scss */
   .x-reset .x-ie .x-menu-item-disabled .x-menu-item-icon {
     filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=50);
     opacity: 0.5; }
-  /* line 164, ../themes/stylesheets/ext4/default/widgets/_menu.scss */
+  /* line 168, ../themes/stylesheets/ext4/default/widgets/_menu.scss */
   .x-reset .x-ie .x-menu-item-disabled .x-menu-item-text {
     background-color: transparent; }
-  /* line 171, ../themes/stylesheets/ext4/default/widgets/_menu.scss */
+  /* line 175, ../themes/stylesheets/ext4/default/widgets/_menu.scss */
   .x-strict .x-ie7m .x-reset .x-ie .x-menu-icon-separator {
     width: 1px; }
-  /* line 175, ../themes/stylesheets/ext4/default/widgets/_menu.scss */
+  /* line 179, ../themes/stylesheets/ext4/default/widgets/_menu.scss */
   .x-strict .x-ie7m .x-reset .x-ie .x-menu-item-separator {
     height: 1px; }
-  /* line 184, ../themes/stylesheets/ext4/default/widgets/_menu.scss */
+  /* line 188, ../themes/stylesheets/ext4/default/widgets/_menu.scss */
   .x-reset .x-ie6 .x-menu-item-link,
   .x-reset .x-ie7 .x-menu-item-link,
   .x-reset .x-quirks .x-ie8 .x-menu-item-link {
     padding-bottom: 2px; }
-  /* line 192, ../themes/stylesheets/ext4/default/widgets/_menu.scss */
+  /* line 196, ../themes/stylesheets/ext4/default/widgets/_menu.scss */
   .x-reset .x-nlg .x-menu-item-active .x-menu-item-link {
     background: #d9e8fb repeat-x left top;
     background-image: url('../../resources/themes/images/default/menu/menu-item-active-bg.gif'); }
-  /* line 199, ../themes/stylesheets/ext4/default/widgets/_menu.scss */
+  /* line 203, ../themes/stylesheets/ext4/default/widgets/_menu.scss */
   .x-reset .x-menu-date-item {
     border-color: #99BBE8; }
+  /* line 208, ../themes/stylesheets/ext4/default/widgets/_menu.scss */
+  .x-reset .x-menu-item .x-field-label-cell {
+    vertical-align: middle; }
+  /* line 211, ../themes/stylesheets/ext4/default/widgets/_menu.scss */
+  .x-reset .x-menu-item .x-form-item-label {
+    font-size: 11px;
+    color: #222222;
+    padding-left: 34px; }
   /* line 8, ../themes/stylesheets/ext4/default/widgets/_grid.scss */
   .x-reset .x-panel .x-grid-body {
     background: white;
@@ -3391,36 +3385,33 @@ tr.x-container:before {
     border-width: 1px;
     border-top-color: #c5c5c5; }
   /* line 17, ../themes/stylesheets/ext4/default/widgets/_grid.scss */
-  .x-reset .x-panel .x-grid-header-ct-hidden {
-    visibility: hidden; }
-  /* line 22, ../themes/stylesheets/ext4/default/widgets/_grid.scss */
   .x-reset .x-grid-empty {
     padding: 10px;
     color: gray;
     font: normal 11px tahoma, arial, helvetica, sans-serif; }
-  /* line 28, ../themes/stylesheets/ext4/default/widgets/_grid.scss */
+  /* line 23, ../themes/stylesheets/ext4/default/widgets/_grid.scss */
   .x-reset .x-grid-header-hidden .x-grid-body {
     border-top-color: #99bce8 !important; }
-  /* line 32, ../themes/stylesheets/ext4/default/widgets/_grid.scss */
+  /* line 27, ../themes/stylesheets/ext4/default/widgets/_grid.scss */
   .x-reset .x-grid-view {
     overflow: hidden;
     position: relative; }
-  /* line 38, ../themes/stylesheets/ext4/default/widgets/_grid.scss */
+  /* line 33, ../themes/stylesheets/ext4/default/widgets/_grid.scss */
   .x-reset .x-grid-table {
     table-layout: fixed;
     border-collapse: separate; }
-  /* line 45, ../themes/stylesheets/ext4/default/widgets/_grid.scss */
+  /* line 40, ../themes/stylesheets/ext4/default/widgets/_grid.scss */
   .x-reset .x-autowidth-table table.x-grid-table {
     table-layout: auto;
     width: auto!important; }
-  /* line 50, ../themes/stylesheets/ext4/default/widgets/_grid.scss */
+  /* line 45, ../themes/stylesheets/ext4/default/widgets/_grid.scss */
   .x-reset .x-grid-row .x-grid-table {
     border-collapse: collapse; }
-  /* line 54, ../themes/stylesheets/ext4/default/widgets/_grid.scss */
+  /* line 49, ../themes/stylesheets/ext4/default/widgets/_grid.scss */
   .x-reset .x-grid-locked .x-grid-inner-locked {
     border-width: 0 1px 0 0 !important;
     border-style: solid; }
-  /* line 59, ../themes/stylesheets/ext4/default/widgets/_grid.scss */
+  /* line 54, ../themes/stylesheets/ext4/default/widgets/_grid.scss */
   .x-reset .x-grid-header-ct {
     cursor: default;
     zoom: 1;
@@ -3435,9 +3426,12 @@ tr.x-container:before {
     background-image: -o-linear-gradient(top, #f9f9f9, #e3e4e6);
     background-image: -ms-linear-gradient(top, #f9f9f9, #e3e4e6);
     background-image: linear-gradient(top, #f9f9f9, #e3e4e6); }
-  /* line 73, ../themes/stylesheets/ext4/default/widgets/_grid.scss */
+  /* line 68, ../themes/stylesheets/ext4/default/widgets/_grid.scss */
   .x-reset .x-accordion-item .x-grid-header-ct {
-    border-width: 0 0 1px 0!important; }
+    border-width: 0 0 1px !important; }
+  /* line 73, ../themes/stylesheets/ext4/default/widgets/_grid.scss */
+  .x-reset .x-accordion-item .x-grid-header-ct-hidden {
+    border: 0 !important; }
   /* line 77, ../themes/stylesheets/ext4/default/widgets/_grid.scss */
   .x-reset .x-column-header {
     padding: 0;
@@ -3587,7 +3581,7 @@ tr.x-container:before {
   .x-reset .x-grid-rowwrap-div .x-grid-cell,
   .x-reset .x-grid-rowwrap-div .x-grid-cell-inner {
     border-width: 0;
-    background: transparent; }
+    background-color: transparent; }
   /* line 261, ../themes/stylesheets/ext4/default/widgets/_grid.scss */
   .x-reset .x-grid-row-body-hidden {
     display: none; }
@@ -4061,6 +4055,12 @@ tr.x-container:before {
   .x-reset .x-grid-row-editor-errors li {
     list-style: disc;
     margin-left: 15px; }
+  /* line 904, ../themes/stylesheets/ext4/default/widgets/_grid.scss */
+  .x-reset .x-grid-inner-locked .x-column-header-last {
+    border-right: 0 none; }
+  /* line 907, ../themes/stylesheets/ext4/default/widgets/_grid.scss */
+  .x-reset .x-grid-inner-locked .x-grid-cell-last {
+    border-right: 0 none; }
   /* line 9, ../themes/stylesheets/ext4/default/widgets/form/_all.scss */
   .x-reset .x-webkit *:focus {
     outline: none !important; }
@@ -4234,7 +4234,7 @@ tr.x-container:before {
   /* line 6, ../themes/stylesheets/ext4/default/widgets/form/_fieldset.scss */
   .x-reset .x-fieldset {
     border: 1px solid #b5b8c8;
-    padding: 10px;
+    padding: 0 10px;
     margin-bottom: 10px;
     display: block;
     /* preserve margins in IE */
@@ -4244,7 +4244,7 @@ tr.x-container:before {
     padding-top: 0; }
     /* line 20, ../themes/stylesheets/ext4/default/widgets/form/_fieldset.scss */
     .x-reset .x-ie .x-fieldset .x-fieldset-body {
-      padding-top: 10px; }
+      padding-top: 5px; }
   /* line 25, ../themes/stylesheets/ext4/default/widgets/form/_fieldset.scss */
   .x-reset .x-fieldset-header-checkbox {
     line-height: 14px; }
@@ -4469,35 +4469,30 @@ tr.x-container:before {
   .x-reset .x-pickerfield-open .x-form-field {
     -moz-border-radius-bottomleft: 0;
     -webkit-border-bottom-left-radius: 0;
-    -o-border-bottom-left-radius: 0;
     -ms-border-bottom-left-radius: 0;
-    -khtml-border-bottom-left-radius: 0;
+    -o-border-bottom-left-radius: 0;
     border-bottom-left-radius: 0;
     -moz-border-radius-bottomright: 0;
     -webkit-border-bottom-right-radius: 0;
-    -o-border-bottom-right-radius: 0;
     -ms-border-bottom-right-radius: 0;
-    -khtml-border-bottom-right-radius: 0;
+    -o-border-bottom-right-radius: 0;
     border-bottom-right-radius: 0; }
   /* line 80, ../themes/stylesheets/ext4/default/widgets/form/_triggerfield.scss */
   .x-reset .x-pickerfield-open-above .x-form-field {
     -moz-border-radius-bottomleft: 3px;
     -webkit-border-bottom-left-radius: 3px;
-    -o-border-bottom-left-radius: 3px;
     -ms-border-bottom-left-radius: 3px;
-    -khtml-border-bottom-left-radius: 3px;
+    -o-border-bottom-left-radius: 3px;
     border-bottom-left-radius: 3px;
     -moz-border-radius-topleft: 0;
     -webkit-border-top-left-radius: 0;
-    -o-border-top-left-radius: 0;
     -ms-border-top-left-radius: 0;
-    -khtml-border-top-left-radius: 0;
+    -o-border-top-left-radius: 0;
     border-top-left-radius: 0;
     -moz-border-radius-topright: 0;
     -webkit-border-top-right-radius: 0;
-    -o-border-top-right-radius: 0;
     -ms-border-top-right-radius: 0;
-    -khtml-border-top-right-radius: 0;
+    -o-border-top-right-radius: 0;
     border-top-right-radius: 0; }
   /* line 87, ../themes/stylesheets/ext4/default/widgets/form/_triggerfield.scss */
   .x-reset .x-form-arrow-trigger .x-form-trigger-icon {
@@ -4668,6 +4663,10 @@ tr.x-container:before {
     border: 0;
     padding: 3px 2px;
     overflow: auto; }
+  /* line 129, ../themes/stylesheets/ext4/default/widgets/form/_htmleditor.scss */
+  .x-reset .x-htmleditor-iframe {
+    display: block;
+    overflow: auto; }
   /* line 7, ../themes/stylesheets/ext4/default/widgets/_panel.scss */
   .x-reset .x-panel,
   .x-reset .x-plain {
@@ -4786,9 +4785,8 @@ tr.x-container:before {
     background-image: -o-linear-gradient(top, #dae7f6, #cddef3 45%, #abc7ec 46%, #abc7ec 50%, #b8cfee 51%, #cbddf3);
     background-image: -ms-linear-gradient(top, #dae7f6, #cddef3 45%, #abc7ec 46%, #abc7ec 50%, #b8cfee 51%, #cbddf3);
     background-image: linear-gradient(top, #dae7f6, #cddef3 45%, #abc7ec 46%, #abc7ec 50%, #b8cfee 51%, #cbddf3);
-    -moz-box-shadow: #f4f8fd 0 1px 0px 0 inset;
     -webkit-box-shadow: #f4f8fd 0 1px 0px 0 inset;
-    -o-box-shadow: #f4f8fd 0 1px 0px 0 inset;
+    -moz-box-shadow: #f4f8fd 0 1px 0px 0 inset;
     box-shadow: #f4f8fd 0 1px 0px 0 inset; }
   /* line 277, ../themes/stylesheets/ext4/default/widgets/_panel.scss */
   .x-reset .x-nlg .x-panel-header-default-top {
@@ -4844,81 +4842,69 @@ tr.x-container:before {
   .x-reset .x-panel-collapsed .x-panel-header-default-top {
     -moz-border-radius-bottomleft: null;
     -webkit-border-bottom-left-radius: null;
-    -o-border-bottom-left-radius: null;
     -ms-border-bottom-left-radius: null;
-    -khtml-border-bottom-left-radius: null;
+    -o-border-bottom-left-radius: null;
     border-bottom-left-radius: null;
     -moz-border-radius-bottomright: null;
     -webkit-border-bottom-right-radius: null;
-    -o-border-bottom-right-radius: null;
     -ms-border-bottom-right-radius: null;
-    -khtml-border-bottom-right-radius: null;
+    -o-border-bottom-right-radius: null;
     border-bottom-right-radius: null; }
   /* line 420, ../themes/stylesheets/ext4/default/widgets/_panel.scss */
   .x-reset .x-panel-collapsed .x-panel-header-default-right {
     -moz-border-radius-topleft: null;
     -webkit-border-top-left-radius: null;
-    -o-border-top-left-radius: null;
     -ms-border-top-left-radius: null;
-    -khtml-border-top-left-radius: null;
+    -o-border-top-left-radius: null;
     border-top-left-radius: null;
     -moz-border-radius-bottomleft: null;
     -webkit-border-bottom-left-radius: null;
-    -o-border-bottom-left-radius: null;
     -ms-border-bottom-left-radius: null;
-    -khtml-border-bottom-left-radius: null;
+    -o-border-bottom-left-radius: null;
     border-bottom-left-radius: null; }
   /* line 424, ../themes/stylesheets/ext4/default/widgets/_panel.scss */
   .x-reset .x-panel-collapsed .x-panel-header-default-bottom {
     -moz-border-radius-topleft: null;
     -webkit-border-top-left-radius: null;
-    -o-border-top-left-radius: null;
     -ms-border-top-left-radius: null;
-    -khtml-border-top-left-radius: null;
+    -o-border-top-left-radius: null;
     border-top-left-radius: null;
     -moz-border-radius-topright: null;
     -webkit-border-top-right-radius: null;
-    -o-border-top-right-radius: null;
     -ms-border-top-right-radius: null;
-    -khtml-border-top-right-radius: null;
+    -o-border-top-right-radius: null;
     border-top-right-radius: null; }
   /* line 428, ../themes/stylesheets/ext4/default/widgets/_panel.scss */
   .x-reset .x-panel-collapsed .x-panel-header-default-left {
     -moz-border-radius-topright: null;
     -webkit-border-top-right-radius: null;
-    -o-border-top-right-radius: null;
     -ms-border-top-right-radius: null;
-    -khtml-border-top-right-radius: null;
+    -o-border-top-right-radius: null;
     border-top-right-radius: null;
     -moz-border-radius-bottomright: null;
     -webkit-border-bottom-right-radius: null;
-    -o-border-bottom-right-radius: null;
     -ms-border-bottom-right-radius: null;
-    -khtml-border-bottom-right-radius: null;
+    -o-border-bottom-right-radius: null;
     border-bottom-right-radius: null; }
   /* line 434, ../themes/stylesheets/ext4/default/widgets/_panel.scss */
   .x-reset .x-panel-header-default-top {
-    -moz-box-shadow: #f4f8fd 0 1px 0px 0 inset;
     -webkit-box-shadow: #f4f8fd 0 1px 0px 0 inset;
-    -o-box-shadow: #f4f8fd 0 1px 0px 0 inset;
+    -moz-box-shadow: #f4f8fd 0 1px 0px 0 inset;
     box-shadow: #f4f8fd 0 1px 0px 0 inset; }
   /* line 438, ../themes/stylesheets/ext4/default/widgets/_panel.scss */
   .x-reset .x-panel-header-default-right {
-    -moz-box-shadow: #f4f8fd -1px 0 0px 0 inset;
     -webkit-box-shadow: #f4f8fd -1px 0 0px 0 inset;
-    -o-box-shadow: #f4f8fd -1px 0 0px 0 inset;
+    -moz-box-shadow: #f4f8fd -1px 0 0px 0 inset;
     box-shadow: #f4f8fd -1px 0 0px 0 inset; }
   /* line 442, ../themes/stylesheets/ext4/default/widgets/_panel.scss */
   .x-reset .x-panel-header-default-bottom {
-    -moz-box-shadow: #f4f8fd 0 -1px 0px 0 inset;
     -webkit-box-shadow: #f4f8fd 0 -1px 0px 0 inset;
-    -o-box-shadow: #f4f8fd 0 -1px 0px 0 inset;
+    -moz-box-shadow: #f4f8fd 0 -1px 0px 0 inset;
     box-shadow: #f4f8fd 0 -1px 0px 0 inset; }
   /* line 446, ../themes/stylesheets/ext4/default/widgets/_panel.scss */
   .x-reset .x-panel-header-default-left {
-    -moz-box-shadow: #f4f8fd 1px 0 0px 0 inset;
     -webkit-box-shadow: #f4f8fd 1px 0 0px 0 inset;
-    -o-box-shadow: #f4f8fd 1px 0 0px 0 inset;
+    -moz-box-shadow: #f4f8fd 1px 0 0px 0 inset;
     box-shadow: #f4f8fd 1px 0 0px 0 inset; }
   /* line 481, ../themes/stylesheets/ext4/default/widgets/_panel.scss */
   .x-reset .x-panel-header-default-right-tc,
@@ -4947,9 +4933,8 @@ tr.x-container:before {
     background-image: -o-linear-gradient(top, #dae7f6, #cddef3 45%, #abc7ec 46%, #abc7ec 50%, #b8cfee 51%, #cbddf3);
     background-image: -ms-linear-gradient(top, #dae7f6, #cddef3 45%, #abc7ec 46%, #abc7ec 50%, #b8cfee 51%, #cbddf3);
     background-image: linear-gradient(top, #dae7f6, #cddef3 45%, #abc7ec 46%, #abc7ec 50%, #b8cfee 51%, #cbddf3);
-    -moz-box-shadow: #f4f8fd 0 1px 0px 0 inset;
     -webkit-box-shadow: #f4f8fd 0 1px 0px 0 inset;
-    -o-box-shadow: #f4f8fd 0 1px 0px 0 inset;
+    -moz-box-shadow: #f4f8fd 0 1px 0px 0 inset;
     box-shadow: #f4f8fd 0 1px 0px 0 inset; }
   /* line 277, ../themes/stylesheets/ext4/default/widgets/_panel.scss */
   .x-reset .x-nlg .x-panel-header-default-framed-top {
@@ -5026,11 +5011,10 @@ tr.x-container:before {
     background-image: linear-gradient(right, #dae7f6, #cddef3 45%, #abc7ec 46%, #abc7ec 50%, #b8cfee 51%, #cbddf3); }
   /* line 69, ../themes/stylesheets/ext4/default/mixins/_frame.scss */
   .x-reset .x-panel-default-framed {
-    -moz-border-radius: 4px;
     -webkit-border-radius: 4px;
-    -o-border-radius: 4px;
+    -moz-border-radius: 4px;
     -ms-border-radius: 4px;
-    -khtml-border-radius: 4px;
+    -o-border-radius: 4px;
     border-radius: 4px;
     padding: 4px 4px 4px 4px;
     border-width: 1px;
@@ -5043,11 +5027,10 @@ tr.x-container:before {
   .x-reset .x-nbr .x-panel-default-framed {
     padding: 0 !important;
     border-width: 0 !important;
-    -moz-border-radius: 0px;
     -webkit-border-radius: 0px;
-    -o-border-radius: 0px;
+    -moz-border-radius: 0px;
     -ms-border-radius: 0px;
-    -khtml-border-radius: 0px;
+    -o-border-radius: 0px;
     border-radius: 0px;
     background-color: transparent;
     background-position: 1000404px 1000404px; }
@@ -5081,27 +5064,23 @@ tr.x-container:before {
   .x-reset .x-panel-header-default-framed-top {
     -moz-border-radius-topleft: 4px;
     -webkit-border-top-left-radius: 4px;
-    -o-border-top-left-radius: 4px;
     -ms-border-top-left-radius: 4px;
-    -khtml-border-top-left-radius: 4px;
+    -o-border-top-left-radius: 4px;
     border-top-left-radius: 4px;
     -moz-border-radius-topright: 4px;
     -webkit-border-top-right-radius: 4px;
-    -o-border-top-right-radius: 4px;
     -ms-border-top-right-radius: 4px;
-    -khtml-border-top-right-radius: 4px;
+    -o-border-top-right-radius: 4px;
     border-top-right-radius: 4px;
     -moz-border-radius-bottomright: 0;
     -webkit-border-bottom-right-radius: 0;
-    -o-border-bottom-right-radius: 0;
     -ms-border-bottom-right-radius: 0;
-    -khtml-border-bottom-right-radius: 0;
+    -o-border-bottom-right-radius: 0;
     border-bottom-right-radius: 0;
     -moz-border-radius-bottomleft: 0;
     -webkit-border-bottom-left-radius: 0;
-    -o-border-bottom-left-radius: 0;
     -ms-border-bottom-left-radius: 0;
-    -khtml-border-bottom-left-radius: 0;
+    -o-border-bottom-left-radius: 0;
     border-bottom-left-radius: 0;
     padding: 3px 5px 4px 5px;
     border-width: 1px 1px 0 1px;
@@ -5122,11 +5101,10 @@ tr.x-container:before {
   .x-reset .x-nbr .x-panel-header-default-framed-top {
     padding: 0 !important;
     border-width: 0 !important;
-    -moz-border-radius: 0px;
     -webkit-border-radius: 0px;
-    -o-border-radius: 0px;
+    -moz-border-radius: 0px;
     -ms-border-radius: 0px;
-    -khtml-border-radius: 0px;
+    -o-border-radius: 0px;
     border-radius: 0px;
     background-color: transparent;
     background-position: 1000404px 1000000px; }
@@ -5159,27 +5137,23 @@ tr.x-container:before {
   .x-reset .x-panel-header-default-framed-right {
     -moz-border-radius-topleft: 0;
     -webkit-border-top-left-radius: 0;
-    -o-border-top-left-radius: 0;
     -ms-border-top-left-radius: 0;
-    -khtml-border-top-left-radius: 0;
+    -o-border-top-left-radius: 0;
     border-top-left-radius: 0;
     -moz-border-radius-topright: 4px;
     -webkit-border-top-right-radius: 4px;
-    -o-border-top-right-radius: 4px;
     -ms-border-top-right-radius: 4px;
-    -khtml-border-top-right-radius: 4px;
+    -o-border-top-right-radius: 4px;
     border-top-right-radius: 4px;
     -moz-border-radius-bottomright: 4px;
     -webkit-border-bottom-right-radius: 4px;
-    -o-border-bottom-right-radius: 4px;
     -ms-border-bottom-right-radius: 4px;
-    -khtml-border-bottom-right-radius: 4px;
+    -o-border-bottom-right-radius: 4px;
     border-bottom-right-radius: 4px;
     -moz-border-radius-bottomleft: 0;
     -webkit-border-bottom-left-radius: 0;
-    -o-border-bottom-left-radius: 0;
     -ms-border-bottom-left-radius: 0;
-    -khtml-border-bottom-left-radius: 0;
+    -o-border-bottom-left-radius: 0;
     border-bottom-left-radius: 0;
     padding: 5px 4px 5px 4px;
     border-width: 1px 1px 1px 0;
@@ -5200,11 +5174,10 @@ tr.x-container:before {
   .x-reset .x-nbr .x-panel-header-default-framed-right {
     padding: 0 !important;
     border-width: 0 !important;
-    -moz-border-radius: 0px;
     -webkit-border-radius: 0px;
-    -o-border-radius: 0px;
+    -moz-border-radius: 0px;
     -ms-border-radius: 0px;
-    -khtml-border-radius: 0px;
+    -o-border-radius: 0px;
     border-radius: 0px;
     background-color: transparent;
     background-position: 1000004px 1100400px; }
@@ -5238,27 +5211,23 @@ tr.x-container:before {
   .x-reset .x-panel-header-default-framed-bottom {
     -moz-border-radius-topleft: 0;
     -webkit-border-top-left-radius: 0;
-    -o-border-top-left-radius: 0;
     -ms-border-top-left-radius: 0;
-    -khtml-border-top-left-radius: 0;
+    -o-border-top-left-radius: 0;
     border-top-left-radius: 0;
     -moz-border-radius-topright: 0;
     -webkit-border-top-right-radius: 0;
-    -o-border-top-right-radius: 0;
     -ms-border-top-right-radius: 0;
-    -khtml-border-top-right-radius: 0;
+    -o-border-top-right-radius: 0;
     border-top-right-radius: 0;
     -moz-border-radius-bottomright: 4px;
     -webkit-border-bottom-right-radius: 4px;
-    -o-border-bottom-right-radius: 4px;
     -ms-border-bottom-right-radius: 4px;
-    -khtml-border-bottom-right-radius: 4px;
+    -o-border-bottom-right-radius: 4px;
     border-bottom-right-radius: 4px;
     -moz-border-radius-bottomleft: 4px;
     -webkit-border-bottom-left-radius: 4px;
-    -o-border-bottom-left-radius: 4px;
     -ms-border-bottom-left-radius: 4px;
-    -khtml-border-bottom-left-radius: 4px;
+    -o-border-bottom-left-radius: 4px;
     border-bottom-left-radius: 4px;
     padding: 3px 5px 4px 5px;
     border-width: 0 1px 1px 1px;
@@ -5279,11 +5248,10 @@ tr.x-container:before {
   .x-reset .x-nbr .x-panel-header-default-framed-bottom {
     padding: 0 !important;
     border-width: 0 !important;
-    -moz-border-radius: 0px;
     -webkit-border-radius: 0px;
-    -o-border-radius: 0px;
+    -moz-border-radius: 0px;
     -ms-border-radius: 0px;
-    -khtml-border-radius: 0px;
+    -o-border-radius: 0px;
     border-radius: 0px;
     background-color: transparent;
     background-position: 1000000px 1000404px; }
@@ -5316,27 +5284,23 @@ tr.x-container:before {
   .x-reset .x-panel-header-default-framed-left {
     -moz-border-radius-topleft: 4px;
     -webkit-border-top-left-radius: 4px;
-    -o-border-top-left-radius: 4px;
     -ms-border-top-left-radius: 4px;
-    -khtml-border-top-left-radius: 4px;
+    -o-border-top-left-radius: 4px;
     border-top-left-radius: 4px;
     -moz-border-radius-topright: 0;
     -webkit-border-top-right-radius: 0;
-    -o-border-top-right-radius: 0;
     -ms-border-top-right-radius: 0;
-    -khtml-border-top-right-radius: 0;
+    -o-border-top-right-radius: 0;
     border-top-right-radius: 0;
     -moz-border-radius-bottomright: 0;
     -webkit-border-bottom-right-radius: 0;
-    -o-border-bottom-right-radius: 0;
     -ms-border-bottom-right-radius: 0;
-    -khtml-border-bottom-right-radius: 0;
+    -o-border-bottom-right-radius: 0;
     border-bottom-right-radius: 0;
     -moz-border-radius-bottomleft: 4px;
     -webkit-border-bottom-left-radius: 4px;
-    -o-border-bottom-left-radius: 4px;
     -ms-border-bottom-left-radius: 4px;
-    -khtml-border-bottom-left-radius: 4px;
+    -o-border-bottom-left-radius: 4px;
     border-bottom-left-radius: 4px;
     padding: 5px 4px 5px 4px;
     border-width: 1px 0 1px 1px;
@@ -5357,11 +5321,10 @@ tr.x-container:before {
   .x-reset .x-nbr .x-panel-header-default-framed-left {
     padding: 0 !important;
     border-width: 0 !important;
-    -moz-border-radius: 0px;
     -webkit-border-radius: 0px;
-    -o-border-radius: 0px;
+    -moz-border-radius: 0px;
     -ms-border-radius: 0px;
-    -khtml-border-radius: 0px;
+    -o-border-radius: 0px;
     border-radius: 0px;
     background-color: transparent;
     background-position: 1000400px 1100004px; }
@@ -5393,27 +5356,23 @@ tr.x-container:before {
     right: 0; }
   /* line 399, ../themes/stylesheets/ext4/default/widgets/_panel.scss */
   .x-reset .x-panel-header-default-framed-top {
-    -moz-box-shadow: #f4f8fd 0 1px 0px 0 inset, #f4f8fd -1px 0 0px 0 inset, #f4f8fd 1px 0 0px 0 inset;
     -webkit-box-shadow: #f4f8fd 0 1px 0px 0 inset, #f4f8fd -1px 0 0px 0 inset, #f4f8fd 1px 0 0px 0 inset;
-    -o-box-shadow: #f4f8fd 0 1px 0px 0 inset, #f4f8fd -1px 0 0px 0 inset, #f4f8fd 1px 0 0px 0 inset;
+    -moz-box-shadow: #f4f8fd 0 1px 0px 0 inset, #f4f8fd -1px 0 0px 0 inset, #f4f8fd 1px 0 0px 0 inset;
     box-shadow: #f4f8fd 0 1px 0px 0 inset, #f4f8fd -1px 0 0px 0 inset, #f4f8fd 1px 0 0px 0 inset; }
   /* line 403, ../themes/stylesheets/ext4/default/widgets/_panel.scss */
   .x-reset .x-panel-header-default-framed-right {
-    -moz-box-shadow: #f4f8fd 0 1px 0px 0 inset, #f4f8fd 0 -1px 0px 0 inset, #f4f8fd -1px 0 0px 0 inset;
     -webkit-box-shadow: #f4f8fd 0 1px 0px 0 inset, #f4f8fd 0 -1px 0px 0 inset, #f4f8fd -1px 0 0px 0 inset;
-    -o-box-shadow: #f4f8fd 0 1px 0px 0 inset, #f4f8fd 0 -1px 0px 0 inset, #f4f8fd -1px 0 0px 0 inset;
+    -moz-box-shadow: #f4f8fd 0 1px 0px 0 inset, #f4f8fd 0 -1px 0px 0 inset, #f4f8fd -1px 0 0px 0 inset;
     box-shadow: #f4f8fd 0 1px 0px 0 inset, #f4f8fd 0 -1px 0px 0 inset, #f4f8fd -1px 0 0px 0 inset; }
   /* line 407, ../themes/stylesheets/ext4/default/widgets/_panel.scss */
   .x-reset .x-panel-header-default-framed-bottom {
-    -moz-box-shadow: #f4f8fd 0 -1px 0px 0 inset, #f4f8fd -1px 0 0px 0 inset, #f4f8fd 1px 0 0px 0 inset;
     -webkit-box-shadow: #f4f8fd 0 -1px 0px 0 inset, #f4f8fd -1px 0 0px 0 inset, #f4f8fd 1px 0 0px 0 inset;
-    -o-box-shadow: #f4f8fd 0 -1px 0px 0 inset, #f4f8fd -1px 0 0px 0 inset, #f4f8fd 1px 0 0px 0 inset;
+    -moz-box-shadow: #f4f8fd 0 -1px 0px 0 inset, #f4f8fd -1px 0 0px 0 inset, #f4f8fd 1px 0 0px 0 inset;
     box-shadow: #f4f8fd 0 -1px 0px 0 inset, #f4f8fd -1px 0 0px 0 inset, #f4f8fd 1px 0 0px 0 inset; }
   /* line 411, ../themes/stylesheets/ext4/default/widgets/_panel.scss */
   .x-reset .x-panel-header-default-framed-left {
-    -moz-box-shadow: #f4f8fd 0 1px 0px 0 inset, #f4f8fd 0 -1px 0px 0 inset, #f4f8fd 1px 0 0px 0 inset;
     -webkit-box-shadow: #f4f8fd 0 1px 0px 0 inset, #f4f8fd 0 -1px 0px 0 inset, #f4f8fd 1px 0 0px 0 inset;
-    -o-box-shadow: #f4f8fd 0 1px 0px 0 inset, #f4f8fd 0 -1px 0px 0 inset, #f4f8fd 1px 0 0px 0 inset;
+    -moz-box-shadow: #f4f8fd 0 1px 0px 0 inset, #f4f8fd 0 -1px 0px 0 inset, #f4f8fd 1px 0 0px 0 inset;
     box-shadow: #f4f8fd 0 1px 0px 0 inset, #f4f8fd 0 -1px 0px 0 inset, #f4f8fd 1px 0 0px 0 inset; }
   /* line 452, ../themes/stylesheets/ext4/default/widgets/_panel.scss */
   .x-reset .x-panel .x-panel-header-default-framed-top {
@@ -5429,37 +5388,32 @@ tr.x-container:before {
     border-right-width: 1px !important; }
   /* line 468, ../themes/stylesheets/ext4/default/widgets/_panel.scss */
   .x-reset .x-panel-header-default-framed-collapsed {
-    -moz-border-radius: 4px;
     -webkit-border-radius: 4px;
-    -o-border-radius: 4px;
+    -moz-border-radius: 4px;
     -ms-border-radius: 4px;
-    -khtml-border-radius: 4px;
+    -o-border-radius: 4px;
     border-radius: 4px; }
   /* line 69, ../themes/stylesheets/ext4/default/mixins/_frame.scss */
   .x-reset .x-panel-header-default-framed-collapsed-top {
     -moz-border-radius-topleft: 4px;
     -webkit-border-top-left-radius: 4px;
-    -o-border-top-left-radius: 4px;
     -ms-border-top-left-radius: 4px;
-    -khtml-border-top-left-radius: 4px;
+    -o-border-top-left-radius: 4px;
     border-top-left-radius: 4px;
     -moz-border-radius-topright: 4px;
     -webkit-border-top-right-radius: 4px;
-    -o-border-top-right-radius: 4px;
     -ms-border-top-right-radius: 4px;
-    -khtml-border-top-right-radius: 4px;
+    -o-border-top-right-radius: 4px;
     border-top-right-radius: 4px;
     -moz-border-radius-bottomright: 4px;
     -webkit-border-bottom-right-radius: 4px;
-    -o-border-bottom-right-radius: 4px;
     -ms-border-bottom-right-radius: 4px;
-    -khtml-border-bottom-right-radius: 4px;
+    -o-border-bottom-right-radius: 4px;
     border-bottom-right-radius: 4px;
     -moz-border-radius-bottomleft: 4px;
     -webkit-border-bottom-left-radius: 4px;
-    -o-border-bottom-left-radius: 4px;
     -ms-border-bottom-left-radius: 4px;
-    -khtml-border-bottom-left-radius: 4px;
+    -o-border-bottom-left-radius: 4px;
     border-bottom-left-radius: 4px;
     padding: 3px 5px 4px 5px;
     border-width: 1px;
@@ -5480,11 +5434,10 @@ tr.x-container:before {
   .x-reset .x-nbr .x-panel-header-default-framed-collapsed-top {
     padding: 0 !important;
     border-width: 0 !important;
-    -moz-border-radius: 0px;
     -webkit-border-radius: 0px;
-    -o-border-radius: 0px;
+    -moz-border-radius: 0px;
     -ms-border-radius: 0px;
-    -khtml-border-radius: 0px;
+    -o-border-radius: 0px;
     border-radius: 0px;
     background-color: transparent;
     background-position: 1000404px 1000404px; }
@@ -5517,27 +5470,23 @@ tr.x-container:before {
   .x-reset .x-panel-header-default-framed-collapsed-right {
     -moz-border-radius-topleft: 4px;
     -webkit-border-top-left-radius: 4px;
-    -o-border-top-left-radius: 4px;
     -ms-border-top-left-radius: 4px;
-    -khtml-border-top-left-radius: 4px;
+    -o-border-top-left-radius: 4px;
     border-top-left-radius: 4px;
     -moz-border-radius-topright: 4px;
     -webkit-border-top-right-radius: 4px;
-    -o-border-top-right-radius: 4px;
     -ms-border-top-right-radius: 4px;
-    -khtml-border-top-right-radius: 4px;
+    -o-border-top-right-radius: 4px;
     border-top-right-radius: 4px;
     -moz-border-radius-bottomright: 4px;
     -webkit-border-bottom-right-radius: 4px;
-    -o-border-bottom-right-radius: 4px;
     -ms-border-bottom-right-radius: 4px;
-    -khtml-border-bottom-right-radius: 4px;
+    -o-border-bottom-right-radius: 4px;
     border-bottom-right-radius: 4px;
     -moz-border-radius-bottomleft: 4px;
     -webkit-border-bottom-left-radius: 4px;
-    -o-border-bottom-left-radius: 4px;
     -ms-border-bottom-left-radius: 4px;
-    -khtml-border-bottom-left-radius: 4px;
+    -o-border-bottom-left-radius: 4px;
     border-bottom-left-radius: 4px;
     padding: 5px 4px 5px 4px;
     border-width: 1px;
@@ -5558,11 +5507,10 @@ tr.x-container:before {
   .x-reset .x-nbr .x-panel-header-default-framed-collapsed-right {
     padding: 0 !important;
     border-width: 0 !important;
-    -moz-border-radius: 0px;
     -webkit-border-radius: 0px;
-    -o-border-radius: 0px;
+    -moz-border-radius: 0px;
     -ms-border-radius: 0px;
-    -khtml-border-radius: 0px;
+    -o-border-radius: 0px;
     border-radius: 0px;
     background-color: transparent;
     background-position: 1000404px 1100404px; }
@@ -5596,27 +5544,23 @@ tr.x-container:before {
   .x-reset .x-panel-header-default-framed-collapsed-bottom {
     -moz-border-radius-topleft: 4px;
     -webkit-border-top-left-radius: 4px;
-    -o-border-top-left-radius: 4px;
     -ms-border-top-left-radius: 4px;
-    -khtml-border-top-left-radius: 4px;
+    -o-border-top-left-radius: 4px;
     border-top-left-radius: 4px;
     -moz-border-radius-topright: 4px;
     -webkit-border-top-right-radius: 4px;
-    -o-border-top-right-radius: 4px;
     -ms-border-top-right-radius: 4px;
-    -khtml-border-top-right-radius: 4px;
+    -o-border-top-right-radius: 4px;
     border-top-right-radius: 4px;
     -moz-border-radius-bottomright: 4px;
     -webkit-border-bottom-right-radius: 4px;
-    -o-border-bottom-right-radius: 4px;
     -ms-border-bottom-right-radius: 4px;
-    -khtml-border-bottom-right-radius: 4px;
+    -o-border-bottom-right-radius: 4px;
     border-bottom-right-radius: 4px;
     -moz-border-radius-bottomleft: 4px;
     -webkit-border-bottom-left-radius: 4px;
-    -o-border-bottom-left-radius: 4px;
     -ms-border-bottom-left-radius: 4px;
-    -khtml-border-bottom-left-radius: 4px;
+    -o-border-bottom-left-radius: 4px;
     border-bottom-left-radius: 4px;
     padding: 3px 5px 4px 5px;
     border-width: 1px;
@@ -5637,11 +5581,10 @@ tr.x-container:before {
   .x-reset .x-nbr .x-panel-header-default-framed-collapsed-bottom {
     padding: 0 !important;
     border-width: 0 !important;
-    -moz-border-radius: 0px;
     -webkit-border-radius: 0px;
-    -o-border-radius: 0px;
+    -moz-border-radius: 0px;
     -ms-border-radius: 0px;
-    -khtml-border-radius: 0px;
+    -o-border-radius: 0px;
     border-radius: 0px;
     background-color: transparent;
     background-position: 1000404px 1000404px; }
@@ -5674,27 +5617,23 @@ tr.x-container:before {
   .x-reset .x-panel-header-default-framed-collapsed-left {
     -moz-border-radius-topleft: 4px;
     -webkit-border-top-left-radius: 4px;
-    -o-border-top-left-radius: 4px;
     -ms-border-top-left-radius: 4px;
-    -khtml-border-top-left-radius: 4px;
+    -o-border-top-left-radius: 4px;
     border-top-left-radius: 4px;
     -moz-border-radius-topright: 4px;
     -webkit-border-top-right-radius: 4px;
-    -o-border-top-right-radius: 4px;
     -ms-border-top-right-radius: 4px;
-    -khtml-border-top-right-radius: 4px;
+    -o-border-top-right-radius: 4px;
     border-top-right-radius: 4px;
     -moz-border-radius-bottomright: 4px;
     -webkit-border-bottom-right-radius: 4px;
-    -o-border-bottom-right-radius: 4px;
     -ms-border-bottom-right-radius: 4px;
-    -khtml-border-bottom-right-radius: 4px;
+    -o-border-bottom-right-radius: 4px;
     border-bottom-right-radius: 4px;
     -moz-border-radius-bottomleft: 4px;
     -webkit-border-bottom-left-radius: 4px;
-    -o-border-bottom-left-radius: 4px;
     -ms-border-bottom-left-radius: 4px;
-    -khtml-border-bottom-left-radius: 4px;
+    -o-border-bottom-left-radius: 4px;
     border-bottom-left-radius: 4px;
     padding: 5px 4px 5px 4px;
     border-width: 1px;
@@ -5715,11 +5654,10 @@ tr.x-container:before {
   .x-reset .x-nbr .x-panel-header-default-framed-collapsed-left {
     padding: 0 !important;
     border-width: 0 !important;
-    -moz-border-radius: 0px;
     -webkit-border-radius: 0px;
-    -o-border-radius: 0px;
+    -moz-border-radius: 0px;
     -ms-border-radius: 0px;
-    -khtml-border-radius: 0px;
+    -o-border-radius: 0px;
     border-radius: 0px;
     background-color: transparent;
     background-position: 1000404px 1100404px; }
@@ -5778,11 +5716,10 @@ tr.x-container:before {
       padding: 0px 1px 0 0 !important; }
   /* line 69, ../themes/stylesheets/ext4/default/mixins/_frame.scss */
   .x-reset .x-tip {
-    -moz-border-radius: 3px;
     -webkit-border-radius: 3px;
-    -o-border-radius: 3px;
+    -moz-border-radius: 3px;
     -ms-border-radius: 3px;
-    -khtml-border-radius: 3px;
+    -o-border-radius: 3px;
     border-radius: 3px;
     padding: 2px 2px 2px 2px;
     border-width: 1px;
@@ -5795,11 +5732,10 @@ tr.x-container:before {
   .x-reset .x-nbr .x-tip {
     padding: 0 !important;
     border-width: 0 !important;
-    -moz-border-radius: 0px;
     -webkit-border-radius: 0px;
-    -o-border-radius: 0px;
+    -moz-border-radius: 0px;
     -ms-border-radius: 0px;
-    -khtml-border-radius: 0px;
+    -o-border-radius: 0px;
     border-radius: 0px;
     background-color: transparent;
     background-position: 1100303px 1000303px; }
@@ -5914,9 +5850,8 @@ tr.x-container:before {
   /* line 137, ../themes/stylesheets/ext4/default/widgets/_qtip.scss */
   .x-reset .x-form-invalid-tip {
     border-color: #a1311f;
-    -moz-box-shadow: #d87166 0 1px 0px 0 inset, #d87166 0 -1px 0px 0 inset, #d87166 -1px 0 0px 0 inset, #d87166 1px 0 0px 0 inset;
     -webkit-box-shadow: #d87166 0 1px 0px 0 inset, #d87166 0 -1px 0px 0 inset, #d87166 -1px 0 0px 0 inset, #d87166 1px 0 0px 0 inset;
-    -o-box-shadow: #d87166 0 1px 0px 0 inset, #d87166 0 -1px 0px 0 inset, #d87166 -1px 0 0px 0 inset, #d87166 1px 0 0px 0 inset;
+    -moz-box-shadow: #d87166 0 1px 0px 0 inset, #d87166 0 -1px 0px 0 inset, #d87166 -1px 0 0px 0 inset, #d87166 1px 0 0px 0 inset;
     box-shadow: #d87166 0 1px 0px 0 inset, #d87166 0 -1px 0px 0 inset, #d87166 -1px 0 0px 0 inset, #d87166 1px 0 0px 0 inset; }
   /* line 146, ../themes/stylesheets/ext4/default/widgets/_qtip.scss */
   .x-reset .x-form-invalid-tip-body {
@@ -5931,11 +5866,10 @@ tr.x-container:before {
         margin-bottom: 0; }
   /* line 69, ../themes/stylesheets/ext4/default/mixins/_frame.scss */
   .x-reset .x-form-invalid-tip-default {
-    -moz-border-radius: 5px;
     -webkit-border-radius: 5px;
-    -o-border-radius: 5px;
+    -moz-border-radius: 5px;
     -ms-border-radius: 5px;
-    -khtml-border-radius: 5px;
+    -o-border-radius: 5px;
     border-radius: 5px;
     padding: 4px 4px 4px 4px;
     border-width: 1px;
@@ -5948,11 +5882,10 @@ tr.x-container:before {
   .x-reset .x-nbr .x-form-invalid-tip-default {
     padding: 0 !important;
     border-width: 0 !important;
-    -moz-border-radius: 0px;
     -webkit-border-radius: 0px;
-    -o-border-radius: 0px;
+    -moz-border-radius: 0px;
     -ms-border-radius: 0px;
-    -khtml-border-radius: 0px;
+    -o-border-radius: 0px;
     border-radius: 0px;
     background-color: transparent;
     background-position: 1100505px 1000505px; }
@@ -6106,11 +6039,10 @@ tr.x-container:before {
     position: relative;
     border-width: 1px;
     border-style: solid;
-    -moz-border-radius: 0;
     -webkit-border-radius: 0;
-    -o-border-radius: 0;
+    -moz-border-radius: 0;
     -ms-border-radius: 0;
-    -khtml-border-radius: 0;
+    -o-border-radius: 0;
     border-radius: 0;
     overflow: hidden;
     height: 20px; }
@@ -6120,11 +6052,10 @@ tr.x-container:before {
     overflow: hidden;
     position: absolute;
     width: 0;
-    -moz-border-radius: 0;
     -webkit-border-radius: 0;
-    -o-border-radius: 0;
+    -moz-border-radius: 0;
     -ms-border-radius: 0;
-    -khtml-border-radius: 0;
+    -o-border-radius: 0;
     border-radius: 0;
     border-right: 1px solid;
     border-top: 1px solid; }
@@ -6308,19 +6239,17 @@ tr.x-container:before {
     padding-left: 1px; }
   /* line 58, ../themes/stylesheets/ext4/default/widgets/_window.scss */
   .x-reset .x-window-collapsed .x-window-header-vertical {
-    -moz-border-radius: 5px;
     -webkit-border-radius: 5px;
-    -o-border-radius: 5px;
+    -moz-border-radius: 5px;
     -ms-border-radius: 5px;
-    -khtml-border-radius: 5px;
+    -o-border-radius: 5px;
     border-radius: 5px; }
   /* line 61, ../themes/stylesheets/ext4/default/widgets/_window.scss */
   .x-reset .x-window-collapsed .x-window-header-horizontal {
-    -moz-border-radius: 5px;
     -webkit-border-radius: 5px;
-    -o-border-radius: 5px;
+    -moz-border-radius: 5px;
     -ms-border-radius: 5px;
-    -khtml-border-radius: 5px;
+    -o-border-radius: 5px;
     border-radius: 5px; }
   /* line 66, ../themes/stylesheets/ext4/default/widgets/_window.scss */
   .x-reset .x-window-collapsed .x-window-header-left {
@@ -6363,41 +6292,35 @@ tr.x-container:before {
   /* line 159, ../themes/stylesheets/ext4/default/widgets/_window.scss */
   .x-reset .x-window-default {
     border-color: #a2b1c5;
-    -moz-border-radius: 5px 5px;
     -webkit-border-radius: 5px 5px;
-    -o-border-radius: 5px 5px;
+    -moz-border-radius: 5px 5px;
     -ms-border-radius: 5px 5px;
-    -khtml-border-radius: 5px 5px;
+    -o-border-radius: 5px 5px;
     border-radius: 5px 5px;
-    -moz-box-shadow: #ecf2fb 0 1px 0px 0 inset, #ecf2fb 0 -1px 0px 0 inset, #ecf2fb -1px 0 0px 0 inset, #ecf2fb 1px 0 0px 0 inset;
     -webkit-box-shadow: #ecf2fb 0 1px 0px 0 inset, #ecf2fb 0 -1px 0px 0 inset, #ecf2fb -1px 0 0px 0 inset, #ecf2fb 1px 0 0px 0 inset;
-    -o-box-shadow: #ecf2fb 0 1px 0px 0 inset, #ecf2fb 0 -1px 0px 0 inset, #ecf2fb -1px 0 0px 0 inset, #ecf2fb 1px 0 0px 0 inset;
+    -moz-box-shadow: #ecf2fb 0 1px 0px 0 inset, #ecf2fb 0 -1px 0px 0 inset, #ecf2fb -1px 0 0px 0 inset, #ecf2fb 1px 0 0px 0 inset;
     box-shadow: #ecf2fb 0 1px 0px 0 inset, #ecf2fb 0 -1px 0px 0 inset, #ecf2fb -1px 0 0px 0 inset, #ecf2fb 1px 0 0px 0 inset; }
   /* line 69, ../themes/stylesheets/ext4/default/mixins/_frame.scss */
   .x-reset .x-window-default {
     -moz-border-radius-topleft: 5px;
     -webkit-border-top-left-radius: 5px;
-    -o-border-top-left-radius: 5px;
     -ms-border-top-left-radius: 5px;
-    -khtml-border-top-left-radius: 5px;
+    -o-border-top-left-radius: 5px;
     border-top-left-radius: 5px;
     -moz-border-radius-topright: 5px;
     -webkit-border-top-right-radius: 5px;
-    -o-border-top-right-radius: 5px;
     -ms-border-top-right-radius: 5px;
-    -khtml-border-top-right-radius: 5px;
+    -o-border-top-right-radius: 5px;
     border-top-right-radius: 5px;
     -moz-border-radius-bottomright: 5px;
     -webkit-border-bottom-right-radius: 5px;
-    -o-border-bottom-right-radius: 5px;
     -ms-border-bottom-right-radius: 5px;
-    -khtml-border-bottom-right-radius: 5px;
+    -o-border-bottom-right-radius: 5px;
     border-bottom-right-radius: 5px;
     -moz-border-radius-bottomleft: 5px;
     -webkit-border-bottom-left-radius: 5px;
-    -o-border-bottom-left-radius: 5px;
     -ms-border-bottom-left-radius: 5px;
-    -khtml-border-bottom-left-radius: 5px;
+    -o-border-bottom-left-radius: 5px;
     border-bottom-left-radius: 5px;
     padding: 4px 4px 4px 4px;
     border-width: 1px;
@@ -6410,11 +6333,10 @@ tr.x-container:before {
   .x-reset .x-nbr .x-window-default {
     padding: 0 !important;
     border-width: 0 !important;
-    -moz-border-radius: 0px;
     -webkit-border-radius: 0px;
-    -o-border-radius: 0px;
+    -moz-border-radius: 0px;
     -ms-border-radius: 0px;
-    -khtml-border-radius: 0px;
+    -o-border-radius: 0px;
     border-radius: 0px;
     background-color: transparent;
     background-position: 1000505px 1000505px; }
@@ -6466,27 +6388,23 @@ tr.x-container:before {
   .x-reset .x-window-header-default-top {
     -moz-border-radius-topleft: 5px;
     -webkit-border-top-left-radius: 5px;
-    -o-border-top-left-radius: 5px;
     -ms-border-top-left-radius: 5px;
-    -khtml-border-top-left-radius: 5px;
+    -o-border-top-left-radius: 5px;
     border-top-left-radius: 5px;
     -moz-border-radius-topright: 5px;
     -webkit-border-top-right-radius: 5px;
-    -o-border-top-right-radius: 5px;
     -ms-border-top-right-radius: 5px;
-    -khtml-border-top-right-radius: 5px;
+    -o-border-top-right-radius: 5px;
     border-top-right-radius: 5px;
     -moz-border-radius-bottomright: 0;
     -webkit-border-bottom-right-radius: 0;
-    -o-border-bottom-right-radius: 0;
     -ms-border-bottom-right-radius: 0;
-    -khtml-border-bottom-right-radius: 0;
+    -o-border-bottom-right-radius: 0;
     border-bottom-right-radius: 0;
     -moz-border-radius-bottomleft: 0;
     -webkit-border-bottom-left-radius: 0;
-    -o-border-bottom-left-radius: 0;
     -ms-border-bottom-left-radius: 0;
-    -khtml-border-bottom-left-radius: 0;
+    -o-border-bottom-left-radius: 0;
     border-bottom-left-radius: 0;
     padding: 4px 5px 0 5px;
     border-width: 1px 1px 0 1px;
@@ -6499,11 +6417,10 @@ tr.x-container:before {
   .x-reset .x-nbr .x-window-header-default-top {
     padding: 0 !important;
     border-width: 0 !important;
-    -moz-border-radius: 0px;
     -webkit-border-radius: 0px;
-    -o-border-radius: 0px;
+    -moz-border-radius: 0px;
     -ms-border-radius: 0px;
-    -khtml-border-radius: 0px;
+    -o-border-radius: 0px;
     border-radius: 0px;
     background-color: transparent;
     background-position: 1000505px 1000000px; }
@@ -6537,27 +6454,23 @@ tr.x-container:before {
   .x-reset .x-window-header-default-right {
     -moz-border-radius-topleft: 0;
     -webkit-border-top-left-radius: 0;
-    -o-border-top-left-radius: 0;
     -ms-border-top-left-radius: 0;
-    -khtml-border-top-left-radius: 0;
+    -o-border-top-left-radius: 0;
     border-top-left-radius: 0;
     -moz-border-radius-topright: 5px;
     -webkit-border-top-right-radius: 5px;
-    -o-border-top-right-radius: 5px;
     -ms-border-top-right-radius: 5px;
-    -khtml-border-top-right-radius: 5px;
+    -o-border-top-right-radius: 5px;
     border-top-right-radius: 5px;
     -moz-border-radius-bottomright: 5px;
     -webkit-border-bottom-right-radius: 5px;
-    -o-border-bottom-right-radius: 5px;
     -ms-border-bottom-right-radius: 5px;
-    -khtml-border-bottom-right-radius: 5px;
+    -o-border-bottom-right-radius: 5px;
     border-bottom-right-radius: 5px;
     -moz-border-radius-bottomleft: 0;
     -webkit-border-bottom-left-radius: 0;
-    -o-border-bottom-left-radius: 0;
     -ms-border-bottom-left-radius: 0;
-    -khtml-border-bottom-left-radius: 0;
+    -o-border-bottom-left-radius: 0;
     border-bottom-left-radius: 0;
     padding: 5px 4px 5px 0;
     border-width: 1px 1px 1px 0;
@@ -6570,11 +6483,10 @@ tr.x-container:before {
   .x-reset .x-nbr .x-window-header-default-right {
     padding: 0 !important;
     border-width: 0 !important;
-    -moz-border-radius: 0px;
     -webkit-border-radius: 0px;
-    -o-border-radius: 0px;
+    -moz-border-radius: 0px;
     -ms-border-radius: 0px;
-    -khtml-border-radius: 0px;
+    -o-border-radius: 0px;
     border-radius: 0px;
     background-color: transparent;
     background-position: 1000005px 1000500px; }
@@ -6608,27 +6520,23 @@ tr.x-container:before {
   .x-reset .x-window-header-default-bottom {
     -moz-border-radius-topleft: 0;
     -webkit-border-top-left-radius: 0;
-    -o-border-top-left-radius: 0;
     -ms-border-top-left-radius: 0;
-    -khtml-border-top-left-radius: 0;
+    -o-border-top-left-radius: 0;
     border-top-left-radius: 0;
     -moz-border-radius-topright: 0;
     -webkit-border-top-right-radius: 0;
-    -o-border-top-right-radius: 0;
     -ms-border-top-right-radius: 0;
-    -khtml-border-top-right-radius: 0;
+    -o-border-top-right-radius: 0;
     border-top-right-radius: 0;
     -moz-border-radius-bottomright: 5px;
     -webkit-border-bottom-right-radius: 5px;
-    -o-border-bottom-right-radius: 5px;
     -ms-border-bottom-right-radius: 5px;
-    -khtml-border-bottom-right-radius: 5px;
+    -o-border-bottom-right-radius: 5px;
     border-bottom-right-radius: 5px;
     -moz-border-radius-bottomleft: 5px;
     -webkit-border-bottom-left-radius: 5px;
-    -o-border-bottom-left-radius: 5px;
     -ms-border-bottom-left-radius: 5px;
-    -khtml-border-bottom-left-radius: 5px;
+    -o-border-bottom-left-radius: 5px;
     border-bottom-left-radius: 5px;
     padding: 0 5px 4px 5px;
     border-width: 0 1px 1px 1px;
@@ -6641,11 +6549,10 @@ tr.x-container:before {
   .x-reset .x-nbr .x-window-header-default-bottom {
     padding: 0 !important;
     border-width: 0 !important;
-    -moz-border-radius: 0px;
     -webkit-border-radius: 0px;
-    -o-border-radius: 0px;
+    -moz-border-radius: 0px;
     -ms-border-radius: 0px;
-    -khtml-border-radius: 0px;
+    -o-border-radius: 0px;
     border-radius: 0px;
     background-color: transparent;
     background-position: 1000000px 1000505px; }
@@ -6679,27 +6586,23 @@ tr.x-container:before {
   .x-reset .x-window-header-default-left {
     -moz-border-radius-topleft: 5px;
     -webkit-border-top-left-radius: 5px;
-    -o-border-top-left-radius: 5px;
     -ms-border-top-left-radius: 5px;
-    -khtml-border-top-left-radius: 5px;
+    -o-border-top-left-radius: 5px;
     border-top-left-radius: 5px;
     -moz-border-radius-topright: 0;
     -webkit-border-top-right-radius: 0;
-    -o-border-top-right-radius: 0;
     -ms-border-top-right-radius: 0;
-    -khtml-border-top-right-radius: 0;
+    -o-border-top-right-radius: 0;
     border-top-right-radius: 0;
     -moz-border-radius-bottomright: 0;
     -webkit-border-bottom-right-radius: 0;
-    -o-border-bottom-right-radius: 0;
     -ms-border-bottom-right-radius: 0;
-    -khtml-border-bottom-right-radius: 0;
+    -o-border-bottom-right-radius: 0;
     border-bottom-right-radius: 0;
     -moz-border-radius-bottomleft: 5px;
     -webkit-border-bottom-left-radius: 5px;
-    -o-border-bottom-left-radius: 5px;
     -ms-border-bottom-left-radius: 5px;
-    -khtml-border-bottom-left-radius: 5px;
+    -o-border-bottom-left-radius: 5px;
     border-bottom-left-radius: 5px;
     padding: 5px 0px 5px 4px;
     border-width: 1px 0 1px 1px;
@@ -6712,11 +6615,10 @@ tr.x-container:before {
   .x-reset .x-nbr .x-window-header-default-left {
     padding: 0 !important;
     border-width: 0 !important;
-    -moz-border-radius: 0px;
     -webkit-border-radius: 0px;
-    -o-border-radius: 0px;
+    -moz-border-radius: 0px;
     -ms-border-radius: 0px;
-    -khtml-border-radius: 0px;
+    -o-border-radius: 0px;
     border-radius: 0px;
     background-color: transparent;
     background-position: 1000500px 1000005px; }
@@ -6750,27 +6652,23 @@ tr.x-container:before {
   .x-reset .x-window-header-default-collapsed-top {
     -moz-border-radius-topleft: 5px;
     -webkit-border-top-left-radius: 5px;
-    -o-border-top-left-radius: 5px;
     -ms-border-top-left-radius: 5px;
-    -khtml-border-top-left-radius: 5px;
+    -o-border-top-left-radius: 5px;
     border-top-left-radius: 5px;
     -moz-border-radius-topright: 5px;
     -webkit-border-top-right-radius: 5px;
-    -o-border-top-right-radius: 5px;
     -ms-border-top-right-radius: 5px;
-    -khtml-border-top-right-radius: 5px;
+    -o-border-top-right-radius: 5px;
     border-top-right-radius: 5px;
     -moz-border-radius-bottomright: 5px;
     -webkit-border-bottom-right-radius: 5px;
-    -o-border-bottom-right-radius: 5px;
     -ms-border-bottom-right-radius: 5px;
-    -khtml-border-bottom-right-radius: 5px;
+    -o-border-bottom-right-radius: 5px;
     border-bottom-right-radius: 5px;
     -moz-border-radius-bottomleft: 5px;
     -webkit-border-bottom-left-radius: 5px;
-    -o-border-bottom-left-radius: 5px;
     -ms-border-bottom-left-radius: 5px;
-    -khtml-border-bottom-left-radius: 5px;
+    -o-border-bottom-left-radius: 5px;
     border-bottom-left-radius: 5px;
     padding: 4px 5px 4px 5px;
     border-width: 1px;
@@ -6783,11 +6681,10 @@ tr.x-container:before {
   .x-reset .x-nbr .x-window-header-default-collapsed-top {
     padding: 0 !important;
     border-width: 0 !important;
-    -moz-border-radius: 0px;
     -webkit-border-radius: 0px;
-    -o-border-radius: 0px;
+    -moz-border-radius: 0px;
     -ms-border-radius: 0px;
-    -khtml-border-radius: 0px;
+    -o-border-radius: 0px;
     border-radius: 0px;
     background-color: transparent;
     background-position: 1000505px 1000505px; }
@@ -6821,27 +6718,23 @@ tr.x-container:before {
   .x-reset .x-window-header-default-collapsed-right {
     -moz-border-radius-topleft: 5px;
     -webkit-border-top-left-radius: 5px;
-    -o-border-top-left-radius: 5px;
     -ms-border-top-left-radius: 5px;
-    -khtml-border-top-left-radius: 5px;
+    -o-border-top-left-radius: 5px;
     border-top-left-radius: 5px;
     -moz-border-radius-topright: 5px;
     -webkit-border-top-right-radius: 5px;
-    -o-border-top-right-radius: 5px;
     -ms-border-top-right-radius: 5px;
-    -khtml-border-top-right-radius: 5px;
+    -o-border-top-right-radius: 5px;
     border-top-right-radius: 5px;
     -moz-border-radius-bottomright: 5px;
     -webkit-border-bottom-right-radius: 5px;
-    -o-border-bottom-right-radius: 5px;
     -ms-border-bottom-right-radius: 5px;
-    -khtml-border-bottom-right-radius: 5px;
+    -o-border-bottom-right-radius: 5px;
     border-bottom-right-radius: 5px;
     -moz-border-radius-bottomleft: 5px;
     -webkit-border-bottom-left-radius: 5px;
-    -o-border-bottom-left-radius: 5px;
     -ms-border-bottom-left-radius: 5px;
-    -khtml-border-bottom-left-radius: 5px;
+    -o-border-bottom-left-radius: 5px;
     border-bottom-left-radius: 5px;
     padding: 5px 4px 5px 4px;
     border-width: 1px;
@@ -6854,11 +6747,10 @@ tr.x-container:before {
   .x-reset .x-nbr .x-window-header-default-collapsed-right {
     padding: 0 !important;
     border-width: 0 !important;
-    -moz-border-radius: 0px;
     -webkit-border-radius: 0px;
-    -o-border-radius: 0px;
+    -moz-border-radius: 0px;
     -ms-border-radius: 0px;
-    -khtml-border-radius: 0px;
+    -o-border-radius: 0px;
     border-radius: 0px;
     background-color: transparent;
     background-position: 1000505px 1000505px; }
@@ -6892,27 +6784,23 @@ tr.x-container:before {
   .x-reset .x-window-header-default-collapsed-bottom {
     -moz-border-radius-topleft: 5px;
     -webkit-border-top-left-radius: 5px;
-    -o-border-top-left-radius: 5px;
     -ms-border-top-left-radius: 5px;
-    -khtml-border-top-left-radius: 5px;
+    -o-border-top-left-radius: 5px;
     border-top-left-radius: 5px;
     -moz-border-radius-topright: 5px;
     -webkit-border-top-right-radius: 5px;
-    -o-border-top-right-radius: 5px;
     -ms-border-top-right-radius: 5px;
-    -khtml-border-top-right-radius: 5px;
+    -o-border-top-right-radius: 5px;
     border-top-right-radius: 5px;
     -moz-border-radius-bottomright: 5px;
     -webkit-border-bottom-right-radius: 5px;
-    -o-border-bottom-right-radius: 5px;
     -ms-border-bottom-right-radius: 5px;
-    -khtml-border-bottom-right-radius: 5px;
+    -o-border-bottom-right-radius: 5px;
     border-bottom-right-radius: 5px;
     -moz-border-radius-bottomleft: 5px;
     -webkit-border-bottom-left-radius: 5px;
-    -o-border-bottom-left-radius: 5px;
     -ms-border-bottom-left-radius: 5px;
-    -khtml-border-bottom-left-radius: 5px;
+    -o-border-bottom-left-radius: 5px;
     border-bottom-left-radius: 5px;
     padding: 4px 5px 4px 5px;
     border-width: 1px;
@@ -6925,11 +6813,10 @@ tr.x-container:before {
   .x-reset .x-nbr .x-window-header-default-collapsed-bottom {
     padding: 0 !important;
     border-width: 0 !important;
-    -moz-border-radius: 0px;
     -webkit-border-radius: 0px;
-    -o-border-radius: 0px;
+    -moz-border-radius: 0px;
     -ms-border-radius: 0px;
-    -khtml-border-radius: 0px;
+    -o-border-radius: 0px;
     border-radius: 0px;
     background-color: transparent;
     background-position: 1000505px 1000505px; }
@@ -6963,27 +6850,23 @@ tr.x-container:before {
   .x-reset .x-window-header-default-collapsed-left {
     -moz-border-radius-topleft: 5px;
     -webkit-border-top-left-radius: 5px;
-    -o-border-top-left-radius: 5px;
     -ms-border-top-left-radius: 5px;
-    -khtml-border-top-left-radius: 5px;
+    -o-border-top-left-radius: 5px;
     border-top-left-radius: 5px;
     -moz-border-radius-topright: 5px;
     -webkit-border-top-right-radius: 5px;
-    -o-border-top-right-radius: 5px;
     -ms-border-top-right-radius: 5px;
-    -khtml-border-top-right-radius: 5px;
+    -o-border-top-right-radius: 5px;
     border-top-right-radius: 5px;
     -moz-border-radius-bottomright: 5px;
     -webkit-border-bottom-right-radius: 5px;
-    -o-border-bottom-right-radius: 5px;
     -ms-border-bottom-right-radius: 5px;
-    -khtml-border-bottom-right-radius: 5px;
+    -o-border-bottom-right-radius: 5px;
     border-bottom-right-radius: 5px;
     -moz-border-radius-bottomleft: 5px;
     -webkit-border-bottom-left-radius: 5px;
-    -o-border-bottom-left-radius: 5px;
     -ms-border-bottom-left-radius: 5px;
-    -khtml-border-bottom-left-radius: 5px;
+    -o-border-bottom-left-radius: 5px;
     border-bottom-left-radius: 5px;
     padding: 5px 4px 5px 4px;
     border-width: 1px;
@@ -6996,11 +6879,10 @@ tr.x-container:before {
   .x-reset .x-nbr .x-window-header-default-collapsed-left {
     padding: 0 !important;
     border-width: 0 !important;
-    -moz-border-radius: 0px;
     -webkit-border-radius: 0px;
-    -o-border-radius: 0px;
+    -moz-border-radius: 0px;
     -ms-border-radius: 0px;
-    -khtml-border-radius: 0px;
+    -o-border-radius: 0px;
     border-radius: 0px;
     background-color: transparent;
     background-position: 1000505px 1000505px; }
@@ -7032,27 +6914,23 @@ tr.x-container:before {
     right: 0; }
   /* line 217, ../themes/stylesheets/ext4/default/widgets/_window.scss */
   .x-reset .x-window-header-default-top {
-    -moz-box-shadow: #ecf2fb 0 1px 0px 0 inset, #ecf2fb -1px 0 0px 0 inset, #ecf2fb 1px 0 0px 0 inset;
     -webkit-box-shadow: #ecf2fb 0 1px 0px 0 inset, #ecf2fb -1px 0 0px 0 inset, #ecf2fb 1px 0 0px 0 inset;
-    -o-box-shadow: #ecf2fb 0 1px 0px 0 inset, #ecf2fb -1px 0 0px 0 inset, #ecf2fb 1px 0 0px 0 inset;
+    -moz-box-shadow: #ecf2fb 0 1px 0px 0 inset, #ecf2fb -1px 0 0px 0 inset, #ecf2fb 1px 0 0px 0 inset;
     box-shadow: #ecf2fb 0 1px 0px 0 inset, #ecf2fb -1px 0 0px 0 inset, #ecf2fb 1px 0 0px 0 inset; }
   /* line 221, ../themes/stylesheets/ext4/default/widgets/_window.scss */
   .x-reset .x-window-header-default-right {
-    -moz-box-shadow: #ecf2fb 0 1px 0px 0 inset, #ecf2fb 0 -1px 0px 0 inset, #ecf2fb -1px 0 0px 0 inset;
     -webkit-box-shadow: #ecf2fb 0 1px 0px 0 inset, #ecf2fb 0 -1px 0px 0 inset, #ecf2fb -1px 0 0px 0 inset;
-    -o-box-shadow: #ecf2fb 0 1px 0px 0 inset, #ecf2fb 0 -1px 0px 0 inset, #ecf2fb -1px 0 0px 0 inset;
+    -moz-box-shadow: #ecf2fb 0 1px 0px 0 inset, #ecf2fb 0 -1px 0px 0 inset, #ecf2fb -1px 0 0px 0 inset;
     box-shadow: #ecf2fb 0 1px 0px 0 inset, #ecf2fb 0 -1px 0px 0 inset, #ecf2fb -1px 0 0px 0 inset; }
   /* line 225, ../themes/stylesheets/ext4/default/widgets/_window.scss */
   .x-reset .x-window-header-default-bottom {
-    -moz-box-shadow: #ecf2fb 0 -1px 0px 0 inset, #ecf2fb -1px 0 0px 0 inset, #ecf2fb 1px 0 0px 0 inset;
     -webkit-box-shadow: #ecf2fb 0 -1px 0px 0 inset, #ecf2fb -1px 0 0px 0 inset, #ecf2fb 1px 0 0px 0 inset;
-    -o-box-shadow: #ecf2fb 0 -1px 0px 0 inset, #ecf2fb -1px 0 0px 0 inset, #ecf2fb 1px 0 0px 0 inset;
+    -moz-box-shadow: #ecf2fb 0 -1px 0px 0 inset, #ecf2fb -1px 0 0px 0 inset, #ecf2fb 1px 0 0px 0 inset;
     box-shadow: #ecf2fb 0 -1px 0px 0 inset, #ecf2fb -1px 0 0px 0 inset, #ecf2fb 1px 0 0px 0 inset; }
   /* line 229, ../themes/stylesheets/ext4/default/widgets/_window.scss */
   .x-reset .x-window-header-default-left {
-    -moz-box-shadow: #ecf2fb 0 1px 0px 0 inset, #ecf2fb 0 -1px 0px 0 inset, #ecf2fb 1px 0 0px 0 inset;
     -webkit-box-shadow: #ecf2fb 0 1px 0px 0 inset, #ecf2fb 0 -1px 0px 0 inset, #ecf2fb 1px 0 0px 0 inset;
-    -o-box-shadow: #ecf2fb 0 1px 0px 0 inset, #ecf2fb 0 -1px 0px 0 inset, #ecf2fb 1px 0 0px 0 inset;
+    -moz-box-shadow: #ecf2fb 0 1px 0px 0 inset, #ecf2fb 0 -1px 0px 0 inset, #ecf2fb 1px 0 0px 0 inset;
     box-shadow: #ecf2fb 0 1px 0px 0 inset, #ecf2fb 0 -1px 0px 0 inset, #ecf2fb 1px 0 0px 0 inset; }
   /* line 130, ../themes/stylesheets/ext4/default/widgets/_window.scss */
   .x-reset .x-window-body-plain {
@@ -7216,27 +7094,23 @@ tr.x-container:before {
   .x-reset .x-tab-default-top {
     -moz-border-radius-topleft: 4px;
     -webkit-border-top-left-radius: 4px;
-    -o-border-top-left-radius: 4px;
     -ms-border-top-left-radius: 4px;
-    -khtml-border-top-left-radius: 4px;
+    -o-border-top-left-radius: 4px;
     border-top-left-radius: 4px;
     -moz-border-radius-topright: 4px;
     -webkit-border-top-right-radius: 4px;
-    -o-border-top-right-radius: 4px;
     -ms-border-top-right-radius: 4px;
-    -khtml-border-top-right-radius: 4px;
+    -o-border-top-right-radius: 4px;
     border-top-right-radius: 4px;
     -moz-border-radius-bottomright: 0;
     -webkit-border-bottom-right-radius: 0;
-    -o-border-bottom-right-radius: 0;
     -ms-border-bottom-right-radius: 0;
-    -khtml-border-bottom-right-radius: 0;
+    -o-border-bottom-right-radius: 0;
     border-bottom-right-radius: 0;
     -moz-border-radius-bottomleft: 0;
     -webkit-border-bottom-left-radius: 0;
-    -o-border-bottom-left-radius: 0;
     -ms-border-bottom-left-radius: 0;
-    -khtml-border-bottom-left-radius: 0;
+    -o-border-bottom-left-radius: 0;
     border-bottom-left-radius: 0;
     padding: 3px 3px 0 3px;
     border-width: 1px 1px 0 1px;
@@ -7257,11 +7131,10 @@ tr.x-container:before {
   .x-reset .x-nbr .x-tab-default-top {
     padding: 0 !important;
     border-width: 0 !important;
-    -moz-border-radius: 0px;
     -webkit-border-radius: 0px;
-    -o-border-radius: 0px;
+    -moz-border-radius: 0px;
     -ms-border-radius: 0px;
-    -khtml-border-radius: 0px;
+    -o-border-radius: 0px;
     border-radius: 0px;
     background-color: transparent;
     background-position: 1100404px 1000000px; }
@@ -7294,27 +7167,23 @@ tr.x-container:before {
   .x-reset .x-tab-default-bottom {
     -moz-border-radius-topleft: 0;
     -webkit-border-top-left-radius: 0;
-    -o-border-top-left-radius: 0;
     -ms-border-top-left-radius: 0;
-    -khtml-border-top-left-radius: 0;
+    -o-border-top-left-radius: 0;
     border-top-left-radius: 0;
     -moz-border-radius-topright: 0;
     -webkit-border-top-right-radius: 0;
-    -o-border-top-right-radius: 0;
     -ms-border-top-right-radius: 0;
-    -khtml-border-top-right-radius: 0;
+    -o-border-top-right-radius: 0;
     border-top-right-radius: 0;
     -moz-border-radius-bottomright: 4px;
     -webkit-border-bottom-right-radius: 4px;
-    -o-border-bottom-right-radius: 4px;
     -ms-border-bottom-right-radius: 4px;
-    -khtml-border-bottom-right-radius: 4px;
+    -o-border-bottom-right-radius: 4px;
     border-bottom-right-radius: 4px;
     -moz-border-radius-bottomleft: 4px;
     -webkit-border-bottom-left-radius: 4px;
-    -o-border-bottom-left-radius: 4px;
     -ms-border-bottom-left-radius: 4px;
-    -khtml-border-bottom-left-radius: 4px;
+    -o-border-bottom-left-radius: 4px;
     border-bottom-left-radius: 4px;
     padding: 0 3px 3px 3px;
     border-width: 0 1px 1px 1px;
@@ -7335,11 +7204,10 @@ tr.x-container:before {
   .x-reset .x-nbr .x-tab-default-bottom {
     padding: 0 !important;
     border-width: 0 !important;
-    -moz-border-radius: 0px;
     -webkit-border-radius: 0px;
-    -o-border-radius: 0px;
+    -moz-border-radius: 0px;
     -ms-border-radius: 0px;
-    -khtml-border-radius: 0px;
+    -o-border-radius: 0px;
     border-radius: 0px;
     background-color: transparent;
     background-position: 1100000px 1000404px; }
@@ -7440,9 +7308,8 @@ tr.x-container:before {
     left: -1px; }
   /* line 124, ../themes/stylesheets/ext4/default/widgets/_tab.scss */
   .x-reset .x-tab-default-top {
-    -moz-box-shadow: white 0 1px 0px 0 inset, white -1px 0 0px 0 inset, white 1px 0 0px 0 inset;
     -webkit-box-shadow: white 0 1px 0px 0 inset, white -1px 0 0px 0 inset, white 1px 0 0px 0 inset;
-    -o-box-shadow: white 0 1px 0px 0 inset, white -1px 0 0px 0 inset, white 1px 0 0px 0 inset;
+    -moz-box-shadow: white 0 1px 0px 0 inset, white -1px 0 0px 0 inset, white 1px 0 0px 0 inset;
     box-shadow: white 0 1px 0px 0 inset, white -1px 0 0px 0 inset, white 1px 0 0px 0 inset;
     border-bottom: 1px solid #99bce8 !important; }
     /* line 134, ../themes/stylesheets/ext4/default/widgets/_tab.scss */
@@ -7465,14 +7332,12 @@ tr.x-container:before {
     border-bottom-color: #deecfd !important; }
   /* line 163, ../themes/stylesheets/ext4/default/widgets/_tab.scss */
   .x-reset .x-tab-default-bottom {
-    -moz-box-shadow: white 0 -1px 0px 0 inset, white -1px 0 0px 0 inset, white 1px 0 0px 0 inset;
     -webkit-box-shadow: white 0 -1px 0px 0 inset, white -1px 0 0px 0 inset, white 1px 0 0px 0 inset;
-    -o-box-shadow: white 0 -1px 0px 0 inset, white -1px 0 0px 0 inset, white 1px 0 0px 0 inset;
+    -moz-box-shadow: white 0 -1px 0px 0 inset, white -1px 0 0px 0 inset, white 1px 0 0px 0 inset;
     box-shadow: white 0 -1px 0px 0 inset, white -1px 0 0px 0 inset, white 1px 0 0px 0 inset;
     border-top: 1px solid #99bce8 !important;
-    -moz-box-shadow: white 0 -1px 0px 0 inset, white -1px 0 0px 0 inset, white 1px 0 0px 0 inset;
     -webkit-box-shadow: white 0 -1px 0px 0 inset, white -1px 0 0px 0 inset, white 1px 0 0px 0 inset;
-    -o-box-shadow: white 0 -1px 0px 0 inset, white -1px 0 0px 0 inset, white 1px 0 0px 0 inset;
+    -moz-box-shadow: white 0 -1px 0px 0 inset, white -1px 0 0px 0 inset, white 1px 0 0px 0 inset;
     box-shadow: white 0 -1px 0px 0 inset, white -1px 0 0px 0 inset, white 1px 0 0px 0 inset; }
     /* line 178, ../themes/stylesheets/ext4/default/widgets/_tab.scss */
     .x-reset .x-tab-default-bottom em {
@@ -7981,7 +7846,7 @@ tr.x-container:before {
     vertical-align: middle;
     *vertical-align: auto;
     overflow: hidden; }
-    /* line 7, ../../../../../../../../../Library/Ruby/Gems/1.8/gems/compass-0.11.7/frameworks/compass/stylesheets/compass/css3/_inline-block.scss */
+    /* line 7, ../../../../../../../../Library/Ruby/Gems/1.8/gems/compass-0.12.1/frameworks/compass/stylesheets/compass/css3/_inline-block.scss */
     .x-reset .x-surface {
       *display: inline; }
   /* line 11, ../themes/stylesheets/ext4/default/widgets/_drawcomponent.scss */
@@ -8344,130 +8209,131 @@ tr.x-container:before {
   .x-reset .x-docked {
     position: absolute !important;
     z-index: 1; }
-  /* line 11, ../themes/stylesheets/ext4/default/layout/_layout.scss */
+  /* line 12, ../themes/stylesheets/ext4/default/layout/_layout.scss */
+  .x-reset .x-docked-vertical {
+    position: static; }
+  /* line 16, ../themes/stylesheets/ext4/default/layout/_layout.scss */
   .x-reset .x-docked-top {
     border-bottom-width: 0 !important; }
-  /* line 15, ../themes/stylesheets/ext4/default/layout/_layout.scss */
+  /* line 20, ../themes/stylesheets/ext4/default/layout/_layout.scss */
   .x-reset .x-docked-bottom {
     border-top-width: 0 !important; }
-  /* line 19, ../themes/stylesheets/ext4/default/layout/_layout.scss */
+  /* line 24, ../themes/stylesheets/ext4/default/layout/_layout.scss */
   .x-reset .x-docked-left {
     border-right-width: 0 !important; }
-  /* line 23, ../themes/stylesheets/ext4/default/layout/_layout.scss */
+  /* line 28, ../themes/stylesheets/ext4/default/layout/_layout.scss */
   .x-reset .x-docked-right {
     border-left-width: 0 !important; }
-  /* line 27, ../themes/stylesheets/ext4/default/layout/_layout.scss */
+  /* line 32, ../themes/stylesheets/ext4/default/layout/_layout.scss */
   .x-reset .x-docked-noborder-top {
     border-top-width: 0 !important; }
-  /* line 31, ../themes/stylesheets/ext4/default/layout/_layout.scss */
+  /* line 36, ../themes/stylesheets/ext4/default/layout/_layout.scss */
   .x-reset .x-docked-noborder-right {
     border-right-width: 0 !important; }
-  /* line 35, ../themes/stylesheets/ext4/default/layout/_layout.scss */
+  /* line 40, ../themes/stylesheets/ext4/default/layout/_layout.scss */
   .x-reset .x-docked-noborder-bottom {
     border-bottom-width: 0 !important; }
-  /* line 39, ../themes/stylesheets/ext4/default/layout/_layout.scss */
+  /* line 44, ../themes/stylesheets/ext4/default/layout/_layout.scss */
   .x-reset .x-docked-noborder-left {
     border-left-width: 0 !important; }
-  /* line 43, ../themes/stylesheets/ext4/default/layout/_layout.scss */
+  /* line 48, ../themes/stylesheets/ext4/default/layout/_layout.scss */
   .x-reset .x-box-inner {
     overflow: hidden;
     zoom: 1;
     position: relative;
     left: 0;
     top: 0; }
-  /* line 53, ../themes/stylesheets/ext4/default/layout/_layout.scss */
+  /* line 58, ../themes/stylesheets/ext4/default/layout/_layout.scss */
   .x-reset .x-box-item {
     position: absolute !important;
     left: 0;
     top: 0; }
-  /* line 59, ../themes/stylesheets/ext4/default/layout/_layout.scss */
+  /* line 64, ../themes/stylesheets/ext4/default/layout/_layout.scss */
   .x-reset .x-rtl .x-box-item {
     right: 0;
     left: auto; }
-  /* line 65, ../themes/stylesheets/ext4/default/layout/_layout.scss */
+  /* line 70, ../themes/stylesheets/ext4/default/layout/_layout.scss */
   .x-reset .x-box-layout-ct,
   .x-reset .x-border-layout-ct {
     overflow: hidden;
     zoom: 1; }
-  /* line 70, ../themes/stylesheets/ext4/default/layout/_layout.scss */
+  /* line 75, ../themes/stylesheets/ext4/default/layout/_layout.scss */
   .x-reset .x-border-layout-ct {
     background-color: #dfe8f6;
     position: relative; }
-  /* line 75, ../themes/stylesheets/ext4/default/layout/_layout.scss */
+  /* line 80, ../themes/stylesheets/ext4/default/layout/_layout.scss */
   .x-reset .x-overflow-hidden {
     overflow: hidden !important; }
-  /* line 79, ../themes/stylesheets/ext4/default/layout/_layout.scss */
+  /* line 84, ../themes/stylesheets/ext4/default/layout/_layout.scss */
   .x-reset .x-inline-children > * {
     display: inline-block !important; }
-  /* line 83, ../themes/stylesheets/ext4/default/layout/_layout.scss */
+  /* line 88, ../themes/stylesheets/ext4/default/layout/_layout.scss */
   .x-reset .x-abs-layout-ct {
     position: relative; }
-  /* line 87, ../themes/stylesheets/ext4/default/layout/_layout.scss */
+  /* line 92, ../themes/stylesheets/ext4/default/layout/_layout.scss */
   .x-reset .x-abs-layout-item {
     position: absolute !important; }
-  /* line 91, ../themes/stylesheets/ext4/default/layout/_layout.scss */
+  /* line 96, ../themes/stylesheets/ext4/default/layout/_layout.scss */
   .x-reset .x-fit-item {
     position: relative; }
-  /* line 95, ../themes/stylesheets/ext4/default/layout/_layout.scss */
+  /* line 100, ../themes/stylesheets/ext4/default/layout/_layout.scss */
   .x-reset .x-border-region-slide-in {
     z-index: 5; }
-  /* line 99, ../themes/stylesheets/ext4/default/layout/_layout.scss */
+  /* line 104, ../themes/stylesheets/ext4/default/layout/_layout.scss */
   .x-reset .x-region-collapsed-placeholder {
     z-index: 4; }
-  /* line 103, ../themes/stylesheets/ext4/default/layout/_layout.scss */
+  /* line 108, ../themes/stylesheets/ext4/default/layout/_layout.scss */
   .x-reset .x-accordion-hd .x-panel-header-text {
     color: black;
     font-weight: normal; }
-  /* line 108, ../themes/stylesheets/ext4/default/layout/_layout.scss */
+  /* line 113, ../themes/stylesheets/ext4/default/layout/_layout.scss */
   .x-reset .x-accordion-hd {
     background: #d9e7f8 !important;
-    -moz-box-shadow: inset 0 0 0 0 #d9e7f8;
     -webkit-box-shadow: inset 0 0 0 0 #d9e7f8;
-    -o-box-shadow: inset 0 0 0 0 #d9e7f8;
+    -moz-box-shadow: inset 0 0 0 0 #d9e7f8;
     box-shadow: inset 0 0 0 0 #d9e7f8; }
-    /* line 112, ../themes/stylesheets/ext4/default/layout/_layout.scss */
+    /* line 117, ../themes/stylesheets/ext4/default/layout/_layout.scss */
     .x-reset .x-accordion-hd .x-tool-collapse-top,
     .x-reset .x-accordion-hd .x-tool-collapse-right,
     .x-reset .x-accordion-hd .x-tool-collapse-bottom,
     .x-reset .x-accordion-hd .x-tool-collapse-left {
       background-position: 0 -255px; }
-    /* line 119, ../themes/stylesheets/ext4/default/layout/_layout.scss */
+    /* line 124, ../themes/stylesheets/ext4/default/layout/_layout.scss */
     .x-reset .x-accordion-hd .x-tool-expand-top,
     .x-reset .x-accordion-hd .x-tool-expand-right,
     .x-reset .x-accordion-hd .x-tool-expand-bottom,
     .x-reset .x-accordion-hd .x-tool-expand-left {
       background-position: 0 -240px; }
-    /* line 127, ../themes/stylesheets/ext4/default/layout/_layout.scss */
+    /* line 132, ../themes/stylesheets/ext4/default/layout/_layout.scss */
     .x-reset .x-accordion-hd .x-tool-over .x-tool-collapse-top,
     .x-reset .x-accordion-hd .x-tool-over .x-tool-collapse-right,
     .x-reset .x-accordion-hd .x-tool-over .x-tool-collapse-bottom,
     .x-reset .x-accordion-hd .x-tool-over .x-tool-collapse-left {
       background-position: -15px -255px; }
-    /* line 136, ../themes/stylesheets/ext4/default/layout/_layout.scss */
+    /* line 141, ../themes/stylesheets/ext4/default/layout/_layout.scss */
     .x-reset .x-accordion-hd .x-tool-over .x-tool-expand-top,
     .x-reset .x-accordion-hd .x-tool-over .x-tool-expand-right,
     .x-reset .x-accordion-hd .x-tool-over .x-tool-expand-bottom,
     .x-reset .x-accordion-hd .x-tool-over .x-tool-expand-left {
       background-position: -15px -240px; }
-  /* line 145, ../themes/stylesheets/ext4/default/layout/_layout.scss */
+  /* line 150, ../themes/stylesheets/ext4/default/layout/_layout.scss */
   .x-reset .x-accordion-hd {
     border-width: 1px 0 1px 0 !important;
     padding: 4px 5px 5px 5px;
     border-top-color: #f3f7fb !important; }
-  /* line 151, ../themes/stylesheets/ext4/default/layout/_layout.scss */
+  /* line 156, ../themes/stylesheets/ext4/default/layout/_layout.scss */
   .x-reset .x-accordion-body {
     border-width: 0 !important; }
-  /* line 155, ../themes/stylesheets/ext4/default/layout/_layout.scss */
+  /* line 160, ../themes/stylesheets/ext4/default/layout/_layout.scss */
   .x-reset .x-accordion-hd-sibling-expanded {
     border-top-color: #99bce8 !important;
-    -moz-box-shadow: inset 0 1px 0 0 #f3f7fb;
     -webkit-box-shadow: inset 0 1px 0 0 #f3f7fb;
-    -o-box-shadow: inset 0 1px 0 0 #f3f7fb;
+    -moz-box-shadow: inset 0 1px 0 0 #f3f7fb;
     box-shadow: inset 0 1px 0 0 #f3f7fb; }
-  /* line 160, ../themes/stylesheets/ext4/default/layout/_layout.scss */
+  /* line 165, ../themes/stylesheets/ext4/default/layout/_layout.scss */
   .x-reset .x-accordion-hd-last-collapsed {
     border-bottom-color: #d9e7f8 !important; }
-  /* line 169, ../themes/stylesheets/ext4/default/layout/_layout.scss */
+  /* line 174, ../themes/stylesheets/ext4/default/layout/_layout.scss */
   .x-reset .x-frame-tl,
   .x-reset .x-frame-tr,
   .x-reset .x-frame-tc,
@@ -8476,21 +8342,21 @@ tr.x-container:before {
   .x-reset .x-frame-bc {
     overflow: hidden;
     background-repeat: no-repeat; }
-  /* line 175, ../themes/stylesheets/ext4/default/layout/_layout.scss */
+  /* line 180, ../themes/stylesheets/ext4/default/layout/_layout.scss */
   .x-reset .x-frame-tc,
   .x-reset .x-frame-bc {
     background-repeat: repeat-x; }
-  /* line 179, ../themes/stylesheets/ext4/default/layout/_layout.scss */
+  /* line 184, ../themes/stylesheets/ext4/default/layout/_layout.scss */
   .x-reset .x-frame-mc {
     position: relative;
     background-repeat: repeat-x;
     overflow: hidden; }
-  /* line 188, ../themes/stylesheets/ext4/default/layout/_layout.scss */
+  /* line 193, ../themes/stylesheets/ext4/default/layout/_layout.scss */
   .x-reset .x-box-scroller-left {
     float: left;
     height: 100%;
     z-index: 5; }
-    /* line 195, ../themes/stylesheets/ext4/default/layout/_layout.scss */
+    /* line 200, ../themes/stylesheets/ext4/default/layout/_layout.scss */
     .x-reset .x-box-scroller-left .x-toolbar-scroll-left,
     .x-reset .x-box-scroller-left .x-tabbar-scroll-left {
       width: 18px;
@@ -8499,40 +8365,40 @@ tr.x-container:before {
       height: 20px;
       background: transparent no-repeat -18px 0;
       background-image: url('../../resources/themes/images/default/tab-bar/scroll-left.gif'); }
-    /* line 203, ../themes/stylesheets/ext4/default/layout/_layout.scss */
+    /* line 208, ../themes/stylesheets/ext4/default/layout/_layout.scss */
     .x-reset .x-box-scroller-left .x-toolbar-scroll-left-hover {
       background-position: 0 0; }
-    /* line 207, ../themes/stylesheets/ext4/default/layout/_layout.scss */
+    /* line 212, ../themes/stylesheets/ext4/default/layout/_layout.scss */
     .x-reset .x-box-scroller-left .x-toolbar-scroll-left-disabled,
     .x-reset .x-box-scroller-left .x-tabbar-scroll-left-disabled {
       background-position: -18px 0;
       filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=50);
       opacity: 0.5;
       cursor: default; }
-    /* line 214, ../themes/stylesheets/ext4/default/layout/_layout.scss */
+    /* line 219, ../themes/stylesheets/ext4/default/layout/_layout.scss */
     .x-reset .x-box-scroller-left .x-toolbar-scroll-left {
       background-image: url('../../resources/themes/images/default/toolbar/scroll-left.gif');
       background-position: -14px 0; }
-    /* line 218, ../themes/stylesheets/ext4/default/layout/_layout.scss */
+    /* line 223, ../themes/stylesheets/ext4/default/layout/_layout.scss */
     .x-reset .x-box-scroller-left .x-toolbar-scroll-left-hover {
       background-position: 0 0; }
-    /* line 221, ../themes/stylesheets/ext4/default/layout/_layout.scss */
+    /* line 226, ../themes/stylesheets/ext4/default/layout/_layout.scss */
     .x-reset .x-box-scroller-left .x-toolbar-scroll-left-disabled {
       background-position: -14px 0; }
-    /* line 225, ../themes/stylesheets/ext4/default/layout/_layout.scss */
+    /* line 230, ../themes/stylesheets/ext4/default/layout/_layout.scss */
     .x-reset .x-box-scroller-left .x-toolbar-scroll-left {
       width: 14px;
       height: 22px;
       border-bottom: 1px solid #8db2e3; }
-  /* line 233, ../themes/stylesheets/ext4/default/layout/_layout.scss */
+  /* line 238, ../themes/stylesheets/ext4/default/layout/_layout.scss */
   .x-reset .x-horizontal-box-overflow-body {
     float: left; }
-  /* line 236, ../themes/stylesheets/ext4/default/layout/_layout.scss */
+  /* line 241, ../themes/stylesheets/ext4/default/layout/_layout.scss */
   .x-reset .x-box-scroller-right {
     float: right;
     height: 100%;
     z-index: 5; }
-    /* line 243, ../themes/stylesheets/ext4/default/layout/_layout.scss */
+    /* line 248, ../themes/stylesheets/ext4/default/layout/_layout.scss */
     .x-reset .x-box-scroller-right .x-toolbar-scroll-right,
     .x-reset .x-box-scroller-right .x-tabbar-scroll-right {
       width: 18px;
@@ -8541,62 +8407,62 @@ tr.x-container:before {
       height: 20px;
       background: transparent no-repeat 0 0;
       background-image: url('../../resources/themes/images/default/tab-bar/scroll-right.gif'); }
-    /* line 251, ../themes/stylesheets/ext4/default/layout/_layout.scss */
+    /* line 256, ../themes/stylesheets/ext4/default/layout/_layout.scss */
     .x-reset .x-box-scroller-right .x-toolbar-scroll-right-hover {
       background-position: -18px 0; }
-    /* line 255, ../themes/stylesheets/ext4/default/layout/_layout.scss */
+    /* line 260, ../themes/stylesheets/ext4/default/layout/_layout.scss */
     .x-reset .x-box-scroller-right .x-toolbar-scroll-right-disabled,
     .x-reset .x-box-scroller-right .x-tabbar-scroll-right-disabled {
       background-position: 0 0;
       filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=50);
       opacity: 0.5;
       cursor: default; }
-    /* line 262, ../themes/stylesheets/ext4/default/layout/_layout.scss */
+    /* line 267, ../themes/stylesheets/ext4/default/layout/_layout.scss */
     .x-reset .x-box-scroller-right .x-toolbar-scroll-right {
       background-image: url('../../resources/themes/images/default/toolbar/scroll-right.gif'); }
-    /* line 265, ../themes/stylesheets/ext4/default/layout/_layout.scss */
+    /* line 270, ../themes/stylesheets/ext4/default/layout/_layout.scss */
     .x-reset .x-box-scroller-right .x-toolbar-scroll-right-hover {
       background-position: -14px 0; }
-    /* line 268, ../themes/stylesheets/ext4/default/layout/_layout.scss */
+    /* line 273, ../themes/stylesheets/ext4/default/layout/_layout.scss */
     .x-reset .x-box-scroller-right .x-toolbar-scroll-right-disabled {
       background-position: 0 0; }
-    /* line 272, ../themes/stylesheets/ext4/default/layout/_layout.scss */
+    /* line 277, ../themes/stylesheets/ext4/default/layout/_layout.scss */
     .x-reset .x-box-scroller-right .x-toolbar-scroll-right {
       width: 14px;
       height: 22px;
       border-bottom: 1px solid #8db2e3; }
-  /* line 282, ../themes/stylesheets/ext4/default/layout/_layout.scss */
+  /* line 287, ../themes/stylesheets/ext4/default/layout/_layout.scss */
   .x-reset .x-box-scroller-top .x-box-scroller {
     line-height: 0;
     font-size: 0; }
-  /* line 286, ../themes/stylesheets/ext4/default/layout/_layout.scss */
+  /* line 291, ../themes/stylesheets/ext4/default/layout/_layout.scss */
   .x-reset .x-box-scroller-top .x-menu-scroll-top {
     background: transparent no-repeat center center;
     background-image: url('../../resources/themes/images/default/layout/mini-top.gif');
     height: 8px;
     cursor: pointer; }
-  /* line 294, ../themes/stylesheets/ext4/default/layout/_layout.scss */
+  /* line 299, ../themes/stylesheets/ext4/default/layout/_layout.scss */
   .x-reset .x-box-scroller-bottom .x-box-scroller {
     line-height: 0;
     font-size: 0; }
-  /* line 298, ../themes/stylesheets/ext4/default/layout/_layout.scss */
+  /* line 303, ../themes/stylesheets/ext4/default/layout/_layout.scss */
   .x-reset .x-box-scroller-bottom .x-menu-scroll-bottom {
     background: transparent no-repeat center center;
     background-image: url('../../resources/themes/images/default/layout/mini-bottom.gif');
     height: 8px;
     cursor: pointer; }
-  /* line 306, ../themes/stylesheets/ext4/default/layout/_layout.scss */
+  /* line 311, ../themes/stylesheets/ext4/default/layout/_layout.scss */
   .x-reset .x-box-menu-right {
     float: right;
     padding-right: 2px; }
-  /* line 311, ../themes/stylesheets/ext4/default/layout/_layout.scss */
+  /* line 316, ../themes/stylesheets/ext4/default/layout/_layout.scss */
   .x-reset .x-column {
     float: left; }
-  /* line 315, ../themes/stylesheets/ext4/default/layout/_layout.scss */
+  /* line 320, ../themes/stylesheets/ext4/default/layout/_layout.scss */
   .x-reset .x-ie6 .x-column {
     display: inline;
     /*prevent IE6 double-margin bug*/ }
-  /* line 319, ../themes/stylesheets/ext4/default/layout/_layout.scss */
+  /* line 324, ../themes/stylesheets/ext4/default/layout/_layout.scss */
   .x-reset .x-quirks .x-ie .x-form-layout-table, .x-reset .x-quirks .x-ie .x-form-layout-table tbody tr.x-form-item {
     position: relative; }
   /* line 2, ../themes/stylesheets/ext4/default/util/_tool.scss */
