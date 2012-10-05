@@ -1,36 +1,30 @@
-Rake::Task["db:migrate"].clear_actions
-
-namespace :db do
-  task :migrate => :environment do
-    ActiveRecord::Migrator.prepare_migrations
-    Rake::Task["db:migrate:original_migrate"].reenable
-    Rake::Task["db:migrate:original_migrate"].invoke
-    ActiveRecord::Migrator.cleanup_migrations
-  end
-
-  namespace :migrate do
-    
-    desc "list pending migrations"
-    task :list_pending => :environment do
-      ActiveRecord::Migrator.prepare_migrations
-      pending_migrations = ActiveRecord::Migrator.new('up', 'db/migrate/').pending_migrations.collect{|item| File.basename(item.filename)}
-      puts "================Pending Migrations=========="
-      puts pending_migrations
-      puts "============================================"
-      ActiveRecord::Migrator.cleanup_migrations
-    end
-    
-    desc "original migrate"
-    task :original_migrate do
-      ActiveRecord::Migration.verbose = ENV["VERBOSE"] ? ENV["VERBOSE"] == "true" : true
-      ActiveRecord::Migrator.migrate("db/migrate/", ENV["VERSION"] ? ENV["VERSION"].to_i : nil)
-      Rake::Task["db:schema:dump"].invoke if ActiveRecord::Base.schema_format == :ruby
-    end
-    
-  end#migrate
-end#db
-
 namespace :compass_ae do
+  namespace :install do
+    desc "Install all CompassAE migrations"
+    task :migrations => :environment do
+      Rails.application.config.erp_base_erp_svcs.compass_ae_engines.each do |e|
+        if e.has_migrations?
+          puts "Coping migrations from #{e.name}"
+          task = "#{e.name.split("::").first.underscore}:install:migrations"
+          Rake::Task["railties:install:migrations"].reenable
+          Rake::Task[task].invoke
+        end
+      end
+    end
+    
+    desc "Install all CompassAE data migrations"
+    task :data_migrations => :environment do
+      Rails.application.config.erp_base_erp_svcs.compass_ae_engines.each do |e|
+        if e.has_data_migrations?
+          puts "Coping data migrations from #{e.name}"
+          task = "#{e.name.split("::").first.underscore}:install:data_migrations"
+          Rake::Task["railties:install:data_migrations"].reenable
+          Rake::Task[task].invoke
+        end
+      end
+    end
+    
+  end
 
   desc "Upgrade you installation of Compass AE"
   task :upgrade => :environment do
@@ -46,7 +40,7 @@ namespace :compass_ae do
 
       ActiveRecord::Migrator.cleanup_upgrade_migrations
       RussellEdge::DataMigrator.cleanup_upgrade_migrations
-    rescue Exception=>ex
+    rescue Exception => ex
       ActiveRecord::Migrator.cleanup_migrations
       ActiveRecord::Migrator.cleanup_upgrade_migrations
       RussellEdge::DataMigrator.cleanup_upgrade_migrations
@@ -54,6 +48,5 @@ namespace :compass_ae do
       puts ex.inspect
       puts ex.backtrace
     end
-  end
-
-end
+  end #install
+end #compass_ae
