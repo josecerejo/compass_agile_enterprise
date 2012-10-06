@@ -2,7 +2,7 @@ class ErpForms::ErpApp::Desktop::DynamicForms::FormsController < ErpForms::ErpAp
   
   # get tree of dynamic models and forms
   def get_tree
-    models = params[:node] == "root" ? DynamicFormModel.all(:order => :model_name) : DynamicFormModel.find_all_by_id(id)
+    models = params[:node] == "root" ? DynamicFormModel.all(:order => :model_name) : DynamicFormModel.find_all_by_id(params[:id])
     tree = []
 
     models.each do |form_model|
@@ -13,8 +13,8 @@ class ErpForms::ErpApp::Desktop::DynamicForms::FormsController < ErpForms::ErpAp
         :text => form_model.model_name,
         :iconCls => 'icon-data',
         :id => "form_model_#{form_model.id}",
-        :modelId => form_model.id,
-        :isModel => true, 
+        :formModelId => form_model.id,
+        :isFormModel => true, 
         :isForm => false, 
         :leaf => false,
         :expanded => true,
@@ -28,9 +28,9 @@ class ErpForms::ErpApp::Desktop::DynamicForms::FormsController < ErpForms::ErpAp
           :iconCls => (form.default ? 'icon-document_ok' : 'icon-document'), 
           :id => "form_#{form.id}",
           :formId => form.id, 
-          :isModel => false, 
-          :isDefault => form.default,
-          :modelName => form_model.model_name,
+          :isFormModel => false, 
+          :isDefaultForm => form.default,
+          :formModelName => form_model.model_name,
           :isForm => true, 
           :leaf => true 
         }

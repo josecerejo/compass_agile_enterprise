@@ -415,98 +415,110 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.FormBuilder",{
         return form_with_validation;
     },
 
-    reloadForm : function(formPanel){
-        formPanel.removeAll();
+    addHighlightListenerForSelectedField : function(form_with_validation){
+        var form_with_listeners = [];
+        Ext.each(form_with_validation, function(field){
+            field.listeners = {
+                render: function(item){
+                    var el = item.getEl();
+                    el.addListener('click', function(e, t, eOpts){    
+                        var formPanel = item.findParentByType('form');
+                        var highlight_border = '1px solid green';
+                        //console.log(el.dom.style.border);
+                        if (el.dom.style.border != highlight_border){
+                            Ext.each(formPanel.items.items, function(i){
+                                //console.log(i.getEl().getStyle('border'));
+                                if (item != i && i.getEl().dom.style.border == highlight_border){
+                                    var label = i.getEl().query('label').first();
+                                    label.style.width = (parseInt(label.style.width) + 2) + 'px';
+                                    i.getEl().setStyle('border', 'none');
+                                }
+                            });
+                            var label = el.query('label').first();
+                            label.style.width = (parseInt(label.style.width) - 2) + 'px';
+                            el.setStyle('border', highlight_border);
+                            el.highlight();
 
-        var items = formPanel.add(this.addValidationToForm(formPanel));
+                            // set field properties as active tab
+                            var formBuilder = formPanel.findParentByType('dynamic_forms_FormBuilder');
+                            var east_tabs = formBuilder.query('#east_tabs').first();
+                            east_tabs.setActiveTab('field_props');
 
-        // add listener to highlight selected field
-        Ext.each(items, function(item){
-            item.getEl().addListener('click', function(){    
-                var highlight_border = '1px solid green';            
-                if (item.getEl().getStyle('border') != highlight_border){
-                    Ext.each(items, function(i){
-                        if (item != i && i.getEl().getStyle('border') == highlight_border){
-                            var label = i.getEl().query('label').first();
-                            label.style.width = (parseInt(label.style.width) + 2) + 'px';
-                            i.getEl().setStyle('border', 'none');
+                            formPanel.selected_field = item;
+
+                            //TODO: populate field properties
+                            var prop_formPanel = east_tabs.query('#field_props').first();
+                            var prop_form = prop_formPanel.getForm();
+                            prop_formPanel.removeAll();
+                            prop_formPanel.add(formBuilder.getFieldOptionsForXtype(item.xtype));                    
+
+                            // common
+                            prop_form.findField('updateName').setValue(item.name);
+                            prop_form.findField('updateLabel').setValue(item.fieldLabel);
+                            prop_form.findField('updateValue').setValue(item.value);
+                            prop_form.findField('updateAllowBlank').setValue(item.allowBlank);
+                            prop_form.findField('updateDisplayInGrid').setValue(item.display_in_grid);
+                            prop_form.findField('updateReadOnly').setValue(item.readOnly);
+                            prop_form.findField('updateWidth').setValue(item.width);
+                            prop_form.findField('updateLabelWidth').setValue(item.labelWidth);
+
+                            if (item.xtype == 'datefield' || item.xtype == 'timefield'){
+                                prop_form.findField('updateMinValue').setValue(item.minValue);
+                                prop_form.findField('updateMaxValue').setValue(item.maxValue);
+                            } 
+
+                            if (!Ext.isEmpty(item.validation_regex)){
+                                prop_form.findField('updateValidationType').setValue('regex');
+                                prop_form.findField('updateValidationRegex').show();
+                                prop_form.findField('updateValidationRegex').enable();
+                                prop_form.findField('updateValidationRegex').setValue(item.validation_regex);
+                            }else if(!Ext.isEmpty(item.validator_function)){
+                                prop_form.findField('updateValidationType').setValue('function');
+                                prop_form.findField('updateValidationFunction').show();
+                                prop_form.findField('updateValidationFunction').enable();
+                                prop_form.findField('updateValidationFunction').setValue(item.validator_function);                        
+                            }
+
+                            if (item.xtype == 'numberfield'){
+                                if (item.minValue != Number.NEGATIVE_INFINITY){
+                                    prop_form.findField('updateMinValue').setValue(item.minValue);
+                                }
+                                if (item.maxValue != Number.MAX_VALUE){
+                                    prop_form.findField('updateMaxValue').setValue(item.maxValue);                        
+                                }
+                            }
+
+                            if (item.xtype == 'textfield' || item.xtype == 'textarea' || item.xtype == 'numberfield'){
+                                prop_form.findField('updateMinLength').setValue(item.minLength);
+                                if (item.maxLength != Number.MAX_VALUE){
+                                    prop_form.findField('updateMaxLength').setValue(item.maxLength);
+                                }
+                            }
+
+                            if (item.xtype == 'combobox' || item.xtype == 'combo'){
+                                var options = Ext.encode(item.getStore().proxy.reader.rawData).replace(/\"/g,'').replace(/\[/g,'').replace(/\]/g,'');
+                                prop_form.findField('updateOptions').setValue(options);
+                                prop_form.findField('updateForceSelection').setValue(item.forceSelection);
+                                prop_form.findField('updateMultiSelect').setValue(item.multiSelect);
+                            }
                         }
                     });
-                    var label = item.getEl().query('label').first();
-                    label.style.width = (parseInt(label.style.width) - 2) + 'px';
-                    item.getEl().setStyle('border', highlight_border);
-
-                    // set field properties as active tab
-                    var formBuilder = formPanel.findParentByType('dynamic_forms_FormBuilder');
-                    var east_tabs = formBuilder.query('#east_tabs').first();
-                    east_tabs.setActiveTab('field_props');
-
-                    formPanel.selected_field = item;
-
-                    //TODO: populate field properties
-                    var prop_formPanel = east_tabs.query('#field_props').first();
-                    var prop_form = prop_formPanel.getForm();
-                    prop_formPanel.removeAll();
-                    prop_formPanel.add(formBuilder.getFieldOptionsForXtype(item.xtype));                    
-
-                    // common
-                    prop_form.findField('updateName').setValue(item.name);
-                    prop_form.findField('updateLabel').setValue(item.fieldLabel);
-                    prop_form.findField('updateValue').setValue(item.value);
-                    prop_form.findField('updateAllowBlank').setValue(item.allowBlank);
-                    prop_form.findField('updateDisplayInGrid').setValue(item.display_in_grid);
-                    prop_form.findField('updateReadOnly').setValue(item.readOnly);
-                    prop_form.findField('updateWidth').setValue(item.width);
-                    prop_form.findField('updateLabelWidth').setValue(item.labelWidth);
-
-                    if (item.xtype == 'datefield' || item.xtype == 'timefield'){
-                        prop_form.findField('updateMinValue').setValue(item.minValue);
-                        prop_form.findField('updateMaxValue').setValue(item.maxValue);
-                    } 
-
-                    if (!Ext.isEmpty(item.validation_regex)){
-                        prop_form.findField('updateValidationType').setValue('regex');
-                        prop_form.findField('updateValidationRegex').show();
-                        prop_form.findField('updateValidationRegex').enable();
-                        prop_form.findField('updateValidationRegex').setValue(item.validation_regex);
-                    }else if(!Ext.isEmpty(item.validator_function)){
-                        prop_form.findField('updateValidationType').setValue('function');
-                        prop_form.findField('updateValidationFunction').show();
-                        prop_form.findField('updateValidationFunction').enable();
-                        prop_form.findField('updateValidationFunction').setValue(item.validator_function);                        
-                    }
-
-                    if (item.xtype == 'numberfield'){
-                        if (item.minValue != Number.NEGATIVE_INFINITY){
-                            prop_form.findField('updateMinValue').setValue(item.minValue);
-                        }
-                        if (item.maxValue != Number.MAX_VALUE){
-                            prop_form.findField('updateMaxValue').setValue(item.maxValue);                        
-                        }
-                    }
-
-                    if (item.xtype == 'textfield' || item.xtype == 'textarea' || item.xtype == 'numberfield'){
-                        prop_form.findField('updateMinLength').setValue(item.minLength);
-                        if (item.maxLength != Number.MAX_VALUE){
-                            prop_form.findField('updateMaxLength').setValue(item.maxLength);
-                        }
-                    }
-
-                    if (item.xtype == 'combobox' || item.xtype == 'combo'){
-                        prop_form.findField('updateOptions').setValue(item.store.proxy.reader.rawData);
-                        prop_form.findField('updateForceSelection').setValue(item.forceSelection);
-                        prop_form.findField('updateMultiSelect').setValue(item.multiSelect);
-                    }
                 }
-            });
+            }
+            form_with_listeners.push(field);
         });
-        
+
+        return form_with_listeners;
+    },
+
+    reloadForm : function(formPanel){
+        formPanel.removeAll();
+        var form_with_validation = this.addValidationToForm(formPanel);
+        formPanel.add(this.addHighlightListenerForSelectedField(form_with_validation));        
     },
 
     constructor : function(config) {
-        if (Ext.isEmpty(config.form_definition)){
-            config.form_definition = [];
-        }
+        if (Ext.isEmpty(config.form_definition)) config.form_definition = [];
 
         config = Ext.apply({
             id: 'formBuilder_'+config.title,
@@ -732,7 +744,6 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.FormBuilder",{
 
                                             switch(fieldDefinition.xtype){
                                                 case 'combobox':
-                                                    fieldDefinition.xtype = 'textfield';
                                                     fieldDefinition.forceSelection = true;
                                                     break;
                                                 case 'email':
