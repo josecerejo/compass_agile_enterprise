@@ -53,6 +53,11 @@ class ErpForms::ErpApp::Desktop::DynamicForms::FormsController < ErpForms::ErpAp
     render :json => dform.definition
   end
 
+  # get a single form record
+  def get_record
+    render :json => [DynamicForm.find_by_id(params[:id])]
+  end
+
   # get a single form
   def get
     dform = DynamicForm.find_by_id(params[:id]) if params[:id]

@@ -185,9 +185,21 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.WestRegion",{
             newFormWindow.show();
   },
 
+  openFormTab : function(title, model_name, form_id, form_definition){
+    var formBuilder = Ext.create('Compass.ErpApp.Desktop.Applications.DynamicForms.FormBuilder', {
+      title: title,
+      model_name: model_name,
+      form_id: form_id,
+      form_definition: form_definition
+    });
+    this.centerRegion.workArea.add(formBuilder);
+    this.centerRegion.workArea.setActiveTab(this.centerRegion.workArea.items.length - 1);
+  },
+
   getDynamicForm : function(record){
     var self = this;
     form_tab = Ext.getCmp('formBuilder_'+record.get('text'));
+
     if (form_tab){
       this.centerRegion.workArea.setActiveTab(form_tab);
       return;
@@ -206,14 +218,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.WestRegion",{
         if (form_definition.success == false){
             Ext.Msg.alert('Error', form_definition.error);
         }else{
-          var formBuilder = Ext.create('Compass.ErpApp.Desktop.Applications.DynamicForms.FormBuilder', {
-            title: record.get('text'),
-            model_name: record.parentNode.get('text'),
-            form_id: record.get('formId'),
-            form_definition: form_definition
-          });
-          self.centerRegion.workArea.add(formBuilder);
-          self.centerRegion.workArea.setActiveTab(self.centerRegion.workArea.items.length - 1);
+          self.openFormTab(record.get('text'), record.parentNode.get('text'), record.get('formId'), form_definition);
         }
       },
       failure: function(response) {
@@ -327,7 +332,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.WestRegion",{
       }],
       proxy:{
         type: 'ajax',
-        url: '/erp_forms/erp_app/desktop/dynamic_forms/forms/get_tree',
+        url: '/erp_forms/erp_app/desktop/dynamic_forms/forms/get_tree'
       },      
       root: {
         text: 'Dynamic Forms',
@@ -338,13 +343,12 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.WestRegion",{
     this.formsTree = Ext.create("Ext.tree.Panel",{
       title: 'Models & Forms',
       store:store,
-      //region: 'center',
       rootVisible:false,
       autoScroll: true,
       tbar:{
         items:[
         {
-          text:'New Dynamic Form Model',
+          text:'New Form Model',
           iconCls:'icon-add',
           handler:function(btn){
             var newModelWindow = Ext.create("Ext.window.Window",{
@@ -418,12 +422,6 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.WestRegion",{
         ]
       },
       listeners:{
-        // afterrender:function(){
-        //   Ext.getStore('formsTreeStore').load();
-        // },
-        // 'load':function(){
-        //   self.formsTree.getStore().sort('text', 'ASC');
-        // },
         'itemclick':function(view, record, item, index, e){
           e.stopEvent();
           if(record.data['isFormModel']){
@@ -433,7 +431,6 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.WestRegion",{
           }
           else if(record.data['isForm']){
             self.getDynamicForm(record);
-            //Ext.Msg.alert('Info', 'Form Builder not yet implemented');
           }
         },
         'itemcontextmenu':function(view, record, htmlItem, index, e){
@@ -456,19 +453,18 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.WestRegion",{
             }
 
             items.push({
-              text:'Add Dynamic Form',
+              text:'New Dynamic Form',
               iconCls:'icon-add',
               listeners:{
                 'click':function(){
                   self.addDynamicForm(record);
-                  //Ext.Msg.alert('Info', 'Form Builder not yet implemented');
                 }
               }
             });
                         
             if(record.data['text'] != 'DynamicFormDocument'){
               items.push({
-                text:'Delete Model',
+                text:'Delete Form Model',
                 iconCls:'icon-delete',
                 listeners:{
                   'click':function(){
@@ -486,30 +482,27 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.WestRegion",{
               listeners:{
                 'click':function(){
                   self.getDynamicForm(record);
-                  //Ext.Msg.alert('Info', 'Form Builder not yet implemented');
                 }
               }
             });
             if(!record.data['isDefaultForm']){
               items.push({
-                text:'Set As Default',
+                text:'Set As Default Form',
                 iconCls:'icon-edit',
                 listeners:{
                   'click':function(){
                     self.setDefaultForm(record);
-                    //Ext.Msg.alert('Info', 'Form Builder not yet implemented');
                   }
                 }
               });
             }
 
             items.push({
-              text:'Delete',
+              text:'Delete Dynamic Form',
               iconCls:'icon-delete',
               listeners:{
                 'click':function(){
                   self.deleteForm(record);
-                  //Ext.Msg.alert('Info', 'Form Builder not yet implemented');
                 }
               }
             });

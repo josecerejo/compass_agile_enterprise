@@ -1,3 +1,32 @@
+Ext.define('Form', {
+  extend: 'Ext.data.Model',
+  fields: [
+    {name: 'id', type: 'number'},
+    {name: 'description', type: 'string'},
+    {name: 'model_name', type: 'string'},
+    {name: 'definition', type: 'string'}
+  ]
+});
+
+// get a single form and fire openFormTab
+Ext.create('Ext.data.Store', {
+  model: 'Form',
+  storeId: 'formStore',
+  timeout : 90000,
+  proxy: {
+      type: 'ajax',
+      url: '/erp_forms/erp_app/desktop/dynamic_forms/forms/get_record',
+      method: 'POST'
+  },
+  listeners:{
+    'load':function(store, records){
+      var record = store.getAt(0).data;
+      Ext.getCmp('westregionPanel').openFormTab(record.description, record.model_name, record.id, Ext.decode(record.definition));
+    }
+  },
+  autoLoad: false
+});
+
 Ext.define('Field', {
     extend: 'Ext.data.Model',
     fields: [
@@ -539,7 +568,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.FormBuilder",{
                     form_id: (Ext.isEmpty(config.form_id) ? null : config.form_id),
                     tbar: [
                       { xtype: 'button', 
-                        text: 'Save Form',
+                        text: 'Save Dynamic Form',
                         iconCls: 'icon-save',
                         listeners:{
                           click: function(button){
@@ -547,6 +576,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.FormBuilder",{
                             var formBuilder = formPanel.findParentByType('dynamic_forms_FormBuilder');
 
                             if (Ext.isEmpty(config.form_id)){
+                                var create = true;
                                 var url = '/erp_forms/erp_app/desktop/dynamic_forms/forms/create';
                             }else{                                
                                 var url = '/erp_forms/erp_app/desktop/dynamic_forms/forms/update';
@@ -565,13 +595,18 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.FormBuilder",{
                                 formBuilder.clearWindowStatus();
                                 var obj =  Ext.decode(response.responseText);
                                 if(obj.success){
-                                    if (Ext.isEmpty(config.form_id)){
-                                        // refresh model tree
+                                    if (create == true){
+                                        Ext.getCmp('dynamic_formsTabPanel').remove(formBuilder);
+                                        // ajax call to get single grid record data
+                                        Ext.getStore('formStore').load({
+                                          params:{ 
+                                            id: obj.id 
+                                          }
+                                        });                      
                                         Ext.getStore('formsTreeStore').load();
-                                    }                                    
-                                    config.form_id = obj.id;
-                                    formPanel.form_id = obj.id;
-                                    Ext.Msg.alert('Success', 'Form saved.');  
+                                    }else{
+                                        Ext.Msg.alert('Success', 'Form saved.');  
+                                    }
                                 }
                                 else{
                                   Ext.Msg.alert('Error', 'Error saving form.');
