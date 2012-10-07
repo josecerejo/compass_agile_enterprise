@@ -177,11 +177,11 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.FormBuilder",{
                 name: 'updateValue',
                 xtype: 'textfield'
             },
-            // {
-            //     fieldLabel: 'Empty Text',
-            //     name: 'updateEmptyText',
-            //     xtype: 'textfield'
-            // },
+            {
+                fieldLabel: 'Empty Text',
+                name: 'updateEmptyText',
+                xtype: 'textfield'
+            },
             {
                 fieldLabel: 'Allow Blank',
                 name: 'updateAllowBlank',
@@ -335,8 +335,8 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.FormBuilder",{
                 xtype: 'textfield',
                 allowBlank: true,
                 hidden: true,
-                disabled: true
-                //emptyText: 'customFunction(v)'
+                disabled: true,
+                emptyText: 'customFunction(v)'
             }
         ];
 
@@ -497,6 +497,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.FormBuilder",{
                             prop_form.findField('updateName').setValue(item.name);
                             prop_form.findField('updateLabel').setValue(item.fieldLabel);
                             prop_form.findField('updateValue').setValue(item.value);
+                            prop_form.findField('updateEmptyText').setValue(item.emptyText);
                             prop_form.findField('updateAllowBlank').setValue(item.allowBlank);
                             prop_form.findField('updateDisplayInGrid').setValue(item.display_in_grid);
                             prop_form.findField('updateReadOnly').setValue(item.readOnly);
@@ -867,6 +868,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.FormBuilder",{
                                         var updateLabelWidth = updateFieldForm.findField('updateLabelWidth').getValue();
                                         var updateReadOnly = updateFieldForm.findField('updateReadOnly').getValue();
                                         var updateAllowBlank = updateFieldForm.findField('updateAllowBlank').getValue();
+                                        var updateEmptyText = updateFieldForm.findField('updateEmptyText').getValue();
                                         var updateDisplayInGrid = updateFieldForm.findField('updateDisplayInGrid').getValue();
 
                                         var selected_field = formPanel.selected_field;
@@ -877,6 +879,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.FormBuilder",{
                                             name: updateName,
                                             fieldLabel: updateLabel,
                                             readOnly: updateReadOnly,
+                                            emptyText: updateEmptyText,
                                             allowBlank: updateAllowBlank,
                                             display_in_grid: updateDisplayInGrid
                                         };
@@ -1053,9 +1056,4 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.FormBuilder",{
         this.callParent([config]);
     }
     
-});
-
-// potential fix for clearing emptyText in FF and Chrome
-Ext.onReady( function(){
-    if ( Ext.isGecko || Ext.isWebkit ) Ext.supports.Placeholder = false;
 });
