@@ -19,38 +19,30 @@ Ext.define("Compass.ErpApp.Desktop.Applications.UserManagement.PersonalInfoPanel
       {
         xtype:'displayfield',
         fieldLabel:'Username',
-        labelWidth:'110',
-        width:'150',
         value:config['userInfo']['username']
       },
       {
         xtype:'displayfield',
         fieldLabel:'Email Address',
-        labelWidth:'110',
-        width:'150',
         value:config['userInfo']['email']
       },
       {
         xtype:'displayfield',
         fieldLabel:'Activation State',
-        labelWidth:'110',
         value:config['userInfo']['activation_state']
       },
       {
         xtype:'displayfield',
         fieldLabel:'Last Login',
-        labelWidth:'110',
         value:Ext.util.Format.date(config['userInfo']['last_login_at'],'F j, Y, g:i a')
       },
       {
         xtype:'displayfield',
         fieldLabel:'Last Activity',
-        labelWidth:'110',
         value:Ext.util.Format.date(config['userInfo']['last_activity_at'],'F j, Y, g:i a')
       },
       {
         xtype:'displayfield',
-        labelWidth:'110',
         fieldLabel:'# Failed Logins',
         value:config['userInfo']['failed_login_count']
       }
@@ -71,8 +63,6 @@ Ext.define("Compass.ErpApp.Desktop.Applications.UserManagement.PersonalInfoPanel
           items:[
           {
             xtype:'textfield',
-            labelWidth:'110',
-            width:'150',
             fieldLabel:'Description',
             value:config['businessParty']['description']
           }
@@ -96,23 +86,17 @@ Ext.define("Compass.ErpApp.Desktop.Applications.UserManagement.PersonalInfoPanel
           items:[
           {
             xtype:'displayfield',
-            labelWidth:'110',
-            width:'150',
             fieldLabel:'First Name',
             value:config['businessParty']['current_first_name']
           },
           {
             xtype:'displayfield',
             fieldLabel:'Last Name',
-            labelWidth:'110',
-            width:'150',
             value:config['businessParty']['current_last_name']
           },
           {
             xtype:'displayfield',
             fieldLabel:'Gender',
-            labelWidth:'110',
-            width:'150',
             value:config['businessParty']['gender']
           }
           ]
