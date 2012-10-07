@@ -20,7 +20,7 @@ Gem::Specification.new do |s|
 
   s.add_dependency('attr_encrypted','~> 1.2.0')
   s.add_dependency('awesome_nested_set','~> 2.1.3')
-  s.add_dependency('data_migrator','1.7')
+  s.add_dependency('data_migrator','1.8')
   s.add_dependency('has_many_polymorphic','>= 2.0.1')
   s.add_dependency('uuid','2.3.5')
 
