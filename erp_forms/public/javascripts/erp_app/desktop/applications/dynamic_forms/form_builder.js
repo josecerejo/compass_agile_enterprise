@@ -39,7 +39,7 @@ Ext.create('Ext.data.Store', {
   autoLoad: false
 });
 
-Ext.define('Field', {
+Ext.define('FieldType', {
     extend: 'Ext.data.Model',
     fields: [
         {name: 'text', type: 'string'},
@@ -51,7 +51,7 @@ Ext.define('Field', {
 
 var fieldStore = Ext.create('Ext.data.TreeStore', {
     autoLoad:false,
-    model: 'Field',
+    model: 'FieldType',
     proxy: {
         type: 'memory'
     },
@@ -59,7 +59,7 @@ var fieldStore = Ext.create('Ext.data.TreeStore', {
 });
 
 var fieldData = {
-    text:"Fields",
+    text:"Field Types",
     expanded: true,
     expandable: false,
     children: [
@@ -841,25 +841,12 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.FormBuilder",{
                     defaults:{
                         width: 255,
                     },
-                    items: [
-                        {
-                            xtype: 'treepanel',
-                            viewConfig: {
-                                plugins: {
-                                    ptype: 'treeviewdragdrop',
-                                    ddGroup: 'fieldsDDGroup',
-                                    enableDrop: false
-                                }
-                            },                            
-                            itemId: 'field_types',                            
-                            title: 'Field Types',
-                            root: fieldTreeRootNode,
-                            rootVisible: false
-                        },
+                    items: [                        
                         {
                             xtype: 'form',
                             title: 'Field Properties',
                             itemId: 'field_props',
+                            autoScroll: true,
                             bodyPadding: 10,
                             tbar: [
                               { xtype: 'button', 
@@ -973,6 +960,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.FormBuilder",{
                             xtype: 'form',
                             title: 'Form Properties',
                             itemId: 'form_props',
+                            autoScroll: true,
                             bodyPadding: 10,             
                             defaults:{
                                 width: 230,

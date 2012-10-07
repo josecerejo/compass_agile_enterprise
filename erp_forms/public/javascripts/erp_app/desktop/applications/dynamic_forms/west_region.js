@@ -201,6 +201,10 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.WestRegion",{
 
     var form_props = formBuilder.query('#form_props').first().getForm();
     form_props.loadRecord(record);
+    Ext.getCmp('westregionPanel').setActiveTab('field_types');
+    var east_tabs = formBuilder.query('#east_tabs').first();
+    east_tabs.setActiveTab('form_props');
+
   },
 
   getDynamicForm : function(record){
@@ -506,13 +510,32 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.WestRegion",{
       }
     });
 
+    this.fieldTypes = {
+        xtype: 'treepanel',
+        viewConfig: {
+            plugins: {
+                ptype: 'treeviewdragdrop',
+                ddGroup: 'fieldsDDGroup',
+                enableDrop: false
+            }
+        },                            
+        itemId: 'field_types',                            
+        title: 'Field Types',
+        root: fieldTreeRootNode,
+        rootVisible: true,
+        autoScroll: true
+    };
+
     config = Ext.apply({
       id: 'westregionPanel',
       region:'west',
       split:true,
-      width:175,
-      collapsible:false,
-      items: [this.formsTree]
+      width:200,
+      header: false,
+      hideCollapseTool: true,
+      collapsible: true,
+      collapseMode: 'mini',
+      items: [this.formsTree, this.fieldTypes]
     }, config);
 
     this.callParent([config]);
