@@ -1,4 +1,6 @@
 class ConfigurationItemType < ActiveRecord::Base
+  attr_accessible :description, :internal_identifier, :allow_user_defined_options
+  
   validates :internal_identifier, :uniqueness => true
 
   has_many :configuration_item_type_configuration_options

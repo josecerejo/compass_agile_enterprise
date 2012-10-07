@@ -1,4 +1,6 @@
 class Comment < ActiveRecord::Base
+  attr_accessible :comment, :value
+
   belongs_to :commented_record, :polymorphic => true
   belongs_to :user
 

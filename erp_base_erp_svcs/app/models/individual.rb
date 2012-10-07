@@ -1,4 +1,6 @@
 class Individual < ActiveRecord::Base
+  attr_accessible :current_first_name, :current_last_name, :gender
+  
   require 'attr_encrypted'
   
   after_create  :create_party

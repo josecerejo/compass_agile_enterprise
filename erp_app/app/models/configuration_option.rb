@@ -1,4 +1,6 @@
 class ConfigurationOption < ActiveRecord::Base
+  attr_accessible :description, :internal_identifier, :comment, :value
+  
   validates :internal_identifier, :uniqueness => {:scope => :id}
 
   has_many :configuration_item_type_configuration_options

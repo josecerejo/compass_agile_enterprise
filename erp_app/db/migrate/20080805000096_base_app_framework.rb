@@ -146,9 +146,12 @@ class BaseAppFramework < ActiveRecord::Migration
         t.string :description
         t.string :internal_identifier
         t.boolean :active
+        t.boolean :is_template, :default => false
 
         t.timestamps
       end
+      
+      add_index :configurations, :is_template
     end
 
     unless table_exists? :valid_configurations
@@ -255,9 +258,8 @@ class BaseAppFramework < ActiveRecord::Migration
         :preference_options, :preference_options_preference_types,
         :valid_preference_types, :user_preferences,
         :app_containers, :app_containers_applications,
-        :applications_widgets,
+        :applications_widgets,  :widgets, :tree_menu_node_defs,
         :applications, :applications_desktops,
-        :desktops, :widgets, :tree_menu_node_defs,
         :configurations, :configuration_items,
         :configuration_item_types, :configuration_options,
         :configuration_item_types_configuration_options,

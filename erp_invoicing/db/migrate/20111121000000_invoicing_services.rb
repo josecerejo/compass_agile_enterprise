@@ -22,6 +22,8 @@ class InvoicingServices < ActiveRecord::Migration
         t.references :invoice_type
         t.references :billing_account
         t.references :invoice_payment_strategy_type
+        t.references :balance
+        t.references :calculate_balance_strategy_type
 
         t.timestamps
       end
@@ -128,6 +130,7 @@ class InvoicingServices < ActiveRecord::Migration
         t.boolean :send_paper_bills, :default => false
         t.boolean :payable_online, :default => false
         t.date    :billing_date
+        t.integer :calculate_balance_strategy_type_id
 
         t.timestamps
       end
@@ -157,6 +160,7 @@ class InvoicingServices < ActiveRecord::Migration
         t.date     :from_date
         t.date     :thru_date
         t.boolean  :enabled
+        t.boolean  :text_to_pay
 
         t.timestamps
       end
@@ -244,6 +248,14 @@ class InvoicingServices < ActiveRecord::Migration
       end
     end
 
+    unless table_exists?(:calculate_balance_strategy_types)
+      create_table :calculate_balance_strategy_types do |t|
+        t.string :internal_identifier
+        t.string :description
+
+        t.timestamps
+      end
+    end
     
   end
 
@@ -253,7 +265,7 @@ class InvoicingServices < ActiveRecord::Migration
       :invoice_items, :invoice_item_types, :invoice_party_roles,
       :billing_accounts, :billing_contact_mechanisms,
       :payment_applications, :payment_party_roles, :recurring_payments,
-      :invoice_payment_term_sets,:invoice_payment_terms,:invoice_payment_term_types
+      :invoice_payment_term_sets,:invoice_payment_terms,:invoice_payment_term_types, :calculate_balance_strategy_types
     ].each do |tbl|
       if table_exists?(tbl)
         drop_table tbl

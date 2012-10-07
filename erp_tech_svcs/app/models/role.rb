@@ -1,4 +1,6 @@
 class Role < ActiveRecord::Base
+  attr_accessible :internal_identifier, :description
+  
   acts_as_erp_type
 
   has_and_belongs_to_many :secured_models

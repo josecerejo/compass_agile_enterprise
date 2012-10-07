@@ -3,7 +3,11 @@ class DynamicForm < ActiveRecord::Base
 
   validates_uniqueness_of :internal_identifier, :scope => :model_name
 
-  has_permalink :description, :internal_identifier, :update => false
+  extend FriendlyId
+  friendly_id :description, :use => [:slugged], :slug_column => :internal_identifier
+  def should_generate_new_friendly_id?
+    new_record?
+  end
   
   def self.class_exists?(class_name)
   	result = nil

@@ -1,4 +1,6 @@
 class Category < ActiveRecord::Base
+  attr_accessible :description, :internal_identifier
+  
   acts_as_nested_set
   include ErpTechSvcs::Utils::DefaultNestedSetMethods
 

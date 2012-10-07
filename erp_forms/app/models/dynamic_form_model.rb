@@ -1,4 +1,6 @@
 class DynamicFormModel < ActiveRecord::Base
+  attr_accessible :model_name
+  
   has_many :dynamic_form_documents
   has_many :dynamic_forms, :dependent => :destroy
 

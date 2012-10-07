@@ -1,4 +1,6 @@
 class Currency < ActiveRecord::Base
+  attr_accessible :name, :internal_identifier, :major_unit_symbol
+  
   has_many :money
   
   def symbol

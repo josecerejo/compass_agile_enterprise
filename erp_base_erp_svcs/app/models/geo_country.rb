@@ -1,4 +1,6 @@
 class GeoCountry < ActiveRecord::Base
+  attr_accessible :name, :created_at, :external_id, :iso_code_2, :iso_code_3, :id, :display
+  
   has_many :postal_addresses
   has_many :geo_zones
 

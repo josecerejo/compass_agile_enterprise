@@ -1,4 +1,6 @@
 class Application < ActiveRecord::Base
+  attr_accessible :description, :icon, :javascript_class_name, :internal_identifier, :shortcut_id, :base_url
+  
   has_capabilities
   has_user_preferences
 

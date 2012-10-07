@@ -1,4 +1,6 @@
 class CompassAeInstance < ActiveRecord::Base
+  attr_accessible :version
+  
   has_file_assets
   
   def installed_engines

@@ -257,6 +257,45 @@ class SetupKnitkit < ActiveRecord::Migration
       add_index :website_party_roles, :role_type_id
       add_index :website_party_roles, :party_id
     end
+    
+    create_table :documented_items, :force => true do |t|
+      t.string :documented_klass, :null => true
+      t.integer :documented_content_id, :null => true
+      t.integer :online_document_section_id
+      t.timestamps
+    end
+    
+    create_table :documents do |t|
+      t.string    :external_identifier
+      t.string    :internal_identifier
+      t.string    :description
+      t.datetime  :document_date
+      t.text      :dynamic_attributes
+
+      t.references :document_record, :polymorphic => true
+      t.references :document_type
+
+      t.timestamps
+    end
+
+    add_index :documents, [:document_record_type, :document_record_id], :name => 'document_record_poly_idx'
+    add_index :documents, :document_type_id, :name => 'document_type_idx'
+
+    create_table :document_types do |t|
+      t.string    :external_identifier
+      t.string    :internal_identifier
+      t.string    :description
+
+      t.timestamps
+    end
+    
+    create_table :valid_documents do |t|
+      t.references :document
+      t.references :documented_model, :polymorphic => true
+    end
+
+    add_index :valid_documents, :document_id
+    add_index :valid_documents, [:documented_model_id, :documented_model_type], :name => 'valid_documents_model_idx'
 
   end
 
@@ -265,9 +304,9 @@ class SetupKnitkit < ActiveRecord::Migration
     Content.drop_versioned_table
 
     # check that each table exists before trying to delete it.
-    [:websites, :website_sections, :contents, :website_section_contents,
+    [:websites, :website_sections, :contents, :website_section_contents, :documents, :document_types, :valid_documents,
       :themes, :theme_files, :published_websites, :published_elements, :website_party_roles,
-      :comments,:website_hosts,:website_nav_items, :website_navs, :tags, :taggings].each do |tbl|
+      :comments,:website_hosts,:website_nav_items, :website_navs, :tags, :taggings, :documented_items].each do |tbl|
       if table_exists?(tbl)
         drop_table tbl
       end

@@ -1,4 +1,6 @@
 class Capability < ActiveRecord::Base
+  attr_accessible :capability_type, :resource
+  
   has_roles
 
   belongs_to :capability_type
