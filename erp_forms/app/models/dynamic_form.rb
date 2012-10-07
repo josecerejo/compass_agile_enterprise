@@ -1,5 +1,7 @@
 class DynamicForm < ActiveRecord::Base
   belongs_to :dynamic_form_model
+  belongs_to :created_by, :class_name => "User"
+  belongs_to :updated_by, :class_name => "User"
 
   validates_uniqueness_of :internal_identifier, :scope => :model_name
 
@@ -76,7 +78,24 @@ class DynamicForm < ActiveRecord::Base
     array_of_fields.to_json
   end
   
-  def to_extjs_formpanel(options={})    
+  def focus_first_field_js(model_name)
+    if self.focus_first_field
+      return "Ext.getCmp('dynamic_form_panel_#{model_name}').getComponent(0).focus(true, 200);"
+    else
+      return ''
+    end
+  end
+
+  def submit_empty_text_js
+    if self.submit_empty_text
+      return "submitEmptyText: true,"
+    else
+      return ''
+    end
+  end
+
+  def to_extjs_formpanel(options={})   
+  Rails.logger.info definition_with_validation 
     form_hash = {
       :xtype => 'form',
       :id => "dynamic_form_panel_#{model_name}",
@@ -93,16 +112,17 @@ class DynamicForm < ActiveRecord::Base
     form_hash[:baseParams][:dynamic_form_model_id] = self.dynamic_form_model_id
     form_hash[:baseParams][:model_name] = self.model_name
     form_hash[:listeners] = {
-      :afterrender => NonEscapeJsonString.new("function(form) {Ext.getCmp('dynamic_form_panel_#{model_name}').getComponent(0).focus(false);}")
+      :afterrender => NonEscapeJsonString.new("function(form) { #{focus_first_field_js(self.model_name)} }")
     }
     form_hash[:items] = definition_with_validation
     form_hash[:buttons] = []
     form_hash[:buttons][0] = {
-      :text => 'Submit',
+      :text => self.submit_button_label,
       :listeners => NonEscapeJsonString.new("{
           \"click\":function(button){
               var formPanel = Ext.getCmp('dynamic_form_panel_#{model_name}');
               formPanel.getForm().submit({
+                  #{submit_empty_text_js}
                   reset:true,
                   success:function(form, action){
                       Ext.getCmp('dynamic_form_panel_#{model_name}').findParentByType('window').close();
@@ -119,7 +139,7 @@ class DynamicForm < ActiveRecord::Base
       }")
     }
     form_hash[:buttons][1] = {
-      :text => 'Cancel',
+      :text => self.cancel_button_label,
       :listeners => NonEscapeJsonString.new("{
           \"click\":function(button){
               Ext.getCmp('dynamic_form_panel_#{model_name}').findParentByType('window').close();
@@ -161,15 +181,16 @@ class DynamicForm < ActiveRecord::Base
               items: #{definition_with_validation.to_json},
               listeners: {
                   afterrender: function(form) {
-                      Ext.getCmp('dynamic_form_panel_#{model_name}').getComponent(0).focus(false);
+                      #{focus_first_field_js(self.model_name)}
                   }
               },
               buttons: [{
-                  text: 'Submit',
+                  text: '#{self.submit_button_label}',
                   listeners:{
                       'click':function(button){
                           var formPanel = Ext.getCmp('dynamic_form_panel_#{model_name}');
                           formPanel.getForm().submit({
+                              #{submit_empty_text_js}
                               reset:true,
                               success:function(form, action){
                                   json_hash = Ext.decode(action.response.responseText);
@@ -190,7 +211,7 @@ class DynamicForm < ActiveRecord::Base
                   }
                   
               },{
-                  text: 'Cancel'
+                  text: '#{self.submit_button_label}'
               }]
           });"
       #logger.info javascript

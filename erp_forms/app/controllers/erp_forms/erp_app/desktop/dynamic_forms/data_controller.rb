@@ -1,6 +1,5 @@
 module ErpForms::ErpApp::Desktop::DynamicForms
   class DataController < ErpForms::ErpApp::Desktop::DynamicForms::BaseController
-    @@datetime_format = "%m/%d/%Y %l:%M%P"
 
     # setup dynamic data grid
     def setup

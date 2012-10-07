@@ -172,6 +172,10 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.WestRegion",{
                     });
                     self.centerRegion.workArea.add(formBuilder);
                     self.centerRegion.workArea.setActiveTab(self.centerRegion.workArea.items.length - 1);
+
+                    var form_props = formBuilder.query('#form_props').first().getForm();
+                    form_props.findField('description').setValue(form_name);
+
                     newFormWindow.close();
                   }
                 }
@@ -185,15 +189,18 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.WestRegion",{
             newFormWindow.show();
   },
 
-  openFormTab : function(title, model_name, form_id, form_definition){
+  openFormTab : function(record){
     var formBuilder = Ext.create('Compass.ErpApp.Desktop.Applications.DynamicForms.FormBuilder', {
-      title: title,
-      model_name: model_name,
-      form_id: form_id,
-      form_definition: form_definition
+      title: record.get('description'),
+      model_name: record.get('model_name'),
+      form_id: record.get('id'),
+      form_definition: Ext.decode(record.get('definition'))
     });
     this.centerRegion.workArea.add(formBuilder);
     this.centerRegion.workArea.setActiveTab(this.centerRegion.workArea.items.length - 1);
+
+    var form_props = formBuilder.query('#form_props').first().getForm();
+    form_props.loadRecord(record);
   },
 
   getDynamicForm : function(record){
@@ -206,25 +213,8 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.WestRegion",{
     }
 
     self.setWindowStatus('Loading dynamic form...');
-    Ext.Ajax.request({
-      url: '/erp_forms/erp_app/desktop/dynamic_forms/forms/get_definition',
-      method: 'POST',
-      params:{
-        id:record.get('formId')
-      },
-      success: function(response) {
-        self.clearWindowStatus();
-        form_definition = Ext.decode(response.responseText);
-        if (form_definition.success == false){
-            Ext.Msg.alert('Error', form_definition.error);
-        }else{
-          self.openFormTab(record.get('text'), record.parentNode.get('text'), record.get('formId'), form_definition);
-        }
-      },
-      failure: function(response) {
-        Ext.Msg.alert('Error', 'Error loading dynamic form.');
-      }
-    });
+    Ext.getStore('dynamicFormStore').load({ params:{ id:record.get('formId') }});
+    self.clearWindowStatus();
   },
 
   getDynamicData : function(record, title){

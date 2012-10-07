@@ -1,17 +1,29 @@
-Ext.define('Form', {
+Ext.define('DynamicForm', {
   extend: 'Ext.data.Model',
   fields: [
     {name: 'id', type: 'number'},
     {name: 'description', type: 'string'},
     {name: 'model_name', type: 'string'},
-    {name: 'definition', type: 'string'}
+    {name: 'definition', type: 'string'},
+    {name: 'internal_identifier', type: 'string'},
+    {name: 'email_or_save', type: 'string'},
+    {name: 'email_recipients', type: 'string'},
+    {name: 'focus_first_field', type: 'boolean'},
+    {name: 'show_in_multitask', type: 'boolean'},
+    {name: 'submit_empty_text', type: 'boolean'},
+    {name: 'submit_button_label', type: 'string'},
+    {name: 'cancel_button_label', type: 'string'},
+    {name: 'created_at', type: 'string'},
+    {name: 'updated_at', type: 'string'},
+    {name: 'created_by', type: 'string'},
+    {name: 'updated_by', type: 'string'}
   ]
 });
 
 // get a single form and fire openFormTab
 Ext.create('Ext.data.Store', {
-  model: 'Form',
-  storeId: 'formStore',
+  model: 'DynamicForm',
+  storeId: 'dynamicFormStore',
   timeout : 90000,
   proxy: {
       type: 'ajax',
@@ -20,8 +32,8 @@ Ext.create('Ext.data.Store', {
   },
   listeners:{
     'load':function(store, records){
-      var record = store.getAt(0).data;
-      Ext.getCmp('westregionPanel').openFormTab(record.description, record.model_name, record.id, Ext.decode(record.definition));
+      var record = store.getAt(0);
+      Ext.getCmp('westregionPanel').openFormTab(record);
     }
   },
   autoLoad: false
@@ -431,14 +443,14 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.FormBuilder",{
     },
 
     addValidationToForm : function(formPanel){
-        var form_with_validation = [];
-        Ext.each(formPanel.form_definition, function(field){
+        var form_with_validation = Ext.clone(formPanel.form_definition); // make independent copy
+        Ext.each(form_with_validation, function(field){
             if(!Ext.isEmpty(field.validator_function)){
                 field.validator = function(v){ regex = this.initialConfig.validation_regex; return eval(field.validator_function); };
             }else if (!Ext.isEmpty(field.validation_regex)){
                 field.validator = function(v){ return validate_regex(v, this.initialConfig.validation_regex); };
             }
-            form_with_validation.push(field);
+            //form_with_validation.push(field);
         });
 
         return form_with_validation;
@@ -568,12 +580,15 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.FormBuilder",{
                     form_id: (Ext.isEmpty(config.form_id) ? null : config.form_id),
                     tbar: [
                       { xtype: 'button', 
-                        text: 'Save Dynamic Form',
+                        text: 'Save Form',
                         iconCls: 'icon-save',
                         listeners:{
                           click: function(button){
                             var formPanel = button.findParentByType('form');
                             var formBuilder = formPanel.findParentByType('dynamic_forms_FormBuilder');
+                            var form_props = formBuilder.query('#form_props').first().getForm();
+
+                            //TODO: add validation for form_props including email_recipients which depends on email_or_save
 
                             if (Ext.isEmpty(config.form_id)){
                                 var create = true;
@@ -588,8 +603,15 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.FormBuilder",{
                               params:{
                                 id:config.form_id,
                                 form_definition:Ext.JSON.encode(formPanel.form_definition),
-                                description: config.title,
-                                model_name: config.model_name
+                                description: form_props.findField('description').getValue(),
+                                model_name: config.model_name,
+                                email_or_save: form_props.findField('email_or_save').getValue(),
+                                email_recipients: form_props.findField('email_recipients').getValue(),
+                                focus_first_field: form_props.findField('focus_first_field').getValue(),
+                                show_in_multitask: form_props.findField('show_in_multitask').getValue(),
+                                submit_empty_text: form_props.findField('submit_empty_text').getValue(),
+                                submit_button_label: form_props.findField('submit_button_label').getValue(),
+                                cancel_button_label: form_props.findField('cancel_button_label').getValue()
                               },
                               success: function(response) {
                                 formBuilder.clearWindowStatus();
@@ -597,14 +619,10 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.FormBuilder",{
                                 if(obj.success){
                                     if (create == true){
                                         Ext.getCmp('dynamic_formsTabPanel').remove(formBuilder);
-                                        // ajax call to get single grid record data
-                                        Ext.getStore('formStore').load({
-                                          params:{ 
-                                            id: obj.id 
-                                          }
-                                        });                      
+                                        Ext.getStore('dynamicFormStore').load({ params:{ id: obj.id } });
                                         Ext.getStore('formsTreeStore').load();
                                     }else{
+                                        formBuilder.setTitle(form_props.findField('description').getValue());
                                         Ext.Msg.alert('Success', 'Form saved.');  
                                     }
                                 }
@@ -835,7 +853,8 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.FormBuilder",{
                             },                            
                             itemId: 'field_types',                            
                             title: 'Field Types',
-                            root: fieldTreeRootNode
+                            root: fieldTreeRootNode,
+                            rootVisible: false
                         },
                         {
                             xtype: 'form',
@@ -954,12 +973,86 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.FormBuilder",{
                             xtype: 'form',
                             title: 'Form Properties',
                             itemId: 'form_props',
-                            bodyPadding: 10,
+                            bodyPadding: 10,             
+                            defaults:{
+                                width: 230,
+                                labelWidth: 85
+                            },
                             items:[
                                 {
                                     fieldLabel: 'Form Name',
+                                    name: 'description',
                                     xtype: 'textfield',
-                                    width: 200
+                                    allowBlank: false
+                                },
+                                {
+                                    fieldLabel: 'Internal ID',
+                                    name: 'internal_identifier',
+                                    xtype: 'displayfield'
+                                },
+                                {
+                                    fieldLabel: 'Email or Save Data',
+                                    name: 'email_or_save',
+                                    xtype: 'combobox',
+                                    allowBlank: false,
+                                    forceSelection:true,
+                                    store: [
+                                        ['email', 'Email Data'],
+                                        ['save', 'Save Data'],
+                                        ['both', 'Email & Save Data']
+                                    ]
+                                },
+                                {
+                                    fieldLabel: 'Email Recipients',
+                                    name: 'email_recipients',
+                                    xtype: 'textfield'
+                                },
+                                {
+                                    fieldLabel: 'Focus Field',
+                                    name: 'focus_first_field',
+                                    xtype: 'checkbox'
+                                },
+                                {
+                                    fieldLabel: 'Submit Button Label',
+                                    name: 'submit_button_label',
+                                    xtype: 'textfield',
+                                    allowBlank: false
+                                },
+                                {
+                                    fieldLabel: 'Cancel Button Label',
+                                    name: 'cancel_button_label',
+                                    xtype: 'textfield',
+                                    allowBlank: false
+                                },
+                                {
+                                    fieldLabel: 'Submit Empty Text',
+                                    name: 'submit_empty_text',
+                                    xtype: 'checkbox'
+                                },
+                                {
+                                    fieldLabel: 'Show in MultiTask',
+                                    name: 'show_in_multitask',
+                                    xtype: 'checkbox'
+                                },
+                                {
+                                    fieldLabel: 'Created At',
+                                    name: 'created_at',
+                                    xtype: 'displayfield'
+                                },
+                                {
+                                    fieldLabel: 'Created By',
+                                    name: 'created_by',
+                                    xtype: 'displayfield'
+                                },
+                                {
+                                    fieldLabel: 'Updated At',
+                                    name: 'updated_at',
+                                    xtype: 'displayfield'
+                                },
+                                {
+                                    fieldLabel: 'Updated By',
+                                    name: 'updated_by',
+                                    xtype: 'displayfield'
                                 }
                             ]
                         }

@@ -28,6 +28,13 @@ class DynamicForms < ActiveRecord::Migration
         t.string :model_name
         t.string :internal_identifier
         t.boolean :default
+        t.string  :email_or_save, :default => 'save' 
+        t.string :email_recipients 
+        t.boolean :focus_first_field, :default => true 
+        t.boolean :show_in_multitask, :default => false 
+        t.boolean :submit_empty_text, :default => false 
+        t.string :submit_button_label, :default => 'Submit'
+        t.string :cancel_button_label, :default => 'Cancel'
 
         t.integer :created_by_id
         t.integer :updated_by_id
