@@ -120,21 +120,24 @@ class DynamicForm < ActiveRecord::Base
       :text => self.submit_button_label,
       :listeners => NonEscapeJsonString.new("{
           \"click\":function(button){
-              var formPanel = Ext.getCmp('dynamic_form_panel_#{model_name}');
-              formPanel.getForm().submit({
-                  #{submit_empty_text_js}
-                  reset:true,
-                  success:function(form, action){
-                      Ext.getCmp('dynamic_form_panel_#{model_name}').findParentByType('window').close();
-
-                      if (Ext.getCmp('#{model_name}')){
-                          Ext.getCmp('#{model_name}').query('shared_dynamiceditablegrid')[0].store.load();                                                                      
-                      }
-                  },
-                  failure:function(form, action){
-                    Ext.Msg.alert(action.response.responseText);                                
-                  }
-              });
+              var form = Ext.getCmp('dynamic_form_panel_#{model_name}').getForm();
+              if (form.isValid()){
+                form.submit({
+                    #{submit_empty_text_js}
+                    reset:true,
+                    success:function(form, action){
+                        Ext.getCmp('dynamic_form_panel_#{model_name}').findParentByType('window').close();
+                        if (Ext.getCmp('#{model_name}')){
+                            Ext.getCmp('#{model_name}').query('shared_dynamiceditablegrid')[0].store.load();                                                                      
+                        }
+                    },
+                    failure:function(form, action){
+                      Ext.Msg.alert('Error', action.response.responseText);                                
+                    }
+                });
+              }else{
+                Ext.Msg.alert('Error','Please complete form.');
+              }
           }
       }")
     }
