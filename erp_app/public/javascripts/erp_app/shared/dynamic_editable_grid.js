@@ -74,35 +74,41 @@ Ext.define("Compass.ErpApp.Shared.DynamicEditableGrid",{
                 idProperty: ((config.id_property != undefined) ? config.id_property : "id")
             });
             plugins.push(this.editing);
-            tbar = {
-                items:[{
-                    text: 'Add',
-                    iconCls: 'icon-add',
-                    handler: function(button) {
-                        var grid = button.findParentByType('shared_dynamiceditablegrid');
-                        var edit = grid.editing;
-                        grid.store.insert(0, new Model());
-                        edit.startEdit(0,0);
-                    }
-                },
-                '-',
-                {
-                    text: 'Delete',
-                    iconCls: 'icon-delete',
-                    handler: function(button) {
-                        var grid = button.findParentByType('shared_dynamiceditablegrid');
-                        var selection = grid.getView().getSelectionModel().getSelection()[0];
-                        if (selection) {
-                            grid.store.remove(selection);
-                        }
-                    }
-                }]
-            };
-
+            
             config = Ext.apply({
-                plugins:plugins,
-                tbar:tbar
+                plugins:plugins
             }, config);
+
+            if (config.showEditorToolbar){
+                tbar = {
+                    items:[{
+                        text: 'Add',
+                        iconCls: 'icon-add',
+                        handler: function(button) {
+                            var grid = button.findParentByType('shared_dynamiceditablegrid');
+                            var edit = grid.editing;
+                            grid.store.insert(0, new Model());
+                            edit.startEdit(0,0);
+                        }
+                    },
+                    '-',
+                    {
+                        text: 'Delete',
+                        iconCls: 'icon-delete',
+                        handler: function(button) {
+                            var grid = button.findParentByType('shared_dynamiceditablegrid');
+                            var selection = grid.getView().getSelectionModel().getSelection()[0];
+                            if (selection) {
+                                grid.store.remove(selection);
+                            }
+                        }
+                    }]
+                };                
+
+                config = Ext.apply({
+                    tbar:tbar
+                }, config);
+            }
         }
 
         config = Ext.apply({
