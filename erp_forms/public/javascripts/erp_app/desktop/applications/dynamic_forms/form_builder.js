@@ -113,6 +113,11 @@ var fieldData = {
             field_xtype: 'timefield',
             leaf: true
         },
+        {
+            text: 'Yes / No',
+            field_xtype: 'yesno',
+            leaf: true
+        }
     ]};
 
 var fieldTreeRootNode = fieldStore.setRootNode(fieldData);
@@ -216,7 +221,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.FormBuilder",{
                 xtype: 'textarea',
                 labelWidth: 50,
                 width: 235,
-                height: 200,
+                height: 175,
                 toolTip: "Add options with a comma separated list. Example: value,Description,option2,Option 2"
             },
             {
@@ -799,6 +804,11 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.FormBuilder",{
                                             switch(fieldDefinition.xtype){
                                                 case 'combobox':
                                                     fieldDefinition.forceSelection = true;
+                                                    break;
+                                                case 'yesno':
+                                                    fieldDefinition.xtype = 'combobox';
+                                                    fieldDefinition.forceSelection = true;
+                                                    fieldDefinition.store = [['no','No'],['yes','Yes']];
                                                     break;
                                                 case 'email':
                                                     fieldDefinition.xtype = 'textfield';
