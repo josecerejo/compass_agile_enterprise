@@ -29,7 +29,7 @@ class DynamicGridColumn
     if options[:editor]
       readonly = field_hash[:readOnly].blank? ? false : field_hash[:readOnly]
       col += ",
-      {
+      \"editor\": {
         \"xtype\": \"#{field_hash[:xtype]}\",
         \"readOnly\": \"#{readonly}\""
         
