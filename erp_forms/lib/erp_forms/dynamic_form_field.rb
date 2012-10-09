@@ -30,7 +30,7 @@ class DynamicFormField
   # SPECIAL FIELDS #
   ##################
   def self.email(options={})
-    options[:validation_regex] = "^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$"
+    options[:validation_regex] = ErpTechSvcs::Config.email_regex
     DynamicFormField.basic_field('textfield', options)
   end
 

@@ -2,6 +2,7 @@ Rails.application.config.erp_tech_svcs.configure do |config|
   config.installation_domain = 'localhost:3000'
   config.login_url = '/erp_app/login'
   config.email_notifications_from = 'notifications@noreply.com'
+  config.email_regex = "^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$"
   config.max_file_size_in_mb = 5
   config.file_assets_location = 'file_assets' # relative to Rails.root/
   config.s3_url_expires_in_seconds = 60 

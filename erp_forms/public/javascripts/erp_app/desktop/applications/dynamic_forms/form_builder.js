@@ -430,8 +430,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.FormBuilder",{
     },
 
     emailRegex : function(){
-        // using HTML5 regex from http://stackoverflow.com/questions/201323/using-a-regular-expression-to-validate-an-email-address
-        return "[a-zA-Z0-9.!#$%&'*+-/=?\^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*";
+        return ErpApp.emailRegex;
     },
 
     addFieldToForm : function(formPanel, fieldDefinition){
