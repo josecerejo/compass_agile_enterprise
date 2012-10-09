@@ -2,52 +2,28 @@ class DynamicGridColumn
   
   def self.build_column(field_hash, options={})
     field_hash.symbolize_keys!
-    header = field_hash[:fieldLabel]
-    type = DynamicGridColumn.convert_xtype_to_column_type(field_hash[:xtype])
+    header = (field_hash[:header] ? field_hash[:header] : field_hash[:fieldLabel])
+    type = (field_hash[:type] ? field_hash[:type] : DynamicGridColumn.convert_xtype_to_column_type(field_hash[:xtype]))
     data_index = (field_hash[:dataIndex] ? field_hash[:dataIndex] : field_hash[:name])
+    sortable = (field_hash[:sortable].nil? ? true : field_hash[:sortable])
+    renderer = (type == 'date' ? "Ext.util.Format.dateRenderer('m/d/Y')" : '')
     
-    if type == 'date'
-      renderer = "Ext.util.Format.dateRenderer('m/d/Y')"
-    else
-      renderer = ''
-    end
-    
-    col = "{
-        \"header\":\"#{header}\",
-        \"type\":\"#{type}\",
-        \"dataIndex\":\"#{data_index}\""
+    col = {
+      :header => header,
+      :type => type,
+      :dataIndex => data_index,
+      :sortable => sortable
+    }
    
-    
-    col << ",\"width\":#{field_hash[:width]}" if field_hash[:width]
+    col[:width] = field_hash[:width] if field_hash[:width]
+    col[:renderer] = renderer unless renderer.blank?
 
-    sortable = field_hash[:sortable].nil? ? true : field_hash[:sortable]
-    col << ",\"sortable\":#{sortable}"
-
-    col += ",
-        \"renderer\": #{renderer}" if renderer != ''
-
-    if options[:editor]
-      readonly = field_hash[:readOnly].blank? ? false : field_hash[:readOnly]
-      col += ",
-      \"editor\": {
-        \"xtype\": \"#{field_hash[:xtype]}\",
-        \"readOnly\": \"#{readonly}\""
-        
-        if field_hash[:validation_regex] and field_hash[:validation_regex] != ''
-          col += ",    
-            \"validateOnBlur\": true,
-            \"validator\": function(v){
-              var pattern = /#{field_hash[:validation_regex]}/;
-              var regex = new RegExp(pattern);
-              return regex.test(v);          
-            }"
-        end
-      col += "}"
+    if field_hash[:editor]
+      selections = (field_hash[:editor][:store] ? field_hash[:editor][:store] : [])
+      col[:editor] = DynamicFormField.basic_field(field_hash[:editor][:xtype], field_hash[:editor], selections)
     end    
-        
-    col += "}"
     
-    col
+    col.to_json
   end
   
   def self.build_delete_column(action='')
