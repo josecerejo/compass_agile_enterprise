@@ -1,4 +1,5 @@
 class ProductOffer < ActiveRecord::Base
+  attr_protected :created_at, :updated_at
   
 	belongs_to :product_offer_record, :polymorphic => true   
 

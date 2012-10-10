@@ -1,5 +1,5 @@
 class DynamicFormModel < ActiveRecord::Base
-  attr_accessible :model_name
+  attr_protected :created_at, :updated_at
   
   has_many :dynamic_form_documents
   has_many :dynamic_forms, :dependent => :destroy

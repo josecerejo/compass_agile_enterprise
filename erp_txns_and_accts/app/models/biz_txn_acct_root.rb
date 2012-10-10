@@ -1,4 +1,5 @@
 class BizTxnAcctRoot < ActiveRecord::Base
+  attr_protected :created_at, :updated_at
 
 	belongs_to :biz_txn_acct, :polymorphic => true
 	has_many   :biz_txn_events, :dependent => :destroy

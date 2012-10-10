@@ -1,4 +1,6 @@
 class Invoice < ActiveRecord::Base
+  attr_protected :created_at, :updated_at
+
   acts_as_document
   
   belongs_to  :billing_account

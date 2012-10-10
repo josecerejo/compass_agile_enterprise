@@ -11,13 +11,16 @@ require 'action_controller'
 module ErpApp
   module Widgets
     class Base < ActionController::Metal
+      abstract!
+
       include AbstractController
+      include Rendering, Layouts, Helpers, Callbacks, Translation, Logger
+      include ActionController::RequestForgeryProtection
       include ActionController::DataStreaming
       include ActionController::Streaming
-      include Rendering, Layouts, Helpers, Callbacks, Translation
-      include ActionController::RequestForgeryProtection
 
-      IGNORED_PARAMS = %w{action controller uuid widget_name widget_action dynamic_form_id dynamic_form_model_id model_name use_dynamic_form authenticity_token is_html_form commit utf8}
+      IGNORED_PARAMS = %w{action controller uuid widget_name widget_action dynamic_form_id dynamic_form_model_id
+                          model_name use_dynamic_form authenticity_token is_html_form commit utf8}
 
       delegate :config, :params, :session, :request, :logger, :logged_in?, :current_user,
                :flash, :update_div_id, :update_html, :current_theme_paths, :request, :send_data, :to => :proxy_controller
@@ -25,12 +28,6 @@ module ErpApp
       attr_reader   :state_name
       attr_accessor :proxy_controller, :name, :div_id,:html, :view, :uuid, :widget_params
       cattr_accessor :view_resolver_cache
-
-      def log(*args); end
-
-      def process(*)  # defined in AC::Metal.
-        self.response_body = super
-      end
 
       def initialize(proxy_controller=nil, name=nil, view=nil, uuid=nil, widget_params=nil)
         ErpApp::Widgets::Base.view_resolver_cache = [] if ErpApp::Widgets::Base.view_resolver_cache.nil?
@@ -44,61 +41,14 @@ module ErpApp
         merge_params
       end
 
-      def render(opts={})
-        render_view_for(opts, self.view)
+      #override default behavior of nesting views by controller namespace....
+      # The prefixes used in render "foo" shortcuts.
+      def _prefixes
+        @_prefixes ||= []
       end
 
-      def render_view_for(opts, state)
-        return '' if opts[:nothing]
-
-        if opts[:update]
-          update_opts = opts[:update]
-          if update_opts[:text]
-            js = update_opts[:text]
-          else
-            opts = defaultize_render_options_for(update_opts, state)
-            template = find_family_view_for_state(opts[:view])
-            opts[:template] = template
-            js = render_to_string(opts)
-          end
-          return {:json => {:htmlId => update_opts[:id], :html => js}}
-        elsif opts[:text]   ### FIXME: generic option?
-        elsif opts[:inline]
-        elsif opts[:file]
-        elsif opts[:json]
-          opts[:json] = opts[:json].to_json
-        elsif opts[:state]  ### FIXME: generic option
-          opts[:text] = render_state(opts[:state])
-        else
-          # handle :layout, :template_format, :view
-          opts = defaultize_render_options_for(opts, state)
-          template = find_family_view_for_state(opts[:view])
-          opts[:template] = template
-          opts[:inline] = render_to_string(opts)
-          opts.except!(:template)
-        end
-        sanitize_render_options(opts)
-      end
-
-      def find_family_view_for_state(state)
-        missing_template_exception = nil
-
-        begin
-          template = find_template(state)
-          return template if template
-        rescue ::ActionView::MissingTemplate => missing_template_exception
-        end
-
-        raise missing_template_exception
-      end
-
-      def defaultize_render_options_for(opts, state)
-        opts[:view] ||= state
-        opts
-      end
-
-      def sanitize_render_options(opts)
-        opts.except!(:view)
+      def render(*args)
+        render_view_for(self.action_name, *args)
       end
 
       protected
@@ -109,11 +59,38 @@ module ErpApp
 
       #get the full file path for a view file relative to the widgets view path
       def get_views_full_path(view)
-        find_template(view).identifier
+        self.lookup_context.find_template(view).virtual_path
       end
 
       private
-      
+
+      def render_view_for(view, *args)
+        opts = args.first.is_a?(::Hash) ? args.shift : {}
+
+        return "" if opts[:nothing]
+
+        if opts[:update]
+          update_opts = opts[:update]
+          if update_opts[:text]
+            js = update_opts[:text]
+          else
+            opts = {:view => update_opts[:view]}
+            process_opts_for(opts, view)
+            js = render_to_string(opts).html_safe
+          end
+          return {:json => {:htmlId => update_opts[:id], :html => js}}
+        elsif (opts.keys & [:text, :inline, :file]).blank?
+          process_opts_for(opts, view)
+          return render_to_string(opts).html_safe # ActionView::Template::Text doesn't do that for us.
+        else
+          return opts
+        end
+      end
+
+      def process_opts_for(opts, view)
+        opts[:action] = opts[:view] || view
+      end
+
       def merge_params
         stored_widget_params = session[:widgets][self.uuid]
         unless stored_widget_params.nil?
@@ -156,14 +133,6 @@ module ErpApp
 
         def installed_widgets
           self.locate_widgets
-        end
-
-        def find_template(view)
-          resolvers = []
-          widget = Rails.application.config.erp_app.widgets.find{|item| item[:name] == self.widget_name}
-          widget[:view_paths].each do |view_path|
-            resolvers << ActionView::OptimizedFileSystemResolver.new(view_path)
-          end
         end
 
         private

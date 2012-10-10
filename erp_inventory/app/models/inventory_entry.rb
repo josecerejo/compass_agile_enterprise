@@ -1,4 +1,5 @@
 class InventoryEntry < ActiveRecord::Base
+  attr_protected :created_at, :updated_at
 
 	belongs_to :inventory_entry_record, :polymorphic => true
 	belongs_to :product_type

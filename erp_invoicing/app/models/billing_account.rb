@@ -1,4 +1,6 @@
 class BillingAccount < ActiveRecord::Base
+  attr_protected :created_at, :updated_at
+
   acts_as_financial_txn_account
 
   belongs_to :calculate_balance_strategy_type

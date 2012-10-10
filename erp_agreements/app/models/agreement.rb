@@ -1,6 +1,7 @@
 class Agreement < ActiveRecord::Base
+  attr_protected :created_at, :updated_at
 
-	belongs_to :agreement_type
+  belongs_to :agreement_type
 	has_many 	 :agreement_items
 	has_many 	 :agreement_party_roles
 	has_many	 :parties, :through => :agreement_party_roles

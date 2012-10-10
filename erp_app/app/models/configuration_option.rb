@@ -1,5 +1,5 @@
 class ConfigurationOption < ActiveRecord::Base
-  attr_accessible :description, :internal_identifier, :comment, :value
+  attr_protected :created_at, :updated_at
   
   validates :internal_identifier, :uniqueness => {:scope => :id}
 

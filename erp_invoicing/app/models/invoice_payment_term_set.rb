@@ -1,4 +1,6 @@
 class InvoicePaymentTermSet < ActiveRecord::Base
+  attr_protected :created_at, :updated_at
+
   belongs_to :invoice
   has_many   :invoice_payment_terms
 

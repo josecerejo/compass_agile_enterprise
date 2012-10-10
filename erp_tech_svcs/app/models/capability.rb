@@ -1,5 +1,5 @@
 class Capability < ActiveRecord::Base
-  attr_accessible :capability_type, :resource
+  attr_protected :created_at, :updated_at
   
   has_roles
 

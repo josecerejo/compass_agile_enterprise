@@ -1,4 +1,6 @@
 class PartySearchFact < ActiveRecord::Base
+  attr_protected :created_at, :updated_at
+
   after_destroy :sunspot_commit
   
   belongs_to :party

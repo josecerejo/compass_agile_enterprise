@@ -1,5 +1,5 @@
 class Individual < ActiveRecord::Base
-  attr_accessible :current_first_name, :current_last_name, :gender
+  attr_protected :created_at, :updated_at
   
   require 'attr_encrypted'
   

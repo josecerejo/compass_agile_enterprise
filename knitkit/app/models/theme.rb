@@ -2,6 +2,8 @@ require 'yaml'
 require 'fileutils'
 
 class Theme < ActiveRecord::Base
+  attr_protected :created_at, :updated_at
+
   THEME_STRUCTURE = ['stylesheets', 'javascripts', 'images', 'templates']
   class << self; attr_accessor :base_layouts_views_path, :knitkit_website_stylesheets_path, :knitkit_website_images_path  end
   @base_layouts_views_path = "#{Knitkit::Engine.root.to_s}/app/views"

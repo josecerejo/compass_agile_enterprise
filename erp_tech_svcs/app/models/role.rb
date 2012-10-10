@@ -1,5 +1,5 @@
 class Role < ActiveRecord::Base
-  attr_accessible :internal_identifier, :description
+  attr_protected :created_at, :updated_at
   
   acts_as_erp_type
 

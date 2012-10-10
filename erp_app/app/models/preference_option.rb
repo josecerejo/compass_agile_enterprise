@@ -1,5 +1,5 @@
 class PreferenceOption < ActiveRecord::Base
-  attr_accessible :description, :internal_identifier, :value
+  attr_protected :created_at, :updated_at
   
   has_many   :preferences
   has_and_belongs_to_many :preference_type

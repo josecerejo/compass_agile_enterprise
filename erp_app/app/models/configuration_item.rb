@@ -1,4 +1,6 @@
 class ConfigurationItem < ActiveRecord::Base
+  attr_protected :created_at, :updated_at
+
   belongs_to :configuration
   belongs_to :configuration_item_type
   has_and_belongs_to_many :configuration_options

@@ -1,4 +1,6 @@
 class Document < ActiveRecord::Base
+  attr_protected :created_at, :updated_at
+
   DOCUMENT_DYNAMIC_ATTRIBUTE_PREFIX = 'dyn_'
   
   has_dynamic_attributes :dynamic_attribute_prefix => DOCUMENT_DYNAMIC_ATTRIBUTE_PREFIX, :destroy_dynamic_attribute_for_nil => false

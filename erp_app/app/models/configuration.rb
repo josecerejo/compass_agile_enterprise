@@ -1,5 +1,5 @@
 class Configuration < ActiveRecord::Base
-  attr_accessible :description, :internal_identifier, :is_template
+  attr_protected :created_at, :updated_at
   
   scope :templates, where('is_template = ?', true)
 

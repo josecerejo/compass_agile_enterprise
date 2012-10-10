@@ -1,4 +1,6 @@
 class WebsiteNav < ActiveRecord::Base
+  attr_protected :created_at, :updated_at
+
   belongs_to :website
 
   validates_uniqueness_of :name, :scope => [:website_id], :message => "That Name is Already in Use"

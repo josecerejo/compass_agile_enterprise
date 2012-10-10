@@ -1,4 +1,5 @@
 class PaymentApplication < ActiveRecord::Base
+  attr_protected :created_at, :updated_at
 
   belongs_to :financial_txn
   belongs_to :payment_applied_to, :polymorphic => true

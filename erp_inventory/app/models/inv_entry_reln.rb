@@ -1,4 +1,5 @@
 class InvEntryReln < ActiveRecord::Base
+  attr_protected :created_at, :updated_at
 
   belongs_to :inv_entry_from, :class_name => "InvEntry", :foreign_key => "inv_entry_id_from"  
   belongs_to :inv_entry_to, :class_name => "InvEntry", :foreign_key => "inv_entry_id_to"

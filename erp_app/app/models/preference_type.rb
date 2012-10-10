@@ -1,5 +1,5 @@
 class PreferenceType < ActiveRecord::Base
-  attr_accessible :description, :internal_identifier
+  attr_protected :created_at, :updated_at
   
   has_many_polymorphic :preferenced_records,
                :through => :valid_preference_types,

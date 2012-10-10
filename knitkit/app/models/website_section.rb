@@ -1,4 +1,6 @@
 class WebsiteSection < ActiveRecord::Base
+  attr_protected :created_at, :updated_at
+
   has_roles
   after_create :update_paths # must happen after has_roles so that after_create :save_secured_model fires first
   before_save  :update_path, :check_internal_indentifier

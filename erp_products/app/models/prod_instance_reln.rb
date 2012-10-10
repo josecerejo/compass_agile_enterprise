@@ -1,4 +1,5 @@
 class ProdInstanceReln < ActiveRecord::Base
+  attr_protected :created_at, :updated_at
 
   belongs_to :prod_instance_from, :class_name => "ProductInstance", :foreign_key => "prod_instance_id_from"  
   belongs_to :prod_instance_to, :class_name => "ProductInstance", :foreign_key => "prod_instance_id_to"

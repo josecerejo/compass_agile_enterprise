@@ -1,5 +1,5 @@
 class Category < ActiveRecord::Base
-  attr_accessible :description, :internal_identifier
+  attr_protected :created_at, :updated_at
   
   acts_as_nested_set
   include ErpTechSvcs::Utils::DefaultNestedSetMethods

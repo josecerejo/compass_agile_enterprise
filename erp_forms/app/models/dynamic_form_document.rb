@@ -1,4 +1,6 @@
 class DynamicFormDocument < ActiveRecord::Base
+  attr_protected :created_at, :updated_at
+
   belongs_to :dynamic_form_model
 
   has_dynamic_forms

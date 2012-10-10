@@ -1,5 +1,5 @@
 class Widget < ActiveRecord::Base
-  attr_accessible :description, :internal_identifier, :icon, :xtype
+  attr_protected :created_at, :updated_at
   
   has_roles
   has_capabilities

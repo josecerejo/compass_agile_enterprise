@@ -1,4 +1,6 @@
 class Website < ActiveRecord::Base
+  attr_protected :created_at, :updated_at
+
   after_destroy :remove_sites_directory, :remove_website_role
   after_create  :setup_website
 

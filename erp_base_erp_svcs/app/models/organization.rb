@@ -1,5 +1,5 @@
 class Organization < ActiveRecord::Base
-	attr_accessible :description
+  attr_protected :created_at, :updated_at
 	
 	after_create  :create_party
 	after_save    :save_party

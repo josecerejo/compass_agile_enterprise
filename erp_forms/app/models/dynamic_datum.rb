@@ -1,4 +1,6 @@
 class DynamicDatum < ActiveRecord::Base
+  attr_protected :created_at, :updated_at
+
   DYNAMIC_ATTRIBUTE_PREFIX = 'dyn_'
   
   has_dynamic_attributes :dynamic_attribute_prefix => DYNAMIC_ATTRIBUTE_PREFIX, :destroy_dynamic_attribute_for_nil => false

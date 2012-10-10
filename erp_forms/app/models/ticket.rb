@@ -1,4 +1,6 @@
 class Ticket < ActiveRecord::Base
+  attr_protected :created_at, :updated_at
+
   belongs_to :user, :foreign_key => 'assigned_to_id'
 
   has_dynamic_forms

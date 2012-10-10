@@ -1,5 +1,5 @@
 class UserPreference < ActiveRecord::Base
-  attr_accessible :user, :preference
+  attr_protected :created_at, :updated_at
   
   belongs_to :user
   belongs_to :preference

@@ -1,4 +1,6 @@
 class AttributeValue < ActiveRecord::Base
+  attr_protected :created_at, :updated_at
+
   belongs_to :attributed_record, :polymorphic => true
   belongs_to :attribute_type
 

@@ -1,4 +1,6 @@
 class Party < ActiveRecord::Base
+  attr_protected :created_at, :updated_at
+
   has_notes
   
   has_many   :contacts, :dependent => :destroy

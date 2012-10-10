@@ -1,4 +1,6 @@
 class DynamicForm < ActiveRecord::Base
+  attr_protected :created_at, :updated_at
+
   belongs_to :dynamic_form_model
 
   validates_uniqueness_of :internal_identifier, :scope => :model_name

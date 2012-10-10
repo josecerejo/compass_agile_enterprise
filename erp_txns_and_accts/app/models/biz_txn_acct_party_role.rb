@@ -1,4 +1,5 @@
 class BizTxnAcctPartyRole < ActiveRecord::Base
+  attr_protected :created_at, :updated_at
 
 	belongs_to :biz_txn_acct_root
 	belongs_to :party

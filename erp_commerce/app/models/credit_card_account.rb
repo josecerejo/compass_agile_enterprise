@@ -1,4 +1,6 @@
 class CreditCardAccount < ActiveRecord::Base
+  attr_protected :created_at, :updated_at
+
   acts_as_biz_txn_account
 
   belongs_to :credit_card_account_purpose

@@ -1,5 +1,5 @@
 class ConfigurationItemType < ActiveRecord::Base
-  attr_accessible :description, :internal_identifier, :allow_user_defined_options
+  attr_protected :created_at, :updated_at
   
   validates :internal_identifier, :uniqueness => true
 

@@ -1,5 +1,5 @@
 class CompassAeInstance < ActiveRecord::Base
-  attr_accessible :version
+  attr_protected :created_at, :updated_at
   
   has_file_assets
   

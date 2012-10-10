@@ -28,6 +28,8 @@ Paperclip.interpolates(:file_url){|data, style|
 }
 
 class FileAsset < ActiveRecord::Base
+  attr_protected :created_at, :updated_at
+
   if respond_to?(:class_attribute)
     class_attribute :file_type
     class_attribute :valid_extensions
