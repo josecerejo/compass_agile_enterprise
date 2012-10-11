@@ -32,7 +32,7 @@ module Knitkit
               else
                 raw "<div class='knitkit_content'
                         contentid='#{content.id}'
-                        lastupdate='#{content_version.content.updated_at.strftime("%m/%d/%Y %I:%M%p")}'>
+                        lastupdate='#{content_version.updated_at.strftime("%m/%d/%Y %I:%M%p")}'>
                         #{(content_version.body_html.nil? ? '' : content_version.body_html)}</div>"
               end
             end

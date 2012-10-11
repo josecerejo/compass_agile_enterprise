@@ -161,9 +161,11 @@ class DynamicFormField
     field[:extraParams] = options[:extraParams] unless options[:extraParams].blank?
     field[:url] = options[:url] unless options[:url].blank?
     field[:fields] = options[:fields] unless options[:fields].blank?
-    
     field[:mapping] = options[:mapping] unless options[:mapping].blank?
+    field[:minLength] = options[:minLength] unless options[:minLength].nil?
     field[:maxLength] = options[:maxLength] unless options[:maxLength].nil?
+    field[:minValue] = options[:minValue] unless options[:minValue].nil?
+    field[:maxValue] = options[:maxValue] unless options[:maxValue].nil?
     
     if selections and selections != []
       field[:store] = selections
@@ -191,6 +193,7 @@ class DynamicFormField
     options[:allowBlank] = true if options[:allowBlank].nil?
     options[:value] = '' if options[:value].nil?
     options[:readOnly] = false if options[:readOnly].nil?
+    options[:minLength] = nil if options[:minLength].nil?
     options[:maxLength] = nil if options[:maxLength].nil?
     options[:width] = 200 if options[:width].nil?
     options[:height] = nil if options[:height].nil?
