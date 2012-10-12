@@ -31,10 +31,10 @@ Version 2.0.6 - 09-24-2012
 - Added filter to Attach Articles to Section feature
 
 Version 2.0.7 - 09-26-2012
-- fixed js validation so that desktop will load in IE7
+- Fixed js validation so that desktop will load in IE7
 Version 2.0.8 - 10-11-2012
-- fix for render_content helper method
+- Fix for render_content helper method
 Version 2.0.9 - 10-12-2012
-- upgrading codemirror to 2.34 (fixes double scrollbar bug)
-- changed "Unique Name" to "Internal ID"
-- removed New file option from Knitkit shared and website file trees using showNewFileMenuItem: false
+- Upgraded codemirror to 2.34 (fixes double scrollbar bug)
+- Changed "Unique Name" to "Internal ID"
+- Removed "New File" option from Knitkit Shared & Website file trees using showNewFileMenuItem: false
