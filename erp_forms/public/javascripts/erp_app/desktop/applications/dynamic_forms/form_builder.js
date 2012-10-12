@@ -208,6 +208,11 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.FormBuilder",{
                 xtype: 'numberfield'
             },
             {
+                fieldLabel: 'Height',
+                name: 'updateHeight',
+                xtype: 'numberfield'
+            },
+            {
                 fieldLabel: 'Label Width',
                 name: 'updateLabelWidth',
                 xtype: 'numberfield'
@@ -223,6 +228,11 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.FormBuilder",{
                 width: 235,
                 height: 175,
                 toolTip: "Add options with a comma separated list. Example: value,Description,option2,Option 2"
+            },
+            {
+                fieldLabel: 'Editable',
+                name: 'updateEditable',
+                xtype: 'checkbox'
             },
             {
                 fieldLabel: 'Force Selection',
@@ -506,6 +516,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.FormBuilder",{
                             prop_form.findField('updateDisplayInGrid').setValue(item.display_in_grid);
                             prop_form.findField('updateReadOnly').setValue(item.readOnly);
                             prop_form.findField('updateWidth').setValue(item.width);
+                            prop_form.findField('updateHeight').setValue(item.height);
                             prop_form.findField('updateLabelWidth').setValue(item.labelWidth);
 
                             if (item.xtype == 'datefield' || item.xtype == 'timefield'){
@@ -544,6 +555,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.FormBuilder",{
                             if (item.xtype == 'combobox' || item.xtype == 'combo'){
                                 var options = Ext.encode(item.getStore().proxy.reader.rawData).replace(/\"/g,'').replace(/\[/g,'').replace(/\]/g,'');
                                 prop_form.findField('updateOptions').setValue(options);
+                                prop_form.findField('updateEditable').setValue(item.editable);
                                 prop_form.findField('updateForceSelection').setValue(item.forceSelection);
                                 prop_form.findField('updateMultiSelect').setValue(item.multiSelect);
                             }
@@ -802,6 +814,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.FormBuilder",{
 
                                             switch(fieldDefinition.xtype){
                                                 case 'combobox':
+                                                    fieldDefinition.editable = true;
                                                     fieldDefinition.forceSelection = true;
                                                     break;
                                                 case 'yesno':
@@ -874,6 +887,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.FormBuilder",{
                                         var updateName = updateFieldForm.findField('updateName').getValue();
                                         var updateValue = updateFieldForm.findField('updateValue').getValue();
                                         var updateWidth = updateFieldForm.findField('updateWidth').getValue();
+                                        var updateHeight = updateFieldForm.findField('updateHeight').getValue();
                                         var updateLabelWidth = updateFieldForm.findField('updateLabelWidth').getValue();
                                         var updateReadOnly = updateFieldForm.findField('updateReadOnly').getValue();
                                         var updateAllowBlank = updateFieldForm.findField('updateAllowBlank').getValue();
@@ -896,6 +910,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.FormBuilder",{
                                         if (!Ext.isEmpty(updateValue)) fieldDefinition.value = updateValue;                                        
                                         if (!Ext.isEmpty(updateLabelWidth)) fieldDefinition.labelWidth = updateLabelWidth;                                        
                                         if (!Ext.isEmpty(updateWidth)) fieldDefinition.width = updateWidth;
+                                        if (!Ext.isEmpty(updateHeight)) fieldDefinition.height = updateHeight;
                                         
                                         if (selected_field.xtype != 'combobox' && selected_field.xtype != 'combo'){
                                             switch(updateFieldForm.findField('updateValidationType').getValue()){
@@ -939,6 +954,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.FormBuilder",{
 
                                                 fieldDefinition.store = optionsArray;
                                             }
+                                            fieldDefinition.editable = updateFieldForm.findField('updateEditable').getValue();
                                             fieldDefinition.forceSelection = updateFieldForm.findField('updateForceSelection').getValue();
                                             fieldDefinition.multiSelect = updateFieldForm.findField('updateMultiSelect').getValue();
                                         }
