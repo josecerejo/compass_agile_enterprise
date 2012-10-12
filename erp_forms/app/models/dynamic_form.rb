@@ -95,15 +95,16 @@ class DynamicForm < ActiveRecord::Base
   end
 
   def to_extjs_formpanel(options={})   
-  Rails.logger.info definition_with_validation 
     form_hash = {
       :xtype => 'form',
       :id => "dynamic_form_panel_#{model_name}",
       :url => options[:url],
       :title => self.description,
       :frame => true,
-      :bodyStyle => 'padding: 5px 5px 0;'
+      :bodyStyle => 'padding: 5px 5px 0;',
+      :defaults => {}
     }
+    form_hash[:defaults][:msgTarget] = self.msg_target unless self.msg_target.blank?
     
     form_hash[:width] = options[:width] if options[:width]
     form_hash[:baseParams] = {}

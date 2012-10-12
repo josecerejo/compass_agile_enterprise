@@ -150,6 +150,7 @@ class ErpForms::ErpApp::Desktop::DynamicForms::FormsController < ErpForms::ErpAp
     dform.email_recipients = params[:email_recipients] unless params[:email_recipients].nil?
     dform.focus_first_field = params[:focus_first_field] unless params[:focus_first_field].nil?
     dform.show_in_multitask = params[:show_in_multitask] unless params[:show_in_multitask].nil?
+    dform.msg_target = params[:msg_target] unless params[:msg_target].nil?
     dform.submit_empty_text = params[:submit_empty_text] unless params[:submit_empty_text].nil?
     dform.submit_button_label = params[:submit_button_label] unless params[:submit_button_label].nil?
     dform.cancel_button_label = params[:cancel_button_label] unless params[:cancel_button_label].nil?

@@ -33,6 +33,7 @@ class DynamicForms < ActiveRecord::Migration
         t.boolean :focus_first_field, :default => true 
         t.boolean :show_in_multitask, :default => false 
         t.boolean :submit_empty_text, :default => false 
+        t.string :msg_target
         t.string :submit_button_label, :default => 'Submit'
         t.string :cancel_button_label, :default => 'Cancel'
 

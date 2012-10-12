@@ -11,6 +11,7 @@ Ext.define('DynamicForm', {
     {name: 'focus_first_field', type: 'boolean'},
     {name: 'show_in_multitask', type: 'boolean'},
     {name: 'submit_empty_text', type: 'boolean'},
+    {name: 'msg_target', type: 'string'},
     {name: 'submit_button_label', type: 'string'},
     {name: 'cancel_button_label', type: 'string'},
     {name: 'created_at', type: 'string'},
@@ -221,15 +222,6 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.FormBuilder",{
 
         var combobox = [
             {
-                fieldLabel: 'Options',
-                name: 'updateOptions',
-                xtype: 'textarea',
-                labelWidth: 50,
-                width: 235,
-                height: 175,
-                toolTip: "Add options with a comma separated list. Example: value,Description,option2,Option 2"
-            },
-            {
                 fieldLabel: 'Editable',
                 name: 'updateEditable',
                 xtype: 'checkbox'
@@ -243,6 +235,15 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.FormBuilder",{
                 fieldLabel: 'Multi Select',
                 name: 'updateMultiSelect',
                 xtype: 'checkbox'
+            },
+            {
+                fieldLabel: 'Options',
+                name: 'updateOptions',
+                xtype: 'textarea',
+                labelWidth: 50,
+                width: 235,
+                height: 175,
+                toolTip: "Add options with a comma separated list. Example: value,Description,option2,Option 2"
             }
         ];
 
@@ -627,6 +628,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.FormBuilder",{
                                 focus_first_field: form_props.findField('focus_first_field').getValue(),
                                 show_in_multitask: form_props.findField('show_in_multitask').getValue(),
                                 submit_empty_text: form_props.findField('submit_empty_text').getValue(),
+                                msg_target: form_props.findField('msg_target').getValue(),
                                 submit_button_label: form_props.findField('submit_button_label').getValue(),
                                 cancel_button_label: form_props.findField('cancel_button_label').getValue()
                               },
@@ -859,7 +861,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.FormBuilder",{
                     xtype: 'tabpanel',
                     itemId: 'east_tabs',
                     region: 'east',
-                    width: 255,
+                    width: 265,
                     activeTab: 0,
                     defaults:{
                         width: 255,
@@ -1044,6 +1046,22 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.FormBuilder",{
                                     fieldLabel: 'Submit Empty Text',
                                     name: 'submit_empty_text',
                                     xtype: 'checkbox'
+                                },
+                                {
+                                    fieldLabel: 'Message Target',
+                                    name: 'msg_target',
+                                    xtype: 'combobox',
+                                    allowBlank: false,
+                                    editable: true,
+                                    forceSelection:false,
+                                    value: 'qtip',
+                                    store: [
+                                        ['qtip', 'Quick Tip'],
+                                        ['side', 'Right of Field'],
+                                        ['title', 'Title'],
+                                        ['under', 'Under Field'],
+                                        ['none', 'None']
+                                    ]
                                 },
                                 {
                                     fieldLabel: 'Show in MultiTask',
