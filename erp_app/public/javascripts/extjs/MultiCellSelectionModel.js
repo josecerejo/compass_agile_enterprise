@@ -140,7 +140,7 @@ Ext.define('Compass.MultiCellSelectionModel', {
             
             if(me.allowDeselect){
                 
-                var index = this.selected.items.indexOf(cell);
+                var index = Ext.Array.indexOf(this.selected.items, cell);
                 this.selected.items.splice(index,1);
                 me.primaryView.onCellDeselect(me.getCurrentPosition());
                 
@@ -211,9 +211,8 @@ Ext.define('Compass.MultiCellSelectionModel', {
             return false;
             
         }
-        
-        return this.selected.items.indexOf(record) !== -1;
-        
+
+        return Ext.Array.indexOf(this.selected.items, record) !== -1;
     },
     
     selectWithEvent: function(record, e) {
@@ -231,7 +230,7 @@ Ext.define('Compass.MultiCellSelectionModel', {
                     
                     if(me.allowDeselect){
                         
-                        var index = this.selected.items.indexOf(cell);
+                        var index = Ext.Array.indexOf(this.selected.items, cell);
                         this.selected.items.splice(index,1);
                         me.primaryView.onCellDeselect(me.getCurrentPosition());
                         

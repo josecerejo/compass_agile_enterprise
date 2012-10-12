@@ -6,6 +6,7 @@ module ErpTechSvcs
                     :installation_domain, 
                     :login_url,
                     :email_notifications_from, 
+                    :email_regex,
                     :file_assets_location, 
                     :s3_url_expires_in_seconds,
                     :s3_protocol,
@@ -20,6 +21,7 @@ module ErpTechSvcs
           :@installation_domain => 'localhost:3000',
           :@login_url => '/erp_app/login',
           :@email_notifications_from => 'notifications@noreply.com',
+          :@email_regex => "^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$",
           :@file_assets_location => 'file_assets', # relative to Rails.root/
           :@s3_url_expires_in_seconds => 60,
           :@s3_protocol => 'https', # Can be either 'http' or 'https'

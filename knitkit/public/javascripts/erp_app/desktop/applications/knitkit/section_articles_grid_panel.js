@@ -117,7 +117,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.Knitkit.SectionArticlesGridPanel
 	        },
 	        {
 	          xtype:'textfield',
-	          fieldLabel:'Unique Name',
+	          fieldLabel:'Internal ID',
 	          allowBlank:true,
 	          name:'internal_identifier',
 	          value: record.data.internal_identifier
@@ -342,7 +342,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.Knitkit.SectionArticlesGridPanel
     },
     {
       xtype:'textfield',
-      fieldLabel:'Unique Name',
+      fieldLabel:'Internal ID',
       allowBlank:true,
       name:'internal_identifier'
     }
@@ -485,7 +485,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.Knitkit.SectionArticlesGridPanel
                                             available_articles_filter_combobox = Ext.ComponentQuery.query('#available_articles_filter_combobox')[0];
                                             available_articles_filter_combobox.select(0);
                                             available_articles_filter_combobox.fireEvent('select');
-                                        },
+                                        }
                                     }
                                 }),
                                 forceSelection:true,

@@ -418,3 +418,31 @@ String.prototype.underscore = function () {
 String.prototype.downcase = function () {
     return this.toLowerCase();
 };
+
+String.prototype.upcase = function () {
+    return this.toUpperCase();
+};
+
+String.prototype.camelize = function() {
+    var parts = this.replace(/_/,'-').split('-'), len = parts.length;
+    if (len == 1) return parts[0];
+
+    var camelized = this.charAt(0) == '-'
+      ? parts[0].charAt(0).toUpperCase() + parts[0].substring(1)
+      : parts[0];
+
+    for (var i = 1; i < len; i++)
+      camelized += parts[i].charAt(0).toUpperCase() + parts[i].substring(1);
+
+    return camelized;
+};
+
+String.prototype.titleize = function() {
+    var parts = this.replace(/_/,'-').split('-'), len = parts.length, titleized = '';
+    for (var i = 0; i < len; i++){
+      if (i > 0) titleized += ' ';
+      titleized += parts[i].charAt(0).toUpperCase() + parts[i].substring(1);        
+    }
+    return titleized;
+};
+

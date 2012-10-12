@@ -74,7 +74,7 @@ Compass.ErpApp.Desktop.Applications.Knitkit.addSectionOptions = function (self, 
                                 },
                                 {
                                     xtype:'textfield',
-                                    fieldLabel:'Unique Name',
+                                    fieldLabel:'Internal ID',
                                     allowBlank:true,
                                     name:'internal_identifier'
                                 },
@@ -223,7 +223,7 @@ Compass.ErpApp.Desktop.Applications.Knitkit.addSectionOptions = function (self, 
                                 },
                                 {
                                     xtype:'textfield',
-                                    fieldLabel:'Unique Name',
+                                    fieldLabel:'Internal ID',
                                     allowBlank:true,
                                     name:'internal_identifier',
                                     value:record.data.internal_identifier

@@ -3,7 +3,8 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.CenterRegion",{
     alias:'widget.dynamic_forms_centerregion',
   
     constructor : function(config) {
-      this.workArea = new Ext.TabPanel({
+      this.workArea = Ext.create('Ext.tab.Panel',{
+          id: 'dynamic_formsTabPanel',
           autoDestroy:true,
           region:'center'
       });

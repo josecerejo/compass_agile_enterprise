@@ -2,7 +2,7 @@ class ErpForms::ErpApp::Desktop::DynamicForms::FormsController < ErpForms::ErpAp
   
   # get tree of dynamic models and forms
   def get_tree
-    models = params[:node] == "root" ? DynamicFormModel.all(:order => :model_name) : DynamicFormModel.find_all_by_id(id)
+    models = params[:node] == "root" ? DynamicFormModel.all(:order => :model_name) : DynamicFormModel.find_all_by_id(params[:id])
     tree = []
 
     models.each do |form_model|
@@ -13,8 +13,8 @@ class ErpForms::ErpApp::Desktop::DynamicForms::FormsController < ErpForms::ErpAp
         :text => form_model.model_name,
         :iconCls => 'icon-data',
         :id => "form_model_#{form_model.id}",
-        :modelId => form_model.id,
-        :isModel => true, 
+        :formModelId => form_model.id,
+        :isFormModel => true, 
         :isForm => false, 
         :leaf => false,
         :expanded => true,
@@ -28,9 +28,9 @@ class ErpForms::ErpApp::Desktop::DynamicForms::FormsController < ErpForms::ErpAp
           :iconCls => (form.default ? 'icon-document_ok' : 'icon-document'), 
           :id => "form_#{form.id}",
           :formId => form.id, 
-          :isModel => false, 
-          :isDefault => form.default,
-          :modelName => form_model.model_name,
+          :isFormModel => false, 
+          :isDefaultForm => form.default,
+          :formModelName => form_model.model_name,
           :isForm => true, 
           :leaf => true 
         }
@@ -50,7 +50,25 @@ class ErpForms::ErpApp::Desktop::DynamicForms::FormsController < ErpForms::ErpAp
     dform = DynamicForm.find_by_id(params[:id]) if params[:id]
     dform = DynamicForm.get_form(params[:model_name], params[:internal_identifier]) if dform.nil? and params[:model_name]
 
-    render :json => dform.definition
+    if dform.nil?
+      render :json => {:success => false}
+    else
+      render :json => dform.definition
+    end
+  end
+
+  # get a single form record
+  def get_record
+    dform = DynamicForm.find(params[:id]) rescue nil
+
+    unless dform.nil?
+      dform_hash = dform.to_hash
+      dform_hash[:created_by] = dform.created_by.username rescue 'Unknown'
+      dform_hash[:updated_by] = dform.updated_by.username rescue 'Unknown'
+      dform_hash[:created_at] = dform.created_at.getlocal.strftime(@@datetime_format)
+      dform_hash[:updated_at] = dform.updated_at.getlocal.strftime(@@datetime_format)      
+    end
+    render :json => [dform_hash]
   end
 
   # get a single form
@@ -96,8 +114,7 @@ class ErpForms::ErpApp::Desktop::DynamicForms::FormsController < ErpForms::ErpAp
   # update dynamic form
   def update
     dform = DynamicForm.find_by_id(params[:id])
-    dform.description = params[:description] if params[:description]
-    dform.definition = params[:form_definition] if params[:form_definition]
+    dform = assign_form_attributes(dform)
     dform.updated_by_id = current_user.id
     if dform.save
       render :json => {:success => true}
@@ -110,9 +127,7 @@ class ErpForms::ErpApp::Desktop::DynamicForms::FormsController < ErpForms::ErpAp
   def create
     if params[:form_definition] and params[:description] and params[:model_name]
       dform = DynamicForm.new
-      dform.description = params[:description]
-      dform.definition = params[:form_definition]
-      dform.model_name = params[:model_name]
+      dform = assign_form_attributes(dform)
       dform.dynamic_form_model_id = DynamicFormModel.find_by_model_name(params[:model_name]).id
       dform.default = false
       dform.created_by_id = current_user.id
@@ -126,4 +141,19 @@ class ErpForms::ErpApp::Desktop::DynamicForms::FormsController < ErpForms::ErpAp
     end
   end
   
+  protected
+  def assign_form_attributes(dform)
+    dform.description = params[:description] unless params[:description].nil?
+    dform.definition = params[:form_definition] unless params[:form_definition].nil?
+    dform.model_name = params[:model_name] unless params[:model_name].nil?
+    dform.email_or_save = params[:email_or_save] unless params[:email_or_save].nil?
+    dform.email_recipients = params[:email_recipients] unless params[:email_recipients].nil?
+    dform.focus_first_field = params[:focus_first_field] unless params[:focus_first_field].nil?
+    dform.show_in_multitask = params[:show_in_multitask] unless params[:show_in_multitask].nil?
+    dform.submit_empty_text = params[:submit_empty_text] unless params[:submit_empty_text].nil?
+    dform.submit_button_label = params[:submit_button_label] unless params[:submit_button_label].nil?
+    dform.cancel_button_label = params[:cancel_button_label] unless params[:cancel_button_label].nil?
+    dform
+  end
+
 end

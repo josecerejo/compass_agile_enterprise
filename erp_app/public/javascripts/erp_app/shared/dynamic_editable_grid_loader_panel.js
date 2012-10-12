@@ -31,7 +31,8 @@ Ext.define("Compass.ErpApp.Shared.DynamicEditableGridLoaderPanel",{
                         selType: (config.selType || 'rowmodel'),
                         multiSelect: (config.multiSelect || false),
                         allowDeselect: (config.allowDeselect || false),
-                        timeout: (config.timeout || 30000)
+                        timeout: (config.timeout || 30000),
+                        showEditorToolbar: (config.showEditorToolbar === false ? false : true)
                     });
                     self.down('shared_dynamiceditablegrid').getStore().load();
                 }
