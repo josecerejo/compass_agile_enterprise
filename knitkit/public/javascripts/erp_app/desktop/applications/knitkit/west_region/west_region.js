@@ -643,7 +643,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.Knitkit.WestRegion", {
                                                     },
                                                     {
                                                         xtype:'textfield',
-                                                        fieldLabel:'Unique Name',
+                                                        fieldLabel:'Internal ID',
                                                         allowBlank:true,
                                                         name:'internal_identifier'
                                                     },

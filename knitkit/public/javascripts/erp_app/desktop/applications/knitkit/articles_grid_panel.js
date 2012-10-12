@@ -78,7 +78,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.Knitkit.ArticlesGridPanel",{
           },
           {
             xtype:'textfield',
-            fieldLabel:'Unique Name',
+            fieldLabel:'Internal ID',
             allowBlank:true,
             name:'internal_identifier',
             value: record.data.internal_identifier
@@ -393,7 +393,7 @@ var columnItems = [];
                             },
                             {
                                 xtype:'textfield',
-                                fieldLabel:'Unique Name',
+                                fieldLabel:'Internal ID',
                                 allowBlank:true,
                                 name:'internal_identifier'
                             },
