@@ -43,7 +43,7 @@ module Knitkit
                 links = menu_item.self_and_ancestors.map{|child| {:url => child.path, :title => child.title}}
               elsif options[:section_unique_name]
                 section = WebsiteSection.find_by_internal_identifier(options[:section_unique_name])
-                raise "Website Section with that unique name does not exist" if section.nil?
+                raise "Website Section with that Internal ID does not exist" if section.nil?
                 links = section.self_and_ancestors.map{|child| {:url => child.path, :title => child.title}}
               else
                 links = @website_section.self_and_ancestors.collect{|child| {:url => child.path, :title => child.title}}

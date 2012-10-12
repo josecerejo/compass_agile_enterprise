@@ -2,3 +2,6 @@ Version 3.0.9 - 09-26-2012
 - fixed IE bug in MultiCellSelectionModel, replaced indexOf with Ext.Array.indexOf
 Version 3.0.10 - 09-26-2012
 - fixed js validation so that desktop will load in IE7
+Version 3.0.11 - 10-11-2012
+- adding showEditorToolbar config option to dynamic grid
+
