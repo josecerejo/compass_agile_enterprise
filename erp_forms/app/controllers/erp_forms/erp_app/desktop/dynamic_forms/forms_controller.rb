@@ -154,6 +154,7 @@ class ErpForms::ErpApp::Desktop::DynamicForms::FormsController < ErpForms::ErpAp
     dform.submit_empty_text = params[:submit_empty_text] unless params[:submit_empty_text].nil?
     dform.submit_button_label = params[:submit_button_label] unless params[:submit_button_label].nil?
     dform.cancel_button_label = params[:cancel_button_label] unless params[:cancel_button_label].nil?
+    dform.comment = params[:comment] unless params[:comment].nil?
     dform
   end
 

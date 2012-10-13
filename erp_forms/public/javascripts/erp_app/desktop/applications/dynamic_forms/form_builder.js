@@ -179,6 +179,19 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.FormBuilder",{
                 allowBlank: false
             },
             {
+                fieldLabel: 'Label Alignment',
+                name: 'updateLabelAlign',
+                xtype: 'combobox',
+                allowBlank: false,
+                editable: true,
+                forceSelection:true,
+                value: 'left',
+                store: [
+                    ['left', 'Left of Field'],
+                    ['top', 'Above Field']
+                ]
+            },
+            {
                 fieldLabel: 'Default Value',
                 name: 'updateValue',
                 xtype: 'textfield'
@@ -240,10 +253,11 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.FormBuilder",{
                 fieldLabel: 'Options',
                 name: 'updateOptions',
                 xtype: 'textarea',
+                labelAlign: 'top',
                 labelWidth: 50,
                 width: 235,
                 height: 175,
-                toolTip: "Add options with a comma separated list. Example: value,Description,option2,Option 2"
+                plugins: [new helpQtip('Add options with a comma separated list. Example: value,Description,option2,Option 2')]
             }
         ];
 
@@ -348,6 +362,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.FormBuilder",{
             {
                 fieldLabel: 'Function',
                 name: 'updateValidationFunction',
+                plugins: [new helpQtip('Call a pre-existing javascript function for custom validation. Field value must be passed in using variable v. Example: customFunction(v)')],
                 xtype: 'textfield',
                 allowBlank: true,
                 hidden: true,
@@ -511,6 +526,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.FormBuilder",{
                             // common
                             prop_form.findField('updateName').setValue(item.name);
                             prop_form.findField('updateLabel').setValue(item.fieldLabel);
+                            prop_form.findField('updateLabelAlign').setValue(item.labelAlign);
                             prop_form.findField('updateValue').setValue(item.value);
                             prop_form.findField('updateEmptyText').setValue(item.emptyText);
                             prop_form.findField('updateAllowBlank').setValue(item.allowBlank);
@@ -596,6 +612,9 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.FormBuilder",{
                     bodyPadding: 10,
                     form_definition: config.form_definition,
                     form_id: (Ext.isEmpty(config.form_id) ? null : config.form_id),
+                    defaults:{
+                        msgTarget: (Ext.isEmpty(config.msg_target) ? 'left' : config.msg_target),
+                    },
                     tbar: [
                       { xtype: 'button', 
                         text: 'Save Form',
@@ -864,7 +883,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.FormBuilder",{
                     width: 265,
                     activeTab: 0,
                     defaults:{
-                        width: 255,
+                        width: 255
                     },
                     items: [                        
                         {
@@ -886,6 +905,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.FormBuilder",{
                                         var formPanel = Ext.getCmp('formBuilder_'+config.title).query('#dynamicForm').first();
                                         var formBuilder = formPanel.findParentByType('dynamic_forms_FormBuilder');
                                         var updateLabel = updateFieldForm.findField('updateLabel').getValue();
+                                        var updateLabelAlign = updateFieldForm.findField('updateLabelAlign').getValue();
                                         var updateName = updateFieldForm.findField('updateName').getValue();
                                         var updateValue = updateFieldForm.findField('updateValue').getValue();
                                         var updateWidth = updateFieldForm.findField('updateWidth').getValue();
@@ -903,6 +923,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.FormBuilder",{
                                             xtype: selected_field.xtype,
                                             name: updateName,
                                             fieldLabel: updateLabel,
+                                            labelAlign: updateLabelAlign,
                                             readOnly: updateReadOnly,
                                             emptyText: updateEmptyText,
                                             allowBlank: updateAllowBlank,
