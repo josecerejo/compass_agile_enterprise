@@ -30,6 +30,7 @@ module ErpApp
                 resources << static_javascript_include_tag("extjs/ext-all.js")
               end
 
+              resources << static_javascript_include_tag("extjs/helpQtip.js")
               resources << static_javascript_include_tag("extjs/ext_ux_tab_close_menu.js")
               resources << static_javascript_include_tag("extjs/Ext.ux.form.MultiSelect.js")
 
