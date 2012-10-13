@@ -28,8 +28,8 @@ class DynamicForms < ActiveRecord::Migration
         t.string :model_name
         t.string :internal_identifier
         t.boolean :default
-        t.string  :email_or_save, :default => 'save' 
-        t.string :email_recipients 
+        t.string  :widget_action, :default => 'save' 
+        t.string :widget_email_recipients 
         t.boolean :focus_first_field, :default => true 
         t.boolean :show_in_multitask, :default => false 
         t.boolean :submit_empty_text, :default => false 

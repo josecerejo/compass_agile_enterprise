@@ -6,14 +6,15 @@ Ext.define('DynamicForm', {
     {name: 'model_name', type: 'string'},
     {name: 'definition', type: 'string'},
     {name: 'internal_identifier', type: 'string'},
-    {name: 'email_or_save', type: 'string'},
-    {name: 'email_recipients', type: 'string'},
+    {name: 'widget_action', type: 'string'},
+    {name: 'widget_email_recipients', type: 'string'},
     {name: 'focus_first_field', type: 'boolean'},
     {name: 'show_in_multitask', type: 'boolean'},
     {name: 'submit_empty_text', type: 'boolean'},
     {name: 'msg_target', type: 'string'},
     {name: 'submit_button_label', type: 'string'},
     {name: 'cancel_button_label', type: 'string'},
+    {name: 'comment', type: 'string'},
     {name: 'created_at', type: 'string'},
     {name: 'updated_at', type: 'string'},
     {name: 'created_by', type: 'string'},
@@ -192,6 +193,21 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.FormBuilder",{
                 ]
             },
             {
+                fieldLabel: 'Label Width',
+                name: 'updateLabelWidth',
+                xtype: 'numberfield'
+            },
+            {
+                fieldLabel: 'Width',
+                name: 'updateWidth',
+                xtype: 'numberfield'
+            },
+            {
+                fieldLabel: 'Height',
+                name: 'updateHeight',
+                xtype: 'numberfield'
+            },
+            {
                 fieldLabel: 'Default Value',
                 name: 'updateValue',
                 xtype: 'textfield'
@@ -215,21 +231,6 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.FormBuilder",{
                 fieldLabel: 'Display In Grid',
                 name: 'updateDisplayInGrid',
                 xtype: 'checkbox'
-            },
-            {
-                fieldLabel: 'Width',
-                name: 'updateWidth',
-                xtype: 'numberfield'
-            },
-            {
-                fieldLabel: 'Height',
-                name: 'updateHeight',
-                xtype: 'numberfield'
-            },
-            {
-                fieldLabel: 'Label Width',
-                name: 'updateLabelWidth',
-                xtype: 'numberfield'
             }
         ];
 
@@ -255,6 +256,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.FormBuilder",{
                 xtype: 'textarea',
                 labelAlign: 'top',
                 labelWidth: 50,
+                allowBlank: false,
                 width: 235,
                 height: 175,
                 plugins: [new helpQtip('Add options with a comma separated list. Example: value,Description,option2,Option 2')]
@@ -625,7 +627,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.FormBuilder",{
                             var formBuilder = formPanel.findParentByType('dynamic_forms_FormBuilder');
                             var form_props = formBuilder.query('#form_props').first().getForm();
 
-                            //TODO: add validation for form_props including email_recipients which depends on email_or_save
+                            //TODO: add validation for form_props including widget_email_recipients which depends on widget_action
 
                             if (Ext.isEmpty(config.form_id)){
                                 var create = true;
@@ -642,14 +644,15 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.FormBuilder",{
                                 form_definition:Ext.JSON.encode(formPanel.form_definition),
                                 description: form_props.findField('description').getValue(),
                                 model_name: config.model_name,
-                                email_or_save: form_props.findField('email_or_save').getValue(),
-                                email_recipients: form_props.findField('email_recipients').getValue(),
+                                widget_action: form_props.findField('widget_action').getValue(),
+                                widget_email_recipients: form_props.findField('widget_email_recipients').getValue(),
                                 focus_first_field: form_props.findField('focus_first_field').getValue(),
                                 show_in_multitask: form_props.findField('show_in_multitask').getValue(),
                                 submit_empty_text: form_props.findField('submit_empty_text').getValue(),
                                 msg_target: form_props.findField('msg_target').getValue(),
                                 submit_button_label: form_props.findField('submit_button_label').getValue(),
-                                cancel_button_label: form_props.findField('cancel_button_label').getValue()
+                                cancel_button_label: form_props.findField('cancel_button_label').getValue(),
+                                comment: form_props.findField('comment').getValue()
                               },
                               success: function(response) {
                                 formBuilder.clearWindowStatus();
@@ -1030,21 +1033,23 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.FormBuilder",{
                                     xtype: 'displayfield'
                                 },
                                 {
-                                    fieldLabel: 'Email or Save Data',
-                                    name: 'email_or_save',
+                                    fieldLabel: 'Widget Action',
+                                    name: 'widget_action',
                                     xtype: 'combobox',
                                     allowBlank: false,
                                     forceSelection:true,
                                     store: [
-                                        ['email', 'Email Data'],
-                                        ['save', 'Save Data'],
+                                        ['email', 'Email Only'],
+                                        ['save', 'Save Only'],
                                         ['both', 'Email & Save Data']
-                                    ]
+                                    ],
+                                    plugins: [new helpQtip('Configure the action to be taken when a form is submitted via the Knitkit Dynamic Forms widget. (Note that the Contact Us widget does not use this setting but rather uses the Knitkit website configuration option.)<br /> Email Only with email but not save the data to the database.<br /> Save Only will save the data to the database but not email. Email & Save Data will do both.')]
                                 },
                                 {
                                     fieldLabel: 'Email Recipients',
-                                    name: 'email_recipients',
-                                    xtype: 'textfield'
+                                    name: 'widget_email_recipients',
+                                    xtype: 'textfield',
+                                    plugins: [new helpQtip('When Widget Action is set to Email only or Email & Save Data, this field is required. Enter a comma separated list of email addresses who should receive data submitted with this form via the Knitkit Dynamic Forms widget.')]                                    
                                 },
                                 {
                                     fieldLabel: 'Focus Field',
@@ -1088,6 +1093,12 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.FormBuilder",{
                                     fieldLabel: 'Show in MultiTask',
                                     name: 'show_in_multitask',
                                     xtype: 'checkbox'
+                                },
+                                {
+                                    fieldLabel: 'Comment',
+                                    labelAlign: 'top',
+                                    name: 'comment',
+                                    xtype: 'textarea'
                                 },
                                 {
                                     fieldLabel: 'Created At',

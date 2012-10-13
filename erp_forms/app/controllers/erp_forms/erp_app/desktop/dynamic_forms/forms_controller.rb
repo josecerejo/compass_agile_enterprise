@@ -146,8 +146,8 @@ class ErpForms::ErpApp::Desktop::DynamicForms::FormsController < ErpForms::ErpAp
     dform.description = params[:description] unless params[:description].nil?
     dform.definition = params[:form_definition] unless params[:form_definition].nil?
     dform.model_name = params[:model_name] unless params[:model_name].nil?
-    dform.email_or_save = params[:email_or_save] unless params[:email_or_save].nil?
-    dform.email_recipients = params[:email_recipients] unless params[:email_recipients].nil?
+    dform.widget_action = params[:widget_action] unless params[:widget_action].nil?
+    dform.widget_email_recipients = params[:widget_email_recipients] unless params[:widget_email_recipients].nil?
     dform.focus_first_field = params[:focus_first_field] unless params[:focus_first_field].nil?
     dform.show_in_multitask = params[:show_in_multitask] unless params[:show_in_multitask].nil?
     dform.msg_target = params[:msg_target] unless params[:msg_target].nil?
