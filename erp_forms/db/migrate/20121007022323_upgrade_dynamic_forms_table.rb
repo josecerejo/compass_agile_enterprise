@@ -8,6 +8,7 @@ class UpgradeDynamicFormsTable < ActiveRecord::Migration
     add_column :dynamic_forms, :msg_target, :string unless columns(:dynamic_forms).collect {|c| c.name}.include?('msg_target')
     add_column :dynamic_forms, :submit_button_label, :string, :default => 'Submit' unless columns(:dynamic_forms).collect {|c| c.name}.include?('submit_button_label')
     add_column :dynamic_forms, :cancel_button_label, :string, :default => 'Cancel' unless columns(:dynamic_forms).collect {|c| c.name}.include?('cancel_button_label')
+    add_column :dynamic_forms, :comment, :text unless columns(:dynamic_forms).collect {|c| c.name}.include?('comment')
   end
 
   def self.down
@@ -19,5 +20,6 @@ class UpgradeDynamicFormsTable < ActiveRecord::Migration
     remove_column :dynamic_forms, :msg_target if columns(:dynamic_forms).collect {|c| c.name}.include?('msg_target')
     remove_column :dynamic_forms, :submit_button_label if columns(:dynamic_forms).collect {|c| c.name}.include?('submit_button_label')
     remove_column :dynamic_forms, :cancel_button_label if columns(:dynamic_forms).collect {|c| c.name}.include?('cancel_button_label')
+    remove_column :dynamic_forms, :comment if columns(:dynamic_forms).collect {|c| c.name}.include?('comment')
   end
 end
