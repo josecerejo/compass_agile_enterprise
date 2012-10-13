@@ -36,6 +36,7 @@ class DynamicForms < ActiveRecord::Migration
         t.string :msg_target
         t.string :submit_button_label, :default => 'Submit'
         t.string :cancel_button_label, :default => 'Cancel'
+        t.text :comment
 
         t.integer :created_by_id
         t.integer :updated_by_id
