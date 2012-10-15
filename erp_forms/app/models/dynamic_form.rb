@@ -78,9 +78,9 @@ class DynamicForm < ActiveRecord::Base
     array_of_fields.to_json
   end
   
-  def focus_first_field_js(model_name)
+  def focus_first_field_js
     if self.focus_first_field
-      return "Ext.getCmp('dynamic_form_panel_#{model_name}').getComponent(0).focus(true, 200);"
+      return "form.getComponent(0).focus(true, 200);"
     else
       return ''
     end
@@ -102,32 +102,32 @@ class DynamicForm < ActiveRecord::Base
       :title => self.description,
       :frame => true,
       :bodyStyle => 'padding: 5px 5px 0;',
-      :defaults => {}
+      :baseParams => {
+        :dynamic_form_id => self.id,
+        :dynamic_form_model_id => self.dynamic_form_model_id,
+        :model_name => self.model_name
+      },
+      :defaults => {},
+      :items => definition_with_validation
     }
     form_hash[:defaults][:msgTarget] = self.msg_target unless self.msg_target.blank?
-    
     form_hash[:width] = options[:width] if options[:width]
-    form_hash[:baseParams] = {}
     form_hash[:baseParams][:id] = options[:record_id] if options[:record_id]
-    form_hash[:baseParams][:dynamic_form_id] = self.id
-    form_hash[:baseParams][:dynamic_form_model_id] = self.dynamic_form_model_id
-    form_hash[:baseParams][:model_name] = self.model_name
     form_hash[:listeners] = {
-      :afterrender => NonEscapeJsonString.new("function(form) { #{focus_first_field_js(self.model_name)} }")
+      :afterrender => NonEscapeJsonString.new("function(form) { #{focus_first_field_js} }")
     }
-    form_hash[:items] = definition_with_validation
     form_hash[:buttons] = []
-    form_hash[:buttons][0] = {
+    form_hash[:buttons] << {
       :text => self.submit_button_label,
       :listeners => NonEscapeJsonString.new("{
           \"click\":function(button){
-              var form = Ext.getCmp('dynamic_form_panel_#{model_name}').getForm();
+              var form = button.findParentByType('form').getForm();
               if (form.isValid()){
                 form.submit({
                     #{submit_empty_text_js}
                     reset:true,
                     success:function(form, action){
-                        Ext.getCmp('dynamic_form_panel_#{model_name}').findParentByType('window').close();
+                        form.owner.findParentByType('window').close();
                         if (Ext.getCmp('#{model_name}')){
                             Ext.getCmp('#{model_name}').query('shared_dynamiceditablegrid')[0].store.load();                                                                      
                         }
@@ -142,11 +142,11 @@ class DynamicForm < ActiveRecord::Base
           }
       }")
     }
-    form_hash[:buttons][1] = {
+    form_hash[:buttons] << {
       :text => self.cancel_button_label,
       :listeners => NonEscapeJsonString.new("{
           \"click\":function(button){
-              Ext.getCmp('dynamic_form_panel_#{model_name}').findParentByType('window').close();
+              button.findParentByType('window').close();
           }
       }")
     }
@@ -166,60 +166,67 @@ class DynamicForm < ActiveRecord::Base
 
     #NOTE: The random nbsp; forces IE to eval this javascript!
     javascript = "Ext.QuickTips.init();
-
-          Ext.create('Ext.form.Panel',{
-              id: 'dynamic_form_panel_#{model_name}',
-              url:'#{options[:url]}',
-              title: '#{self.description}',"
-
-    javascript += "\"width\": #{options[:width]}," if options[:width]
-
-    javascript += "frame: true,
-              bodyStyle:'padding: 5px 5px 0;',
-              renderTo: 'dynamic_form_target',
-              baseParams: {
-                dynamic_form_id: #{self.id},
-                dynamic_form_model_id: #{self.dynamic_form_model_id},
-                model_name: '#{self.model_name}'
-              },
-              items: #{definition_with_validation.to_json},
-              listeners: {
-                  afterrender: function(form) {
-                      #{focus_first_field_js(self.model_name)}
+                  Ext.create('Ext.form.Panel',"
+    
+    config_hash = {
+      :id => "dynamic_form_panel_#{model_name}",
+      :url => "#{options[:url]}",
+      :title => "#{self.description}",
+      :frame => true,
+      :bodyStyle => 'padding: 5px 5px 0;',
+      :renderTo => 'dynamic_form_target',
+      :baseParams => {
+        :dynamic_form_id => self.id,
+        :dynamic_form_model_id => self.dynamic_form_model_id,
+        :model_name => self.model_name
+      },
+      :items => definition_with_validation,
+      :defaults => {},
+      :listeners => {
+        :afterrender => NonEscapeJsonString.new("function(form) { #{focus_first_field_js} }")
+      }
+    }
+    config_hash[:defaults][:msgTarget] = self.msg_target unless self.msg_target.blank?
+    config_hash[:width] = options[:width] if options[:width]
+    config_hash[:buttons] = []
+    config_hash[:buttons] << {
+      :text => self.submit_button_label,
+      :listeners => NonEscapeJsonString.new("{
+          \"click\":function(button){
+              var form = button.findParentByType('form').getForm();
+              form.jsonRoot = 'data';
+              form.doAction('JsonSubmit',{
+                  #{submit_empty_text_js}
+                  reset:true,
+                  success:function(form, action){
+                      json_hash = Ext.decode(action.response.responseText);
+                      Ext.get('#{options[:widget_result_id]}').dom.innerHTML = json_hash.response;
+                      var scriptTags = Ext.get('#{options[:widget_result_id]}').dom.getElementsByTagName('script');
+                      Ext.each(scriptTags, function(scriptTag){
+                            eval(scriptTag.text);
+                      });
+                  },
+                  failure:function(form, action){
+                    if (action.response){
+                      json_hash = Ext.decode(action.response.responseText);
+                      Ext.get('#{options[:widget_result_id]}').dom.innerHTML = json_hash.response;
+                    }
                   }
-              },
-              buttons: [{
-                  text: '#{self.submit_button_label}',
-                  listeners:{
-                      'click':function(button){
-                          var form = Ext.getCmp('dynamic_form_panel_#{model_name}').getForm();
-                          form.jsonRoot = 'data';
-                          form.doAction('JsonSubmit',{
-                              #{submit_empty_text_js}
-                              reset:true,
-                              success:function(form, action){
-                                  json_hash = Ext.decode(action.response.responseText);
-                                  Ext.get('#{options[:widget_result_id]}').dom.innerHTML = json_hash.response;
-                                  var scriptTags = Ext.get('#{options[:widget_result_id]}').dom.getElementsByTagName('script');
-                                  Ext.each(scriptTags, function(scriptTag){
-                                        eval(scriptTag.text);
-                                  });
-                              },
-                              failure:function(form, action){
-                                if (action.response){
-                                  json_hash = Ext.decode(action.response.responseText);
-                                  Ext.get('#{options[:widget_result_id]}').dom.innerHTML = json_hash.response;
-                                }
-                              }
-                          });
-                      }
-                  }
-                  
-              },{
-                  text: '#{self.cancel_button_label}'
-              }]
-          });"
-      #logger.info javascript
+              });
+          }
+      }")
+    }
+    config_hash[:buttons] << {
+      :text => 'Reset',
+      :listeners => NonEscapeJsonString.new("{
+          \"click\":function(button){
+              button.findParentByType('form').getForm().reset();
+          }
+      }")
+    }
+
+    javascript += "#{config_hash.to_json});"
+    #logger.info javascript
     javascript
   end
   
