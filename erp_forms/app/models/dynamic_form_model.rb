@@ -3,14 +3,14 @@ class DynamicFormModel < ActiveRecord::Base
   has_many :dynamic_forms, :dependent => :destroy
 
   def self.get_constant(klass_name)
-	result = nil
-	begin
+  	result = nil
+  	begin
       result = klass_name.constantize
     rescue
       DynamicFormDocument.declare(klass_name)
       result = klass_name.constantize
     end
-	result
+  	result
   end
 
   def self.get_instance(klass_name)
@@ -18,10 +18,10 @@ class DynamicFormModel < ActiveRecord::Base
   end
 
   # handles both static and dynamic attributes
-  def self.assign_all_attributes(dynamicObject, params, ignored_params=[])
-    
+  def self.assign_all_attributes(dynamicObject, params, ignored_params=[])    
     params.each do |k,v|
-      unless ignored_params.include?(k.to_s) or k == '' or k == '_'
+      k = k.to_s
+      unless ignored_params.include?(k) or k == '' or k == '_'
         if dynamicObject.attributes.include?(k)
           dynamicObject.send(k + '=', v) 
         else

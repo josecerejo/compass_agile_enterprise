@@ -192,8 +192,9 @@ class DynamicForm < ActiveRecord::Base
                   text: '#{self.submit_button_label}',
                   listeners:{
                       'click':function(button){
-                          var formPanel = Ext.getCmp('dynamic_form_panel_#{model_name}');
-                          formPanel.getForm().submit({
+                          var form = Ext.getCmp('dynamic_form_panel_#{model_name}').getForm();
+                          form.jsonRoot = 'data';
+                          form.doAction('JsonSubmit',{
                               #{submit_empty_text_js}
                               reset:true,
                               success:function(form, action){
@@ -215,7 +216,7 @@ class DynamicForm < ActiveRecord::Base
                   }
                   
               },{
-                  text: '#{self.submit_button_label}'
+                  text: '#{self.cancel_button_label}'
               }]
           });"
       #logger.info javascript

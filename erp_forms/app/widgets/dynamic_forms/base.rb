@@ -7,27 +7,26 @@ module Widgets
 
   	  def new
         begin
+          form_data = JSON.parse(params[:data]).symbolize_keys!
           @website = Website.find_by_host(request.host_with_port)
 
-          if params[:email_subject].blank?
-            subject = "#{params[:model_name]} Submission from #{@website.title}"
+          if form_data[:email_subject].blank?
+            subject = "#{form_data[:model_name]} Submission from #{@website.title}"
           else
-            subject = strip_tags(params[:email_subject])
-            params.delete(:email_subject)
+            subject = strip_tags(form_data[:email_subject])
+            form_data.delete(:email_subject)
           end
 
-      		@myDynamicObject = DynamicFormModel.get_instance(params[:model_name])
+      		@myDynamicObject = DynamicFormModel.get_instance(form_data[:model_name])
   		
-      		params[:created_by] = current_user unless current_user.nil?
-      		params[:created_with_form_id] = params[:dynamic_form_id] if params[:dynamic_form_id] and params[:is_html_form].blank?
-      		params[:website] = @website.title
-          # Rails.logger.info "params.inspect: #{params.inspect}"
-          # Rails.logger.info "myDynamicObject.inspect: #{@myDynamicObject.inspect}"
+      		form_data[:created_by] = current_user unless current_user.nil?
+      		form_data[:created_with_form_id] = form_data[:dynamic_form_id] if form_data[:dynamic_form_id] and form_data[:is_html_form].blank?
+      		form_data[:website] = @website.title
 
-      		@myDynamicObject = DynamicFormModel.assign_all_attributes(@myDynamicObject, params, ErpApp::Widgets::Base::IGNORED_PARAMS)
+      		@myDynamicObject = DynamicFormModel.assign_all_attributes(@myDynamicObject, form_data, ErpApp::Widgets::Base::IGNORED_PARAMS)
   			
-          # get dynamic for from params[:created_with_form_id]
-          form = DynamicForm.find(params[:created_with_form_id])
+          # get dynamic for from form_data[:created_with_form_id]
+          form = DynamicForm.find(form_data[:created_with_form_id])
           
           # check widget_action from dynamic form
           if !form.nil? and ['email', 'both'].include?(form.widget_action)
