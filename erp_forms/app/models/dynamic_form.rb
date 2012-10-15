@@ -162,14 +162,10 @@ class DynamicForm < ActiveRecord::Base
   # :widget_result_id => 
   # :width =>
   def to_extjs_widget(options={})
-    options[:width] = "'auto'" if options[:width].nil?
-
-    #NOTE: The random nbsp; forces IE to eval this javascript!
     javascript = "Ext.QuickTips.init();
                   Ext.create('Ext.form.Panel',"
     
     config_hash = {
-      :id => "dynamic_form_panel_#{model_name}",
       :url => "#{options[:url]}",
       :title => "#{self.description}",
       :frame => true,
