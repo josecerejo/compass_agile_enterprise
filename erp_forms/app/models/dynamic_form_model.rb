@@ -18,7 +18,7 @@ class DynamicFormModel < ActiveRecord::Base
   end
 
   # handles both static and dynamic attributes
-  def self.save_all_attributes(dynamicObject, params, ignored_params=[])
+  def self.assign_all_attributes(dynamicObject, params, ignored_params=[])
     
     params.each do |k,v|
       unless ignored_params.include?(k.to_s) or k == '' or k == '_'
@@ -36,6 +36,12 @@ class DynamicFormModel < ActiveRecord::Base
       end
     end
 
+    dynamicObject
+  end
+
+  # handles both static and dynamic attributes
+  def self.save_all_attributes(dynamicObject, params, ignored_params=[])
+    DynamicFormModel.assign_all_attributes(dynamicObject, params, ignored_params)
     (dynamicObject.valid? and dynamicObject.save) ? dynamicObject : nil
   end
 
