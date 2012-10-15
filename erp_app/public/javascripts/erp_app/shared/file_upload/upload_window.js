@@ -22,10 +22,10 @@ Ext.define("Compass.ErpApp.Shared.UploadWindow",{
     config.extraPostData = Ext.applyIf({authenticity_token:Compass.ErpApp.AuthentictyToken}, config.extraPostData);
     query_string = '?' + Ext.Object.toQueryString(config.extraPostData);
 
-    if (typeof ErpApp.FileUpload.maxSize == 'number'){
-      max_file_size = ErpApp.FileUpload.maxSize + 'mb'
+    if (typeof ErpTechSvcs.Config.max_file_size_in_mb == 'number'){
+      max_file_size = ErpTechSvcs.Config.max_file_size_in_mb + 'mb'
     }else{
-      max_file_size = ErpApp.FileUpload.maxSize
+      max_file_size = ErpTechSvcs.Config.max_file_size_in_mb
     }
 
     this.plUploader = Ext.create("Ext.ux.panel.UploadPanel",{

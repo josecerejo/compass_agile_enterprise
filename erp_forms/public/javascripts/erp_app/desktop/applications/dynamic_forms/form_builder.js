@@ -458,7 +458,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.FormBuilder",{
     },
 
     emailRegex : function(){
-        return ErpApp.emailRegex;
+        return ErpTechSvcs.Config.email_regex;
     },
 
     addFieldToForm : function(formPanel, fieldDefinition){
