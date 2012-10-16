@@ -1051,7 +1051,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.FormBuilder",{
                                             widget_email_recipients.allowBlank = (field.getValue() == 'save');
                                         }
                                     },
-                                    plugins: [new helpQtip('Configure the action to be taken when a form is submitted via the Knitkit Dynamic Forms widget. (Note that the Contact Us widget does not use this setting but rather uses the Knitkit website configuration option.)<br /> Email Only with email but not save the data to the database.<br /> Save Only will save the data to the database but not email. Email & Save Data will do both.')]
+                                    plugins: [new helpQtip("Configure the action to be taken when a form is submitted via Knitkit's Dynamic Forms Widget.<br /> Email Only will email but not save the data to the database.<br /> Save Only will save the data to the database but not email.<br /> Email & Save Data will do both.<br /> NOTE: The Contact Us Widget uses Knitkit's website configuration options for email behavior & not the Dynamic Forms Widget Action setting.")]
                                 },
                                 {
                                     fieldLabel: 'Email Recipients',
@@ -1063,7 +1063,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.FormBuilder",{
                                             field.allowBlank = (field.findParentByType('form').getForm().findField('widget_action').getValue() == 'save');
                                         }
                                     },
-                                    plugins: [new helpQtip('When Widget Action is set to Email only or Email & Save Data, this field is required. Enter a comma separated list of email addresses who should receive data submitted with this form via the Knitkit Dynamic Forms widget.')]                                    
+                                    plugins: [new helpQtip('When Widget Action is set to Email only or Email & Save Data, this field is required. Enter a comma separated list of email addresses to receive data submitted with this form via the Knitkit Dynamic Forms widget.')]                                    
                                 },
                                 {
                                     fieldLabel: 'Focus Field',
