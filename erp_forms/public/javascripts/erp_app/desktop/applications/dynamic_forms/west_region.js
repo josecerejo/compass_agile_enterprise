@@ -386,12 +386,12 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.WestRegion",{
                 },
                 items: [
                 {
-                  // TODO: Add validation to check for spaces and non-alphanumeric chars
                   xtype:'textfield',
                   fieldLabel:'Model Name',
                   allowBlank:false,
                   name:'model_name',
-                  plugins: [new helpQtip('This should be a camel case class name.<br /> Example: WebsiteInquiry')]
+                  plugins: [new helpQtip('This should be a camel case class name.<br /> Example: WebsiteInquiry')],
+                  vtype: 'alphanum'
                 }
                 ]
               }),
