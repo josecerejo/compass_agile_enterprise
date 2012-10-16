@@ -627,55 +627,57 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.FormBuilder",{
                             var formBuilder = formPanel.findParentByType('dynamic_forms_FormBuilder');
                             var form_props = formBuilder.query('#form_props').first().getForm();
 
-                            //TODO: add validation for form_props including widget_email_recipients which depends on widget_action
-
-                            if (Ext.isEmpty(config.form_id)){
-                                var create = true;
-                                var url = '/erp_forms/erp_app/desktop/dynamic_forms/forms/create';
-                            }else{                                
-                                var url = '/erp_forms/erp_app/desktop/dynamic_forms/forms/update';
-                            }
-                            formBuilder.setWindowStatus('Saving form ...');
-                            Ext.Ajax.request({
-                              url: url,
-                              method: 'POST',
-                              params:{
-                                id:config.form_id,
-                                form_definition:Ext.JSON.encode(formPanel.form_definition),
-                                description: form_props.findField('description').getValue(),
-                                model_name: config.model_name,
-                                widget_action: form_props.findField('widget_action').getValue(),
-                                widget_email_recipients: form_props.findField('widget_email_recipients').getValue(),
-                                focus_first_field: form_props.findField('focus_first_field').getValue(),
-                                show_in_multitask: form_props.findField('show_in_multitask').getValue(),
-                                submit_empty_text: form_props.findField('submit_empty_text').getValue(),
-                                msg_target: form_props.findField('msg_target').getValue(),
-                                submit_button_label: form_props.findField('submit_button_label').getValue(),
-                                cancel_button_label: form_props.findField('cancel_button_label').getValue(),
-                                comment: form_props.findField('comment').getValue()
-                              },
-                              success: function(response) {
-                                formBuilder.clearWindowStatus();
-                                var obj =  Ext.decode(response.responseText);
-                                if(obj.success){
-                                    if (create == true){
-                                        Ext.getCmp('dynamic_formsTabPanel').remove(formBuilder);
-                                        Ext.getStore('dynamicFormStore').load({ params:{ id: obj.id } });
-                                        Ext.getStore('formsTreeStore').load();
-                                    }else{
-                                        formBuilder.setTitle(form_props.findField('description').getValue());
-                                        Ext.Msg.alert('Success', 'Form saved.');  
+                            if (form_props.isValid()){
+                                if (Ext.isEmpty(config.form_id)){
+                                    var create = true;
+                                    var url = '/erp_forms/erp_app/desktop/dynamic_forms/forms/create';
+                                }else{                                
+                                    var url = '/erp_forms/erp_app/desktop/dynamic_forms/forms/update';
+                                }
+                                formBuilder.setWindowStatus('Saving form ...');
+                                Ext.Ajax.request({
+                                  url: url,
+                                  method: 'POST',
+                                  params:{
+                                    id:config.form_id,
+                                    form_definition:Ext.JSON.encode(formPanel.form_definition),
+                                    description: form_props.findField('description').getValue(),
+                                    model_name: config.model_name,
+                                    widget_action: form_props.findField('widget_action').getValue(),
+                                    widget_email_recipients: form_props.findField('widget_email_recipients').getValue(),
+                                    focus_first_field: form_props.findField('focus_first_field').getValue(),
+                                    show_in_multitask: form_props.findField('show_in_multitask').getValue(),
+                                    submit_empty_text: form_props.findField('submit_empty_text').getValue(),
+                                    msg_target: form_props.findField('msg_target').getValue(),
+                                    submit_button_label: form_props.findField('submit_button_label').getValue(),
+                                    cancel_button_label: form_props.findField('cancel_button_label').getValue(),
+                                    comment: form_props.findField('comment').getValue()
+                                  },
+                                  success: function(response) {
+                                    formBuilder.clearWindowStatus();
+                                    var obj =  Ext.decode(response.responseText);
+                                    if(obj.success){
+                                        if (create == true){
+                                            Ext.getCmp('dynamic_formsTabPanel').remove(formBuilder);
+                                            Ext.getStore('dynamicFormStore').load({ params:{ id: obj.id } });
+                                            Ext.getStore('formsTreeStore').load();
+                                        }else{
+                                            formBuilder.setTitle(form_props.findField('description').getValue());
+                                            Ext.Msg.alert('Success', 'Form saved.');  
+                                        }
                                     }
-                                }
-                                else{
-                                  Ext.Msg.alert('Error', 'Error saving form.');
-                                }
-                              },
-                              failure: function(response) {
-                                formBuilder.clearWindowStatus();
-                                Ext.Msg.alert('Error', 'Error saving form');
-                              }
-                            });
+                                    else{
+                                      Ext.Msg.alert('Error', 'Error saving form.');
+                                    }
+                                  },
+                                  failure: function(response) {
+                                    formBuilder.clearWindowStatus();
+                                    Ext.Msg.alert('Error', 'Error saving form');
+                                  }
+                                });
+                            }else{
+                                Ext.Msg.alert('Error', "There is a validation error with this form's properties. Please correct fields marked red.");
+                            }
                           }
                         }
                       },
@@ -1043,6 +1045,12 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.FormBuilder",{
                                         ['save', 'Save Only'],
                                         ['both', 'Email & Save Data']
                                     ],
+                                    listeners:{
+                                        change:function(field, newValue, oldValue){
+                                            var widget_email_recipients = field.findParentByType('form').getForm().findField('widget_email_recipients');
+                                            widget_email_recipients.allowBlank = (field.getValue() == 'save');
+                                        }
+                                    },
                                     plugins: [new helpQtip('Configure the action to be taken when a form is submitted via the Knitkit Dynamic Forms widget. (Note that the Contact Us widget does not use this setting but rather uses the Knitkit website configuration option.)<br /> Email Only with email but not save the data to the database.<br /> Save Only will save the data to the database but not email. Email & Save Data will do both.')]
                                 },
                                 {
@@ -1050,6 +1058,11 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.FormBuilder",{
                                     name: 'widget_email_recipients',
                                     xtype: 'textfield',
                                     width: 215,
+                                    listeners:{
+                                        render:function(field){
+                                            field.allowBlank = (field.findParentByType('form').getForm().findField('widget_action').getValue() == 'save');
+                                        }
+                                    },
                                     plugins: [new helpQtip('When Widget Action is set to Email only or Email & Save Data, this field is required. Enter a comma separated list of email addresses who should receive data submitted with this form via the Knitkit Dynamic Forms widget.')]                                    
                                 },
                                 {
