@@ -11,7 +11,7 @@ Gem::Specification.new do |s|
   s.version     = ErpForms::VERSION::STRING
   s.summary     = "ErpForms provides dynamic form capability to existing and dynamic models."
   s.description = "ErpForms provides dynamic form capability to existing and dynamic models. Form Builder coming soon."
-  s.authors     = ["Rick Koloski, Russell Holmes"]
+  s.authors     = ["Adam Hull, Rick Koloski, Russell Holmes"]
   s.email       = ["russonrails@gmail.com"]
   s.homepage    = "http://development.compassagile.com"
 

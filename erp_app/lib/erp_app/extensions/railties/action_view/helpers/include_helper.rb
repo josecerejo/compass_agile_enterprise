@@ -13,14 +13,6 @@ module ErpApp
               raw srcs.flatten.map{|src| "<link rel=\"stylesheet\" type=\"text/css\" href=\"/stylesheets/#{src}\" />"}.join("")
             end
       
-            def set_max_file_upload
-              raw "<script type='text/javascript'>Ext.ns('ErpApp.FileUpload'); ErpApp.FileUpload.maxSize = #{ErpTechSvcs::Config.max_file_size_in_mb};</script>"
-            end
-
-            def set_email_regex
-              raw "<script type='text/javascript'>ErpApp.emailRegex = \"#{ErpTechSvcs::Config.email_regex}\";</script>"
-            end
-
             def include_extjs(opt={})
               resources = ''
 
@@ -30,6 +22,8 @@ module ErpApp
                 resources << static_javascript_include_tag("extjs/ext-all.js")
               end
 
+              resources << static_javascript_include_tag("extjs/helpQtip.js")
+              resources << static_javascript_include_tag("extjs/Ext.ux.Action.JsonSubmit.js")
               resources << static_javascript_include_tag("extjs/ext_ux_tab_close_menu.js")
               resources << static_javascript_include_tag("extjs/Ext.ux.form.MultiSelect.js")
 

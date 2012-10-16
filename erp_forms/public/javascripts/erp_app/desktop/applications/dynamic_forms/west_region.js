@@ -197,7 +197,8 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.WestRegion",{
       title: record.get('description'),
       model_name: record.get('model_name'),
       form_id: record.get('id'),
-      form_definition: Ext.decode(record.get('definition'))
+      form_definition: Ext.decode(record.get('definition')),
+      msg_target: record.get('msg_target')
     });
     this.centerRegion.workArea.add(formBuilder);
     this.centerRegion.workArea.setActiveTab(this.centerRegion.workArea.items.length - 1);
@@ -271,7 +272,6 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.WestRegion",{
                   var newRecordWindow = Ext.create("Ext.window.Window",{
                     layout:'fit',
                     title:'New Record',
-                    y: 100, // this fixes chrome and safari rendering the window at the bottom of the screen
                     plain: true,
                     buttonAlign:'center',
                     items: form_definition
