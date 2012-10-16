@@ -14,12 +14,10 @@ module ErpForms::ErpApp::Desktop::DynamicForms
         end
       end
 
-      columns << DynamicGridColumn.build_column({ :fieldLabel => "Created By", :name => 'created_username', :xtype => 'textfield' })
-      columns << DynamicGridColumn.build_column({ :fieldLabel => "Created At", :name => 'created_at', :xtype => 'datefield', :width => 75 })
-      columns << DynamicGridColumn.build_column({ :fieldLabel => "Updated By", :name => 'updated_username', :xtype => 'textfield' })
-      columns << DynamicGridColumn.build_column({ :fieldLabel => "Updated At", :name => 'updated_at', :xtype => 'datefield', :width => 75 })
-      columns << DynamicGridColumn.build_edit_column("Ext.getCmp('#{params[:model_name]}').editRecord(rec,'#{params[:model_name]}');")
-      columns << DynamicGridColumn.build_delete_column("Ext.getCmp('#{params[:model_name]}').deleteRecord(rec,'#{params[:model_name]}');")
+      columns << DynamicGridColumn.build_column({ :fieldLabel => "Created By", :name => 'created_username', :xtype => 'textfield', :width => 100 })
+      columns << DynamicGridColumn.build_column({ :fieldLabel => "Created At", :name => 'created_at', :xtype => 'datefield', :width => 115 })
+      columns << DynamicGridColumn.build_column({ :fieldLabel => "Updated By", :name => 'updated_username', :xtype => 'textfield', :width => 100 })
+      columns << DynamicGridColumn.build_column({ :fieldLabel => "Updated At", :name => 'updated_at', :xtype => 'datefield', :width => 115 })
 
       definition << DynamicFormField.textfield({ :fieldLabel => "Created By", :name => 'created_username' })
       definition << DynamicFormField.datefield({ :fieldLabel => "Created At", :name => 'created_at' })
@@ -52,8 +50,8 @@ module ErpForms::ErpApp::Desktop::DynamicForms
         wihash[:id] = i.id
         wihash[:created_username] = i.data.created_by.nil? ? '' : i.data.created_by.username
         wihash[:updated_username] = i.data.updated_by.nil? ? '' : i.data.updated_by.username
-        wihash[:created_at] = i.data.created_at
-        wihash[:updated_at] = i.data.updated_at
+        wihash[:created_at] = i.data.created_at.strftime(@@datetime_format)
+        wihash[:updated_at] = i.data.updated_at.strftime(@@datetime_format)
         wihash[:form_id] = (i.data.updated_with_form_id ? i.data.updated_with_form_id : i.data.created_with_form_id)
         wihash[:model_name] = params[:model_name]
         wi << wihash
