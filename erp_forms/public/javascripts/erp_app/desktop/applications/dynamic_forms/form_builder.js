@@ -1020,8 +1020,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.FormBuilder",{
                                 width: 230,
                                 labelWidth: 85
                             },
-                            items:[
-                                {
+                            items:[{
                                     fieldLabel: 'Form Name',
                                     name: 'description',
                                     xtype: 'textfield',
@@ -1036,6 +1035,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.FormBuilder",{
                                     fieldLabel: 'Widget Action',
                                     name: 'widget_action',
                                     xtype: 'combobox',
+                                    width: 215,
                                     allowBlank: false,
                                     forceSelection:true,
                                     store: [
@@ -1049,6 +1049,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.FormBuilder",{
                                     fieldLabel: 'Email Recipients',
                                     name: 'widget_email_recipients',
                                     xtype: 'textfield',
+                                    width: 215,
                                     plugins: [new helpQtip('When Widget Action is set to Email only or Email & Save Data, this field is required. Enter a comma separated list of email addresses who should receive data submitted with this form via the Knitkit Dynamic Forms widget.')]                                    
                                 },
                                 {
