@@ -15,7 +15,7 @@ Ext.define("Compass.ErpApp.Shared.DynamicRelatedComboBox",{
             valueField: 'id',
             triggerAction: 'all',
             store: Ext.create('Ext.data.Store', {
-                fields: config.fields,
+                fields: (config.fields || [{ name: 'id' }]),
                 proxy: {
                     type:'ajax',
                     reader:{
