@@ -364,7 +364,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.WestRegion",{
                 },
                 items: [
                 {
-                  // TODO: Add validation
+                  // TODO: Add validation to check for spaces and non-alphanumeric chars
                   xtype:'textfield',
                   fieldLabel:'Model Name',
                   allowBlank:false,

@@ -9,7 +9,6 @@ Ext.define('DynamicForm', {
     {name: 'widget_action', type: 'string'},
     {name: 'widget_email_recipients', type: 'string'},
     {name: 'focus_first_field', type: 'boolean'},
-    {name: 'show_in_multitask', type: 'boolean'},
     {name: 'submit_empty_text', type: 'boolean'},
     {name: 'msg_target', type: 'string'},
     {name: 'submit_button_label', type: 'string'},
@@ -646,7 +645,6 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.FormBuilder",{
                                     widget_action: form_props.findField('widget_action').getValue(),
                                     widget_email_recipients: form_props.findField('widget_email_recipients').getValue(),
                                     focus_first_field: form_props.findField('focus_first_field').getValue(),
-                                    show_in_multitask: form_props.findField('show_in_multitask').getValue(),
                                     submit_empty_text: form_props.findField('submit_empty_text').getValue(),
                                     msg_target: form_props.findField('msg_target').getValue(),
                                     submit_button_label: form_props.findField('submit_button_label').getValue(),
@@ -1107,11 +1105,6 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.FormBuilder",{
                                         ['none', 'None']
                                     ]
                                 },
-                                // {
-                                //     fieldLabel: 'Show in MultiTask',
-                                //     name: 'show_in_multitask',
-                                //     xtype: 'checkbox'
-                                // },
                                 {
                                     fieldLabel: 'Comment',
                                     labelAlign: 'top',

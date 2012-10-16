@@ -3,6 +3,7 @@ class DynamicForms < ActiveRecord::Migration
     unless table_exists?(:dynamic_form_models)
       create_table :dynamic_form_models do |t|
         t.string :model_name
+        t.boolean :show_in_multitask, :default => false 
 
         t.timestamps
       end
