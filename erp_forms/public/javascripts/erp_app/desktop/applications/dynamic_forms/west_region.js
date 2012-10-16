@@ -134,7 +134,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.WestRegion",{
                 items: [
                 {
                   xtype:'textfield',
-                  fieldLabel:'Form Name',
+                  fieldLabel:'Form Title',
                   allowBlank:false,
                   name:'form_name',
                   listeners:{
@@ -364,10 +364,12 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.WestRegion",{
                 },
                 items: [
                 {
+                  // TODO: Add validation
                   xtype:'textfield',
                   fieldLabel:'Model Name',
                   allowBlank:false,
-                  name:'model_name'
+                  name:'model_name',
+                  plugins: [new helpQtip('This should be a camel case class name.<br /> Example: WebsiteInquiry')]
                 }
                 ]
               }),

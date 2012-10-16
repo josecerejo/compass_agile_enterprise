@@ -1023,7 +1023,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.FormBuilder",{
                                 labelWidth: 85
                             },
                             items:[{
-                                    fieldLabel: 'Form Name',
+                                    fieldLabel: 'Form Title',
                                     name: 'description',
                                     xtype: 'textfield',
                                     allowBlank: false
@@ -1063,12 +1063,14 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.FormBuilder",{
                                             field.allowBlank = (field.findParentByType('form').getForm().findField('widget_action').getValue() == 'save');
                                         }
                                     },
-                                    plugins: [new helpQtip('When Widget Action is set to Email only or Email & Save Data, this field is required. Enter a comma separated list of email addresses to receive data submitted with this form via the Knitkit Dynamic Forms widget.')]                                    
+                                    plugins: [new helpQtip('When Widget Action is set to Email only or Email & Save Data, this field is required. Enter a comma separated list of email addresses to receive data submitted with this form via the Knitkit Dynamic Forms widget.')]
                                 },
                                 {
                                     fieldLabel: 'Focus Field',
                                     name: 'focus_first_field',
-                                    xtype: 'checkbox'
+                                    xtype: 'checkbox',
+                                    width: 105,
+                                    plugins: [new helpQtip('Do you want the cursor to autmatically focus the first form field? If there is text it will also automatically highlight.')]
                                 },
                                 {
                                     fieldLabel: 'Submit Button Label',
@@ -1085,7 +1087,9 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.FormBuilder",{
                                 {
                                     fieldLabel: 'Submit Empty Text',
                                     name: 'submit_empty_text',
-                                    xtype: 'checkbox'
+                                    xtype: 'checkbox',
+                                    width: 105,
+                                    plugins: [new helpQtip('Empty Text is example text. Do you want to submit these example values if they are unchanged by the user?')]
                                 },
                                 {
                                     fieldLabel: 'Message Target',
@@ -1103,11 +1107,11 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.FormBuilder",{
                                         ['none', 'None']
                                     ]
                                 },
-                                {
-                                    fieldLabel: 'Show in MultiTask',
-                                    name: 'show_in_multitask',
-                                    xtype: 'checkbox'
-                                },
+                                // {
+                                //     fieldLabel: 'Show in MultiTask',
+                                //     name: 'show_in_multitask',
+                                //     xtype: 'checkbox'
+                                // },
                                 {
                                     fieldLabel: 'Comment',
                                     labelAlign: 'top',
