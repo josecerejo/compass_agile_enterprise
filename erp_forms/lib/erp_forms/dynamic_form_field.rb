@@ -166,7 +166,8 @@ class DynamicFormField
     field[:maxLength] = options[:maxLength] unless options[:maxLength].nil?
     field[:minValue] = options[:minValue] unless options[:minValue].nil?
     field[:maxValue] = options[:maxValue] unless options[:maxValue].nil?
-    
+    field[:hideTrigger] = options[:hideTrigger] unless options[:hideTrigger].nil?
+
     if selections and selections != []
       field[:store] = selections
     end
