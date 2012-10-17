@@ -137,10 +137,19 @@ class DynamicFormField
     DynamicFormField.basic_field('checkbox', options)
   end
 
+  def self.filefield(options={})
+    DynamicFormField.basic_field('filefield', options)
+  end
+
   def self.hiddenfield(options={})
     DynamicFormField.basic_field('hiddenfield', options)
   end
-  
+
+  # alias
+  def self.hidden(options={})
+    DynamicFormField.hiddenfield(options={})
+  end
+
   def self.basic_field(xtype, options={}, selections=[])
     options = DynamicFormField.set_default_field_options(options)
 
@@ -167,6 +176,15 @@ class DynamicFormField
     field[:minValue] = options[:minValue] unless options[:minValue].nil?
     field[:maxValue] = options[:maxValue] unless options[:maxValue].nil?
     field[:hideTrigger] = options[:hideTrigger] unless options[:hideTrigger].nil?
+    field[:hideMode] = options[:hideMode] unless options[:hideMode].blank?
+    field[:hidden] = options[:hidden] unless options[:hidden].nil?
+    field[:disabled] = options[:disabled] unless options[:disabled].nil?
+    field[:buttonText] = options[:buttonText] unless options[:buttonText].blank?
+    field[:forceSelection] = options[:forceSelection] unless options[:forceSelection].nil?
+    field[:editable] = options[:editable] unless options[:editable].nil?
+    field[:emptyText] = options[:emptyText] unless options[:emptyText].blank?
+    field[:msgTarget] = options[:msgTarget] unless options[:msgTarget].blank?
+    field[:labelAlign] = options[:labelAlign] unless options[:labelAlign].blank?
 
     if selections and selections != []
       field[:store] = selections
@@ -188,7 +206,6 @@ class DynamicFormField
   end
   
   def self.set_default_field_options(options={})
-        
     options[:fieldLabel] = '' if options[:fieldLabel].nil?
     options[:name] = '' if options[:name].nil?
     options[:allowBlank] = true if options[:allowBlank].nil?
