@@ -112,7 +112,8 @@ var fieldData = {
         {
             text: 'Related Combo Box',
             field_xtype: 'related_combobox',
-            leaf: true
+            leaf: true,
+            qtip: 'Combo Box with dynamic store. Use limited to secure pages.'
         },
         {
             text: 'Text Field',
