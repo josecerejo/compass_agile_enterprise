@@ -5,8 +5,8 @@ class DynamicFormField
 
   Field Types TODO
   special:
-  codemirror
   file upload - use has_file_assets and plupload
+  codemirror
   test password field
   
   complex (for future implementation):
@@ -137,8 +137,8 @@ class DynamicFormField
     DynamicFormField.basic_field('checkbox', options)
   end
 
-  def self.hidden(options={})
-    DynamicFormField.basic_field('hidden', options)
+  def self.hiddenfield(options={})
+    DynamicFormField.basic_field('hiddenfield', options)
   end
   
   def self.basic_field(xtype, options={}, selections=[])
