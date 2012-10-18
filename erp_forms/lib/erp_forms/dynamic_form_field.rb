@@ -5,8 +5,8 @@ class DynamicFormField
 
   Field Types TODO
   special:
-  codemirror
   file upload - use has_file_assets and plupload
+  codemirror
   test password field
   
   complex (for future implementation):
@@ -70,8 +70,6 @@ class DynamicFormField
       { :name => 'id' },
       { :name => displayField }
     ]
-
-    options[:url] = '/erp_forms/erp_app/desktop/dynamic_forms/forms/related_field' if options[:url].blank?
 
     DynamicFormField.basic_field('related_combobox', options)
   end
@@ -137,10 +135,19 @@ class DynamicFormField
     DynamicFormField.basic_field('checkbox', options)
   end
 
-  def self.hidden(options={})
-    DynamicFormField.basic_field('hidden', options)
+  def self.filefield(options={})
+    DynamicFormField.basic_field('filefield', options)
   end
-  
+
+  def self.hiddenfield(options={})
+    DynamicFormField.basic_field('hiddenfield', options)
+  end
+
+  # alias
+  def self.hidden(options={})
+    DynamicFormField.hiddenfield(options={})
+  end
+
   def self.basic_field(xtype, options={}, selections=[])
     options = DynamicFormField.set_default_field_options(options)
 
@@ -166,7 +173,17 @@ class DynamicFormField
     field[:maxLength] = options[:maxLength] unless options[:maxLength].nil?
     field[:minValue] = options[:minValue] unless options[:minValue].nil?
     field[:maxValue] = options[:maxValue] unless options[:maxValue].nil?
-    
+    field[:hideTrigger] = options[:hideTrigger] unless options[:hideTrigger].nil?
+    field[:hideMode] = options[:hideMode] unless options[:hideMode].blank?
+    field[:hidden] = options[:hidden] unless options[:hidden].nil?
+    field[:disabled] = options[:disabled] unless options[:disabled].nil?
+    field[:buttonText] = options[:buttonText] unless options[:buttonText].blank?
+    field[:forceSelection] = options[:forceSelection] unless options[:forceSelection].nil?
+    field[:editable] = options[:editable] unless options[:editable].nil?
+    field[:emptyText] = options[:emptyText] unless options[:emptyText].blank?
+    field[:msgTarget] = options[:msgTarget] unless options[:msgTarget].blank?
+    field[:labelAlign] = options[:labelAlign] unless options[:labelAlign].blank?
+
     if selections and selections != []
       field[:store] = selections
     end
@@ -187,11 +204,9 @@ class DynamicFormField
   end
   
   def self.set_default_field_options(options={})
-        
     options[:fieldLabel] = '' if options[:fieldLabel].nil?
     options[:name] = '' if options[:name].nil?
     options[:allowBlank] = true if options[:allowBlank].nil?
-    options[:value] = '' if options[:value].nil?
     options[:readOnly] = false if options[:readOnly].nil?
     options[:minLength] = nil if options[:minLength].nil?
     options[:maxLength] = nil if options[:maxLength].nil?

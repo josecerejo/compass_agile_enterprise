@@ -165,7 +165,6 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.DynamicDataGridPane
                     var editRecordWindow = Ext.create("Ext.window.Window",{
                         layout:'fit',
                         title:'Update Record',
-                        y: 100, // this fixes chrome and safari rendering the window at the bottom of the screen
                         plain: true,
                         buttonAlign:'center',
                         items: form_definition                            

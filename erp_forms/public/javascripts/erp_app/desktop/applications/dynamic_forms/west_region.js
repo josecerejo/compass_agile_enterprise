@@ -134,7 +134,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.WestRegion",{
                 items: [
                 {
                   xtype:'textfield',
-                  fieldLabel:'Form Name',
+                  fieldLabel:'Form Title',
                   allowBlank:false,
                   name:'form_name',
                   listeners:{
@@ -285,6 +285,28 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.WestRegion",{
               }
             });
           }
+        },
+        {
+          text: "Edit Selected Record",
+          iconCls:'icon-edit',
+          handler:function(btn){
+            var rec = Ext.getCmp(record.data.text).query('shared_dynamiceditablegrid').first().getSelectionModel().getSelection().first();
+            Ext.getCmp(record.data.text).editRecord(rec, record.data.text);
+          }
+        },
+        {
+          text: "Delete Selected Record",
+          iconCls:'icon-delete',
+          handler:function(btn){
+            var messageBox = Ext.MessageBox.confirm('Confirm', 'Are you sure?', 
+              function(btn){
+                if (btn == 'yes'){ 
+                  var rec = Ext.getCmp(record.data.text).query('shared_dynamiceditablegrid').first().getSelectionModel().getSelection().first();
+                  Ext.getCmp(record.data.text).deleteRecord(rec, record.data.text);
+                }
+              }
+            );                 
+          }
         }
         ]
       }
@@ -367,7 +389,9 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.WestRegion",{
                   xtype:'textfield',
                   fieldLabel:'Model Name',
                   allowBlank:false,
-                  name:'model_name'
+                  name:'model_name',
+                  plugins: [new helpQtip('This should be a camel case class name.<br /> Example: WebsiteInquiry')],
+                  vtype: 'alphanum'
                 }
                 ]
               }),

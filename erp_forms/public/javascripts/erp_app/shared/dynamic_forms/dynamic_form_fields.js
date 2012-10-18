@@ -7,28 +7,31 @@ Ext.define("Compass.ErpApp.Shared.DynamicRelatedComboBox",{
     },
 
     constructor : function(config) {
+        var self = this;
 
         config = Ext.apply({
-            width: config['width'],
             loadingText:'Retrieving Options...',
-            displayField: config['displayField'],
-            valueField:'id',
+            displayField: config.displayField,
+            valueField: 'id',
             triggerAction: 'all',
-            allowBlank: config['allowBlank'],
             store: Ext.create('Ext.data.Store', {
-                fields:config['fields'],
-                //remoteSort:config['remoteSort'],
+                fields: (config.fields || [{ name: 'id' }]),
                 proxy: {
-                        type:'ajax',
-                        reader:{
-                            type:'json',
-                            root:'data'
-                        },
-                        extraParams: config['extraParams'],
-                        url: config['url']
+                    type:'ajax',
+                    reader:{
+                        type:'json',
+                        root:'data'
                     },
-                //storeId: config['storeId'],
-                autoLoad: true
+                    extraParams: config.extraParams,
+                    url: (config.url || '/erp_forms/erp_app/desktop/dynamic_forms/forms/related_field')
+                },
+                autoLoad: true,
+                listeners:{
+                    'load': function(store, records, options){
+                        // self.value did not want to work for selecting default value so we use custom self.default_value
+                        if (!Ext.isEmpty(self.default_value)) self.setValue(self.default_value);
+                    }
+                }
             })
         }, config);
 

@@ -90,10 +90,13 @@ class ErpForms::ErpApp::Desktop::DynamicForms::FormsController < ErpForms::ErpAp
 
   # get related data for a related field
   def related_field
-    related_model = params[:model].camelize.constantize
-    data = related_model.all
-
-    render :inline => data.to_json(:only => [:id, params[:displayField].to_sym])
+    if params[:model].blank? or params[:displayField].blank?
+      render :inline => '[]'
+    else
+      related_model = params[:model].camelize.constantize
+      data = related_model.all
+      render :inline => data.to_json(:only => [:id, params[:displayField].to_sym])
+    end
   end
 
   # delete dynamic form
