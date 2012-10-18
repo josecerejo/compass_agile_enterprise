@@ -20,7 +20,7 @@ class DynamicDatum < ActiveRecord::Base
 
   def dynamic_attributes_with_related_data(related_fields=[], use_label=false)
     key = (use_label ? :fieldLabel : :name)
-    data = sorted_dynamic_attributes(false, use_label)
+    data = sorted_dynamic_attributes(:use_label => use_label)
     related_fields.each do |r|
       data.each do |k,v|
         if k == r[key]
@@ -68,16 +68,18 @@ class DynamicDatum < ActiveRecord::Base
         else
           index = (options[:use_label] ? labels[i] : key)
           sorted[index] = self.dynamic_attributes_without_prefix[key]
-        end        
-
+        end
         i += 1
       end
       
       if options[:all]
         # append attributes not in definition
         attrs = (options[:with_prefix] ? self.dynamic_attributes : self.dynamic_attributes_without_prefix)
+        i=0
         sorted.each do |k,v|
-          attrs.delete(k)
+          index = (options[:use_label] ? keys[i] : k)
+          attrs.delete(index)
+          i += 1
         end
         attrs.each do |k,v|
           if options[:with_prefix]
