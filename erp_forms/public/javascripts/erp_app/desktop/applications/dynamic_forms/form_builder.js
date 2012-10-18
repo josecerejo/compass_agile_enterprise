@@ -927,11 +927,10 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.FormBuilder",{
 
                                             switch(fieldDefinition.xtype){
                                                 case 'hiddenfield':
-                                                    //fieldDefinition.xtype = 'displayfield';
-                                                    //fieldDefinition.field_xtype = 'hiddenfield';
                                                     fieldDefinition.display_in_grid = false;
                                                     break;
                                                 case 'related_combobox':
+                                                    fieldDefinition.width = 175;
                                                     fieldDefinition.editable = true;
                                                     fieldDefinition.forceSelection = true;
                                                     break;
@@ -1017,7 +1016,8 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.FormBuilder",{
 
                                         try { fieldDefinition.labelAlign = updateFieldForm.findField('updateLabelAlign').getValue(); } catch(e){}
                                         try { fieldDefinition.readOnly = updateFieldForm.findField('updateReadOnly').getValue(); } catch(e){}
-                                        try { fieldDefinition.emptyText = updateFieldForm.findField('updateEmptyText').getValue(); } catch(e){}
+                                        try { var updateEmptyText = updateFieldForm.findField('updateEmptyText').getValue();
+                                              if (!Ext.isEmpty(updateEmptyText)) fieldDefinition.emptyText = updateEmptyText; } catch(e){}
                                         try { fieldDefinition.allowBlank = updateFieldForm.findField('updateAllowBlank').getValue(); } catch(e){}
                                         try { fieldDefinition.display_in_grid = updateFieldForm.findField('updateDisplayInGrid').getValue(); } catch(e){}                                        
                                         try { var updateValue = updateFieldForm.findField('updateValue').getValue();

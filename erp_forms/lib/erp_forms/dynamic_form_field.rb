@@ -71,8 +71,6 @@ class DynamicFormField
       { :name => displayField }
     ]
 
-    options[:url] = '/erp_forms/erp_app/desktop/dynamic_forms/forms/related_field' if options[:url].blank?
-
     DynamicFormField.basic_field('related_combobox', options)
   end
 
@@ -209,7 +207,6 @@ class DynamicFormField
     options[:fieldLabel] = '' if options[:fieldLabel].nil?
     options[:name] = '' if options[:name].nil?
     options[:allowBlank] = true if options[:allowBlank].nil?
-    options[:value] = '' if options[:value].nil?
     options[:readOnly] = false if options[:readOnly].nil?
     options[:minLength] = nil if options[:minLength].nil?
     options[:maxLength] = nil if options[:maxLength].nil?

@@ -23,9 +23,9 @@ module ErpForms::ErpApp::Desktop::DynamicForms
       definition << DynamicFormField.datefield({ :fieldLabel => "Created At", :name => 'created_at' })
       definition << DynamicFormField.textfield({ :fieldLabel => "Updated By", :name => 'updated_username' })
       definition << DynamicFormField.datefield({ :fieldLabel => "Updated At", :name => 'updated_at' })
-      definition << DynamicFormField.hidden({ :fieldLabel => "ID", :name => 'id' })
-      definition << DynamicFormField.hidden({ :fieldLabel => "Form ID", :name => 'form_id' })
-      definition << DynamicFormField.hidden({ :fieldLabel => "Model Name", :name => 'model_name' })
+      definition << DynamicFormField.hiddenfield({ :fieldLabel => "ID", :name => 'id' })
+      definition << DynamicFormField.hiddenfield({ :fieldLabel => "Form ID", :name => 'form_id' })
+      definition << DynamicFormField.hiddenfield({ :fieldLabel => "Model Name", :name => 'model_name' })
 
       render :inline => "{
         \"success\": true,
