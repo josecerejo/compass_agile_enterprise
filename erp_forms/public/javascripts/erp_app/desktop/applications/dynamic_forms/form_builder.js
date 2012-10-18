@@ -889,6 +889,9 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.FormBuilder",{
                                           fieldLabel:'Field Name',
                                           allowBlank:false,
                                           name:'field_name',
+                                          maskRe: /^\w+$/,
+                                          regex: /^\w+$/,
+                                          plugins: [new helpQtip('Only letters, numbers and underscores are valid.')],
                                           listeners:{
                                             afterrender:function(field){
                                                 field.focus(false, 200);
