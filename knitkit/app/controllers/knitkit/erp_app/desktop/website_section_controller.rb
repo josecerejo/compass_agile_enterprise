@@ -21,6 +21,7 @@ module Knitkit
                 website_section.render_base_layout = params[:render_with_base_layout] == 'yes'
                 website_section.type = params[:type] unless params[:type] == 'Page'
                 website_section.internal_identifier = params[:internal_identifier]
+                website_section.position = 0 # explicitly set position null, MS SQL doesn't always honor column default
 
                 if website_section.save
                   if params[:website_section_id]
