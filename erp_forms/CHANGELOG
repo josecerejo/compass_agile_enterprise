@@ -1,3 +1,5 @@
 Version 2.0.4 - 10-11-2012
-- fixed and refactored build_column
-- added min/max Value option to form field
+- Fixed and refactored build_column
+- Added min/max Value option to form field
+Version 2.0.5 - 10-18-2012
+- Added hideTrigger option to form field
