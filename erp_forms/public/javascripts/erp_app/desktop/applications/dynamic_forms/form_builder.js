@@ -1,3 +1,4 @@
+Ext.util.CSS.createStyleSheet('.x-form-file{  }');
 Ext.define('DynamicForm', {
   extend: 'Ext.data.Model',
   fields: [
@@ -89,11 +90,12 @@ var fieldData = {
             field_xtype: 'email',
             leaf: true
         },
-        // {
-        //     text: 'File Upload',
-        //     field_xtype: 'filefield',
-        //     leaf: true
-        // },
+        {
+            text: 'File Upload',
+            field_xtype: 'filefield',
+            leaf: true,
+            vtype: 'file'
+        },
         {
             text: 'Hidden Field',
             field_xtype: 'hiddenfield',
@@ -540,146 +542,155 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.FormBuilder",{
         if (fieldDefinition) formPanel.getForm().findField(fieldDefinition.name).getEl().dom.click();
     },
 
-    addValidationToForm : function(form_definition){
-        Ext.each(form_definition, function(field){
-            if(!Ext.isEmpty(field.validator_function)){
-                field.validator = function(v){ regex = this.initialConfig.validation_regex; return eval(field.validator_function); };
-            }else if (!Ext.isEmpty(field.validation_regex)){
-                field.validator = function(v){ return validate_regex(v, this.initialConfig.validation_regex); };
-            }
-        });
-
-        return form_definition;
+    addValidationToField : function(field){
+        if(!Ext.isEmpty(field.validator_function)){
+            field.validator = function(v){ regex = this.initialConfig.validation_regex; return eval(field.validator_function); };
+        }else if (!Ext.isEmpty(field.validation_regex)){
+            field.validator = function(v){ return validate_regex(v, this.initialConfig.validation_regex); };
+        }
+        return field;
     },
 
-    convertHiddenFieldsToDisplayFieldsForUi : function(form_definition){
-        Ext.each(form_definition, function(field){
-            if (field.xtype == 'hiddenfield'){
-                field.xtype = 'displayfield';
-                field.field_xtype = 'hiddenfield';
-            }
-        });
-        return form_definition;
+    convertHiddenFieldToDisplayFieldForUi : function(field){
+        if (field.xtype == 'hiddenfield'){
+            field.xtype = 'displayfield';
+            field.field_xtype = 'hiddenfield';
+        }
+        return field;
     },
+
+    // alterFileUploadField : function(field){
+    //         if (field.xtype == 'filefield'){
+    //             console.log('filefield');
+    //             field.listeners = {
+    //                 'render': function(field){ 
+    //                     console.log('listener');
+    //                     field.inputEl.dom.size = 20; 
+    //                 }
+    //             };
+    //         }
+    //     return field;
+    // },
 
     reloadForm : function(formPanel){
+        var self = this;
         formPanel.removeAll();
         var form_definition_copy = Ext.clone(formPanel.form_definition); // make independent copy
-        form_definition_copy = this.convertHiddenFieldsToDisplayFieldsForUi(form_definition_copy);
-        form_definition_copy = this.addValidationToForm(form_definition_copy);
-        formPanel.add(this.addHighlightListenerForSelectedField(form_definition_copy));        
+        Ext.each(form_definition_copy, function(field){
+            field = self.convertHiddenFieldToDisplayFieldForUi(field);
+            field = self.addValidationToField(field);
+            //field = self.alterFileUploadField(field);
+            field = self.addHighlightListenerForSelectedField(field)
+        });
+        formPanel.add(form_definition_copy);        
     },
 
-    addHighlightListenerForSelectedField : function(form_definition){
-        var form_with_listeners = [];
-        Ext.each(form_definition, function(field){
-            field.listeners = {
-                render: function(item){
-                    var el = item.getEl();
-                    el.addListener('click', function(e, t, eOpts){    
-                        var formPanel = item.findParentByType('form');
-                        var highlight_border = '1px solid green';
-                        //console.log(el.dom.style.border);
-                        if (el.dom.style.border != highlight_border){
-                            Ext.each(formPanel.items.items, function(i){
-                                //console.log(i.getEl().getStyle('border'));
-                                if (item != i && i.getEl().dom.style.border == highlight_border){
-                                    var label = i.getEl().query('label').first();
-                                    label.style.width = (parseInt(label.style.width) + 2) + 'px';
-                                    i.getEl().setStyle('border', 'none');
-                                }
-                            });
-                            var label = el.query('label').first();
-                            label.style.width = (parseInt(label.style.width) - 2) + 'px';
-                            el.setStyle('border', highlight_border);
-                            el.highlight();
-
-                            // set field properties as active tab
-                            var formBuilder = formPanel.findParentByType('dynamic_forms_FormBuilder');
-                            var east_tabs = formBuilder.query('#east_tabs').first();
-                            east_tabs.setActiveTab('field_props');
-
-                            formPanel.selected_field = item;
-
-                            // populate field properties
-                            var prop_formPanel = east_tabs.query('#field_props').first();
-                            var prop_form = prop_formPanel.getForm();
-                            prop_formPanel.removeAll();
-                            prop_formPanel.add(formBuilder.getFieldOptionsForField(item));                    
-
-                            // common
-                            try { prop_form.findField('updateName').setValue(item.name); } catch(e) {}
-                            try { prop_form.findField('updateLabel').setValue(item.fieldLabel); } catch(e) {}
-                            try { prop_form.findField('updateLabelAlign').setValue(item.labelAlign); } catch(e) {}
-                            try { var updateValue = ((item.xtype == 'related_combobox') ? item.default_value : item.value);
-                                  prop_form.findField('updateValue').setValue(updateValue); } catch(e) {}
-                            try { prop_form.findField('updateEmptyText').setValue(item.emptyText); } catch(e) {}
-                            try { prop_form.findField('updateAllowBlank').setValue(item.allowBlank); } catch(e) {}
-                            try { prop_form.findField('updateDisplayInGrid').setValue(item.display_in_grid); } catch(e) {}
-                            try { prop_form.findField('updateReadOnly').setValue(item.readOnly); } catch(e) {}
-                            try { prop_form.findField('updateWidth').setValue(item.width); } catch(e) {}
-                            try { prop_form.findField('updateHeight').setValue(item.height); } catch(e) {}
-                            try { prop_form.findField('updateLabelWidth').setValue(item.labelWidth); } catch(e) {}
-
-                            if (item.xtype == 'datefield' || item.xtype == 'timefield'){
-                                prop_form.findField('updateMinValue').setValue(item.minValue);
-                                prop_form.findField('updateMaxValue').setValue(item.maxValue);
-                            } 
-
-                            if (!Ext.isEmpty(item.validation_regex)){
-                                prop_form.findField('updateValidationType').setValue('regex');
-                                prop_form.findField('updateValidationRegex').show();
-                                prop_form.findField('updateValidationRegex').enable();
-                                prop_form.findField('updateValidationRegex').setValue(item.validation_regex);
-                            }else if(!Ext.isEmpty(item.validator_function)){
-                                prop_form.findField('updateValidationType').setValue('function');
-                                prop_form.findField('updateValidationFunction').show();
-                                prop_form.findField('updateValidationFunction').enable();
-                                prop_form.findField('updateValidationFunction').setValue(item.validator_function);                        
+    addHighlightListenerForSelectedField : function(field){
+        field.listeners = {
+            render: function(item){
+                var el = item.getEl();
+                el.addListener('click', function(e, t, eOpts){    
+                    var formPanel = item.findParentByType('form');
+                    var highlight_border = '1px solid green';
+                    //console.log(el.dom.style.border);
+                    if (el.dom.style.border != highlight_border){
+                        Ext.each(formPanel.items.items, function(i){
+                            //console.log(i.getEl().getStyle('border'));
+                            if (item != i && i.getEl().dom.style.border == highlight_border){
+                                var label = i.getEl().query('label').first();
+                                label.style.width = (parseInt(label.style.width) + 2) + 'px';
+                                i.getEl().setStyle('border', 'none');
                             }
+                        });
+                        var label = el.query('label').first();
+                        label.style.width = (parseInt(label.style.width) - 2) + 'px';
+                        el.setStyle('border', highlight_border);
+                        el.highlight();
 
-                            if (item.xtype == 'numberfield'){
-                                if (item.minValue != Number.NEGATIVE_INFINITY){
-                                    prop_form.findField('updateMinValue').setValue(item.minValue);
-                                }
-                                if (item.maxValue != Number.MAX_VALUE){
-                                    prop_form.findField('updateMaxValue').setValue(item.maxValue);                        
-                                }
-                            }
+                        // set field properties as active tab
+                        var formBuilder = formPanel.findParentByType('dynamic_forms_FormBuilder');
+                        var east_tabs = formBuilder.query('#east_tabs').first();
+                        east_tabs.setActiveTab('field_props');
 
-                            if (item.xtype == 'textfield' || item.xtype == 'textarea' || item.xtype == 'numberfield'){
-                                prop_form.findField('updateMinLength').setValue(item.minLength);
-                                if (item.maxLength != Number.MAX_VALUE){
-                                    prop_form.findField('updateMaxLength').setValue(item.maxLength);
-                                }
-                            }
+                        formPanel.selected_field = item;
 
-                            if (item.xtype == 'related_combobox'){
-                                prop_form.findField('updateEditable').setValue(item.editable);
-                                prop_form.findField('updateForceSelection').setValue(item.forceSelection);
-                                prop_form.findField('updateMultiSelect').setValue(item.multiSelect);
-                                prop_form.findField('updateRelatedModel').setValue(item.extraParams.model);
-                                prop_form.findField('updateDisplayField').setValue(item.displayField);
-                            }else if (item.xtype == 'combobox' || item.xtype == 'combo'){
-                                var options = Ext.encode(item.getStore().proxy.reader.rawData).replace(/\"/g,'').replace(/\[/g,'').replace(/\]/g,'');
-                                prop_form.findField('updateOptions').setValue(options);
-                                prop_form.findField('updateEditable').setValue(item.editable);
-                                prop_form.findField('updateForceSelection').setValue(item.forceSelection);
-                                prop_form.findField('updateMultiSelect').setValue(item.multiSelect);
-                            }
+                        // populate field properties
+                        var prop_formPanel = east_tabs.query('#field_props').first();
+                        var prop_form = prop_formPanel.getForm();
+                        prop_formPanel.removeAll();
+                        prop_formPanel.add(formBuilder.getFieldOptionsForField(item));                    
 
-                            if (item.xtype == 'filefield'){
-                                prop_form.findField('updateButtonText').setValue(item.buttonText);
-                            }
-                            
+                        // common
+                        try { prop_form.findField('updateName').setValue(item.name); } catch(e) {}
+                        try { prop_form.findField('updateLabel').setValue(item.fieldLabel); } catch(e) {}
+                        try { prop_form.findField('updateLabelAlign').setValue(item.labelAlign); } catch(e) {}
+                        try { var updateValue = ((item.xtype == 'related_combobox') ? item.default_value : item.value);
+                              prop_form.findField('updateValue').setValue(updateValue); } catch(e) {}
+                        try { prop_form.findField('updateEmptyText').setValue(item.emptyText); } catch(e) {}
+                        try { prop_form.findField('updateAllowBlank').setValue(item.allowBlank); } catch(e) {}
+                        try { prop_form.findField('updateDisplayInGrid').setValue(item.display_in_grid); } catch(e) {}
+                        try { prop_form.findField('updateReadOnly').setValue(item.readOnly); } catch(e) {}
+                        try { prop_form.findField('updateWidth').setValue(item.width); } catch(e) {}
+                        try { prop_form.findField('updateHeight').setValue(item.height); } catch(e) {}
+                        try { prop_form.findField('updateLabelWidth').setValue(item.labelWidth); } catch(e) {}
+
+                        if (item.xtype == 'datefield' || item.xtype == 'timefield'){
+                            prop_form.findField('updateMinValue').setValue(item.minValue);
+                            prop_form.findField('updateMaxValue').setValue(item.maxValue);
+                        } 
+
+                        if (!Ext.isEmpty(item.validation_regex)){
+                            prop_form.findField('updateValidationType').setValue('regex');
+                            prop_form.findField('updateValidationRegex').show();
+                            prop_form.findField('updateValidationRegex').enable();
+                            prop_form.findField('updateValidationRegex').setValue(item.validation_regex);
+                        }else if(!Ext.isEmpty(item.validator_function)){
+                            prop_form.findField('updateValidationType').setValue('function');
+                            prop_form.findField('updateValidationFunction').show();
+                            prop_form.findField('updateValidationFunction').enable();
+                            prop_form.findField('updateValidationFunction').setValue(item.validator_function);                        
                         }
-                    });
-                }
-            }
-            form_with_listeners.push(field);
-        });
 
-        return form_with_listeners;
+                        if (item.xtype == 'numberfield'){
+                            if (item.minValue != Number.NEGATIVE_INFINITY){
+                                prop_form.findField('updateMinValue').setValue(item.minValue);
+                            }
+                            if (item.maxValue != Number.MAX_VALUE){
+                                prop_form.findField('updateMaxValue').setValue(item.maxValue);                        
+                            }
+                        }
+
+                        if (item.xtype == 'textfield' || item.xtype == 'textarea' || item.xtype == 'numberfield'){
+                            prop_form.findField('updateMinLength').setValue(item.minLength);
+                            if (item.maxLength != Number.MAX_VALUE){
+                                prop_form.findField('updateMaxLength').setValue(item.maxLength);
+                            }
+                        }
+
+                        if (item.xtype == 'related_combobox'){
+                            prop_form.findField('updateEditable').setValue(item.editable);
+                            prop_form.findField('updateForceSelection').setValue(item.forceSelection);
+                            prop_form.findField('updateMultiSelect').setValue(item.multiSelect);
+                            prop_form.findField('updateRelatedModel').setValue(item.extraParams.model);
+                            prop_form.findField('updateDisplayField').setValue(item.displayField);
+                        }else if (item.xtype == 'combobox' || item.xtype == 'combo'){
+                            var options = Ext.encode(item.getStore().proxy.reader.rawData).replace(/\"/g,'').replace(/\[/g,'').replace(/\]/g,'');
+                            prop_form.findField('updateOptions').setValue(options);
+                            prop_form.findField('updateEditable').setValue(item.editable);
+                            prop_form.findField('updateForceSelection').setValue(item.forceSelection);
+                            prop_form.findField('updateMultiSelect').setValue(item.multiSelect);
+                        }
+
+                        if (item.xtype == 'filefield'){
+                            prop_form.findField('updateButtonText').setValue(item.buttonText);
+                        }
+                        
+                    }
+                });
+            }
+        }
+
+        return field;
     },
 
     constructor : function(config) {
@@ -954,6 +965,11 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.FormBuilder",{
                                                     fieldDefinition.xtype = 'textfield';
                                                     fieldDefinition.inputType = 'password';
                                                     break;
+                                                case 'filefield':
+                                                    fieldDefinition.vtype = 'file';
+                                                    // fieldDefinition.inputType = 'file'; // needed for fileSize validation but it causes some cosmetic problems
+                                                    // fieldDefinition.buttonConfig = {hidden: true};
+                                                    break;
                                                 default:
                                             }
 
@@ -1065,6 +1081,9 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.FormBuilder",{
 
                                         if (selected_field.xtype == 'filefield'){
                                             fieldDefinition.buttonText = updateFieldForm.findField('updateButtonText').getValue();
+                                            fieldDefinition.vtype = 'file';
+                                            // fieldDefinition.inputType = 'file'; // needed for fileSize validation but it causes some cosmetic problems
+                                            // fieldDefinition.buttonConfig = {hidden: true};
                                         }
 
                                         if (selected_field.xtype == 'related_combobox'){
