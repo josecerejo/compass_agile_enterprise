@@ -3,6 +3,7 @@ module ErpTechSvcs
     class << self
 
       attr_accessor :max_file_size_in_mb,
+                    :file_upload_types,
                     :installation_domain, 
                     :login_url,
                     :email_notifications_from, 
@@ -18,6 +19,7 @@ module ErpTechSvcs
       def init!
         @defaults = {
           :@max_file_size_in_mb => 5,
+          :@file_upload_types => 'zip,tgz,jpg,gif,png,csv,xls,xlsx,doc,docx,ppt,tif,txt',
           :@installation_domain => 'localhost:3000',
           :@login_url => '/erp_app/login',
           :@email_notifications_from => 'notifications@noreply.com',

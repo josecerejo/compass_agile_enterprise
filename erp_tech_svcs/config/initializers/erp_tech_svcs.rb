@@ -4,6 +4,7 @@ Rails.application.config.erp_tech_svcs.configure do |config|
   config.email_notifications_from = 'notifications@noreply.com'
   config.email_regex = "^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$"
   config.max_file_size_in_mb = 5
+  config.file_upload_types = 'zip,tgz,jpg,gif,png,csv,xls,xlsx,doc,docx,ppt,tif,txt'
   config.file_assets_location = 'file_assets' # relative to Rails.root/
   config.s3_url_expires_in_seconds = 60 
   config.s3_protocol = 'https' # Can be either 'http' or 'https'

@@ -12,6 +12,10 @@ module ErpTechSvcs
             def set_email_regex
               raw "<script type='text/javascript'>ErpTechSvcs.Config.email_regex = \"#{ErpTechSvcs::Config.email_regex}\";</script>"
             end
+
+            def set_file_upload_types
+              raw "<script type='text/javascript'>ErpTechSvcs.Config.file_upload_types = \"#{ErpTechSvcs::Config.file_upload_types}\";</script>"
+            end
             
           end
         end
