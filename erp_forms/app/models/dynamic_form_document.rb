@@ -1,6 +1,7 @@
 class DynamicFormDocument < ActiveRecord::Base
   belongs_to :dynamic_form_model
 
+  has_file_assets
   has_dynamic_forms
 	has_dynamic_data
 
