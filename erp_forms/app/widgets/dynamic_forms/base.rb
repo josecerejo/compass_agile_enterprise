@@ -6,7 +6,13 @@ module Widgets
 	    end
 
   	  def new
-        # begin
+        begin
+          unless params[:file].nil?
+            # size check
+            if params[:file].tempfile.size > ErpTechSvcs::Config.max_file_size_in_mb.megabytes
+              raise "File cannot be larger than #{ErpTechSvcs::Config.max_file_size_in_mb}MB"
+            end
+          end
           dyn_form_fields = JSON.parse(params[:dyn_form_fields])
           form_data = {}
           dyn_form_fields.each do |key|
@@ -50,16 +56,16 @@ module Widgets
 
           render :inline => {
             :success => true,
-            :response => render_to_string(:template => "success", :layout => false)
+            :response =>  ERB::Util.html_escape(render_to_string(:template => "success", :layout => false))
           }.to_json
-       #  rescue Exception => e
-       #    Rails.logger.info e.message
-       #    Rails.logger.info e.backtrace.join("\n")
-  			  # render :inline => {
-  			  #   :success => false,
-       #      :response => render_to_string(:template => "error", :layout => false, :locals => {:message => e.message}) 
-  			  # }.to_json    			    
-       #  end
+        rescue Exception => e
+          Rails.logger.info e.message
+          Rails.logger.info e.backtrace.join("\n")
+  			  render :inline => {
+  			    :success => false,
+            :response => ERB::Util.html_escape(render_to_string(:template => "error", :layout => false, :locals => {:message => e.message}))
+  			  }.to_json    			    
+        end
   	  end
 
       protected
