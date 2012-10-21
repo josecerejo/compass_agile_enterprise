@@ -1,4 +1,3 @@
-Ext.util.CSS.createStyleSheet('.x-form-file{  }');
 Ext.define('DynamicForm', {
   extend: 'Ext.data.Model',
   fields: [
@@ -94,8 +93,7 @@ var fieldData = {
             text: 'File Upload',
             field_xtype: 'filefield',
             leaf: true,
-            vtype: 'file',
-            qtip: 'Model must be enabled with has_file_assets. File Upload fields are limited to one per form.'
+            vtype: 'file'
         },
         {
             text: 'Hidden Field',
@@ -1284,5 +1282,4 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.FormBuilder",{
 
         this.callParent([config]);
     }
-    
 });

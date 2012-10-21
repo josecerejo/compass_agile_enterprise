@@ -545,11 +545,19 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.WestRegion",{
                 enableDrop: false
             }
         },                            
-        itemId: 'field_types',                            
+        itemId: 'field_types',
         title: 'Field Types',
         root: fieldTreeRootNode,
         rootVisible: true,
-        autoScroll: true
+        autoScroll: true,
+        listeners:{
+          beforerender:function(){
+            // we have to set this qtip this way so that we have access to ErpTechSvcs.Config
+            var filefield = fieldTreeRootNode.findChild('field_xtype','filefield');
+            var valid_types = ErpTechSvcs.Config.file_upload_types.replace(/,/g,', ');
+            filefield.data.qtip = 'Model must be enabled with has_file_assets. Use limited to one upload field per form. Compass AE is currently configured with a max file upload size of '+ErpTechSvcs.Config.max_file_size_in_mb+'MB and limited to file types '+valid_types+". Be sure to configure your web and/or mail servers accordingly."
+          }
+        }
     };
 
     config = Ext.apply({
