@@ -65,6 +65,7 @@ class DynamicDatum < ActiveRecord::Base
       sorted = {}
       i=0
       keys.each do |key|
+        next if key == 'file' # we dont want to show file upload fields
         if options[:with_prefix]
           sorted[key] = self.dynamic_attributes[key]
         else

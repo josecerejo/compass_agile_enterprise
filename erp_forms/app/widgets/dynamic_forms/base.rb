@@ -7,7 +7,20 @@ module Widgets
 
   	  def new
         begin
-          form_data = JSON.parse(params[:data]).symbolize_keys!
+          unless params[:file].nil?
+            # size check
+            if params[:file].tempfile.size > ErpTechSvcs::Config.max_file_size_in_mb.megabytes
+              raise "File cannot be larger than #{ErpTechSvcs::Config.max_file_size_in_mb}MB"
+            end
+          end
+          dyn_form_fields = JSON.parse(params[:dyn_form_fields])
+          form_data = {}
+          dyn_form_fields.each do |key|
+            form_data[key] = params[key]
+          end
+          form_data[:dynamic_form_id] = params[:dynamic_form_id]
+          form_data[:model_name] = params[:model_name]
+          form_data.symbolize_keys!
           @website = Website.find_by_host(request.host_with_port)
 
           if form_data[:email_subject].blank?
@@ -18,9 +31,9 @@ module Widgets
           end
 
       		@myDynamicObject = DynamicFormModel.get_instance(form_data[:model_name])
-  		
+
       		form_data[:created_by] = current_user unless current_user.nil?
-      		form_data[:created_with_form_id] = form_data[:dynamic_form_id] if form_data[:dynamic_form_id] and form_data[:is_html_form].blank?
+      		form_data[:created_with_form_id] = form_data[:dynamic_form_id] if form_data[:dynamic_form_id] and params[:is_html_form].blank?
       		form_data[:website] = @website.title
 
       		@myDynamicObject = DynamicFormModel.assign_all_attributes(@myDynamicObject, form_data, ErpApp::Widgets::Base::IGNORED_PARAMS)
@@ -29,40 +42,67 @@ module Widgets
           form = DynamicForm.find(form_data[:created_with_form_id])
           
           # check widget_action from dynamic form
-          if !form.nil? and ['email', 'both'].include?(form.widget_action)
+          if !form.nil? and ['email', 'both'].include?(form.widget_action)            
             # email data
-            send_email(form, @myDynamicObject, subject)
+            attachments = (params[:file].nil? ? [] : [params[:file]])
+            send_email(form, @myDynamicObject, subject, attachments)
           end
 
           if form.nil? or (!form.nil? and ['save', 'both'].include?(form.widget_action))
             #save data
             @myDynamicObject.save
-          end          
+            save_file_asset(form_data) unless params[:file].nil?
+          end
 
-          render :json => {
+          render :inline => {
             :success => true,
-            :response => render_to_string(:template => "success", :layout => false) 
-          }
+            :response =>  ERB::Util.html_escape(render_to_string(:template => "success", :layout => false))
+          }.to_json
         rescue Exception => e
           Rails.logger.info e.message
           Rails.logger.info e.backtrace.join("\n")
-  			  render :json => {
+  			  render :inline => {
   			    :success => false,
-            :response => render_to_string(:template => "error", :layout => false) 
-  			  }    			    
+            :response => ERB::Util.html_escape(render_to_string(:template => "error", :layout => false, :locals => {:message => e.message}))
+  			  }.to_json    			    
         end
   	  end
 
       protected
-      def send_email(form, dynamicObject, subject='')
-        begin
-          DynamicFormMailer.widget_email(form, dynamicObject, subject).deliver
-        rescue Exception => e
-          system_user = Party.find_by_description('Compass AE')
-          AuditLog.custom_application_log_message(system_user, e)
-        end
+      def save_file_asset(form_data)
+        result = {}
+        name = params[:file].original_filename
+        data = params[:file].tempfile
+        set_file_support
+
+        # begin
+          @root_node = File.join(ErpTechSvcs::Config.file_assets_location, form_data[:model_name], @myDynamicObject.id.to_s)
+          @myDynamicObject.add_file(data, File.join(@file_support.root, base_path, name))
+          return {:success => true}
+        # rescue Exception => e
+        #   Rails.logger.error e.message
+        #   Rails.logger.error e.backtrace
+        #   raise "Error uploading file. #{e.message}"
+        # end
+      end      
+
+      def base_path          
+        @base_path = (@root_node.nil? ? nil : File.join(@file_support.root, @root_node))
       end
 
+      def set_file_support
+        @file_support = ErpTechSvcs::FileSupport::Base.new(:storage => ErpTechSvcs::Config.file_storage)
+      end
+
+      def send_email(form, dynamicObject, subject='', attachments=[])
+        # begin
+            DynamicFormMailer.widget_email_with_attachments(form, dynamicObject, subject, attachments).deliver
+        # rescue Exception => e
+        #   Rails.logger.error e.message
+        #   Rails.logger.error e.backtrace
+        #   raise "Error sending email. #{e.message}"
+        # end
+      end
 
       #should not be modified
       #modify at your own risk
