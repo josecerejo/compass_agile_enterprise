@@ -19,12 +19,9 @@ class DynamicForm < ActiveRecord::Base
   end
   
   def self.get_form(klass_name, internal_identifier='')
-    result = nil
-  	unless internal_identifier.blank?
-  	  result = DynamicForm.find_by_model_name_and_internal_identifier(klass_name, internal_identifier)
-  	else
-  	  result = DynamicForm.find_by_model_name_and_default(klass_name, true)
-  	end
+    result = nil  	
+	  result = DynamicForm.find_by_model_name_and_internal_identifier(klass_name, internal_identifier) unless internal_identifier.blank?
+	  result = DynamicForm.find_by_model_name_and_default(klass_name, true) if result.nil?
   	result
   end
   
@@ -176,6 +173,7 @@ class DynamicForm < ActiveRecord::Base
         :dynamic_form_model_id => self.dynamic_form_model_id,
         :model_name => self.model_name
       },
+      #:fileUpload => true,
       :items => definition_with_validation,
       :defaults => {},
       :listeners => {
@@ -190,10 +188,19 @@ class DynamicForm < ActiveRecord::Base
       :listeners => NonEscapeJsonString.new("{
           \"click\":function(button){
               var form = button.findParentByType('form').getForm();
-              form.jsonRoot = 'data';
-              form.doAction('JsonSubmit',{
+              //form.jsonRoot = 'data';
+              var dyn_form_fields = [];
+              Ext.each(form.getFields().items, function(field) {
+                if (Ext.Array.indexOf(['filefield','fileuploadfield'], field.xtype)){
+                  dyn_form_fields.push(field.name);
+                } 
+              });
+              form.submit({
                   #{submit_empty_text_js}
                   reset:true,
+                  params:{
+                    dyn_form_fields: Ext.encode(dyn_form_fields)
+                  },
                   success:function(form, action){
                       json_hash = Ext.decode(action.response.responseText);
                       Ext.get('#{options[:widget_result_id]}').dom.innerHTML = json_hash.response;

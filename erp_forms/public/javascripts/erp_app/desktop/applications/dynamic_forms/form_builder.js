@@ -94,7 +94,8 @@ var fieldData = {
             text: 'File Upload',
             field_xtype: 'filefield',
             leaf: true,
-            vtype: 'file'
+            vtype: 'file',
+            qtip: 'Model must be enabled with has_file_assets. File Upload fields are limited to one per form.'
         },
         {
             text: 'Hidden Field',
@@ -185,14 +186,18 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.FormBuilder",{
         var xtype = field.xtype;
         var field_xtype = field.field_xtype; // used to determine if it is a hidden field
 
+        var updateName = {
+            fieldLabel: 'Name',
+            name: 'updateName',
+            xtype: 'textfield',
+            allowBlank: false
+        };
+
+        if (xtype == 'filefield') updateName.readOnly = true;
+
         //console.log(xtype);
         var base_top = [
-            {
-                fieldLabel: 'Name',
-                name: 'updateName',
-                xtype: 'textfield',
-                allowBlank: false
-            },
+            updateName,
             {
                 fieldLabel: 'Label',
                 name: 'updateLabel',
@@ -900,9 +905,11 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.FormBuilder",{
                                           fieldLabel:'Field Name',
                                           allowBlank:false,
                                           name:'field_name',
+                                          value: (droppedField.get('field_xtype') == 'filefield' ? 'file' : ''),
+                                          readOnly: (droppedField.get('field_xtype') == 'filefield' ? true : false),
                                           maskRe: /^\w+$/,
                                           regex: /^\w+$/,
-                                          plugins: [new helpQtip('Only letters, numbers and underscores are valid.')],
+                                          plugins: [new helpQtip('Only letters, numbers and underscores are valid. Field Names must be unique. A File Upload field must be named "file".')],
                                           listeners:{
                                             afterrender:function(field){
                                                 field.focus(false, 200);
@@ -967,6 +974,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.FormBuilder",{
                                                     break;
                                                 case 'filefield':
                                                     fieldDefinition.vtype = 'file';
+                                                    fieldDefinition.name = 'file';
                                                     // fieldDefinition.inputType = 'file'; // needed for fileSize validation but it causes some cosmetic problems
                                                     // fieldDefinition.buttonConfig = {hidden: true};
                                                     break;

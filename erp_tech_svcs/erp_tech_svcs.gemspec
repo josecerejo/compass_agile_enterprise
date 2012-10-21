@@ -27,4 +27,5 @@ Gem::Specification.new do |s|
   s.add_dependency('paperclip','3.0.2')
   s.add_dependency('pdfkit','0.4.6')
   s.add_dependency('sorcery','0.7.12')
+  s.add_dependency('mail_alternatives_with_attachments','1.0.0')
 end
