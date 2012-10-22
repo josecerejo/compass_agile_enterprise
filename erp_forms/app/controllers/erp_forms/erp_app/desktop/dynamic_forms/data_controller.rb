@@ -90,24 +90,48 @@ module ErpForms::ErpApp::Desktop::DynamicForms
 
     # create a dynamic data record
     def create
-      @myDynamicObject = DynamicFormModel.get_instance(params[:model_name])
+      begin
+        check_file_upload_size
 
-      params[:created_by] = current_user unless current_user.nil?
-      params[:created_with_form_id] = params[:dynamic_form_id] if params[:dynamic_form_id]
-      @myDynamicObject = DynamicFormModel.save_all_attributes(@myDynamicObject, params, ErpForms::ErpApp::Desktop::DynamicForms::BaseController::IGNORED_PARAMS)
-      
-      render :json => @myDynamicObject ? {:success => true} : {:success => false}
+        @myDynamicObject = DynamicFormModel.get_instance(params[:model_name])
+
+        params[:created_by] = current_user unless current_user.nil?
+        params[:created_with_form_id] = params[:dynamic_form_id] if params[:dynamic_form_id]
+        @myDynamicObject = DynamicFormModel.save_all_attributes(@myDynamicObject, params, ErpForms::ErpApp::Desktop::DynamicForms::BaseController::IGNORED_PARAMS)
+        save_file_asset(params) unless params[:file].nil?
+
+        render :inline => @myDynamicObject ? {:success => true}.to_json : {:success => false}.to_json
+      rescue Exception => e
+        Rails.logger.error e.message
+        Rails.logger.error e.backtrace.join("\n")
+        render :inline => {
+          :success => false,
+          :message => e.message
+        }.to_json             
+      end
     end
 
     # update a dynamic data record
     def update
-      @myDynamicObject = DynamicFormModel.get_constant(params[:model_name]).find(params[:id])
+      begin
+        check_file_upload_size
 
-      params[:updated_by] = current_user unless current_user.nil?
-      params[:updated_with_form_id] = params[:dynamic_form_id] if params[:dynamic_form_id]      
-      @myDynamicObject = DynamicFormModel.save_all_attributes(@myDynamicObject, params, ErpForms::ErpApp::Desktop::DynamicForms::BaseController::IGNORED_PARAMS)
-            
-      render :json => @myDynamicObject ? {:success => true} : {:success => false}
+        @myDynamicObject = DynamicFormModel.get_constant(params[:model_name]).find(params[:id])
+
+        params[:updated_by] = current_user unless current_user.nil?
+        params[:updated_with_form_id] = params[:dynamic_form_id] if params[:dynamic_form_id]      
+        @myDynamicObject = DynamicFormModel.save_all_attributes(@myDynamicObject, params, ErpForms::ErpApp::Desktop::DynamicForms::BaseController::IGNORED_PARAMS)
+        save_file_asset(params) unless params[:file].nil?
+
+        render :inline => @myDynamicObject ? {:success => true}.to_json : {:success => false}.to_json
+      rescue Exception => e
+        Rails.logger.error e.message
+        Rails.logger.error e.backtrace.join("\n")
+        render :inline => {
+          :success => false,
+          :message => e.message
+        }.to_json             
+      end
     end
 
     # delete a dynamic data record
@@ -116,6 +140,39 @@ module ErpForms::ErpApp::Desktop::DynamicForms
       @myDynamicObject.destroy(params[:id])
       render :json => {:success => true}
     end
-      
+
+    protected
+    def check_file_upload_size
+      unless params[:file].nil?
+        if params[:file].tempfile.size > ErpTechSvcs::Config.max_file_size_in_mb.megabytes
+          raise "File cannot be larger than #{ErpTechSvcs::Config.max_file_size_in_mb}MB"
+        end
+      end
+    end
+
+    def save_file_asset(form_data)
+      result = {}
+      name = params[:file].original_filename
+      data = params[:file].tempfile
+      set_file_support
+
+      begin
+        @root_node = File.join(ErpTechSvcs::Config.file_assets_location, form_data[:model_name], @myDynamicObject.id.to_s)
+        @myDynamicObject.add_file(data, File.join(@file_support.root, base_path, name))
+        return {:success => true}
+      rescue Exception => e
+        Rails.logger.error e.message
+        Rails.logger.error e.backtrace
+        raise "Error uploading file. #{e.message}"
+      end
+    end      
+
+    def base_path          
+      @base_path = (@root_node.nil? ? nil : File.join(@file_support.root, @root_node))
+    end
+
+    def set_file_support
+      @file_support = ErpTechSvcs::FileSupport::Base.new(:storage => ErpTechSvcs::Config.file_storage)
+    end        
   end
 end
