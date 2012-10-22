@@ -564,7 +564,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.WestRegion",{
       id: 'westregionPanel',
       region:'west',
       split:true,
-      width:200,
+      width:235,
       header: false,
       hideCollapseTool: true,
       collapsible: true,

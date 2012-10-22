@@ -31,7 +31,8 @@ module ErpApp
               elsif opt[:theme]
                 resources << static_stylesheet_link_tag("extjs/resources/css/#{opt[:theme]}")
               else
-                resources << static_stylesheet_link_tag("extjs/resources/css/ext-all.css")
+                #this file will effectively be used as the default stylesheet if no theme is selected
+                resources << static_stylesheet_link_tag("extjs/resources/css/clifton.css")
               end
 
               resources << add_authenticity_token_to_extjs
