@@ -71,7 +71,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.DynamicDataGridPane
 
     viewRecord : function(rec, gridpanel_id){
         var self = this;
-        Ext.getCmp('westregionPanel').setWindowStatus('Getting data ...');
+        Ext.getCmp('dynamic_forms_westregion').setWindowStatus('Getting data ...');
         Ext.Ajax.request({
             url: '/erp_forms/erp_app/desktop/dynamic_forms/data/get',
             method: 'POST',
@@ -80,7 +80,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.DynamicDataGridPane
                 model_name:rec.get("model_name")
             },
             success: function(response) {
-                Ext.getCmp('westregionPanel').clearWindowStatus();
+                Ext.getCmp('dynamic_forms_westregion').clearWindowStatus();
                 var response_text = Ext.decode(response.responseText);
                 var center_region = self.findParentByType('dynamic_forms_centerregion');
 
@@ -138,7 +138,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.DynamicDataGridPane
                 center_region.workArea.setActiveTab(center_region.workArea.items.length - 1);
             },
             failure: function(response) {
-                Ext.getCmp('westregionPanel').clearWindowStatus();
+                Ext.getCmp('dynamic_forms_westregion').clearWindowStatus();
                 Ext.Msg.alert('Error', 'Error getting data');
             }
         });
@@ -146,7 +146,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.DynamicDataGridPane
     
     editRecord : function(rec, model_name){
         var self = this;
-        Ext.getCmp('westregionPanel').setWindowStatus('Getting update form...');
+        Ext.getCmp('dynamic_forms_westregion').setWindowStatus('Getting update form...');
         Ext.Ajax.request({
             url: '/erp_forms/erp_app/desktop/dynamic_forms/forms/get',
             method: 'POST',
@@ -157,7 +157,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.DynamicDataGridPane
                 form_action: 'update'
             },
             success: function(response) {
-                Ext.getCmp('westregionPanel').clearWindowStatus();
+                Ext.getCmp('dynamic_forms_westregion').clearWindowStatus();
                 form_definition = Ext.decode(response.responseText);
                 if (form_definition.success == false){
                     Ext.Msg.alert('Error', form_definition.error);
@@ -174,7 +174,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.DynamicDataGridPane
                 }
             },
             failure: function(response) {
-                Ext.getCmp('westregionPanel').clearWindowStatus();
+                Ext.getCmp('dynamic_forms_westregion').clearWindowStatus();
                 Ext.Msg.alert('Error', 'Error getting form');
             }
         });
@@ -182,7 +182,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.DynamicDataGridPane
     
     deleteRecord : function(rec, model_name){
         var self = this;
-        Ext.getCmp('westregionPanel').setWindowStatus('Deleting record...');
+        Ext.getCmp('dynamic_forms_westregion').setWindowStatus('Deleting record...');
         Ext.Ajax.request({
             url: '/erp_forms/erp_app/desktop/dynamic_forms/data/delete',
             method: 'POST',
@@ -193,16 +193,16 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.DynamicDataGridPane
             success: function(response) {
                 var obj =  Ext.decode(response.responseText);
                 if(obj.success){
-                    Ext.getCmp('westregionPanel').clearWindowStatus();
+                    Ext.getCmp('dynamic_forms_westregion').clearWindowStatus();
                     self.query('shared_dynamiceditablegrid')[0].store.load();
                 }
                 else{
                     Ext.Msg.alert('Error', 'Error deleting record');
-                    Ext.getCmp('westregionPanel').clearWindowStatus();
+                    Ext.getCmp('dynamic_forms_westregion').clearWindowStatus();
                 }
             },
             failure: function(response) {
-                Ext.getCmp('westregionPanel').clearWindowStatus();
+                Ext.getCmp('dynamic_forms_westregion').clearWindowStatus();
                 Ext.Msg.alert('Error', 'Error deleting record');
             }
         });

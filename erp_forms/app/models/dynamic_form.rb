@@ -11,7 +11,7 @@ class DynamicForm < ActiveRecord::Base
   	result = nil
   	begin
   	  klass = Module.const_get(class_name)
-        result = klass.is_a?(Class) ? ((klass.superclass == ActiveRecord::Base or klass.superclass == DynamicModel) ? true : nil) : nil
+      result = (klass.is_a?(Class) ? ((klass.superclass == ActiveRecord::Base or klass.superclass == DynamicModel) ? true : nil) : nil)
   	rescue NameError
   	  result = nil
   	end

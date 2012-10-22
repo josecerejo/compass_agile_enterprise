@@ -175,7 +175,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.WestRegion",{
 
                     var form_props = formBuilder.query('#form_props').first().getForm();
                     form_props.findField('description').setValue(form_name);
-                    Ext.getCmp('westregionPanel').setActiveTab('field_types');
+                    Ext.getCmp('dynamic_forms_westregion').setActiveTab('field_types');
                     var east_tabs = formBuilder.query('#east_tabs').first();
                     east_tabs.setActiveTab('form_props');
 
@@ -205,7 +205,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.WestRegion",{
 
     var form_props = formBuilder.query('#form_props').first().getForm();
     form_props.loadRecord(record);
-    Ext.getCmp('westregionPanel').setActiveTab('field_types');
+    Ext.getCmp('dynamic_forms_westregion').setActiveTab('field_types');
     var east_tabs = formBuilder.query('#east_tabs').first();
     east_tabs.setActiveTab('form_props');
   },
@@ -561,7 +561,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.WestRegion",{
     };
 
     config = Ext.apply({
-      id: 'westregionPanel',
+      id: 'dynamic_forms_westregion',
       region:'west',
       split:true,
       width:200,
@@ -569,10 +569,10 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.WestRegion",{
       hideCollapseTool: true,
       collapsible: true,
       collapseMode: 'mini',
-      items: [this.formsTree, this.fieldTypes]
+      items: [this.formsTree, this.fieldTypes],
+      activeTab: 0
     }, config);
 
     this.callParent([config]);
-    this.setActiveTab(0);
   }
 });
