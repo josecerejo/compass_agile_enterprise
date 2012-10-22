@@ -54,21 +54,27 @@ module Widgets
             save_file_asset(form_data) unless params[:file].nil?
           end
 
+          output = render_to_string(:template => "success", :layout => false)
           render :inline => {
             :success => true,
-            :response =>  ERB::Util.html_escape(render_to_string(:template => "success", :layout => false))
+            :response => (file_upload_request? ? ERB::Util.html_escape(output) : output)
           }.to_json
         rescue Exception => e
           Rails.logger.error e.message
           Rails.logger.error e.backtrace.join("\n")
+          output = render_to_string(:template => "error", :layout => false, :locals => {:message => e.message})
   			  render :inline => {
   			    :success => false,
-            :response => ERB::Util.html_escape(render_to_string(:template => "error", :layout => false, :locals => {:message => e.message}))
+            :response => (file_upload_request? ? ERB::Util.html_escape(output) : output)
   			  }.to_json    			    
         end
   	  end
 
       protected
+      def file_upload_request?
+        request.env['HTTP_X_REQUESTED_WITH'] != 'XMLHttpRequest'
+      end
+
       def save_file_asset(form_data)
         result = {}
         name = params[:file].original_filename
