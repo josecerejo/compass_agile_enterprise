@@ -59,8 +59,8 @@ module Widgets
             :response =>  ERB::Util.html_escape(render_to_string(:template => "success", :layout => false))
           }.to_json
         rescue Exception => e
-          Rails.logger.info e.message
-          Rails.logger.info e.backtrace.join("\n")
+          Rails.logger.error e.message
+          Rails.logger.error e.backtrace.join("\n")
   			  render :inline => {
   			    :success => false,
             :response => ERB::Util.html_escape(render_to_string(:template => "error", :layout => false, :locals => {:message => e.message}))

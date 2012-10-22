@@ -16,7 +16,7 @@ if (currentUser.hasApplicationCapability('knitkit', {
                 height:175,
                 plain: true,
                 buttonAlign:'center',
-                items: new Ext.FormPanel({
+                items: Ext.create('Ext.form.Panel',{
                     labelWidth: 50,
                     frame:false,
                     bodyStyle:'padding:5px 5px 0',

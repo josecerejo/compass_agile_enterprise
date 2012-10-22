@@ -32,7 +32,6 @@ class DynamicForms < ActiveRecord::Migration
         t.string  :widget_action, :default => 'save' 
         t.string :widget_email_recipients 
         t.boolean :focus_first_field, :default => true 
-        t.boolean :show_in_multitask, :default => false 
         t.boolean :submit_empty_text, :default => false 
         t.string :msg_target
         t.string :submit_button_label, :default => 'Submit'

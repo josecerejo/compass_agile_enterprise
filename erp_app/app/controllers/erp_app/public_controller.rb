@@ -2,17 +2,6 @@ module ErpApp
 	class PublicController < ActionController::Base
     before_filter :set_file_support
 
-    # DEPRECATED, use erp_app/public#download
-    # def download_file
-    #    path = params[:path]
-    #    file_klass = FileAsset.type_by_extension(File.extname(path))
-    #    if file_klass == Image
-    #      send_file path, :type => "image/#{File.extname(path)}"
-    #    else
-    #      send_file path, :type => file_klass.content_type
-    #    end
-	  # end
-
     # TODO:
     # reorder menuitems
     # drag and drop image into ckeditor uses bad (but somehow not broken, i.e. ../../images/) url (filesystem on firefox, chrome OK) 
@@ -37,10 +26,12 @@ module ErpApp
             else
               raise ErpTechSvcs::Utils::CompassAccessNegotiator::Errors::UserDoesNotHaveCapability
             end
-          rescue ErpTechSvcs::Utils::CompassAccessNegotiator::Errors::UserDoesNotHaveCapability=>ex
+          rescue ErpTechSvcs::Utils::CompassAccessNegotiator::Errors::UserDoesNotHaveCapability => ex
             render :text => ex.message and return
-          rescue Exception=>ex
-            render :text => "User does not have capability." and return
+          rescue Exception => ex
+            Rails.logger.error ex.message
+            Rails.logger.error ex.backtrace.join("\n")
+            render :text => ex.message and return
           end
         else
           serve_file(file, disposition)
@@ -53,7 +44,8 @@ module ErpApp
     protected
 
     def serve_file(file, disposition=nil)
-      type = (file.type == 'Image' ? "image/#{params[:format]}" : file.content_type)
+      #type = (file.type == 'Image' ? "image/#{params[:format]}" : file.data_content_type)
+      type = file.data_content_type
 
       if ErpTechSvcs::Config.file_storage == :s3
         path = File.join(file.directory,file.name).sub(%r{^/},'')

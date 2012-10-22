@@ -235,11 +235,11 @@ Ext.define("Compass.ErpApp.Shared.FileManagerTree",{
         self.selectedNode = record;
         var menuItems = [];
 		
-		//if this is a leaf (file) allow user to view details
+		//if this is a leaf (file) allow user to view Properties
 		if(record.data['leaf']){
 			menuItems.push({
 		      nodeType:'leaf',
-		      text:'View Details',
+		      text:'Properties',
 		      iconCls:'icon-add',
 		      listeners:{
 		        scope:self,
