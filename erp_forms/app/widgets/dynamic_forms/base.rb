@@ -75,15 +75,15 @@ module Widgets
         data = params[:file].tempfile
         set_file_support
 
-        # begin
+        begin
           @root_node = File.join(ErpTechSvcs::Config.file_assets_location, form_data[:model_name], @myDynamicObject.id.to_s)
           @myDynamicObject.add_file(data, File.join(@file_support.root, base_path, name))
           return {:success => true}
-        # rescue Exception => e
-        #   Rails.logger.error e.message
-        #   Rails.logger.error e.backtrace
-        #   raise "Error uploading file. #{e.message}"
-        # end
+        rescue Exception => e
+          Rails.logger.error e.message
+          Rails.logger.error e.backtrace
+          raise "Error uploading file. #{e.message}"
+        end
       end      
 
       def base_path          
@@ -95,13 +95,13 @@ module Widgets
       end
 
       def send_email(form, dynamicObject, subject='', attachments=[])
-        # begin
-            DynamicFormMailer.widget_email_with_attachments(form, dynamicObject, subject, attachments).deliver
-        # rescue Exception => e
-        #   Rails.logger.error e.message
-        #   Rails.logger.error e.backtrace
-        #   raise "Error sending email. #{e.message}"
-        # end
+        begin
+          DynamicFormMailer.widget_email_with_attachments(form, dynamicObject, subject, attachments).deliver
+        rescue Exception => e
+          Rails.logger.error e.message
+          Rails.logger.error e.backtrace
+          raise "Error sending email. #{e.message}"
+        end
       end
 
       #should not be modified
