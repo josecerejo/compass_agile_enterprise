@@ -65,7 +65,7 @@ module ErpTechSvcs
               self.capable_model.capabilities << capability
               self.capable_model.save
             else
-              raise ErpTechSvcs::Utils::CompassAccessNegotiator::Errors::CapabilityAlreadytExists
+              raise ErpTechSvcs::Utils::CompassAccessNegotiator::Errors::CapabilityAlreadyExists
             end
 
             capability
