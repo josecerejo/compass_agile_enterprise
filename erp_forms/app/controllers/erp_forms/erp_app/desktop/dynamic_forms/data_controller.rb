@@ -1,5 +1,6 @@
 module ErpForms::ErpApp::Desktop::DynamicForms
   class DataController < ErpForms::ErpApp::Desktop::DynamicForms::BaseController
+    before_filter :set_file_support
 
     # setup dynamic data grid
     def setup
@@ -141,6 +142,17 @@ module ErpForms::ErpApp::Desktop::DynamicForms
       render :json => {:success => true}
     end
 
+    def get_files
+      @myDynamicObject = DynamicFormModel.get_constant(params[:model_name]).find(params[:id])
+      if @myDynamicObject.nil?
+        render :json => []
+      else
+        set_root_node(params)
+        path = (params[:node] == 'root_node') ? base_path : params[:node]
+        render :json => @file_support.build_tree(path, :file_asset_holder => @myDynamicObject, :preload => true)
+      end
+    end
+
     protected
     def check_file_upload_size
       unless params[:file].nil?
@@ -154,10 +166,9 @@ module ErpForms::ErpApp::Desktop::DynamicForms
       result = {}
       name = params[:file].original_filename
       data = params[:file].tempfile
-      set_file_support
 
       begin
-        @root_node = File.join(ErpTechSvcs::Config.file_assets_location, form_data[:model_name], @myDynamicObject.id.to_s)
+        set_root_node(form_data)
         @myDynamicObject.add_file(data, File.join(@file_support.root, base_path, name))
         return {:success => true}
       rescue Exception => e
@@ -166,6 +177,10 @@ module ErpForms::ErpApp::Desktop::DynamicForms
         raise "Error uploading file. #{e.message}"
       end
     end      
+
+    def set_root_node(form_data)
+      @root_node = File.join(ErpTechSvcs::Config.file_assets_location, form_data[:model_name], @myDynamicObject.id.to_s)
+    end
 
     def base_path          
       @base_path = (@root_node.nil? ? nil : File.join(@file_support.root, @root_node))
