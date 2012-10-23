@@ -19,6 +19,7 @@ class CreateDefaultDynamicModelsAndForms
     d.default = true
     d.dynamic_form_model = DynamicFormModel.create(:model_name => 'WebsiteInquiry')
     d.comment = "This is the default form used by Knitkit's Contact Us Widget for Website Inquiries. NOTE: The Contact Us Widget uses Knitkit's website configuration options for email behavior & not the Dynamic Forms Widget Action setting."
+    d.msg_target = 'qtip'
     d.save
   end
   

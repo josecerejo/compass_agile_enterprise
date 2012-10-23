@@ -53,6 +53,7 @@ class CreateTicketForm
     d.internal_identifier = 'ticket'
     d.default = true
     d.dynamic_form_model = DynamicFormModel.create(:model_name => 'Ticket')
+    d.msg_target = 'qtip'
     d.save
   end
   

@@ -17,7 +17,7 @@ class DynamicForm < ActiveRecord::Base
   	result = nil
   	begin
   	  klass = Module.const_get(class_name)
-        result = klass.is_a?(Class) ? ((klass.superclass == ActiveRecord::Base or klass.superclass == DynamicModel) ? true : nil) : nil
+      result = (klass.is_a?(Class) ? ((klass.superclass == ActiveRecord::Base or klass.superclass == DynamicModel) ? true : nil) : nil)
   	rescue NameError
   	  result = nil
   	end
@@ -100,7 +100,6 @@ class DynamicForm < ActiveRecord::Base
   def to_extjs_formpanel(options={})   
     form_hash = {
       :xtype => 'form',
-      :id => "dynamic_form_panel_#{model_name}",
       :url => options[:url],
       :title => self.description,
       :frame => true,
@@ -130,7 +129,11 @@ class DynamicForm < ActiveRecord::Base
                     #{submit_empty_text_js}
                     reset:true,
                     success:function(form, action){
-                        form.owner.findParentByType('window').close();
+                        if (form.owner.close_selector){
+                          form.owner.up(form.owner.close_selector).close();
+                        }else{
+                          form.owner.up('window').close();
+                        }
                         if (Ext.getCmp('#{model_name}')){
                             Ext.getCmp('#{model_name}').query('shared_dynamiceditablegrid')[0].store.load();                                                                      
                         }
@@ -149,7 +152,12 @@ class DynamicForm < ActiveRecord::Base
       :text => self.cancel_button_label,
       :listeners => NonEscapeJsonString.new("{
           \"click\":function(button){
-              button.findParentByType('window').close();
+            var form = button.findParentByType('form');
+            if (form.close_selector){
+              form.up(form.close_selector).close();
+            }else{
+              form.up('window').close();
+            }
           }
       }")
     }

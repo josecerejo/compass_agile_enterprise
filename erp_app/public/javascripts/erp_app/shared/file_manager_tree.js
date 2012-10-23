@@ -258,7 +258,7 @@ Ext.define("Compass.ErpApp.Shared.FileManagerTree",{
 				  if(record.data.height){
 				    details += '<br /> Height: '+record.data.height + ' px' 	
 				  }
-				  Ext.Msg.alert('Details',details);
+				  Ext.Msg.alert('Properties', details);
 		        }
 		      }
 		    });

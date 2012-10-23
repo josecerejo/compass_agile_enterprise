@@ -54,36 +54,42 @@ module Widgets
             save_file_asset(form_data) unless params[:file].nil?
           end
 
+          output = render_to_string(:template => "success", :layout => false)
           render :inline => {
             :success => true,
-            :response =>  ERB::Util.html_escape(render_to_string(:template => "success", :layout => false))
+            :response => (file_upload_request? ? ERB::Util.html_escape(output) : output)
           }.to_json
         rescue Exception => e
           Rails.logger.error e.message
           Rails.logger.error e.backtrace.join("\n")
+          output = render_to_string(:template => "error", :layout => false, :locals => {:message => e.message})
   			  render :inline => {
   			    :success => false,
-            :response => ERB::Util.html_escape(render_to_string(:template => "error", :layout => false, :locals => {:message => e.message}))
+            :response => (file_upload_request? ? ERB::Util.html_escape(output) : output)
   			  }.to_json    			    
         end
   	  end
 
       protected
+      def file_upload_request?
+        request.env['HTTP_X_REQUESTED_WITH'] != 'XMLHttpRequest'
+      end
+
       def save_file_asset(form_data)
         result = {}
         name = params[:file].original_filename
         data = params[:file].tempfile
         set_file_support
 
-        # begin
+        begin
           @root_node = File.join(ErpTechSvcs::Config.file_assets_location, form_data[:model_name], @myDynamicObject.id.to_s)
           @myDynamicObject.add_file(data, File.join(@file_support.root, base_path, name))
           return {:success => true}
-        # rescue Exception => e
-        #   Rails.logger.error e.message
-        #   Rails.logger.error e.backtrace
-        #   raise "Error uploading file. #{e.message}"
-        # end
+        rescue Exception => e
+          Rails.logger.error e.message
+          Rails.logger.error e.backtrace
+          raise "Error uploading file. #{e.message}"
+        end
       end      
 
       def base_path          
@@ -95,13 +101,13 @@ module Widgets
       end
 
       def send_email(form, dynamicObject, subject='', attachments=[])
-        # begin
-            DynamicFormMailer.widget_email_with_attachments(form, dynamicObject, subject, attachments).deliver
-        # rescue Exception => e
-        #   Rails.logger.error e.message
-        #   Rails.logger.error e.backtrace
-        #   raise "Error sending email. #{e.message}"
-        # end
+        begin
+          DynamicFormMailer.widget_email_with_attachments(form, dynamicObject, subject, attachments).deliver
+        rescue Exception => e
+          Rails.logger.error e.message
+          Rails.logger.error e.backtrace
+          raise "Error sending email. #{e.message}"
+        end
       end
 
       #should not be modified

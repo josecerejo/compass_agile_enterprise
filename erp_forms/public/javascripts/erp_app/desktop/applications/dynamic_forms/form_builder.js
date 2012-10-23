@@ -34,7 +34,7 @@ Ext.create('Ext.data.Store', {
   listeners:{
     'load':function(store, records){
       var record = store.getAt(0);
-      Ext.getCmp('westregionPanel').openFormTab(record);
+      Ext.getCmp('dynamic_forms_westregion').openFormTab(record);
     }
   },
   autoLoad: false
