@@ -142,14 +142,70 @@ module ErpForms::ErpApp::Desktop::DynamicForms
       render :json => {:success => true}
     end
 
+    # file tree
     def get_files
       @myDynamicObject = DynamicFormModel.get_constant(params[:model_name]).find(params[:id])
       if @myDynamicObject.nil?
         render :json => []
       else
         set_root_node(params)
-        path = (params[:node] == 'root_node') ? base_path : params[:node]
-        render :json => @file_support.build_tree(path, :file_asset_holder => @myDynamicObject, :preload => true)
+        render :json => @file_support.build_tree(base_path, :file_asset_holder => @myDynamicObject, :preload => true)
+      end
+    end
+
+    # for plupload via filetree
+    def upload_file
+      result = {}
+      upload_path = params[:directory]
+      name = params[:name]
+      data = request.raw_post
+
+      begin
+        @myDynamicObject = DynamicFormModel.get_constant(params[:model_name]).find(params[:id])
+        set_root_node(params)
+        @myDynamicObject.add_file(data, File.join(@file_support.root,base_path,name))
+        result = {:success => true}
+      rescue Exception => e
+        Rails.logger.error e.message
+        Rails.logger.error e.backtrace.join("\n")
+        result = {:success => false, :error => "Error uploading file. #{e.message}"}
+      end
+
+      render :inline => result.to_json
+    end
+
+    # file tree
+    def delete_file
+      messages = []
+
+      nodes_to_delete = (params[:selected_nodes] ? JSON(params[:selected_nodes]) : [params[:node]])
+
+      begin
+        @myDynamicObject = DynamicFormModel.get_constant(params[:model_name]).find(params[:id])
+        result = false
+        nodes_to_delete.each do |path|
+          path = "#{path}/" if params[:leaf] == 'false' and path.match(/\/$/).nil?                
+          begin
+            name = File.basename(path)
+            result, message, is_folder = @file_support.delete_file(File.join(@file_support.root,path))
+            if result and !is_folder
+              file = @myDynamicObject.files.find(:first, :conditions => ['name = ? and directory = ?', ::File.basename(path), ::File.dirname(path)])
+              file.destroy
+            end
+            messages << message
+          rescue Exception => e
+            Rails.logger.error e.message
+            Rails.logger.error e.backtrace.join("\n")
+            render :json => {:success => false, :error => "Error deleting #{name}"} and return
+          end
+        end # end nodes_to_delete.each
+        if result
+          render :json => {:success => true, :message => messages.join(',')}
+        else
+          render :json => {:success => false, :error => messages.join(',')}
+        end
+      rescue ErpTechSvcs::Utils::CompassAccessNegotiator::Errors::UserDoesNotHaveCapability => ex
+        render :json => {:success => false, :message => ex.message}
       end
     end
 

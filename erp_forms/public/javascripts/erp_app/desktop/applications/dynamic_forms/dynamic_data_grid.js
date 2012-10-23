@@ -164,11 +164,9 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.DynamicDataGridPane
                 metadata_string += '</div></div>';
 
                 //comments
-                var comment_div_id = gridpanel_id+'_comments';
-
                 if (response_text.comments){
-                    comments_string = '<div id="'+comment_div_id+'" class="comments"><h1>';
-                    comments_string += '<a onclick="javascript: Ext.getCmp(\''+gridpanel_id+'\').addCommentWindow('+rec.get("id")+',\''+rec.get("model_name")+'\',\''+comment_div_id+'\');" href="#">Add Comment</a></h1>';
+                    var comment_div_id = gridpanel_id+'_comments';
+                    comments_string = '<div id="'+comment_div_id+'" class="comments">';
 
                     Ext.each(response_text.comments, function(comment){
                         comments_string += '<div class="comment">';
@@ -178,14 +176,25 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.DynamicDataGridPane
                     });
                     
                     comments_string += '</div>';
+
+                    var commentsPanel = {
+                        id: 'commentsPanel'+rec.get("model_name")+rec.get("id"),
+                        xtype: 'panel',
+                        title: 'Comments',
+                        html: comments_string,
+                        tbar: [{ 
+                            xtype: 'button', 
+                            text: 'Add Comment',
+                            iconCls: 'icon-add',
+                            listeners:{
+                              click: function(button){
+                                Ext.getCmp(gridpanel_id).addCommentWindow(rec.get("id"), rec.get("model_name"), comment_div_id);
+                              }
+                            }
+                        }]
+                    };
                 }
 
-                var commentsPanel = {
-                    id: 'commentsPanel'+rec.get("model_name")+rec.get("id"),
-                    xtype: 'panel',
-                    title: 'Comments',
-                    html: comments_string
-                };
                 formPanel.close_selector = '#'+rec.get("model_name")+'-'+rec.get("id");
                 var leftPanelItems = [formPanel];
                 if (response_text.comments) leftPanelItems.push(commentsPanel);
@@ -198,11 +207,36 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.DynamicDataGridPane
                 };
 
                 var metaDataPanel = {
-                    xtype: 'panel',
+                    xtype: 'form',
                     title: 'MetaData',
-                    html: metadata_string
+                    //html: metadata_string
+                    bodyPadding: 10,
+                    items:[
+                        {
+                            xtype: 'displayfield',
+                            fieldLabel: 'Created By',
+                            value: response_text.metadata.created_username
+                        },
+                        {
+                            xtype: 'displayfield',
+                            fieldLabel: 'Created At',
+                            value: response_text.metadata.created_at
+                        },
+                        {
+                            xtype: 'displayfield',
+                            fieldLabel: 'Updated By',
+                            value: response_text.metadata.updated_username
+                        },
+                        {
+                            xtype: 'displayfield',
+                            fieldLabel: 'Updated At',
+                            value: response_text.metadata.updated_at
+                        }
+                    ]
                 };
                 var fileTree = Ext.create('Compass.ErpApp.Desktop.Applications.DynamicForms.FileTree', {
+                  width: 250,
+                  minHeight: 800,
                   listeners:{
                     'beforeload':function(store){
                         store.getProxy().extraParams.id = rec.get('id');
@@ -223,6 +257,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.DynamicDataGridPane
                     xtype: 'panel',
                     items: [metaDataPanel, fileTree],
                     region: 'east',
+                    width: 250
                 };
 
                 var viewPanel = Ext.create('Ext.panel.Panel',{
