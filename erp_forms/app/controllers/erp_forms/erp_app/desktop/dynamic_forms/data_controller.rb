@@ -61,32 +61,25 @@ module ErpForms::ErpApp::Desktop::DynamicForms
       render :inline => "{ total:#{dynamic_records.total_entries}, data:#{wi.to_json} }"
     end
 
+    # get a single record with sorted_dynamic_attributes
     def get
-      myDynamicObject = DynamicFormModel.get_constant(params[:model_name])
-      @record = myDynamicObject.find(params[:id])
+      @record = DynamicFormModel.get_constant(params[:model_name]).find(params[:id])
+
+      data = @record.data.sorted_dynamic_attributes
+      result_hash = {:success => true, :data => data, :metadata => get_metadata, :comments => get_comments}
+
+      render :json => (@record ? result_hash : {:success => false})
+    end
+
+    # get a single record with dynamic_attributes_with_related_data
+    def get_with_related_data
+      @record = DynamicFormModel.get_constant(params[:model_name]).find(params[:id])
 
       related_fields = @record.form.related_fields
       data = @record.data.dynamic_attributes_with_related_data(related_fields, true)
+      result_hash = {:success => true, :data => data, :metadata => get_metadata, :comments => get_comments}
 
-      metadata = {
-        :created_username => (@record.data.created_by.nil? ? '' : @record.data.created_by.username),
-        :updated_username => (@record.data.updated_by.nil? ? '' : @record.data.updated_by.username),
-        :created_at => @record.data.created_at.getlocal.strftime(@@datetime_format),
-        :updated_at => @record.data.updated_at.getlocal.strftime(@@datetime_format)
-      }
-
-      result_hash = {:success => true, :data => data, :metadata => metadata}
-
-      if @record.respond_to?(:comments)
-        result_hash[:comments] = @record.comments.order('id ASC').all
-        result_hash[:comments].each_with_index do |c, i|
-          result_hash[:comments][i] = c.to_hash
-          result_hash[:comments][i][:created_at] = c.created_at.getlocal.strftime(@@datetime_format)
-          result_hash[:comments][i][:updated_at] = c.updated_at.getlocal.strftime(@@datetime_format)
-        end
-      end
-
-      render :json => @record ? result_hash : {:success => false}    
+      render :json => (@record ? result_hash : {:success => false})
     end
 
     # create a dynamic data record
@@ -210,6 +203,27 @@ module ErpForms::ErpApp::Desktop::DynamicForms
     end
 
     protected
+    def get_metadata
+      metadata = {
+        :created_username => (@record.data.created_by.nil? ? '' : @record.data.created_by.username),
+        :updated_username => (@record.data.updated_by.nil? ? '' : @record.data.updated_by.username),
+        :created_at => @record.data.created_at.getlocal.strftime(@@datetime_format),
+        :updated_at => @record.data.updated_at.getlocal.strftime(@@datetime_format)
+      }
+    end
+
+    def get_comments
+      if @record.respond_to?(:comments)
+        comments = @record.comments.order('id ASC').all
+        comments.each_with_index do |c, i|
+          comments[i] = c.to_hash
+          comments[i][:created_at] = c.created_at.getlocal.strftime(@@datetime_format)
+          comments[i][:updated_at] = c.updated_at.getlocal.strftime(@@datetime_format)
+        end
+      end
+      comments
+    end
+
     def check_file_upload_size
       unless params[:file].nil?
         if params[:file].tempfile.size > ErpTechSvcs::Config.max_file_size_in_mb.megabytes
