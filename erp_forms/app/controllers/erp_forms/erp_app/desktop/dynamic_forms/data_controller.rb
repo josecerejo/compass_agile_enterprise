@@ -66,7 +66,7 @@ module ErpForms::ErpApp::Desktop::DynamicForms
       @record = DynamicFormModel.get_constant(params[:model_name]).find(params[:id])
 
       data = @record.data.sorted_dynamic_attributes
-      result_hash = {:success => true, :data => data, :metadata => get_metadata, :comments => get_comments}
+      result_hash = {:success => true, :data => data, :metadata => get_metadata, :comments => get_comments, :has_file_assets => @record.respond_to?(:files)}
 
       render :json => (@record ? result_hash : {:success => false})
     end
@@ -77,7 +77,7 @@ module ErpForms::ErpApp::Desktop::DynamicForms
 
       related_fields = @record.form.related_fields
       data = @record.data.dynamic_attributes_with_related_data(related_fields, true)
-      result_hash = {:success => true, :data => data, :metadata => get_metadata, :comments => get_comments}
+      result_hash = {:success => true, :data => data, :metadata => get_metadata, :comments => get_comments, :has_file_assets => @record.respond_to?(:files)}
 
       render :json => (@record ? result_hash : {:success => false})
     end

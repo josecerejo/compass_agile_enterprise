@@ -150,6 +150,9 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.DynamicDataGridPane
                 var center_region = self.findParentByType('dynamic_forms_centerregion');
                 var ticket_div_id = gridpanel_id+'_ticket';
 
+                formPanel.close_selector = '#'+rec.get("model_name")+'-'+rec.get("id");
+                var leftPanelItems = [formPanel];
+
                 //comments
                 if (response_text.comments){
                     var comment_div_id = gridpanel_id+'_comments';
@@ -178,11 +181,8 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.DynamicDataGridPane
                             }
                         }]
                     };
+                    leftPanelItems.push(commentsPanel);
                 }
-
-                formPanel.close_selector = '#'+rec.get("model_name")+'-'+rec.get("id");
-                var leftPanelItems = [formPanel];
-                if (response_text.comments) leftPanelItems.push(commentsPanel);
 
                 var leftPanel = {
                     xtype: 'panel',
@@ -219,28 +219,38 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.DynamicDataGridPane
                     ]
                 };
 
-                var fileTree = Ext.create('Compass.ErpApp.Desktop.Applications.DynamicForms.FileTree', {
-                  width: 250,
-                  minHeight: 800,
-                  listeners:{
-                    'beforeload':function(store){
-                        store.getProxy().extraParams.id = rec.get('id');
-                        store.getProxy().extraParams.model_name = rec.get('model_name');
-                    },
-                    'load':function(store){
-                        store.getRootNode().expand();
-                    },
-                    'afterrender':function(panel){
-                        setTimeout(function(){ 
-                            panel.getStore().load();
-                        },100);
-                    }
-                  }
-                });
+                var rightPanelItems = [metaDataPanel];
+
+                if (response_text.has_file_assets){
+                    var fileTree = Ext.create('Compass.ErpApp.Desktop.Applications.DynamicForms.FileTree', {
+                      width: 250,
+                      minHeight: 800,
+                      listeners:{
+                        'beforeload':function(store){
+                            store.getProxy().extraParams.id = rec.get('id');
+                            store.getProxy().extraParams.model_name = rec.get('model_name');
+                        },
+                        'load':function(store){
+                            store.getRootNode().expand();
+                        },
+                        'afterrender':function(panel){
+                            setTimeout(function(){ 
+                                panel.getStore().load();
+                            },100);
+                        }
+                      }
+                    });
+                    fileTree.extraPostData = {
+                        id: rec.get('id'),
+                        model_name: rec.get('model_name')
+                    };
+
+                    rightPanelItems.push(fileTree);
+                }
 
                 var rightPanel = {
                     xtype: 'panel',
-                    items: [metaDataPanel, fileTree],
+                    items: rightPanelItems,
                     region: 'east',
                     width: 250
                 };
@@ -262,10 +272,6 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.DynamicDataGridPane
                 });
                 center_region.workArea.add(viewPanel);
                 viewPanel.query('form').first().getForm().loadRecord(response_text);
-                fileTree.extraPostData = {
-                    id: rec.get('id'),
-                    model_name: rec.get('model_name')
-                };
                 center_region.workArea.setActiveTab(center_region.workArea.items.length - 1);
             },
             failure: function(response) {
