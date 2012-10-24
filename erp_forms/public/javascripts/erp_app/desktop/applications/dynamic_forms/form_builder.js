@@ -706,7 +706,6 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.FormBuilder",{
             border: false,
             closable: true,
             autoHeight:true,
-            //iconCls:'icon-document',
             buttonAlign:'center',
             items: [{
                     xtype: 'form',
@@ -993,8 +992,6 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.FormBuilder",{
                                     });
                                     addFieldWindow.show();
                                     
-                                    //alert(droppedField.get('text'));
-
                                     return true;
                                 }
                             });

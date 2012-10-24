@@ -187,7 +187,6 @@ class DynamicForm < ActiveRecord::Base
         :dynamic_form_model_id => self.dynamic_form_model_id,
         :model_name => self.model_name
       },
-      #:fileUpload => true,
       :items => definition_with_validation,
       :defaults => {},
       :listeners => {
@@ -202,7 +201,7 @@ class DynamicForm < ActiveRecord::Base
       :listeners => NonEscapeJsonString.new("{
           \"click\":function(button){
               var form = button.findParentByType('form').getForm();
-              //form.jsonRoot = 'data';
+              //form.jsonSubmit = true;
               var dyn_form_fields = [];
               Ext.each(form.getFields().items, function(field) {
                 if (Ext.Array.indexOf(['filefield','fileuploadfield'], field.xtype)){
