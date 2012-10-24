@@ -291,7 +291,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.WestRegion",{
           iconCls:'icon-edit',
           handler:function(btn){
             var rec = Ext.getCmp(record.data.text).query('shared_dynamiceditablegrid').first().getSelectionModel().getSelection().first();
-            if (rec) Ext.getCmp(record.data.text).editRecord(rec, record.data.text, 'edit');
+            if (rec) Ext.getCmp(record.data.text).getForm(rec, 'edit');
           }
         },
         {

@@ -274,8 +274,38 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.DynamicDataGridPane
             }
         });
     },
-    
-    editRecord : function(rec, model_name, app_action){
+
+    editRecord : function(rec, formPanel){
+        Ext.getCmp('dynamic_forms_westregion').setWindowStatus('Getting data ...');
+        Ext.Ajax.request({
+            url: '/erp_forms/erp_app/desktop/dynamic_forms/data/get',
+            method: 'POST',
+            params:{
+                id:rec.get("id"),
+                model_name:rec.get("model_name")
+            },
+            success: function(response) {
+                Ext.getCmp('dynamic_forms_westregion').clearWindowStatus();
+                var response_text = Ext.decode(response.responseText);
+                var editRecordWindow = Ext.create("Ext.window.Window",{
+                    layout:'fit',
+                    title:'Update Record',
+                    plain: true,
+                    buttonAlign:'center',
+                    items: [formPanel]
+                });
+                console.log(editRecordWindow);
+                editRecordWindow.query('form').first().getForm().loadRecord(response_text);
+                editRecordWindow.show();  
+            },
+            failure: function(response) {
+                Ext.getCmp('dynamic_forms_westregion').clearWindowStatus();
+                Ext.Msg.alert('Error', 'Error getting data');
+            }
+        });
+    },
+
+    getForm : function(rec, app_action){
         var self = this;
         Ext.getCmp('dynamic_forms_westregion').setWindowStatus('Getting update form...');
         Ext.Ajax.request({
@@ -284,27 +314,19 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.DynamicDataGridPane
             params:{
                 id:rec.get("form_id"),
                 record_id:rec.get("id"),
-                model_name:model_name,
+                model_name:rec.get("model_name"),
                 form_action: 'update'
             },
             success: function(response, options){
                 Ext.getCmp('dynamic_forms_westregion').clearWindowStatus();
-                form_definition = Ext.decode(response.responseText);
-                if (form_definition.success == false){
-                    Ext.Msg.alert('Error', form_definition.error);
+                formPanel = Ext.decode(response.responseText);
+                if (formPanel.success == false){
+                    Ext.Msg.alert('Error', formPanel.error);
                 }else{
                     if (app_action == 'edit'){
-                        var editRecordWindow = Ext.create("Ext.window.Window",{
-                            layout:'fit',
-                            title:'Update Record',
-                            plain: true,
-                            buttonAlign:'center',
-                            items: form_definition
-                        });
-                        editRecordWindow.query('form').first().getForm().loadRecord(rec);
-                        editRecordWindow.show();    
+                        self.editRecord(rec, formPanel)
                     }else{
-                        self.viewRecord(rec, form_definition);
+                        self.viewRecord(rec, formPanel);
                     }
                 }
             },
@@ -323,7 +345,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.DynamicDataGridPane
             method: 'POST',
             params:{
                 id:rec.get("id"),
-                model_name:model_name
+                model_name:rec.get("model_name")
             },
             success: function(response) {
                 var obj =  Ext.decode(response.responseText);
@@ -353,7 +375,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.DynamicDataGridPane
             emptyMsg:'Empty',
             grid_listeners:{
                 'itemdblclick':function(view, record){
-                    Ext.getCmp(config.id).editRecord(record, 'view');
+                    Ext.getCmp(config.id).getForm(record, 'view');
                 }
             }
         }, config);
