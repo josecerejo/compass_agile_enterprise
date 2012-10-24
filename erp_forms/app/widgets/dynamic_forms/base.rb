@@ -13,11 +13,7 @@ module Widgets
               raise "File cannot be larger than #{ErpTechSvcs::Config.max_file_size_in_mb}MB"
             end
           end
-          dyn_form_fields = JSON.parse(params[:dyn_form_fields])
-          form_data = {}
-          dyn_form_fields.each do |key|
-            form_data[key] = params[key]
-          end
+          form_data = JSON.parse(params[:form_data_json])
           form_data[:dynamic_form_id] = params[:dynamic_form_id]
           form_data[:model_name] = params[:model_name]
           form_data.symbolize_keys!

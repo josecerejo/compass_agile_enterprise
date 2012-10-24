@@ -118,10 +118,21 @@ class DynamicForm < ActiveRecord::Base
       :listeners => NonEscapeJsonString.new("{
           \"click\":function(button){
               var form = button.findParentByType('form').getForm();
+              //jsonSubmit option only works when there is no filefield so we have to do it ourselves
+              //JSON is important to preserve data types (ie. we want integers to save as integers not strings)
+              var form_data = {};
+              Ext.each(form.getFields().items, function(field) {
+                if (Ext.Array.indexOf(['filefield','fileuploadfield'], field.xtype) < 0){
+                  form_data[field.name] = field.getValue();
+                } 
+              });
               if (form.isValid()){
                 form.submit({
                     #{submit_empty_text_js}
                     reset:true,
+                    params:{
+                      form_data_json: Ext.encode(form_data)
+                    },
                     success:function(form, action){
                         if (form.owner.close_selector){
                           form.owner.up(form.owner.close_selector).close();
@@ -167,8 +178,7 @@ class DynamicForm < ActiveRecord::Base
   # :widget_result_id => 
   # :width =>
   def to_extjs_widget(options={})
-    javascript = "Ext.QuickTips.init();
-                  Ext.create('Ext.form.Panel',"
+    javascript = "Ext.QuickTips.init(); Ext.create('Ext.form.Panel',"
     
     config_hash = {
       :url => "#{options[:url]}",
@@ -195,18 +205,19 @@ class DynamicForm < ActiveRecord::Base
       :listeners => NonEscapeJsonString.new("{
           \"click\":function(button){
               var form = button.findParentByType('form').getForm();
-              //form.jsonSubmit = true;
-              var dyn_form_fields = [];
+              //jsonSubmit option only works when there is no filefield so we have to do it ourselves
+              //JSON is important to preserve data types (ie. we want integers to save as integers not strings)
+              var form_data = {};
               Ext.each(form.getFields().items, function(field) {
-                if (Ext.Array.indexOf(['filefield','fileuploadfield'], field.xtype)){
-                  dyn_form_fields.push(field.name);
+                if (Ext.Array.indexOf(['filefield','fileuploadfield'], field.xtype) < 0){
+                  form_data[field.name] = field.getValue();
                 } 
               });
               form.submit({
                   #{submit_empty_text_js}
                   reset:true,
                   params:{
-                    dyn_form_fields: Ext.encode(dyn_form_fields)
+                    form_data_json: Ext.encode(form_data)
                   },
                   success:function(form, action){
                       json_hash = Ext.decode(action.response.responseText);

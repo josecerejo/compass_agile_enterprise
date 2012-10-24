@@ -291,7 +291,11 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.WestRegion",{
           iconCls:'icon-edit',
           handler:function(btn){
             var rec = Ext.getCmp(record.data.text).query('shared_dynamiceditablegrid').first().getSelectionModel().getSelection().first();
-            if (rec) Ext.getCmp(record.data.text).getForm(rec, 'edit');
+            if (rec) {
+              Ext.getCmp(record.data.text).editRecord(rec);
+            }else{
+              Ext.Msg.alert('Error', 'No record selected.');
+            }
           }
         },
         {
@@ -303,7 +307,10 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.WestRegion",{
               var messageBox = Ext.MessageBox.confirm('Confirm', 'Are you sure?', function(btn){
                 if (btn == 'yes') Ext.getCmp(record.data.text).deleteRecord(rec, record.data.text);
               });              
+            }else{
+              Ext.Msg.alert('Error', 'No record selected.');
             }
+
           }
         }
         ]
