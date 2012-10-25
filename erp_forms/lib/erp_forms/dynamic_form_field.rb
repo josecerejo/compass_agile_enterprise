@@ -5,7 +5,6 @@ class DynamicFormField
 
   Field Types TODO
   special:
-  file upload - use has_file_assets and plupload
   codemirror
   test password field
   
@@ -23,14 +22,13 @@ class DynamicFormField
 #    :readOnly => disabled true or false
 #    :maxLength => maxLength integer
 #    :width => size integer
-#    :validation_regex => regex string
 #  }
 
   ##################
   # SPECIAL FIELDS #
   ##################
   def self.email(options={})
-    options[:validation_regex] = ErpTechSvcs::Config.email_regex
+    options[:validation_function] = 'validateEmail(v)'
     DynamicFormField.basic_field('textfield', options)
   end
 
@@ -187,15 +185,7 @@ class DynamicFormField
     if selections and selections != []
       field[:store] = selections
     end
-
-    if !options[:validation_regex].blank? or !options[:validator_function].blank?
-      field[:validateOnBlur] = true
-    end
     
-    if options[:validation_regex] and options[:validation_regex] != ''
-      field[:validation_regex] = options[:validation_regex]
-    end
-
     if options[:validator_function] and options[:validator_function] != ''
       field[:validator_function] = options[:validator_function]
     end
@@ -212,7 +202,6 @@ class DynamicFormField
     options[:maxLength] = nil if options[:maxLength].nil?
     options[:width] = 200 if options[:width].nil?
     options[:height] = nil if options[:height].nil?
-    options[:validation_regex] = '' if options[:validation_regex].nil?
     options[:labelWidth] = 75 if options[:labelWidth].nil?
     options[:display_in_grid] = true if options[:display_in_grid].nil?
     
