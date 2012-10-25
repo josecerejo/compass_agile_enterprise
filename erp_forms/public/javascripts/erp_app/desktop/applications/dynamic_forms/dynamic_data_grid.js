@@ -20,7 +20,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.FileTree",{
       return true;
     },
     'allowupload':function(){
-      return true
+      return true;
     },
     'itemclick':function(view, record, item, index, e){
       e.stopEvent();
@@ -112,7 +112,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.DynamicDataGridPane
                   }
                 }
             }]
-        }
+        };
 
         var commentWindow = Ext.create('Ext.window.Window',{
             id: 'commentWindow_'+model_name+record_id,
@@ -296,7 +296,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.DynamicDataGridPane
             success: function(response, options){
                 Ext.getCmp('dynamic_forms_westregion').clearWindowStatus();
                 formPanel = Ext.decode(response.responseText);
-                if (formPanel.success == false){
+                if (formPanel.success === false){
                     Ext.Msg.alert('Error', formPanel.error);
                 }else{
                     self.viewRecord(rec, formPanel);
