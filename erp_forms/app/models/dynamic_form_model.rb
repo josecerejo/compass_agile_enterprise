@@ -4,7 +4,7 @@ class DynamicFormModel < ActiveRecord::Base
   after_create  :create_role
 
   def create_role
-    Role.create(:description => self.model_name.pluralize, :internal_identifier => role_iid) if self.role.nil?
+    Role.create(:description => self.model_name.titleize.pluralize, :internal_identifier => role_iid) if self.role.nil?
   end
 
   def role_iid
