@@ -66,7 +66,7 @@ module ErpForms::ErpApp::Desktop::DynamicForms
       @record = DynamicFormModel.get_constant(params[:model_name]).find(params[:id])
 
       data = @record.data.sorted_dynamic_attributes
-      result_hash = {:success => true, :data => data, :metadata => get_metadata, :comments => get_comments}
+      result_hash = {:success => true, :data => data, :metadata => get_metadata, :comments => get_comments, :has_file_assets => @record.respond_to?(:files)}
 
       render :json => (@record ? result_hash : {:success => false})
     end
@@ -77,7 +77,7 @@ module ErpForms::ErpApp::Desktop::DynamicForms
 
       related_fields = @record.form.related_fields
       data = @record.data.dynamic_attributes_with_related_data(related_fields, true)
-      result_hash = {:success => true, :data => data, :metadata => get_metadata, :comments => get_comments}
+      result_hash = {:success => true, :data => data, :metadata => get_metadata, :comments => get_comments, :has_file_assets => @record.respond_to?(:files)}
 
       render :json => (@record ? result_hash : {:success => false})
     end
@@ -87,12 +87,17 @@ module ErpForms::ErpApp::Desktop::DynamicForms
       begin
         check_file_upload_size
 
+        form_data = JSON.parse(params[:form_data_json])
+        form_data[:dynamic_form_id] = params[:dynamic_form_id]
+        form_data[:model_name] = params[:model_name]
+        form_data.symbolize_keys!
+
         @myDynamicObject = DynamicFormModel.get_instance(params[:model_name])
 
-        params[:created_by] = current_user unless current_user.nil?
-        params[:created_with_form_id] = params[:dynamic_form_id] if params[:dynamic_form_id]
-        @myDynamicObject = DynamicFormModel.save_all_attributes(@myDynamicObject, params, ErpForms::ErpApp::Desktop::DynamicForms::BaseController::IGNORED_PARAMS)
-        save_file_asset(params) unless params[:file].nil?
+        form_data[:created_by] = current_user unless current_user.nil?
+        form_data[:created_with_form_id] = params[:dynamic_form_id] if params[:dynamic_form_id]
+        @myDynamicObject = DynamicFormModel.save_all_attributes(@myDynamicObject, form_data, ErpForms::ErpApp::Desktop::DynamicForms::BaseController::IGNORED_PARAMS)
+        save_file_asset(form_data) unless params[:file].nil?
 
         render :inline => @myDynamicObject ? {:success => true}.to_json : {:success => false}.to_json
       rescue Exception => e
@@ -110,12 +115,17 @@ module ErpForms::ErpApp::Desktop::DynamicForms
       begin
         check_file_upload_size
 
+        form_data = JSON.parse(params[:form_data_json])
+        form_data[:dynamic_form_id] = params[:dynamic_form_id]
+        form_data[:model_name] = params[:model_name]
+        form_data.symbolize_keys!
+
         @myDynamicObject = DynamicFormModel.get_constant(params[:model_name]).find(params[:id])
 
-        params[:updated_by] = current_user unless current_user.nil?
-        params[:updated_with_form_id] = params[:dynamic_form_id] if params[:dynamic_form_id]      
-        @myDynamicObject = DynamicFormModel.save_all_attributes(@myDynamicObject, params, ErpForms::ErpApp::Desktop::DynamicForms::BaseController::IGNORED_PARAMS)
-        save_file_asset(params) unless params[:file].nil?
+        form_data[:updated_by] = current_user unless current_user.nil?
+        form_data[:updated_with_form_id] = params[:dynamic_form_id] if params[:dynamic_form_id]      
+        @myDynamicObject = DynamicFormModel.save_all_attributes(@myDynamicObject, form_data, ErpForms::ErpApp::Desktop::DynamicForms::BaseController::IGNORED_PARAMS)
+        save_file_asset(form_data) unless params[:file].nil?
 
         render :inline => @myDynamicObject ? {:success => true}.to_json : {:success => false}.to_json
       rescue Exception => e

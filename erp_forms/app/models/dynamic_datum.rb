@@ -50,7 +50,7 @@ class DynamicDatum < ActiveRecord::Base
     options[:use_label] = false if options[:use_label].nil?
     options[:all] = true if options[:all].nil?
 
-    form = self.updated_with_form if form.nil? and !self.updated_with_form.nil?
+    form = self.updated_with_form !self.updated_with_form.nil?
     form = self.created_with_form if form.nil? and !self.created_with_form.nil?
     form = DynamicForm.get_form(self.reference_type) if form.nil?
     
@@ -78,10 +78,14 @@ class DynamicDatum < ActiveRecord::Base
       end
 
       # although we try and save integers as integers, we ensure here they are integers so that combobox value is selected
-      fields_and_values.each do |k, v|
-        fields_and_values[k][:value] = fields_and_values[k][:value].to_i if fields_and_values[k][:xtype] == 'related_combobox' 
+      related_fields = form.related_fields
+      if related_fields.length > 0
+        related_fields.collect{|f| f[:name]}.each do |k|
+          k = DYNAMIC_ATTRIBUTE_PREFIX+k if options[:with_prefix]
+          fields_and_values[k][:value] = fields_and_values[k][:value].to_i 
+        end
       end
-
+      
       sorted = {}
       i=0
       fields_and_values.each do |key, field|        
@@ -118,11 +122,7 @@ class DynamicDatum < ActiveRecord::Base
 
       return sorted
     else
-      if options[:with_prefix]
-        return self.dynamic_attributes
-      else
-        return self.dynamic_attributes_without_prefix
-      end
+      return (options[:with_prefix] ? self.dynamic_attributes : self.dynamic_attributes_without_prefix)
     end
   end
 end
