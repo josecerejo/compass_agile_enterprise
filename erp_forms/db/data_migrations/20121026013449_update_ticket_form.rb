@@ -56,8 +56,6 @@ class UpdateTicketForm
   
   def self.down
     #remove data here
-    DynamicForm.find_by_internal_identifier('ticket').destroy
-    DynamicFormModel.find_by_model_name('Ticket').destroy
   end
 
 end
