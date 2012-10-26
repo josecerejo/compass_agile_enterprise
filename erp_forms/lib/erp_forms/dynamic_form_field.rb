@@ -28,7 +28,7 @@ class DynamicFormField
   # SPECIAL FIELDS #
   ##################
   def self.email(options={})
-    options[:validation_function] = 'validateEmail(v)'
+    options[:validator_function] = 'validateEmail(v)'
     DynamicFormField.basic_field('textfield', options)
   end
 
