@@ -596,7 +596,9 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.FormBuilder",{
     },
 
     addValidationToField : function(field){
-        if(!Ext.isEmpty(field.validator_function)){
+        if(!Ext.isEmpty(field.validation_regex)){
+            field.regex = initRegex(field.validation_regex);
+        }else if(!Ext.isEmpty(field.validator_function)){
             field.validator = function(v){ return eval(field.validator_function); };
         }
         return field;
@@ -1103,7 +1105,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.FormBuilder",{
                                             switch(updateFieldForm.findField('updateValidationType').getValue()){
                                                 case 'regex':
                                                     var validationRegex = updateFieldForm.findField('updateValidationRegex').getValue();
-                                                    if(!Ext.isEmpty(validationRegex)) fieldDefinition.regex = initRegex(validationRegex);
+                                                    if(!Ext.isEmpty(validationRegex)) fieldDefinition.validation_regex = validationRegex;
                                                     fieldDefinition.regexText = updateFieldForm.findField('updateValidationRegexText').getValue();
                                                     break;
                                                 case 'function':

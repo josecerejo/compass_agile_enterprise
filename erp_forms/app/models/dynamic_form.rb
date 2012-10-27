@@ -39,8 +39,10 @@ class DynamicForm < ActiveRecord::Base
   end
   
   def add_validation(def_object)
-    def_object.each do |item|      
-      if item[:validator_function] and item[:validator_function] != ""
+    def_object.each do |item|
+      if !item[:validation_regex].blank?
+        item[:regex] = NonEscapeJsonString.new(item[:validation_regex].match('^\/') ? item[:validation_regex] : '/'+item[:validation_regex]+'/')
+      elsif !item[:validator_function].blank?
         item[:validator] = NonEscapeJsonString.new("function(v){ return #{item[:validator_function]}; }")
       end
     end
