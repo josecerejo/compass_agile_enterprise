@@ -1,6 +1,7 @@
 class ErpAppSetup
   
   def self.up
+
     if(ContactPurpose.find_by_internal_identifier('default').nil?)
 
       #######################################
@@ -48,14 +49,11 @@ class ErpAppSetup
       no_po  = PreferenceOption.create(:description => 'No', :internal_identifier => 'no', :value => 'no')
 
       #desktop background options
-      truenorth_background_po    = PreferenceOption.create(:description => 'TrueNorth Logo', :internal_identifier => 'truenorth_logo_background', :value => 'truenorth.png')
+      truenorth_background_po    = PreferenceOption.create(:description => 'TN Tech Logo', :internal_identifier => 'truenorth_logo_background', :value => 'truenorth_tech.png')
       blue_background_po         = PreferenceOption.create(:description => 'Blue', :internal_identifier => 'blue_desktop_background', :value => 'blue.gif')
-      gradient_background_po     = PreferenceOption.create(:description => 'Grey Gradient', :internal_identifier => 'grey_gradient_desktop_background', :value => 'gradient.png')
-      purple_background_po       = PreferenceOption.create(:description => 'Purple', :internal_identifier => 'purple_desktop_background', :value => 'purple.jpg')
-      planet_background_po       = PreferenceOption.create(:description => 'Planet', :internal_identifier => 'purple_desktop_background', :value => 'planet.jpg')
-      portablemind_background_po = PreferenceOption.create(:description => 'Portablemind', :internal_identifier => 'portablemind_desktop_background', :value => 'portablemind.png')
 
       #desktop theme options
+      clifton_extjs_theme_po = PreferenceOption.create(:description => 'Clifton', :internal_identifier => 'clifton_extjs_theme', :value => 'clifton.css')
       access_extjs_theme_po = PreferenceOption.create(:description => 'Access', :internal_identifier => 'access_extjs_theme', :value => 'ext-all-access.css')
       gray_extjs_theme_po   = PreferenceOption.create(:description => 'Gray', :internal_identifier => 'gray_extjs_theme', :value => 'ext-all-gray.css')
       blue_extjs_theme_po   = PreferenceOption.create(:description => 'Blue', :internal_identifier => 'blue_extjs_theme', :value => 'ext-all.css')
@@ -73,17 +71,14 @@ class ErpAppSetup
 
       desktop_backgroud_pt.preference_options << blue_background_po
       desktop_backgroud_pt.preference_options << truenorth_background_po
-      desktop_backgroud_pt.preference_options << gradient_background_po
-      desktop_backgroud_pt.preference_options << purple_background_po
-      desktop_backgroud_pt.preference_options << planet_background_po
-      desktop_backgroud_pt.preference_options << portablemind_background_po
       desktop_backgroud_pt.default_preference_option = truenorth_background_po
       desktop_backgroud_pt.save
 
+      extjs_theme_pt.preference_options << clifton_extjs_theme_po
       extjs_theme_pt.preference_options << access_extjs_theme_po
       extjs_theme_pt.preference_options << gray_extjs_theme_po
       extjs_theme_pt.preference_options << blue_extjs_theme_po
-      extjs_theme_pt.default_preference_option = blue_extjs_theme_po
+      extjs_theme_pt.default_preference_option = clifton_extjs_theme_po
       extjs_theme_pt.save
     
       #######################################
