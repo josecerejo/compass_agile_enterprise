@@ -175,7 +175,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.WestRegion",{
 
                     var form_props = formBuilder.query('#form_props').first().getForm();
                     form_props.findField('description').setValue(form_name);
-                    Ext.getCmp('westregionPanel').setActiveTab('field_types');
+                    Ext.getCmp('dynamic_forms_westregion').setActiveTab('field_types');
                     var east_tabs = formBuilder.query('#east_tabs').first();
                     east_tabs.setActiveTab('form_props');
 
@@ -205,7 +205,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.WestRegion",{
 
     var form_props = formBuilder.query('#form_props').first().getForm();
     form_props.loadRecord(record);
-    Ext.getCmp('westregionPanel').setActiveTab('field_types');
+    Ext.getCmp('dynamic_forms_westregion').setActiveTab('field_types');
     var east_tabs = formBuilder.query('#east_tabs').first();
     east_tabs.setActiveTab('form_props');
   },
@@ -266,7 +266,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.WestRegion",{
               success: function(response) {
                 self.clearWindowStatus();
                 form_definition = Ext.decode(response.responseText);
-                if (form_definition.success == false){
+                if (form_definition.success === false){
                     Ext.Msg.alert('Error', form_definition.error);
                 }else{
                   var newRecordWindow = Ext.create("Ext.window.Window",{
@@ -291,21 +291,26 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.WestRegion",{
           iconCls:'icon-edit',
           handler:function(btn){
             var rec = Ext.getCmp(record.data.text).query('shared_dynamiceditablegrid').first().getSelectionModel().getSelection().first();
-            Ext.getCmp(record.data.text).editRecord(rec, record.data.text);
+            if (rec) {
+              Ext.getCmp(record.data.text).editRecord(rec);
+            }else{
+              Ext.Msg.alert('Error', 'No record selected.');
+            }
           }
         },
         {
           text: "Delete Selected Record",
           iconCls:'icon-delete',
           handler:function(btn){
-            var messageBox = Ext.MessageBox.confirm('Confirm', 'Are you sure?', 
-              function(btn){
-                if (btn == 'yes'){ 
-                  var rec = Ext.getCmp(record.data.text).query('shared_dynamiceditablegrid').first().getSelectionModel().getSelection().first();
-                  Ext.getCmp(record.data.text).deleteRecord(rec, record.data.text);
-                }
-              }
-            );                 
+            var rec = Ext.getCmp(record.data.text).query('shared_dynamiceditablegrid').first().getSelectionModel().getSelection().first();
+            if (rec){
+              var messageBox = Ext.MessageBox.confirm('Confirm', 'Are you sure?', function(btn){
+                if (btn == 'yes') Ext.getCmp(record.data.text).deleteRecord(rec, record.data.text);
+              });              
+            }else{
+              Ext.Msg.alert('Error', 'No record selected.');
+            }
+
           }
         }
         ]
@@ -419,7 +424,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.WestRegion",{
                       failure:function(form, action){
                         self.clearWindowStatus();
                         var obj =  Ext.decode(action.response.responseText);
-                        if(obj != null){
+                        if(obj !== null){
                           Ext.Msg.alert("Error", obj.message);
                         }
                         else{
@@ -555,13 +560,13 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.WestRegion",{
             // we have to set this qtip this way so that we have access to ErpTechSvcs.Config
             var filefield = fieldTreeRootNode.findChild('field_xtype','filefield');
             var valid_types = ErpTechSvcs.Config.file_upload_types.replace(/,/g,', ');
-            filefield.data.qtip = 'Model must be enabled with has_file_assets. Use limited to one upload field per form. Compass AE is currently configured with a max file upload size of '+ErpTechSvcs.Config.max_file_size_in_mb+'MB and limited to file types '+valid_types+". Be sure to configure your web and/or mail servers accordingly."
+            filefield.data.qtip = 'Model must be enabled with has_file_assets. Use limited to one upload field per form. Compass AE is currently configured with a max file upload size of '+ErpTechSvcs.Config.max_file_size_in_mb+'MB and limited to file types '+valid_types+". Be sure to configure your web and/or mail servers accordingly.";
           }
         }
     };
 
     config = Ext.apply({
-      id: 'westregionPanel',
+      id: 'dynamic_forms_westregion',
       region:'west',
       split:true,
       width:235,
@@ -569,10 +574,10 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.WestRegion",{
       hideCollapseTool: true,
       collapsible: true,
       collapseMode: 'mini',
-      items: [this.formsTree, this.fieldTypes]
+      items: [this.formsTree, this.fieldTypes],
+      activeTab: 0
     }, config);
 
     this.callParent([config]);
-    this.setActiveTab(0);
   }
 });

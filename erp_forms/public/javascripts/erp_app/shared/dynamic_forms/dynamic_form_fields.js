@@ -1,10 +1,6 @@
 Ext.define("Compass.ErpApp.Shared.DynamicRelatedComboBox",{
     extend:"Ext.form.field.ComboBox",
     alias:'widget.related_combobox',
-    initComponent: function() {
-        //var config = this.initialConfig;
-        this.callParent(arguments);
-    },
 
     constructor : function(config) {
         var self = this;
@@ -27,9 +23,14 @@ Ext.define("Compass.ErpApp.Shared.DynamicRelatedComboBox",{
                 },
                 autoLoad: true,
                 listeners:{
-                    'load': function(store, records, options){
-                        // self.value did not want to work for selecting default value so we use custom self.default_value
-                        if (!Ext.isEmpty(self.default_value)) self.setValue(self.default_value);
+                    load: function(store, records, options){
+                        try { var record_value = self.ownerCt.getRecord().data[self.name]; }catch(e){}
+                        if (!Ext.isEmpty(record_value)){
+                            self.setValue(record_value);
+                        }else if (!Ext.isEmpty(self.default_value)){
+                            // self.value did not want to work for selecting default value so we use custom self.default_value
+                            self.setValue(self.default_value);                            
+                        }
                     }
                 }
             })

@@ -34,7 +34,7 @@ Ext.create('Ext.data.Store', {
   listeners:{
     'load':function(store, records){
       var record = store.getAt(0);
-      Ext.getCmp('westregionPanel').openFormTab(record);
+      Ext.getCmp('dynamic_forms_westregion').openFormTab(record);
     }
   },
   autoLoad: false
@@ -382,7 +382,8 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.FormBuilder",{
                 store:[
                     ['none','None'],
                     ['regex','Regular Expression'],
-                    ['function','Custom Function']
+                    ['function','Custom Function'],
+                    ['vtype','VType']
                 ],
                 value: 'none',
                 forceSelection: true,
@@ -391,22 +392,45 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.FormBuilder",{
                     change: function(field, newValue, oldValue, eOpts){
                         var field_props = this.findParentByType('form');
                         var updateValidationRegex = field_props.getForm().findField('updateValidationRegex');
+                        var updateValidationRegexText = field_props.getForm().findField('updateValidationRegexText');
                         var updateValidationFunction = field_props.getForm().findField('updateValidationFunction');
+                        var updateValidationVType = field_props.getForm().findField('updateValidationVType');
                         if (newValue == 'regex'){
                             updateValidationRegex.show();
                             updateValidationRegex.enable();
+                            updateValidationRegexText.show();
+                            updateValidationRegexText.enable();
                             updateValidationFunction.hide();
                             updateValidationFunction.disable();
+                            updateValidationVType.hide();
+                            updateValidationVType.disable();
                         }else if (newValue == 'function'){
                             updateValidationFunction.show();
                             updateValidationFunction.enable();
                             updateValidationRegex.hide();
                             updateValidationRegex.disable();
+                            updateValidationRegexText.hide();
+                            updateValidationRegexText.disable();
+                            updateValidationVType.hide();
+                            updateValidationVType.disable();
+                        }else if (newValue == 'vtype'){
+                            updateValidationVType.show();
+                            updateValidationVType.enable();
+                            updateValidationRegex.hide();
+                            updateValidationRegex.disable();
+                            updateValidationRegexText.hide();
+                            updateValidationRegexText.disable();
+                            updateValidationFunction.hide();
+                            updateValidationFunction.disable();
                         }else{
                             updateValidationFunction.hide();
                             updateValidationFunction.disable();
                             updateValidationRegex.hide();
                             updateValidationRegex.disable();
+                            updateValidationRegexText.disable();
+                            updateValidationRegexText.hide();
+                            updateValidationVType.hide();
+                            updateValidationVType.disable();
                         }
                     }
                 }
@@ -420,18 +444,44 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.FormBuilder",{
                 disabled: true
             },
             {
+                fieldLabel: 'Regex Text',
+                name: 'updateValidationRegexText',
+                xtype: 'textfield',
+                allowBlank: true,
+                hidden: true,
+                disabled: true
+            },
+            {
                 fieldLabel: 'Function',
                 name: 'updateValidationFunction',
-                plugins: [new helpQtip('Call a pre-existing javascript function for custom validation. Field value must be passed in using variable v. Example: customFunction(v)')],
+                plugins: [new helpQtip('Call a pre-existing JavaScript function for custom validation. Field value must be passed in using variable v. No semicolon required. Example: customFunction(v)')],
                 xtype: 'textfield',
                 allowBlank: true,
                 hidden: true,
                 disabled: true,
                 emptyText: 'customFunction(v)'
+            },
+            {
+                fieldLabel: 'VType',
+                name: 'updateValidationVType',
+                xtype: 'combobox',
+                queryMode: 'local',
+                store:[
+                    ['alpha','Alpha'],
+                    ['alphanum','Alphanumeric'],
+                    ['email','Email'],
+                    ['url','URL']
+                ],
+                plugins: [new helpQtip('Use a built-in or custom ExtJS VType.')],
+                editable: true,
+                forceSelection: false,
+                hidden: true,
+                disabled: true,
+                allowBlank: true
             }
         ];
 
-        var result = []
+        var result = [];
         if (Ext.isEmpty(field_xtype)){
             result = result.concat(base_top);
             result = result.concat(common);
@@ -520,12 +570,12 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.FormBuilder",{
                 }
                 i++;
             });
-            if (direction == 'up' && idx == 0){
+            if (direction == 'up' && idx === 0){
                 Ext.Msg.alert('Error', 'Cannot move. Field is already at top.');
             }else if (direction == 'down' && idx == (formPanel.form_definition.length-1)){
                 Ext.Msg.alert('Error', 'Cannot move. Field is already at bottom.');
             }else{
-                var new_index = (direction == 'up' ? idx-1 : idx+1)
+                var new_index = (direction == 'up' ? idx-1 : idx+1);
                 formPanel.form_definition.splice(idx, 1); // remove field from definition
                 formPanel.form_definition.splice(new_index, 0, field_in_definition); // add field to definition
                 formPanel.findParentByType('dynamic_forms_FormBuilder').reloadForm(formPanel); // redraw form from definition
@@ -547,9 +597,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.FormBuilder",{
 
     addValidationToField : function(field){
         if(!Ext.isEmpty(field.validator_function)){
-            field.validator = function(v){ regex = this.initialConfig.validation_regex; return eval(field.validator_function); };
-        }else if (!Ext.isEmpty(field.validation_regex)){
-            field.validator = function(v){ return validate_regex(v, this.initialConfig.validation_regex); };
+            field.validator = function(v){ return eval(field.validator_function); };
         }
         return field;
     },
@@ -583,7 +631,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.FormBuilder",{
             field = self.convertHiddenFieldToDisplayFieldForUi(field);
             field = self.addValidationToField(field);
             //field = self.alterFileUploadField(field);
-            field = self.addHighlightListenerForSelectedField(field)
+            field = self.addHighlightListenerForSelectedField(field);
         });
         formPanel.add(form_definition_copy);        
     },
@@ -601,12 +649,12 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.FormBuilder",{
                             //console.log(i.getEl().getStyle('border'));
                             if (item != i && i.getEl().dom.style.border == highlight_border){
                                 var label = i.getEl().query('label').first();
-                                label.style.width = (parseInt(label.style.width) + 2) + 'px';
+                                label.style.width = (parseInt(label.style.width, 10) + 2) + 'px';
                                 i.getEl().setStyle('border', 'none');
                             }
                         });
                         var label = el.query('label').first();
-                        label.style.width = (parseInt(label.style.width) - 2) + 'px';
+                        label.style.width = (parseInt(label.style.width, 10) - 2) + 'px';
                         el.setStyle('border', highlight_border);
                         el.highlight();
 
@@ -642,16 +690,16 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.FormBuilder",{
                             prop_form.findField('updateMaxValue').setValue(item.maxValue);
                         } 
 
-                        if (!Ext.isEmpty(item.validation_regex)){
+                        if(!Ext.isEmpty(item.regex)){
                             prop_form.findField('updateValidationType').setValue('regex');
-                            prop_form.findField('updateValidationRegex').show();
-                            prop_form.findField('updateValidationRegex').enable();
-                            prop_form.findField('updateValidationRegex').setValue(item.validation_regex);
+                            prop_form.findField('updateValidationRegex').setValue(item.regex);  
+                            if(!Ext.isEmpty(item.regexText)) prop_form.findField('updateValidationRegexText').setValue(item.regexText);                            
                         }else if(!Ext.isEmpty(item.validator_function)){
                             prop_form.findField('updateValidationType').setValue('function');
-                            prop_form.findField('updateValidationFunction').show();
-                            prop_form.findField('updateValidationFunction').enable();
                             prop_form.findField('updateValidationFunction').setValue(item.validator_function);                        
+                        }else if(!Ext.isEmpty(item.vtype)){
+                            prop_form.findField('updateValidationType').setValue('vtype');
+                            prop_form.findField('updateValidationVType').setValue(item.vtype);                        
                         }
 
                         if (item.xtype == 'numberfield'){
@@ -691,7 +739,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.FormBuilder",{
                     }
                 });
             }
-        }
+        };
 
         return field;
     },
@@ -706,7 +754,6 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.FormBuilder",{
             border: false,
             closable: true,
             autoHeight:true,
-            //iconCls:'icon-document',
             buttonAlign:'center',
             items: [{
                     xtype: 'form',
@@ -717,7 +764,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.FormBuilder",{
                     form_definition: config.form_definition,
                     form_id: (Ext.isEmpty(config.form_id) ? null : config.form_id),
                     defaults:{
-                        msgTarget: (Ext.isEmpty(config.msg_target) ? 'left' : config.msg_target),
+                        msgTarget: (Ext.isEmpty(config.msg_target) ? 'left' : config.msg_target)
                     },
                     tbar: [
                       { xtype: 'button', 
@@ -730,15 +777,10 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.FormBuilder",{
                             var form_props = formBuilder.query('#form_props').first().getForm();
 
                             if (form_props.isValid()){
-                                if (Ext.isEmpty(config.form_id)){
-                                    var create = true;
-                                    var url = '/erp_forms/erp_app/desktop/dynamic_forms/forms/create';
-                                }else{                                
-                                    var url = '/erp_forms/erp_app/desktop/dynamic_forms/forms/update';
-                                }
+                                var create = Ext.isEmpty(config.form_id);
                                 formBuilder.setWindowStatus('Saving form ...');
                                 Ext.Ajax.request({
-                                  url: url,
+                                  url: (create === true ? '/erp_forms/erp_app/desktop/dynamic_forms/forms/create' : '/erp_forms/erp_app/desktop/dynamic_forms/forms/update'),
                                   method: 'POST',
                                   params:{
                                     id:config.form_id,
@@ -758,7 +800,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.FormBuilder",{
                                     formBuilder.clearWindowStatus();
                                     var obj =  Ext.decode(response.responseText);
                                     if(obj.success){
-                                        if (create == true){
+                                        if (create === true){
                                             Ext.getCmp('dynamic_formsTabPanel').remove(formBuilder);
                                             Ext.getStore('dynamicFormStore').load({ params:{ id: obj.id } });
                                             Ext.getStore('formsTreeStore').load();
@@ -964,7 +1006,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.FormBuilder",{
                                                     break;
                                                 case 'email':
                                                     fieldDefinition.xtype = 'textfield';
-                                                    fieldDefinition.validation_regex = formBuilder.emailRegex();
+                                                    fieldDefinition.validator_function = 'validateEmail(v)';
                                                     break;
                                                 case 'password':
                                                     fieldDefinition.xtype = 'textfield';
@@ -993,8 +1035,6 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.FormBuilder",{
                                     });
                                     addFieldWindow.show();
                                     
-                                    //alert(droppedField.get('text'));
-
                                     return true;
                                 }
                             });
@@ -1047,7 +1087,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.FormBuilder",{
                                         try { fieldDefinition.display_in_grid = updateFieldForm.findField('updateDisplayInGrid').getValue(); } catch(e){}                                        
                                         try { var updateValue = updateFieldForm.findField('updateValue').getValue();
                                               if (selected_field.xtype == 'related_combobox') {
-                                                if (!Ext.isEmpty(updateValue)) fieldDefinition.default_value = parseInt(updateValue); 
+                                                if (!Ext.isEmpty(updateValue)) fieldDefinition.default_value = parseInt(updateValue, 10);
                                               }else{
                                                 if (!Ext.isEmpty(updateValue)) fieldDefinition.value = updateValue; 
                                               }
@@ -1062,10 +1102,15 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.FormBuilder",{
                                         if (Ext.isEmpty(selected_field.field_xtype) && selected_field.xtype != 'related_combobox' && selected_field.xtype != 'combobox' && selected_field.xtype != 'combo'){
                                             switch(updateFieldForm.findField('updateValidationType').getValue()){
                                                 case 'regex':
-                                                    fieldDefinition.validation_regex = updateFieldForm.findField('updateValidationRegex').getValue();
+                                                    var validationRegex = updateFieldForm.findField('updateValidationRegex').getValue();
+                                                    if(!Ext.isEmpty(validationRegex)) fieldDefinition.regex = initRegex(validationRegex);
+                                                    fieldDefinition.regexText = updateFieldForm.findField('updateValidationRegexText').getValue();
                                                     break;
                                                 case 'function':
                                                     fieldDefinition.validator_function = updateFieldForm.findField('updateValidationFunction').getValue();
+                                                    break;
+                                                case 'vtype':
+                                                    fieldDefinition.vtype = updateFieldForm.findField('updateValidationVType').getValue();
                                                     break;
                                                 default:
                                             }
@@ -1112,7 +1157,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.FormBuilder",{
                                                 var optionsArray = [], subArray = [], i = 1;
                                                 Ext.each(options, function(option){
                                                     subArray.push(option.trim());
-                                                    if (i%2==0){
+                                                    if (i%2 === 0){
                                                         optionsArray.push(subArray);
                                                         subArray = [];
                                                     }

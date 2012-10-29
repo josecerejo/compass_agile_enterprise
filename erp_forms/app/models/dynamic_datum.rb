@@ -50,27 +50,50 @@ class DynamicDatum < ActiveRecord::Base
     options[:use_label] = false if options[:use_label].nil?
     options[:all] = true if options[:all].nil?
 
-    form = self.updated_with_form if form.nil? and !self.updated_with_form.nil?
+    form = self.updated_with_form !self.updated_with_form.nil?
     form = self.created_with_form if form.nil? and !self.created_with_form.nil?
     form = DynamicForm.get_form(self.reference_type) if form.nil?
     
     unless form.nil?
+      fields = form.definition_object
+
+      fields_and_values = {}
       if options[:with_prefix]
-        keys = form.definition_object.collect{|f| DYNAMIC_ATTRIBUTE_PREFIX + f[:name]}
+        fields.each do |f|
+          k = DYNAMIC_ATTRIBUTE_PREFIX + f[:name]
+          next if k == DYNAMIC_ATTRIBUTE_PREFIX + 'file' # we dont want to show file upload fields
+          fields_and_values[k] = {}
+          fields_and_values[k][:value] = self.dynamic_attributes[k]
+          fields_and_values[k][:xtype] = f[:xtype]
+        end
       else        
-        labels = form.definition_object.collect{|f| f[:fieldLabel]} if options[:use_label]
-        keys = form.definition_object.collect{|f| f[:name]}
+        fields.each do |f|
+          k = f[:name]
+          next if k == 'file' # we dont want to show file upload fields
+          fields_and_values[k] = {}
+          fields_and_values[k][:value] = self.dynamic_attributes_without_prefix[k]
+          fields_and_values[k][:xtype] = f[:xtype]
+          fields_and_values[k][:fieldLabel] = f[:fieldLabel] if options[:use_label]
+        end
       end
 
+      # although we try and save integers as integers, we ensure here they are integers so that combobox value is selected
+      related_fields = form.related_fields
+      if related_fields.length > 0
+        related_fields.collect{|f| f[:name]}.each do |k|
+          k = DYNAMIC_ATTRIBUTE_PREFIX+k if options[:with_prefix]
+          fields_and_values[k][:value] = fields_and_values[k][:value].to_i 
+        end
+      end
+      
       sorted = {}
       i=0
-      keys.each do |key|
-        next if key == 'file' # we dont want to show file upload fields
+      fields_and_values.each do |key, field|        
         if options[:with_prefix]
-          sorted[key] = self.dynamic_attributes[key]
+          sorted[key] = field[:value]
         else
-          index = (options[:use_label] ? labels[i] : key)
-          sorted[index] = self.dynamic_attributes_without_prefix[key]
+          index = (options[:use_label] ? field[:fieldLabel] : key)
+          sorted[index] = field[:value]
         end
         i += 1
       end
@@ -78,12 +101,15 @@ class DynamicDatum < ActiveRecord::Base
       if options[:all]
         # append attributes not in definition
         attrs = (options[:with_prefix] ? self.dynamic_attributes : self.dynamic_attributes_without_prefix)
+        keys = fields_and_values.collect{|k,v| k}
+
         i=0
         sorted.each do |k,v|
           index = (options[:use_label] ? keys[i] : k)
           attrs.delete(index)
           i += 1
         end
+
         attrs.each do |k,v|
           if options[:with_prefix]
             sorted[k] = self.dynamic_attributes[k]
@@ -96,11 +122,7 @@ class DynamicDatum < ActiveRecord::Base
 
       return sorted
     else
-      if options[:with_prefix]
-        return self.dynamic_attributes
-      else
-        return self.dynamic_attributes_without_prefix
-      end
+      return (options[:with_prefix] ? self.dynamic_attributes : self.dynamic_attributes_without_prefix)
     end
   end
 end

@@ -258,13 +258,13 @@ class HtmlFile < TextFile
   self.valid_extensions = %w(.html .HTML)
 end
 
-class Pdf < TextFile
+class Pdf < FileAsset
   self.file_type = :pdf
   self.content_type = 'application/pdf'
   self.valid_extensions = %w(.pdf .PDF)
 end
 
-class Swf < TextFile
+class Swf < FileAsset
   self.file_type = :swf
   self.content_type = 'application/x-shockwave-flash'
   self.valid_extensions = %w(.swf .SWF)
