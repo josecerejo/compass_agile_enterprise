@@ -985,7 +985,8 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.FormBuilder",{
                                                 xtype: droppedField.get('field_xtype'),
                                                 name: field_name,
                                                 fieldLabel: (droppedField.get('field_xtype') == 'hiddenfield' ? 'Hidden Field' : field_name.titleize()),
-                                                display_in_grid: true
+                                                display_in_grid: true,
+                                                labelWidth: 75
                                             };
 
                                             switch(fieldDefinition.xtype){
