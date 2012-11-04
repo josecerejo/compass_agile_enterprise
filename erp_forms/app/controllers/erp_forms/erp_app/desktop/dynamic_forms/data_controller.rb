@@ -51,8 +51,8 @@ module ErpForms::ErpApp::Desktop::DynamicForms
         wihash[:id] = i.id
         wihash[:created_username] = i.data.created_by.nil? ? '' : i.data.created_by.username
         wihash[:updated_username] = i.data.updated_by.nil? ? '' : i.data.updated_by.username
-        wihash[:created_at] = i.data.created_at.strftime(@@datetime_format)
-        wihash[:updated_at] = i.data.updated_at.strftime(@@datetime_format)
+        wihash[:created_at] = i.data.created_at.getlocal.strftime(@@datetime_format)
+        wihash[:updated_at] = i.data.updated_at.getlocal.strftime(@@datetime_format)
         wihash[:form_id] = (i.data.updated_with_form_id ? i.data.updated_with_form_id : i.data.created_with_form_id)
         wihash[:model_name] = params[:model_name]
         wi << wihash
