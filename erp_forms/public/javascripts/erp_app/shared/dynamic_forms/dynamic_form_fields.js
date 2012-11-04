@@ -1,4 +1,4 @@
-Ext.define("Compass.ErpApp.Shared.DynamicRelatedComboBox",{
+Ext.define("Compass.ErpForms.DynamicForms.DynamicRelatedComboBox",{
     extend:"Ext.form.field.ComboBox",
     alias:'widget.related_combobox',
 

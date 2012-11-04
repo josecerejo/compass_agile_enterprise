@@ -1,3 +1,26 @@
+Ext.define("Compass.ErpForms.DynamicForms.DynamicFormPanel",{
+    extend:"Ext.form.Panel",
+    alias:'widget.dynamic_form_panel',
+
+    // CALLBACK USAGE EXAMPLE:
+    // 'afterrender':function(panel){
+    //     panel.query('dynamic_form_panel').first().addListener('afterupdate', function(){
+    //         console.log('afterupdate');
+    //     });
+    // } 
+    initComponent: function() {
+        this.callParent(arguments);
+        this.addEvents(
+          'aftercreate',
+          'afterupdate'
+        );
+    },
+
+    constructor : function(config) {
+        this.callParent([config]);
+    }
+});
+
 Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms",{
     extend:"Ext.ux.desktop.Module",
     id:'dynamic_forms-win',
@@ -7,7 +30,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms",{
             iconCls:'icon-document',
             handler: this.createWindow,
             scope: this
-        }
+        };
     },
 
     createWindow : function(){

@@ -182,7 +182,8 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.WestRegion",{
                     newFormWindow.close();
                   }
                 }
-              },{
+              },
+              {
                 text: 'Close',
                 handler: function(){
                   newFormWindow.close();
@@ -269,14 +270,28 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.WestRegion",{
                 if (form_definition.success === false){
                     Ext.Msg.alert('Error', form_definition.error);
                 }else{
-                  var newRecordWindow = Ext.create("Ext.window.Window",{
-                    layout:'fit',
-                    title:'New Record',
-                    plain: true,
-                    buttonAlign:'center',
-                    items: form_definition
+                  var newRecordPanel = Ext.create('Ext.panel.Panel',{
+                      itemId: record.get("text")+'-new',
+                      layout: 'border',
+                      title: 'New '+record.get("text"),
+                      closable: true,
+                      autoScroll: true,
+                      items: [form_definition],
+                      listeners:{
+                        'afterrender':function(panel){
+                            panel.query('dynamic_form_panel').first().addListener('aftercreate', function(args){
+                              // close and reopen tab
+                              var tabPanel = panel.findParentByType('tabpanel');
+                              tabPanel.remove(panel);
+                              Ext.getCmp(record.data.text).editRecord(args.record);
+                              // reload grid
+                              tabPanel.query('#'+record.get("text")).first().query('shared_dynamiceditablegrid').first().getStore().load({});
+                            });
+                        }                        
+                    }
                   });
-                  newRecordWindow.show();
+                  self.centerRegion.workArea.add(newRecordPanel);
+                  self.centerRegion.workArea.setActiveTab(self.centerRegion.workArea.items.length - 1);
                 }
               },
               failure: function(response) {

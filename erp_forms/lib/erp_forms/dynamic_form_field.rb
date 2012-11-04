@@ -182,13 +182,11 @@ class DynamicFormField
     field[:msgTarget] = options[:msgTarget] unless options[:msgTarget].blank?
     field[:regexText] = options[:regexText] unless options[:regexText].blank?
     field[:url] = options[:url] unless options[:url].blank?
-
-    if selections and selections != []
-      field[:store] = selections
-    end
-    
+    field[:vtype] = options[:vtype] unless options[:vtype].blank?
     field[:validation_regex] = options[:validation_regex] unless options[:validation_regex].blank?
     field[:validator_function] = options[:validator_function] unless options[:validator_function].blank?
+
+    field[:store] = selections if selections and selections != []    
     
     field
   end

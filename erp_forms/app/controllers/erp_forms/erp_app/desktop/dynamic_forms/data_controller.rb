@@ -92,14 +92,25 @@ module ErpForms::ErpApp::Desktop::DynamicForms
         form_data[:model_name] = params[:model_name]
         form_data.symbolize_keys!
 
-        @myDynamicObject = DynamicFormModel.get_instance(params[:model_name])
+        @record = DynamicFormModel.get_instance(params[:model_name])
 
         form_data[:created_by] = current_user unless current_user.nil?
         form_data[:created_with_form_id] = params[:dynamic_form_id] if params[:dynamic_form_id]
-        @myDynamicObject = DynamicFormModel.save_all_attributes(@myDynamicObject, form_data, ErpForms::ErpApp::Desktop::DynamicForms::BaseController::IGNORED_PARAMS)
+        @record = DynamicFormModel.save_all_attributes(@record, form_data, ErpForms::ErpApp::Desktop::DynamicForms::BaseController::IGNORED_PARAMS)
         save_file_asset(form_data) unless params[:file].nil?
 
-        render :inline => @myDynamicObject ? {:success => true}.to_json : {:success => false}.to_json
+        data = @record.data.sorted_dynamic_attributes
+        result_hash = {
+          :success => true, 
+          :id => @record.id, 
+          :model_name => params[:model_name], 
+          :form_id => form_data[:created_with_form_id], 
+          :data => data, 
+          :metadata => get_metadata, 
+          :comments => get_comments, 
+          :has_file_assets => @record.respond_to?(:files)
+        }
+        render :inline => @record ? result_hash.to_json : {:success => false}.to_json
       rescue Exception => e
         Rails.logger.error e.message
         Rails.logger.error e.backtrace.join("\n")
@@ -120,14 +131,25 @@ module ErpForms::ErpApp::Desktop::DynamicForms
         form_data[:model_name] = params[:model_name]
         form_data.symbolize_keys!
 
-        @myDynamicObject = DynamicFormModel.get_constant(params[:model_name]).find(params[:id])
+        @record = DynamicFormModel.get_constant(params[:model_name]).find(params[:id])
 
         form_data[:updated_by] = current_user unless current_user.nil?
         form_data[:updated_with_form_id] = params[:dynamic_form_id] if params[:dynamic_form_id]      
-        @myDynamicObject = DynamicFormModel.save_all_attributes(@myDynamicObject, form_data, ErpForms::ErpApp::Desktop::DynamicForms::BaseController::IGNORED_PARAMS)
+        @record = DynamicFormModel.save_all_attributes(@record, form_data, ErpForms::ErpApp::Desktop::DynamicForms::BaseController::IGNORED_PARAMS)
         save_file_asset(form_data) unless params[:file].nil?
 
-        render :inline => @myDynamicObject ? {:success => true}.to_json : {:success => false}.to_json
+        data = @record.data.sorted_dynamic_attributes
+        result_hash = {
+          :success => true, 
+          :id => params[:id], 
+          :model_name => params[:model_name], 
+          :form_id => form_data[:updated_with_form_id], 
+          :data => data, 
+          :metadata => get_metadata, 
+          :comments => get_comments, 
+          :has_file_assets => @record.respond_to?(:files)
+        }
+        render :inline => @record ? result_hash.to_json : {:success => false}.to_json
       rescue Exception => e
         Rails.logger.error e.message
         Rails.logger.error e.backtrace.join("\n")
@@ -140,19 +162,28 @@ module ErpForms::ErpApp::Desktop::DynamicForms
 
     # delete a dynamic data record
     def delete
-      @myDynamicObject = DynamicFormModel.get_constant(params[:model_name])
-      @myDynamicObject.destroy(params[:id])
-      render :json => {:success => true}
+      begin
+        @record = DynamicFormModel.get_constant(params[:model_name])
+        @record.destroy(params[:id])
+        render :json => {:success => true}
+      rescue Exception => e
+        Rails.logger.error e.message
+        Rails.logger.error e.backtrace.join("\n")
+        render :inline => {
+          :success => false,
+          :message => e.message
+        }.to_json             
+      end
     end
 
     # file tree
     def get_files
-      @myDynamicObject = DynamicFormModel.get_constant(params[:model_name]).find(params[:id])
-      if @myDynamicObject.nil?
+      @record = DynamicFormModel.get_constant(params[:model_name]).find(params[:id])
+      if @record.nil?
         render :json => []
       else
         set_root_node(params)
-        render :json => @file_support.build_tree(base_path, :file_asset_holder => @myDynamicObject, :preload => true)
+        render :json => @file_support.build_tree(base_path, :file_asset_holder => @record, :preload => true)
       end
     end
 
@@ -164,9 +195,9 @@ module ErpForms::ErpApp::Desktop::DynamicForms
       data = request.raw_post
 
       begin
-        @myDynamicObject = DynamicFormModel.get_constant(params[:model_name]).find(params[:id])
+        @record = DynamicFormModel.get_constant(params[:model_name]).find(params[:id])
         set_root_node(params)
-        @myDynamicObject.add_file(data, File.join(@file_support.root,base_path,name))
+        @record.add_file(data, File.join(@file_support.root,base_path,name))
         result = {:success => true}
       rescue Exception => e
         Rails.logger.error e.message
@@ -184,7 +215,7 @@ module ErpForms::ErpApp::Desktop::DynamicForms
       nodes_to_delete = (params[:selected_nodes] ? JSON(params[:selected_nodes]) : [params[:node]])
 
       begin
-        @myDynamicObject = DynamicFormModel.get_constant(params[:model_name]).find(params[:id])
+        @record = DynamicFormModel.get_constant(params[:model_name]).find(params[:id])
         result = false
         nodes_to_delete.each do |path|
           path = "#{path}/" if params[:leaf] == 'false' and path.match(/\/$/).nil?                
@@ -192,7 +223,7 @@ module ErpForms::ErpApp::Desktop::DynamicForms
             name = File.basename(path)
             result, message, is_folder = @file_support.delete_file(File.join(@file_support.root,path))
             if result and !is_folder
-              file = @myDynamicObject.files.find(:first, :conditions => ['name = ? and directory = ?', ::File.basename(path), ::File.dirname(path)])
+              file = @record.files.find(:first, :conditions => ['name = ? and directory = ?', ::File.basename(path), ::File.dirname(path)])
               file.destroy
             end
             messages << message
@@ -249,7 +280,7 @@ module ErpForms::ErpApp::Desktop::DynamicForms
 
       begin
         set_root_node(form_data)
-        @myDynamicObject.add_file(data, File.join(@file_support.root, base_path, name))
+        @record.add_file(data, File.join(@file_support.root, base_path, name))
         return {:success => true}
       rescue Exception => e
         Rails.logger.error e.message
@@ -259,7 +290,7 @@ module ErpForms::ErpApp::Desktop::DynamicForms
     end      
 
     def set_root_node(form_data)
-      @root_node = File.join(ErpTechSvcs::Config.file_assets_location, form_data[:model_name], @myDynamicObject.id.to_s)
+      @root_node = File.join(ErpTechSvcs::Config.file_assets_location, form_data[:model_name], @record.id.to_s)
     end
 
     def base_path          
