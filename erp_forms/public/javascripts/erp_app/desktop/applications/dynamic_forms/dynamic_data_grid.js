@@ -11,7 +11,6 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.FileTree",{
   rootVisible:true,
   multiSelect:true,
   containerScroll: true,
-  additionalContextMenuItems:[],
   listeners:{
     'load':function(store){
       store.getRootNode().expand();
@@ -34,7 +33,45 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.FileTree",{
     }
   },
 
+  changeSecurityOnFile : function(node, secure, fileTree){
+      var msg = secure ? 'Securing file...' : 'Unsecuring file...';
+      var waitMsg = Ext.Msg.wait("Please Wait", msg);
+      Ext.Ajax.request({
+        url: '/erp_forms/erp_app/desktop/dynamic_forms/data/update_file_security',
+        method: 'POST',
+        params:{
+          path: node.get('id'),
+          secure: secure,
+          model_name: fileTree.extraPostData.model_name,
+          id: fileTree.extraPostData.id
+        },
+        success: function(response) {
+          var obj = Ext.decode(response.responseText);
+          if(obj.success){
+            waitMsg.hide();
+            if(secure){
+              node.set('iconCls', 'icon-document_lock');
+            }
+            else{
+              node.set('iconCls', 'icon-document');
+            }
+            node.set('isSecured',secure);
+            node.commit();
+          }
+          else{
+            Ext.Msg.alert('Error', 'Error securing file.');
+          }
+        },
+        failure: function(response) {
+          waitMsg.hide();
+          Ext.Msg.alert('Error', 'Error securing file.');
+        }
+      });
+  },
+
   constructor:function (config) {
+    var self = this;
+
     config = Ext.apply({
       autoDestroy:true,
       title: 'Files',
@@ -47,6 +84,18 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.FileTree",{
       showNewFolderMenuItem:false,
       showRenameMenuItem:false,
       enableViewContents:false,
+      additionalContextMenuItems:[{
+        nodeType:'leaf',
+        text:'Update Security',
+        iconCls:'icon-document_lock',
+        listeners:{
+          scope:self,
+          'click':function(){
+            var node = self.selectedNode;
+            self.changeSecurityOnFile(node, !node.get('isSecured'), self);
+          }
+        }
+      }],
       controllerPath:'/erp_forms/erp_app/desktop/dynamic_forms/data',
       standardUploadUrl:'/erp_forms/erp_app/desktop/dynamic_forms/data/upload_file',
       url:'/erp_forms/erp_app/desktop/dynamic_forms/data/get_files'

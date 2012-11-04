@@ -208,6 +208,33 @@ module ErpForms::ErpApp::Desktop::DynamicForms
       render :inline => result.to_json
     end
 
+    # toggle security on file
+    def update_file_security
+      begin
+        path   = params[:path]
+        secure = params[:secure]
+        roles  = ['admin', 'file_downloader']
+        
+        @record = DynamicFormModel.get_constant(params[:model_name]).find(params[:id])
+        file = @record.files.find(:first, :conditions => ['name = ? and directory = ?', ::File.basename(path), ::File.dirname(path)])
+        roles << DynamicFormModel.get_role_iid(params[:model_name])
+        
+        (secure == 'true') ? file.add_capability(:download, nil, roles) : file.remove_all_capabilities
+
+        # if we're using S3, set file permissions to private or public_read   
+        @file_support.set_permissions(path, ((secure == 'true') ? :private : :public_read)) if ErpTechSvcs::Config.file_storage == :s3
+        
+        render :json =>  {:success => true}
+      rescue Exception => e
+        Rails.logger.error e.message
+        Rails.logger.error e.backtrace.join("\n")
+        render :inline => {
+          :success => false,
+          :message => e.message
+        }.to_json             
+      end
+    end
+
     # file tree
     def delete_file
       messages = []

@@ -15,6 +15,10 @@ class DynamicFormModel < ActiveRecord::Base
     Role.iid(role_iid)
   end
 
+  def self.get_role_iid(model_name)
+    DynamicFormModel.find_by_model_name(model_name).role_iid
+  end
+
   def self.get_constant(klass_name)
   	result = nil
   	begin
