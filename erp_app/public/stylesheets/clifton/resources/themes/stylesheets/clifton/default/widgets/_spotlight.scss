@@ -1,0 +1,14 @@
+@mixin extjs-spotlight {
+    .#{$prefix}spotlight {
+        background-color: $border-color;
+
+        z-index: 8999;
+        position: absolute;
+        top: 0;
+        left: 0;
+        @include opacity(0.5);
+        width: 0;
+        height: 0;
+        zoom: 1;
+    }
+}

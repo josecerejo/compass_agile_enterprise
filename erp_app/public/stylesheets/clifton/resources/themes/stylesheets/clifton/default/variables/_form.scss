@@ -1,0 +1,125 @@
+/**
+ * @class Ext.form.*
+ */
+
+/**
+ * @class Ext.form.field.Base
+ */
+
+$form-field-height: 28px !default;
+$form-toolbar-field-height: 20px !default;
+$form-error-icon-width: 16px !default;
+
+//padding
+$form-field-padding: 1px 3px !default;
+
+//fonts
+$form-field-font-size: $font-size + 2 !default;
+
+$form-field-font-family: $font-family !default;
+$form-field-font-weight: normal !default;
+$form-field-font: $form-field-font-weight $form-field-font-size $form-field-font-family !default;
+$form-field-color: $color !default;
+
+$form-field-empty-color: $border-color !default;
+
+//border
+$form-field-border-color: $border-color !default;
+$form-field-border-width: 1px !default;
+
+$form-field-focus-border-color: adjust-color($base-color, $hue: -4.322deg, $saturation: -1.065%, $lightness: -16.863%) !default;
+$form-field-invalid-border-color: #c30 !default;
+
+//background
+$form-field-background-color: $base-color !default;
+$form-field-background-image: 'form/text-bg.gif' !default;
+
+$form-field-invalid-background-color: #fff !default;
+$form-field-invalid-background-image: 'grid/invalid_line.gif' !default;
+$form-field-invalid-background-repeat: repeat-x !default;
+$form-field-invalid-background-position: bottom !default;
+
+/**
+ * @class Ext.form.field.TextArea
+ */
+$form-textarea-padding: 2px 3px !default;
+
+/**
+ * @class Ext.form.Label
+ */
+$form-label-font-weight: normal !default;
+$form-label-font-size: $font-size !default;
+$form-label-font-family: $font-family !default;
+$form-label-font: $form-label-font-weight $form-label-font-size $form-label-font-family !default;
+$form-label-color: darken($border-color, 30%) !default;
+
+/**
+ * @class Ext.form.field.Checkbox
+ */
+$form-checkbox-size: 16px !default;
+
+/**
+ * Error messages
+ */
+//icons
+$form-exclamation-icon: 'form/exclamation.gif' !default;
+
+//font
+$form-error-msg-color: $color !default;
+$form-error-msg-font-weight: normal !default;
+$form-error-msg-font-size: $font-size !default;
+$form-error-msg-font-family: $font-family !default;
+$form-error-msg-font: $form-error-msg-font-weight $form-error-msg-font-size $form-error-msg-font-family !default;
+$form-error-msg-line-height: 24px !default;
+
+/**
+ * Trigger Field
+ */
+$form-trigger-width: 24px !default;
+$form-trigger-height: 24px !default;
+$form-toolbar-trigger-height: $form-toolbar-field-height !default;
+$form-toolbar-trigger-width: $form-toolbar-field-height !default;
+
+$form-trigger-border-bottom-width: 1px !default;
+$form-trigger-border-bottom-style: solid !default;
+$form-trigger-border-bottom-color: $form-field-border-color !default;
+$form-trigger-border-bottom: $form-trigger-border-bottom-width $form-trigger-border-bottom-style $form-trigger-border-bottom-color !default;
+
+$form-trigger-border-bottom-color-over: adjust-color($base-color, $hue: -4.322deg, $saturation: -1.065%, $lightness: -16.863%) !default;
+$form-trigger-border-bottom-color-focus: adjust-color($base-color, $hue: -4.322deg, $saturation: -1.065%, $lightness: -16.863%) !default;
+$form-trigger-border-bottom-color-focus-over: null !default;
+$form-trigger-border-bottom-color-pressed: null !default;
+
+$form-trigger-icon-background-position: 7px 6px !default;
+
+/**
+ * Fieldsets
+ */
+$fieldset-header-font-size: $font-size + 4 !default;
+$fieldset-header-font-weight: bold !default;
+$fieldset-header-font-family: $font-family !default;
+$fieldset-header-line-height: 24px !default;
+$fieldset-header-font: #{$fieldset-header-font-size}/#{$fieldset-header-line-height} $fieldset-header-font-weight $fieldset-header-font-family !default;
+$fieldset-header-color: $color !default;
+
+$fieldset-border-width: 1px !default;
+$fieldset-border-style: solid !default;
+$fieldset-border-color: $form-field-border-color !default;
+$fieldset-border: $fieldset-border-width $fieldset-border-style $fieldset-border-color !default;
+
+$fieldset-padding: 10px !default;
+$fieldset-header-padding: 0 3px 1px !default;
+$fieldset-background: $neutral-color !default;
+
+/**
+ * Sliders
+ */
+$horizontal-slider-thumb-width: 16px !default;
+$horizontal-slider-thumb-height: 16px !default;
+
+$vertical-slider-thumb-width: 16px !default;
+$vertical-slider-thumb-height: 16px !default;
+
+/**
+ * Search
+ */

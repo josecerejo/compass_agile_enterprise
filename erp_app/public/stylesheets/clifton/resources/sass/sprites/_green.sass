@@ -1,0 +1,687 @@
+@import compass/utilities/sprites/base
+
+// General Sprite Defaults
+// You can override them before you import this file.
+$icon-sprite-base-class: ".icon-sprite" !default
+$icon-sprite-dimensions: false !default
+$icon-position: 0% !default
+$icon-spacing: 0 !default
+$icon-repeat: no-repeat !default
+$icon-prefix: "" !default
+$icon-clean-up: true !default
+$icon-layout: vertical !default
+$icon-inline: false !default
+
+// These variables control the generated sprite output
+// You can override them selectively before you import this file.
+
+$icon-absences-medium-position: $icon-position !default
+$icon-absences-medium-spacing: $icon-spacing !default
+$icon-absences-medium-repeat: $icon-repeat !default
+
+$icon-absences-position: $icon-position !default
+$icon-absences-spacing: $icon-spacing !default
+$icon-absences-repeat: $icon-repeat !default
+
+$icon-accept-position: $icon-position !default
+$icon-accept-spacing: $icon-spacing !default
+$icon-accept-repeat: $icon-repeat !default
+
+$icon-actions-medium-position: $icon-position !default
+$icon-actions-medium-spacing: $icon-spacing !default
+$icon-actions-medium-repeat: $icon-repeat !default
+
+$icon-add-employee-position: $icon-position !default
+$icon-add-employee-spacing: $icon-spacing !default
+$icon-add-employee-repeat: $icon-repeat !default
+
+$icon-add-filled-position: $icon-position !default
+$icon-add-filled-spacing: $icon-spacing !default
+$icon-add-filled-repeat: $icon-repeat !default
+
+$icon-add-position: $icon-position !default
+$icon-add-spacing: $icon-spacing !default
+$icon-add-repeat: $icon-repeat !default
+
+$icon-application-position: $icon-position !default
+$icon-application-spacing: $icon-spacing !default
+$icon-application-repeat: $icon-repeat !default
+
+$icon-authorise-position: $icon-position !default
+$icon-authorise-spacing: $icon-spacing !default
+$icon-authorise-repeat: $icon-repeat !default
+
+$icon-bar-chart-position: $icon-position !default
+$icon-bar-chart-spacing: $icon-spacing !default
+$icon-bar-chart-repeat: $icon-repeat !default
+
+$icon-book-open-position: $icon-position !default
+$icon-book-open-spacing: $icon-spacing !default
+$icon-book-open-repeat: $icon-repeat !default
+
+$icon-brick-position: $icon-position !default
+$icon-brick-spacing: $icon-spacing !default
+$icon-brick-repeat: $icon-repeat !default
+
+$icon-bulletpoints-position: $icon-position !default
+$icon-bulletpoints-spacing: $icon-spacing !default
+$icon-bulletpoints-repeat: $icon-repeat !default
+
+$icon-calendar-date-position: $icon-position !default
+$icon-calendar-date-spacing: $icon-spacing !default
+$icon-calendar-date-repeat: $icon-repeat !default
+
+$icon-calendar-medium-position: $icon-position !default
+$icon-calendar-medium-spacing: $icon-spacing !default
+$icon-calendar-medium-repeat: $icon-repeat !default
+
+$icon-calendar-position: $icon-position !default
+$icon-calendar-spacing: $icon-spacing !default
+$icon-calendar-repeat: $icon-repeat !default
+
+$icon-cancel-trigger-position: $icon-position !default
+$icon-cancel-trigger-spacing: $icon-spacing !default
+$icon-cancel-trigger-repeat: $icon-repeat !default
+
+$icon-cancel-position: $icon-position !default
+$icon-cancel-spacing: $icon-spacing !default
+$icon-cancel-repeat: $icon-repeat !default
+
+$icon-checkbox-selected-position: $icon-position !default
+$icon-checkbox-selected-spacing: $icon-spacing !default
+$icon-checkbox-selected-repeat: $icon-repeat !default
+
+$icon-checkbox-position: $icon-position !default
+$icon-checkbox-spacing: $icon-spacing !default
+$icon-checkbox-repeat: $icon-repeat !default
+
+$icon-clock-position: $icon-position !default
+$icon-clock-spacing: $icon-spacing !default
+$icon-clock-repeat: $icon-repeat !default
+
+$icon-close-position: $icon-position !default
+$icon-close-spacing: $icon-spacing !default
+$icon-close-repeat: $icon-repeat !default
+
+$icon-code-position: $icon-position !default
+$icon-code-spacing: $icon-spacing !default
+$icon-code-repeat: $icon-repeat !default
+
+$icon-collapse-position: $icon-position !default
+$icon-collapse-spacing: $icon-spacing !default
+$icon-collapse-repeat: $icon-repeat !default
+
+$icon-company-medium-position: $icon-position !default
+$icon-company-medium-spacing: $icon-spacing !default
+$icon-company-medium-repeat: $icon-repeat !default
+
+$icon-company-position: $icon-position !default
+$icon-company-spacing: $icon-spacing !default
+$icon-company-repeat: $icon-repeat !default
+
+$icon-contract-position: $icon-position !default
+$icon-contract-spacing: $icon-spacing !default
+$icon-contract-repeat: $icon-repeat !default
+
+$icon-controller-position: $icon-position !default
+$icon-controller-spacing: $icon-spacing !default
+$icon-controller-repeat: $icon-repeat !default
+
+$icon-copy-medium-position: $icon-position !default
+$icon-copy-medium-spacing: $icon-spacing !default
+$icon-copy-medium-repeat: $icon-repeat !default
+
+$icon-copy-position: $icon-position !default
+$icon-copy-spacing: $icon-spacing !default
+$icon-copy-repeat: $icon-repeat !default
+
+$icon-createlink-position: $icon-position !default
+$icon-createlink-spacing: $icon-spacing !default
+$icon-createlink-repeat: $icon-repeat !default
+
+$icon-cut-medium-position: $icon-position !default
+$icon-cut-medium-spacing: $icon-spacing !default
+$icon-cut-medium-repeat: $icon-repeat !default
+
+$icon-cut-position: $icon-position !default
+$icon-cut-spacing: $icon-spacing !default
+$icon-cut-repeat: $icon-repeat !default
+
+$icon-date-position: $icon-position !default
+$icon-date-spacing: $icon-spacing !default
+$icon-date-repeat: $icon-repeat !default
+
+$icon-decreasefontsize-position: $icon-position !default
+$icon-decreasefontsize-spacing: $icon-spacing !default
+$icon-decreasefontsize-repeat: $icon-repeat !default
+
+$icon-delete-employee-position: $icon-position !default
+$icon-delete-employee-spacing: $icon-spacing !default
+$icon-delete-employee-repeat: $icon-repeat !default
+
+$icon-delete-filled-position: $icon-position !default
+$icon-delete-filled-spacing: $icon-spacing !default
+$icon-delete-filled-repeat: $icon-repeat !default
+
+$icon-delete-position-position: $icon-position !default
+$icon-delete-position-spacing: $icon-spacing !default
+$icon-delete-position-repeat: $icon-repeat !default
+
+$icon-delete-position: $icon-position !default
+$icon-delete-spacing: $icon-spacing !default
+$icon-delete-repeat: $icon-repeat !default
+
+$icon-diamond-position: $icon-position !default
+$icon-diamond-spacing: $icon-spacing !default
+$icon-diamond-repeat: $icon-repeat !default
+
+$icon-document-medium-position: $icon-position !default
+$icon-document-medium-spacing: $icon-spacing !default
+$icon-document-medium-repeat: $icon-repeat !default
+
+$icon-document-position: $icon-position !default
+$icon-document-spacing: $icon-spacing !default
+$icon-document-repeat: $icon-repeat !default
+
+$icon-down-position: $icon-position !default
+$icon-down-spacing: $icon-spacing !default
+$icon-down-repeat: $icon-repeat !default
+
+$icon-edit-position: $icon-position !default
+$icon-edit-spacing: $icon-spacing !default
+$icon-edit-repeat: $icon-repeat !default
+
+$icon-eject-position: $icon-position !default
+$icon-eject-spacing: $icon-spacing !default
+$icon-eject-repeat: $icon-repeat !default
+
+$icon-elbow-position: $icon-position !default
+$icon-elbow-spacing: $icon-spacing !default
+$icon-elbow-repeat: $icon-repeat !default
+
+$icon-email-position: $icon-position !default
+$icon-email-spacing: $icon-spacing !default
+$icon-email-repeat: $icon-repeat !default
+
+$icon-employee-medium-position: $icon-position !default
+$icon-employee-medium-spacing: $icon-spacing !default
+$icon-employee-medium-repeat: $icon-repeat !default
+
+$icon-employees-medium-position: $icon-position !default
+$icon-employees-medium-spacing: $icon-spacing !default
+$icon-employees-medium-repeat: $icon-repeat !default
+
+$icon-end-position: $icon-position !default
+$icon-end-spacing: $icon-spacing !default
+$icon-end-repeat: $icon-repeat !default
+
+$icon-error-large-position: $icon-position !default
+$icon-error-large-spacing: $icon-spacing !default
+$icon-error-large-repeat: $icon-repeat !default
+
+$icon-error-xlarge-position: $icon-position !default
+$icon-error-xlarge-spacing: $icon-spacing !default
+$icon-error-xlarge-repeat: $icon-repeat !default
+
+$icon-expand-left-position: $icon-position !default
+$icon-expand-left-spacing: $icon-spacing !default
+$icon-expand-left-repeat: $icon-repeat !default
+
+$icon-expand-right-position: $icon-position !default
+$icon-expand-right-spacing: $icon-spacing !default
+$icon-expand-right-repeat: $icon-repeat !default
+
+$icon-expand-position: $icon-position !default
+$icon-expand-spacing: $icon-spacing !default
+$icon-expand-repeat: $icon-repeat !default
+
+$icon-fastforward-position: $icon-position !default
+$icon-fastforward-spacing: $icon-spacing !default
+$icon-fastforward-repeat: $icon-repeat !default
+
+$icon-fax-position: $icon-position !default
+$icon-fax-spacing: $icon-spacing !default
+$icon-fax-repeat: $icon-repeat !default
+
+$icon-filter-position: $icon-position !default
+$icon-filter-spacing: $icon-spacing !default
+$icon-filter-repeat: $icon-repeat !default
+
+$icon-flag-position: $icon-position !default
+$icon-flag-spacing: $icon-spacing !default
+$icon-flag-repeat: $icon-repeat !default
+
+$icon-folder-open-position: $icon-position !default
+$icon-folder-open-spacing: $icon-spacing !default
+$icon-folder-open-repeat: $icon-repeat !default
+
+$icon-folder-position: $icon-position !default
+$icon-folder-spacing: $icon-spacing !default
+$icon-folder-repeat: $icon-repeat !default
+
+$icon-gauge-position: $icon-position !default
+$icon-gauge-spacing: $icon-spacing !default
+$icon-gauge-repeat: $icon-repeat !default
+
+$icon-gear-position: $icon-position !default
+$icon-gear-spacing: $icon-spacing !default
+$icon-gear-repeat: $icon-repeat !default
+
+$icon-gears-position: $icon-position !default
+$icon-gears-spacing: $icon-spacing !default
+$icon-gears-repeat: $icon-repeat !default
+
+$icon-grid-position: $icon-position !default
+$icon-grid-spacing: $icon-spacing !default
+$icon-grid-repeat: $icon-repeat !default
+
+$icon-group-position: $icon-position !default
+$icon-group-spacing: $icon-spacing !default
+$icon-group-repeat: $icon-repeat !default
+
+$icon-help-position: $icon-position !default
+$icon-help-spacing: $icon-spacing !default
+$icon-help-repeat: $icon-repeat !default
+
+$icon-home-position: $icon-position !default
+$icon-home-spacing: $icon-spacing !default
+$icon-home-repeat: $icon-repeat !default
+
+$icon-ice-medium-position: $icon-position !default
+$icon-ice-medium-spacing: $icon-spacing !default
+$icon-ice-medium-repeat: $icon-repeat !default
+
+$icon-ice-position: $icon-position !default
+$icon-ice-spacing: $icon-spacing !default
+$icon-ice-repeat: $icon-repeat !default
+
+$icon-incidents-medium-position: $icon-position !default
+$icon-incidents-medium-spacing: $icon-spacing !default
+$icon-incidents-medium-repeat: $icon-repeat !default
+
+$icon-incidents-position: $icon-position !default
+$icon-incidents-spacing: $icon-spacing !default
+$icon-incidents-repeat: $icon-repeat !default
+
+$icon-increasefontsize-position: $icon-position !default
+$icon-increasefontsize-spacing: $icon-spacing !default
+$icon-increasefontsize-repeat: $icon-repeat !default
+
+$icon-info-large-position: $icon-position !default
+$icon-info-large-spacing: $icon-spacing !default
+$icon-info-large-repeat: $icon-repeat !default
+
+$icon-info-xlarge-position: $icon-position !default
+$icon-info-xlarge-spacing: $icon-spacing !default
+$icon-info-xlarge-repeat: $icon-repeat !default
+
+$icon-info-position: $icon-position !default
+$icon-info-spacing: $icon-spacing !default
+$icon-info-repeat: $icon-repeat !default
+
+$icon-left-scroller-position: $icon-position !default
+$icon-left-scroller-spacing: $icon-spacing !default
+$icon-left-scroller-repeat: $icon-repeat !default
+
+$icon-left-position: $icon-position !default
+$icon-left-spacing: $icon-spacing !default
+$icon-left-repeat: $icon-repeat !default
+
+$icon-line-chart-position: $icon-position !default
+$icon-line-chart-spacing: $icon-spacing !default
+$icon-line-chart-repeat: $icon-repeat !default
+
+$icon-line-position: $icon-position !default
+$icon-line-spacing: $icon-spacing !default
+$icon-line-repeat: $icon-repeat !default
+
+$icon-list-arrow-small-position: $icon-position !default
+$icon-list-arrow-small-spacing: $icon-spacing !default
+$icon-list-arrow-small-repeat: $icon-repeat !default
+
+$icon-list-arrow-position: $icon-position !default
+$icon-list-arrow-spacing: $icon-spacing !default
+$icon-list-arrow-repeat: $icon-repeat !default
+
+$icon-list-position: $icon-position !default
+$icon-list-spacing: $icon-spacing !default
+$icon-list-repeat: $icon-repeat !default
+
+$icon-lock-open-position: $icon-position !default
+$icon-lock-open-spacing: $icon-spacing !default
+$icon-lock-open-repeat: $icon-repeat !default
+
+$icon-lock-position: $icon-position !default
+$icon-lock-spacing: $icon-spacing !default
+$icon-lock-repeat: $icon-repeat !default
+
+$icon-login-position: $icon-position !default
+$icon-login-spacing: $icon-spacing !default
+$icon-login-repeat: $icon-repeat !default
+
+$icon-logout-grey-position: $icon-position !default
+$icon-logout-grey-spacing: $icon-spacing !default
+$icon-logout-grey-repeat: $icon-repeat !default
+
+$icon-logout-position: $icon-position !default
+$icon-logout-spacing: $icon-spacing !default
+$icon-logout-repeat: $icon-repeat !default
+
+$icon-lost-position: $icon-position !default
+$icon-lost-spacing: $icon-spacing !default
+$icon-lost-repeat: $icon-repeat !default
+
+$icon-maximize-position: $icon-position !default
+$icon-maximize-spacing: $icon-spacing !default
+$icon-maximize-repeat: $icon-repeat !default
+
+$icon-minimize-position: $icon-position !default
+$icon-minimize-spacing: $icon-spacing !default
+$icon-minimize-repeat: $icon-repeat !default
+
+$icon-minus-end-position: $icon-position !default
+$icon-minus-end-spacing: $icon-spacing !default
+$icon-minus-end-repeat: $icon-repeat !default
+
+$icon-minus-nl-position: $icon-position !default
+$icon-minus-nl-spacing: $icon-spacing !default
+$icon-minus-nl-repeat: $icon-repeat !default
+
+$icon-minus-position: $icon-position !default
+$icon-minus-spacing: $icon-spacing !default
+$icon-minus-repeat: $icon-repeat !default
+
+$icon-mobile-position: $icon-position !default
+$icon-mobile-spacing: $icon-spacing !default
+$icon-mobile-repeat: $icon-repeat !default
+
+$icon-next-position: $icon-position !default
+$icon-next-spacing: $icon-spacing !default
+$icon-next-repeat: $icon-repeat !default
+
+$icon-note-position: $icon-position !default
+$icon-note-spacing: $icon-spacing !default
+$icon-note-repeat: $icon-repeat !default
+
+$icon-numericpoints-position: $icon-position !default
+$icon-numericpoints-spacing: $icon-spacing !default
+$icon-numericpoints-repeat: $icon-repeat !default
+
+$icon-paste-medium-position: $icon-position !default
+$icon-paste-medium-spacing: $icon-spacing !default
+$icon-paste-medium-repeat: $icon-repeat !default
+
+$icon-paste-position: $icon-position !default
+$icon-paste-spacing: $icon-spacing !default
+$icon-paste-repeat: $icon-repeat !default
+
+$icon-pause-position: $icon-position !default
+$icon-pause-spacing: $icon-spacing !default
+$icon-pause-repeat: $icon-repeat !default
+
+$icon-people-position: $icon-position !default
+$icon-people-spacing: $icon-spacing !default
+$icon-people-repeat: $icon-repeat !default
+
+$icon-phone-position: $icon-position !default
+$icon-phone-spacing: $icon-spacing !default
+$icon-phone-repeat: $icon-repeat !default
+
+$icon-pin-position: $icon-position !default
+$icon-pin-spacing: $icon-spacing !default
+$icon-pin-repeat: $icon-repeat !default
+
+$icon-plus-end-position: $icon-position !default
+$icon-plus-end-spacing: $icon-spacing !default
+$icon-plus-end-repeat: $icon-repeat !default
+
+$icon-plus-nl-position: $icon-position !default
+$icon-plus-nl-spacing: $icon-spacing !default
+$icon-plus-nl-repeat: $icon-repeat !default
+
+$icon-plus-position: $icon-position !default
+$icon-plus-spacing: $icon-spacing !default
+$icon-plus-repeat: $icon-repeat !default
+
+$icon-position-empty-position: $icon-position !default
+$icon-position-empty-spacing: $icon-spacing !default
+$icon-position-empty-repeat: $icon-repeat !default
+
+$icon-position-filled-position: $icon-position !default
+$icon-position-filled-spacing: $icon-spacing !default
+$icon-position-filled-repeat: $icon-repeat !default
+
+$icon-positions-medium-position: $icon-position !default
+$icon-positions-medium-spacing: $icon-spacing !default
+$icon-positions-medium-repeat: $icon-repeat !default
+
+$icon-prev-position: $icon-position !default
+$icon-prev-spacing: $icon-spacing !default
+$icon-prev-repeat: $icon-repeat !default
+
+$icon-print-position: $icon-position !default
+$icon-print-spacing: $icon-spacing !default
+$icon-print-repeat: $icon-repeat !default
+
+$icon-query-position: $icon-position !default
+$icon-query-spacing: $icon-spacing !default
+$icon-query-repeat: $icon-repeat !default
+
+$icon-question-large-position: $icon-position !default
+$icon-question-large-spacing: $icon-spacing !default
+$icon-question-large-repeat: $icon-repeat !default
+
+$icon-question-xlarge-position: $icon-position !default
+$icon-question-xlarge-spacing: $icon-spacing !default
+$icon-question-xlarge-repeat: $icon-repeat !default
+
+$icon-radio-selected-position: $icon-position !default
+$icon-radio-selected-spacing: $icon-spacing !default
+$icon-radio-selected-repeat: $icon-repeat !default
+
+$icon-radio-position: $icon-position !default
+$icon-radio-spacing: $icon-spacing !default
+$icon-radio-repeat: $icon-repeat !default
+
+$icon-record-position: $icon-position !default
+$icon-record-spacing: $icon-spacing !default
+$icon-record-repeat: $icon-repeat !default
+
+$icon-refresh-tool-position: $icon-position !default
+$icon-refresh-tool-spacing: $icon-spacing !default
+$icon-refresh-tool-repeat: $icon-repeat !default
+
+$icon-refresh-position: $icon-position !default
+$icon-refresh-spacing: $icon-spacing !default
+$icon-refresh-repeat: $icon-repeat !default
+
+$icon-remove-employee-position: $icon-position !default
+$icon-remove-employee-spacing: $icon-spacing !default
+$icon-remove-employee-repeat: $icon-repeat !default
+
+$icon-restore-position: $icon-position !default
+$icon-restore-spacing: $icon-spacing !default
+$icon-restore-repeat: $icon-repeat !default
+
+$icon-rewind-position: $icon-position !default
+$icon-rewind-spacing: $icon-spacing !default
+$icon-rewind-repeat: $icon-repeat !default
+
+$icon-right-scroller-position: $icon-position !default
+$icon-right-scroller-spacing: $icon-spacing !default
+$icon-right-scroller-repeat: $icon-repeat !default
+
+$icon-right-position: $icon-position !default
+$icon-right-spacing: $icon-spacing !default
+$icon-right-repeat: $icon-repeat !default
+
+$icon-roles-medium-position: $icon-position !default
+$icon-roles-medium-spacing: $icon-spacing !default
+$icon-roles-medium-repeat: $icon-repeat !default
+
+$icon-rotate-position: $icon-position !default
+$icon-rotate-spacing: $icon-spacing !default
+$icon-rotate-repeat: $icon-repeat !default
+
+$icon-rss-position: $icon-position !default
+$icon-rss-spacing: $icon-spacing !default
+$icon-rss-repeat: $icon-repeat !default
+
+$icon-salary-position: $icon-position !default
+$icon-salary-spacing: $icon-spacing !default
+$icon-salary-repeat: $icon-repeat !default
+
+$icon-save-position: $icon-position !default
+$icon-save-spacing: $icon-spacing !default
+$icon-save-repeat: $icon-repeat !default
+
+$icon-search-light-position: $icon-position !default
+$icon-search-light-spacing: $icon-spacing !default
+$icon-search-light-repeat: $icon-repeat !default
+
+$icon-search-medium-position: $icon-position !default
+$icon-search-medium-spacing: $icon-spacing !default
+$icon-search-medium-repeat: $icon-repeat !default
+
+$icon-search-trigger-position: $icon-position !default
+$icon-search-trigger-spacing: $icon-spacing !default
+$icon-search-trigger-repeat: $icon-repeat !default
+
+$icon-search-position: $icon-position !default
+$icon-search-spacing: $icon-spacing !default
+$icon-search-repeat: $icon-repeat !default
+
+$icon-secure-position: $icon-position !default
+$icon-secure-spacing: $icon-spacing !default
+$icon-secure-repeat: $icon-repeat !default
+
+$icon-settings-medium-position: $icon-position !default
+$icon-settings-medium-spacing: $icon-spacing !default
+$icon-settings-medium-repeat: $icon-repeat !default
+
+$icon-slider-horizontal-position: $icon-position !default
+$icon-slider-horizontal-spacing: $icon-spacing !default
+$icon-slider-horizontal-repeat: $icon-repeat !default
+
+$icon-slider-vertical-position: $icon-position !default
+$icon-slider-vertical-spacing: $icon-spacing !default
+$icon-slider-vertical-repeat: $icon-repeat !default
+
+$icon-spinner-down-position: $icon-position !default
+$icon-spinner-down-spacing: $icon-spacing !default
+$icon-spinner-down-repeat: $icon-repeat !default
+
+$icon-spinner-up-position: $icon-position !default
+$icon-spinner-up-spacing: $icon-spacing !default
+$icon-spinner-up-repeat: $icon-repeat !default
+
+$icon-spinner-position: $icon-position !default
+$icon-spinner-spacing: $icon-spacing !default
+$icon-spinner-repeat: $icon-repeat !default
+
+$icon-start-position: $icon-position !default
+$icon-start-spacing: $icon-spacing !default
+$icon-start-repeat: $icon-repeat !default
+
+$icon-startdate-position: $icon-position !default
+$icon-startdate-spacing: $icon-spacing !default
+$icon-startdate-repeat: $icon-repeat !default
+
+$icon-stop-position: $icon-position !default
+$icon-stop-spacing: $icon-spacing !default
+$icon-stop-repeat: $icon-repeat !default
+
+$icon-tag-position: $icon-position !default
+$icon-tag-spacing: $icon-spacing !default
+$icon-tag-repeat: $icon-repeat !default
+
+$icon-tags-medium-position: $icon-position !default
+$icon-tags-medium-spacing: $icon-spacing !default
+$icon-tags-medium-repeat: $icon-repeat !default
+
+$icon-task-position: $icon-position !default
+$icon-task-spacing: $icon-spacing !default
+$icon-task-repeat: $icon-repeat !default
+
+$icon-tee-position: $icon-position !default
+$icon-tee-spacing: $icon-spacing !default
+$icon-tee-repeat: $icon-repeat !default
+
+$icon-time-position: $icon-position !default
+$icon-time-spacing: $icon-spacing !default
+$icon-time-repeat: $icon-repeat !default
+
+$icon-trigger-down-position: $icon-position !default
+$icon-trigger-down-spacing: $icon-spacing !default
+$icon-trigger-down-repeat: $icon-repeat !default
+
+$icon-unpin-position: $icon-position !default
+$icon-unpin-spacing: $icon-spacing !default
+$icon-unpin-repeat: $icon-repeat !default
+
+$icon-up-position: $icon-position !default
+$icon-up-spacing: $icon-spacing !default
+$icon-up-repeat: $icon-repeat !default
+
+$icon-user-position: $icon-position !default
+$icon-user-spacing: $icon-spacing !default
+$icon-user-repeat: $icon-repeat !default
+
+$icon-warning-large-position: $icon-position !default
+$icon-warning-large-spacing: $icon-spacing !default
+$icon-warning-large-repeat: $icon-repeat !default
+
+$icon-warning-xlarge-position: $icon-position !default
+$icon-warning-xlarge-spacing: $icon-spacing !default
+$icon-warning-xlarge-repeat: $icon-repeat !default
+
+$icon-warning-position: $icon-position !default
+$icon-warning-spacing: $icon-spacing !default
+$icon-warning-repeat: $icon-repeat !default
+
+$icon-write-large-position: $icon-position !default
+$icon-write-large-spacing: $icon-spacing !default
+$icon-write-large-repeat: $icon-repeat !default
+
+$icon-sprites: sprite-map("green/icon/*.png", $cleanup: $icon-clean-up, $icon_absences_medium_position: $icon-absences-medium-position, $icon_absences_medium_repeat: $icon-absences-medium-repeat, $icon_absences_medium_spacing: $icon-absences-medium-spacing, $icon_absences_position: $icon-absences-position, $icon_absences_repeat: $icon-absences-repeat, $icon_absences_spacing: $icon-absences-spacing, $icon_accept_position: $icon-accept-position, $icon_accept_repeat: $icon-accept-repeat, $icon_accept_spacing: $icon-accept-spacing, $icon_actions_medium_position: $icon-actions-medium-position, $icon_actions_medium_repeat: $icon-actions-medium-repeat, $icon_actions_medium_spacing: $icon-actions-medium-spacing, $icon_add_employee_position: $icon-add-employee-position, $icon_add_employee_repeat: $icon-add-employee-repeat, $icon_add_employee_spacing: $icon-add-employee-spacing, $icon_add_filled_position: $icon-add-filled-position, $icon_add_filled_repeat: $icon-add-filled-repeat, $icon_add_filled_spacing: $icon-add-filled-spacing, $icon_add_position: $icon-add-position, $icon_add_repeat: $icon-add-repeat, $icon_add_spacing: $icon-add-spacing, $icon_application_position: $icon-application-position, $icon_application_repeat: $icon-application-repeat, $icon_application_spacing: $icon-application-spacing, $icon_authorise_position: $icon-authorise-position, $icon_authorise_repeat: $icon-authorise-repeat, $icon_authorise_spacing: $icon-authorise-spacing, $icon_bar_chart_position: $icon-bar-chart-position, $icon_bar_chart_repeat: $icon-bar-chart-repeat, $icon_bar_chart_spacing: $icon-bar-chart-spacing, $icon_book_open_position: $icon-book-open-position, $icon_book_open_repeat: $icon-book-open-repeat, $icon_book_open_spacing: $icon-book-open-spacing, $icon_brick_position: $icon-brick-position, $icon_brick_repeat: $icon-brick-repeat, $icon_brick_spacing: $icon-brick-spacing, $icon_bulletpoints_position: $icon-bulletpoints-position, $icon_bulletpoints_repeat: $icon-bulletpoints-repeat, $icon_bulletpoints_spacing: $icon-bulletpoints-spacing, $icon_calendar_date_position: $icon-calendar-date-position, $icon_calendar_date_repeat: $icon-calendar-date-repeat, $icon_calendar_date_spacing: $icon-calendar-date-spacing, $icon_calendar_medium_position: $icon-calendar-medium-position, $icon_calendar_medium_repeat: $icon-calendar-medium-repeat, $icon_calendar_medium_spacing: $icon-calendar-medium-spacing, $icon_calendar_position: $icon-calendar-position, $icon_calendar_repeat: $icon-calendar-repeat, $icon_calendar_spacing: $icon-calendar-spacing, $icon_cancel_position: $icon-cancel-position, $icon_cancel_repeat: $icon-cancel-repeat, $icon_cancel_spacing: $icon-cancel-spacing, $icon_cancel_trigger_position: $icon-cancel-trigger-position, $icon_cancel_trigger_repeat: $icon-cancel-trigger-repeat, $icon_cancel_trigger_spacing: $icon-cancel-trigger-spacing, $icon_checkbox_position: $icon-checkbox-position, $icon_checkbox_repeat: $icon-checkbox-repeat, $icon_checkbox_selected_position: $icon-checkbox-selected-position, $icon_checkbox_selected_repeat: $icon-checkbox-selected-repeat, $icon_checkbox_selected_spacing: $icon-checkbox-selected-spacing, $icon_checkbox_spacing: $icon-checkbox-spacing, $icon_clock_position: $icon-clock-position, $icon_clock_repeat: $icon-clock-repeat, $icon_clock_spacing: $icon-clock-spacing, $icon_close_position: $icon-close-position, $icon_close_repeat: $icon-close-repeat, $icon_close_spacing: $icon-close-spacing, $icon_code_position: $icon-code-position, $icon_code_repeat: $icon-code-repeat, $icon_code_spacing: $icon-code-spacing, $icon_collapse_position: $icon-collapse-position, $icon_collapse_repeat: $icon-collapse-repeat, $icon_collapse_spacing: $icon-collapse-spacing, $icon_company_medium_position: $icon-company-medium-position, $icon_company_medium_repeat: $icon-company-medium-repeat, $icon_company_medium_spacing: $icon-company-medium-spacing, $icon_company_position: $icon-company-position, $icon_company_repeat: $icon-company-repeat, $icon_company_spacing: $icon-company-spacing, $icon_contract_position: $icon-contract-position, $icon_contract_repeat: $icon-contract-repeat, $icon_contract_spacing: $icon-contract-spacing, $icon_controller_position: $icon-controller-position, $icon_controller_repeat: $icon-controller-repeat, $icon_controller_spacing: $icon-controller-spacing, $icon_copy_medium_position: $icon-copy-medium-position, $icon_copy_medium_repeat: $icon-copy-medium-repeat, $icon_copy_medium_spacing: $icon-copy-medium-spacing, $icon_copy_position: $icon-copy-position, $icon_copy_repeat: $icon-copy-repeat, $icon_copy_spacing: $icon-copy-spacing, $icon_createlink_position: $icon-createlink-position, $icon_createlink_repeat: $icon-createlink-repeat, $icon_createlink_spacing: $icon-createlink-spacing, $icon_cut_medium_position: $icon-cut-medium-position, $icon_cut_medium_repeat: $icon-cut-medium-repeat, $icon_cut_medium_spacing: $icon-cut-medium-spacing, $icon_cut_position: $icon-cut-position, $icon_cut_repeat: $icon-cut-repeat, $icon_cut_spacing: $icon-cut-spacing, $icon_date_position: $icon-date-position, $icon_date_repeat: $icon-date-repeat, $icon_date_spacing: $icon-date-spacing, $icon_decreasefontsize_position: $icon-decreasefontsize-position, $icon_decreasefontsize_repeat: $icon-decreasefontsize-repeat, $icon_decreasefontsize_spacing: $icon-decreasefontsize-spacing, $icon_delete_employee_position: $icon-delete-employee-position, $icon_delete_employee_repeat: $icon-delete-employee-repeat, $icon_delete_employee_spacing: $icon-delete-employee-spacing, $icon_delete_filled_position: $icon-delete-filled-position, $icon_delete_filled_repeat: $icon-delete-filled-repeat, $icon_delete_filled_spacing: $icon-delete-filled-spacing, $icon_delete_position: $icon-delete-position, $icon_delete_position_position: $icon-delete-position-position, $icon_delete_position_repeat: $icon-delete-position-repeat, $icon_delete_position_spacing: $icon-delete-position-spacing, $icon_delete_repeat: $icon-delete-repeat, $icon_delete_spacing: $icon-delete-spacing, $icon_diamond_position: $icon-diamond-position, $icon_diamond_repeat: $icon-diamond-repeat, $icon_diamond_spacing: $icon-diamond-spacing, $icon_document_medium_position: $icon-document-medium-position, $icon_document_medium_repeat: $icon-document-medium-repeat, $icon_document_medium_spacing: $icon-document-medium-spacing, $icon_document_position: $icon-document-position, $icon_document_repeat: $icon-document-repeat, $icon_document_spacing: $icon-document-spacing, $icon_down_position: $icon-down-position, $icon_down_repeat: $icon-down-repeat, $icon_down_spacing: $icon-down-spacing, $icon_edit_position: $icon-edit-position, $icon_edit_repeat: $icon-edit-repeat, $icon_edit_spacing: $icon-edit-spacing, $icon_eject_position: $icon-eject-position, $icon_eject_repeat: $icon-eject-repeat, $icon_eject_spacing: $icon-eject-spacing, $icon_elbow_position: $icon-elbow-position, $icon_elbow_repeat: $icon-elbow-repeat, $icon_elbow_spacing: $icon-elbow-spacing, $icon_email_position: $icon-email-position, $icon_email_repeat: $icon-email-repeat, $icon_email_spacing: $icon-email-spacing, $icon_employee_medium_position: $icon-employee-medium-position, $icon_employee_medium_repeat: $icon-employee-medium-repeat, $icon_employee_medium_spacing: $icon-employee-medium-spacing, $icon_employees_medium_position: $icon-employees-medium-position, $icon_employees_medium_repeat: $icon-employees-medium-repeat, $icon_employees_medium_spacing: $icon-employees-medium-spacing, $icon_end_position: $icon-end-position, $icon_end_repeat: $icon-end-repeat, $icon_end_spacing: $icon-end-spacing, $icon_error_large_position: $icon-error-large-position, $icon_error_large_repeat: $icon-error-large-repeat, $icon_error_large_spacing: $icon-error-large-spacing, $icon_error_xlarge_position: $icon-error-xlarge-position, $icon_error_xlarge_repeat: $icon-error-xlarge-repeat, $icon_error_xlarge_spacing: $icon-error-xlarge-spacing, $icon_expand_left_position: $icon-expand-left-position, $icon_expand_left_repeat: $icon-expand-left-repeat, $icon_expand_left_spacing: $icon-expand-left-spacing, $icon_expand_position: $icon-expand-position, $icon_expand_repeat: $icon-expand-repeat, $icon_expand_right_position: $icon-expand-right-position, $icon_expand_right_repeat: $icon-expand-right-repeat, $icon_expand_right_spacing: $icon-expand-right-spacing, $icon_expand_spacing: $icon-expand-spacing, $icon_fastforward_position: $icon-fastforward-position, $icon_fastforward_repeat: $icon-fastforward-repeat, $icon_fastforward_spacing: $icon-fastforward-spacing, $icon_fax_position: $icon-fax-position, $icon_fax_repeat: $icon-fax-repeat, $icon_fax_spacing: $icon-fax-spacing, $icon_filter_position: $icon-filter-position, $icon_filter_repeat: $icon-filter-repeat, $icon_filter_spacing: $icon-filter-spacing, $icon_flag_position: $icon-flag-position, $icon_flag_repeat: $icon-flag-repeat, $icon_flag_spacing: $icon-flag-spacing, $icon_folder_open_position: $icon-folder-open-position, $icon_folder_open_repeat: $icon-folder-open-repeat, $icon_folder_open_spacing: $icon-folder-open-spacing, $icon_folder_position: $icon-folder-position, $icon_folder_repeat: $icon-folder-repeat, $icon_folder_spacing: $icon-folder-spacing, $icon_gauge_position: $icon-gauge-position, $icon_gauge_repeat: $icon-gauge-repeat, $icon_gauge_spacing: $icon-gauge-spacing, $icon_gear_position: $icon-gear-position, $icon_gear_repeat: $icon-gear-repeat, $icon_gear_spacing: $icon-gear-spacing, $icon_gears_position: $icon-gears-position, $icon_gears_repeat: $icon-gears-repeat, $icon_gears_spacing: $icon-gears-spacing, $icon_grid_position: $icon-grid-position, $icon_grid_repeat: $icon-grid-repeat, $icon_grid_spacing: $icon-grid-spacing, $icon_group_position: $icon-group-position, $icon_group_repeat: $icon-group-repeat, $icon_group_spacing: $icon-group-spacing, $icon_help_position: $icon-help-position, $icon_help_repeat: $icon-help-repeat, $icon_help_spacing: $icon-help-spacing, $icon_home_position: $icon-home-position, $icon_home_repeat: $icon-home-repeat, $icon_home_spacing: $icon-home-spacing, $icon_ice_medium_position: $icon-ice-medium-position, $icon_ice_medium_repeat: $icon-ice-medium-repeat, $icon_ice_medium_spacing: $icon-ice-medium-spacing, $icon_ice_position: $icon-ice-position, $icon_ice_repeat: $icon-ice-repeat, $icon_ice_spacing: $icon-ice-spacing, $icon_incidents_medium_position: $icon-incidents-medium-position, $icon_incidents_medium_repeat: $icon-incidents-medium-repeat, $icon_incidents_medium_spacing: $icon-incidents-medium-spacing, $icon_incidents_position: $icon-incidents-position, $icon_incidents_repeat: $icon-incidents-repeat, $icon_incidents_spacing: $icon-incidents-spacing, $icon_increasefontsize_position: $icon-increasefontsize-position, $icon_increasefontsize_repeat: $icon-increasefontsize-repeat, $icon_increasefontsize_spacing: $icon-increasefontsize-spacing, $icon_info_large_position: $icon-info-large-position, $icon_info_large_repeat: $icon-info-large-repeat, $icon_info_large_spacing: $icon-info-large-spacing, $icon_info_position: $icon-info-position, $icon_info_repeat: $icon-info-repeat, $icon_info_spacing: $icon-info-spacing, $icon_info_xlarge_position: $icon-info-xlarge-position, $icon_info_xlarge_repeat: $icon-info-xlarge-repeat, $icon_info_xlarge_spacing: $icon-info-xlarge-spacing, $icon_left_position: $icon-left-position, $icon_left_repeat: $icon-left-repeat, $icon_left_scroller_position: $icon-left-scroller-position, $icon_left_scroller_repeat: $icon-left-scroller-repeat, $icon_left_scroller_spacing: $icon-left-scroller-spacing, $icon_left_spacing: $icon-left-spacing, $icon_line_chart_position: $icon-line-chart-position, $icon_line_chart_repeat: $icon-line-chart-repeat, $icon_line_chart_spacing: $icon-line-chart-spacing, $icon_line_position: $icon-line-position, $icon_line_repeat: $icon-line-repeat, $icon_line_spacing: $icon-line-spacing, $icon_list_arrow_position: $icon-list-arrow-position, $icon_list_arrow_repeat: $icon-list-arrow-repeat, $icon_list_arrow_small_position: $icon-list-arrow-small-position, $icon_list_arrow_small_repeat: $icon-list-arrow-small-repeat, $icon_list_arrow_small_spacing: $icon-list-arrow-small-spacing, $icon_list_arrow_spacing: $icon-list-arrow-spacing, $icon_list_position: $icon-list-position, $icon_list_repeat: $icon-list-repeat, $icon_list_spacing: $icon-list-spacing, $icon_lock_open_position: $icon-lock-open-position, $icon_lock_open_repeat: $icon-lock-open-repeat, $icon_lock_open_spacing: $icon-lock-open-spacing, $icon_lock_position: $icon-lock-position, $icon_lock_repeat: $icon-lock-repeat, $icon_lock_spacing: $icon-lock-spacing, $icon_login_position: $icon-login-position, $icon_login_repeat: $icon-login-repeat, $icon_login_spacing: $icon-login-spacing, $icon_logout_grey_position: $icon-logout-grey-position, $icon_logout_grey_repeat: $icon-logout-grey-repeat, $icon_logout_grey_spacing: $icon-logout-grey-spacing, $icon_logout_position: $icon-logout-position, $icon_logout_repeat: $icon-logout-repeat, $icon_logout_spacing: $icon-logout-spacing, $icon_lost_position: $icon-lost-position, $icon_lost_repeat: $icon-lost-repeat, $icon_lost_spacing: $icon-lost-spacing, $icon_maximize_position: $icon-maximize-position, $icon_maximize_repeat: $icon-maximize-repeat, $icon_maximize_spacing: $icon-maximize-spacing, $icon_minimize_position: $icon-minimize-position, $icon_minimize_repeat: $icon-minimize-repeat, $icon_minimize_spacing: $icon-minimize-spacing, $icon_minus_end_position: $icon-minus-end-position, $icon_minus_end_repeat: $icon-minus-end-repeat, $icon_minus_end_spacing: $icon-minus-end-spacing, $icon_minus_nl_position: $icon-minus-nl-position, $icon_minus_nl_repeat: $icon-minus-nl-repeat, $icon_minus_nl_spacing: $icon-minus-nl-spacing, $icon_minus_position: $icon-minus-position, $icon_minus_repeat: $icon-minus-repeat, $icon_minus_spacing: $icon-minus-spacing, $icon_mobile_position: $icon-mobile-position, $icon_mobile_repeat: $icon-mobile-repeat, $icon_mobile_spacing: $icon-mobile-spacing, $icon_next_position: $icon-next-position, $icon_next_repeat: $icon-next-repeat, $icon_next_spacing: $icon-next-spacing, $icon_note_position: $icon-note-position, $icon_note_repeat: $icon-note-repeat, $icon_note_spacing: $icon-note-spacing, $icon_numericpoints_position: $icon-numericpoints-position, $icon_numericpoints_repeat: $icon-numericpoints-repeat, $icon_numericpoints_spacing: $icon-numericpoints-spacing, $icon_paste_medium_position: $icon-paste-medium-position, $icon_paste_medium_repeat: $icon-paste-medium-repeat, $icon_paste_medium_spacing: $icon-paste-medium-spacing, $icon_paste_position: $icon-paste-position, $icon_paste_repeat: $icon-paste-repeat, $icon_paste_spacing: $icon-paste-spacing, $icon_pause_position: $icon-pause-position, $icon_pause_repeat: $icon-pause-repeat, $icon_pause_spacing: $icon-pause-spacing, $icon_people_position: $icon-people-position, $icon_people_repeat: $icon-people-repeat, $icon_people_spacing: $icon-people-spacing, $icon_phone_position: $icon-phone-position, $icon_phone_repeat: $icon-phone-repeat, $icon_phone_spacing: $icon-phone-spacing, $icon_pin_position: $icon-pin-position, $icon_pin_repeat: $icon-pin-repeat, $icon_pin_spacing: $icon-pin-spacing, $icon_plus_end_position: $icon-plus-end-position, $icon_plus_end_repeat: $icon-plus-end-repeat, $icon_plus_end_spacing: $icon-plus-end-spacing, $icon_plus_nl_position: $icon-plus-nl-position, $icon_plus_nl_repeat: $icon-plus-nl-repeat, $icon_plus_nl_spacing: $icon-plus-nl-spacing, $icon_plus_position: $icon-plus-position, $icon_plus_repeat: $icon-plus-repeat, $icon_plus_spacing: $icon-plus-spacing, $icon_position_empty_position: $icon-position-empty-position, $icon_position_empty_repeat: $icon-position-empty-repeat, $icon_position_empty_spacing: $icon-position-empty-spacing, $icon_position_filled_position: $icon-position-filled-position, $icon_position_filled_repeat: $icon-position-filled-repeat, $icon_position_filled_spacing: $icon-position-filled-spacing, $icon_positions_medium_position: $icon-positions-medium-position, $icon_positions_medium_repeat: $icon-positions-medium-repeat, $icon_positions_medium_spacing: $icon-positions-medium-spacing, $icon_prev_position: $icon-prev-position, $icon_prev_repeat: $icon-prev-repeat, $icon_prev_spacing: $icon-prev-spacing, $icon_print_position: $icon-print-position, $icon_print_repeat: $icon-print-repeat, $icon_print_spacing: $icon-print-spacing, $icon_query_position: $icon-query-position, $icon_query_repeat: $icon-query-repeat, $icon_query_spacing: $icon-query-spacing, $icon_question_large_position: $icon-question-large-position, $icon_question_large_repeat: $icon-question-large-repeat, $icon_question_large_spacing: $icon-question-large-spacing, $icon_question_xlarge_position: $icon-question-xlarge-position, $icon_question_xlarge_repeat: $icon-question-xlarge-repeat, $icon_question_xlarge_spacing: $icon-question-xlarge-spacing, $icon_radio_position: $icon-radio-position, $icon_radio_repeat: $icon-radio-repeat, $icon_radio_selected_position: $icon-radio-selected-position, $icon_radio_selected_repeat: $icon-radio-selected-repeat, $icon_radio_selected_spacing: $icon-radio-selected-spacing, $icon_radio_spacing: $icon-radio-spacing, $icon_record_position: $icon-record-position, $icon_record_repeat: $icon-record-repeat, $icon_record_spacing: $icon-record-spacing, $icon_refresh_position: $icon-refresh-position, $icon_refresh_repeat: $icon-refresh-repeat, $icon_refresh_spacing: $icon-refresh-spacing, $icon_refresh_tool_position: $icon-refresh-tool-position, $icon_refresh_tool_repeat: $icon-refresh-tool-repeat, $icon_refresh_tool_spacing: $icon-refresh-tool-spacing, $icon_remove_employee_position: $icon-remove-employee-position, $icon_remove_employee_repeat: $icon-remove-employee-repeat, $icon_remove_employee_spacing: $icon-remove-employee-spacing, $icon_restore_position: $icon-restore-position, $icon_restore_repeat: $icon-restore-repeat, $icon_restore_spacing: $icon-restore-spacing, $icon_rewind_position: $icon-rewind-position, $icon_rewind_repeat: $icon-rewind-repeat, $icon_rewind_spacing: $icon-rewind-spacing, $icon_right_position: $icon-right-position, $icon_right_repeat: $icon-right-repeat, $icon_right_scroller_position: $icon-right-scroller-position, $icon_right_scroller_repeat: $icon-right-scroller-repeat, $icon_right_scroller_spacing: $icon-right-scroller-spacing, $icon_right_spacing: $icon-right-spacing, $icon_roles_medium_position: $icon-roles-medium-position, $icon_roles_medium_repeat: $icon-roles-medium-repeat, $icon_roles_medium_spacing: $icon-roles-medium-spacing, $icon_rotate_position: $icon-rotate-position, $icon_rotate_repeat: $icon-rotate-repeat, $icon_rotate_spacing: $icon-rotate-spacing, $icon_rss_position: $icon-rss-position, $icon_rss_repeat: $icon-rss-repeat, $icon_rss_spacing: $icon-rss-spacing, $icon_salary_position: $icon-salary-position, $icon_salary_repeat: $icon-salary-repeat, $icon_salary_spacing: $icon-salary-spacing, $icon_save_position: $icon-save-position, $icon_save_repeat: $icon-save-repeat, $icon_save_spacing: $icon-save-spacing, $icon_search_light_position: $icon-search-light-position, $icon_search_light_repeat: $icon-search-light-repeat, $icon_search_light_spacing: $icon-search-light-spacing, $icon_search_medium_position: $icon-search-medium-position, $icon_search_medium_repeat: $icon-search-medium-repeat, $icon_search_medium_spacing: $icon-search-medium-spacing, $icon_search_position: $icon-search-position, $icon_search_repeat: $icon-search-repeat, $icon_search_spacing: $icon-search-spacing, $icon_search_trigger_position: $icon-search-trigger-position, $icon_search_trigger_repeat: $icon-search-trigger-repeat, $icon_search_trigger_spacing: $icon-search-trigger-spacing, $icon_secure_position: $icon-secure-position, $icon_secure_repeat: $icon-secure-repeat, $icon_secure_spacing: $icon-secure-spacing, $icon_settings_medium_position: $icon-settings-medium-position, $icon_settings_medium_repeat: $icon-settings-medium-repeat, $icon_settings_medium_spacing: $icon-settings-medium-spacing, $icon_slider_horizontal_position: $icon-slider-horizontal-position, $icon_slider_horizontal_repeat: $icon-slider-horizontal-repeat, $icon_slider_horizontal_spacing: $icon-slider-horizontal-spacing, $icon_slider_vertical_position: $icon-slider-vertical-position, $icon_slider_vertical_repeat: $icon-slider-vertical-repeat, $icon_slider_vertical_spacing: $icon-slider-vertical-spacing, $icon_spinner_down_position: $icon-spinner-down-position, $icon_spinner_down_repeat: $icon-spinner-down-repeat, $icon_spinner_down_spacing: $icon-spinner-down-spacing, $icon_spinner_position: $icon-spinner-position, $icon_spinner_repeat: $icon-spinner-repeat, $icon_spinner_spacing: $icon-spinner-spacing, $icon_spinner_up_position: $icon-spinner-up-position, $icon_spinner_up_repeat: $icon-spinner-up-repeat, $icon_spinner_up_spacing: $icon-spinner-up-spacing, $icon_start_position: $icon-start-position, $icon_start_repeat: $icon-start-repeat, $icon_start_spacing: $icon-start-spacing, $icon_startdate_position: $icon-startdate-position, $icon_startdate_repeat: $icon-startdate-repeat, $icon_startdate_spacing: $icon-startdate-spacing, $icon_stop_position: $icon-stop-position, $icon_stop_repeat: $icon-stop-repeat, $icon_stop_spacing: $icon-stop-spacing, $icon_tag_position: $icon-tag-position, $icon_tag_repeat: $icon-tag-repeat, $icon_tag_spacing: $icon-tag-spacing, $icon_tags_medium_position: $icon-tags-medium-position, $icon_tags_medium_repeat: $icon-tags-medium-repeat, $icon_tags_medium_spacing: $icon-tags-medium-spacing, $icon_task_position: $icon-task-position, $icon_task_repeat: $icon-task-repeat, $icon_task_spacing: $icon-task-spacing, $icon_tee_position: $icon-tee-position, $icon_tee_repeat: $icon-tee-repeat, $icon_tee_spacing: $icon-tee-spacing, $icon_time_position: $icon-time-position, $icon_time_repeat: $icon-time-repeat, $icon_time_spacing: $icon-time-spacing, $icon_trigger_down_position: $icon-trigger-down-position, $icon_trigger_down_repeat: $icon-trigger-down-repeat, $icon_trigger_down_spacing: $icon-trigger-down-spacing, $icon_unpin_position: $icon-unpin-position, $icon_unpin_repeat: $icon-unpin-repeat, $icon_unpin_spacing: $icon-unpin-spacing, $icon_up_position: $icon-up-position, $icon_up_repeat: $icon-up-repeat, $icon_up_spacing: $icon-up-spacing, $icon_user_position: $icon-user-position, $icon_user_repeat: $icon-user-repeat, $icon_user_spacing: $icon-user-spacing, $icon_warning_large_position: $icon-warning-large-position, $icon_warning_large_repeat: $icon-warning-large-repeat, $icon_warning_large_spacing: $icon-warning-large-spacing, $icon_warning_position: $icon-warning-position, $icon_warning_repeat: $icon-warning-repeat, $icon_warning_spacing: $icon-warning-spacing, $icon_warning_xlarge_position: $icon-warning-xlarge-position, $icon_warning_xlarge_repeat: $icon-warning-xlarge-repeat, $icon_warning_xlarge_spacing: $icon-warning-xlarge-spacing, $icon_write_large_position: $icon-write-large-position, $icon_write_large_repeat: $icon-write-large-repeat, $icon_write_large_spacing: $icon-write-large-spacing, $layout: $icon-layout)
+
+// All sprites should extend this class
+// The icon-sprite mixin will do so for you.
+@if $icon-inline
+  #{$icon-sprite-base-class}
+    background-image: inline-sprite($icon-sprites)
+@else
+  #{$icon-sprite-base-class}
+    background: $icon-sprites no-repeat
+
+//sass functions to return the dimensions of a sprite image as units
+
+@function icon-sprite-width($name)
+  $file: sprite_file($icon-sprites, $name)
+  @return image-width($file)
+
+@function icon-sprite-height($name)
+  $file: sprite_file($icon-sprites, $name)
+  @return image-height($file)
+
+// Use this to set the dimensions of an element
+// based on the size of the original image.
+=icon-sprite-dimensions($name)
+  +sprite-dimensions($icon-sprites, $name)
+
+// Move the background position to display the sprite.
+=icon-sprite-position($name, $offset-x: 0, $offset-y: 0)
+  +sprite-background-position($icon-sprites, $name, $offset-x, $offset-y)
+
+// Extends the sprite base class and set the background position for the desired sprite.
+// It will also apply the image dimensions if $dimensions is true.
+=icon-sprite($name, $dimensions: $icon-sprite-dimensions, $offset-x: 0, $offset-y: 0)
+  @extend #{$icon-sprite-base-class}
+  +sprite($icon-sprites, $name, $dimensions, $offset-x, $offset-y)
+
+=icon-sprites($sprite-names, $dimensions: $icon-sprite-dimensions, $prefix: sprite-map-name($icon-sprites), $offset-x: 0, $offset-y: 0)
+  +sprites($icon-sprites, $sprite-names, $icon-sprite-base-class, $dimensions, $prefix, $offset-x, $offset-y)
+
+// Generates a class for each sprited image.
+=all-icon-sprites($dimensions: $icon-sprite-dimensions, $prefix: sprite-map-name($icon-sprites), $offset-x: 0, $offset-y: 0)
+  +icon-sprites(absences-medium absences accept actions-medium add-employee add-filled add application authorise bar-chart book-open brick bulletpoints calendar-date calendar-medium calendar cancel-trigger cancel checkbox-selected checkbox clock close code collapse company-medium company contract controller copy-medium copy createlink cut-medium cut date decreasefontsize delete-employee delete-filled delete-position delete diamond document-medium document down edit eject elbow email employee-medium employees-medium end error-large error-xlarge expand-left expand-right expand fastforward fax filter flag folder-open folder gauge gear gears grid group help home ice-medium ice incidents-medium incidents increasefontsize info-large info-xlarge info left-scroller left line-chart line list-arrow-small list-arrow list lock-open lock login logout-grey logout lost maximize minimize minus-end minus-nl minus mobile next note numericpoints paste-medium paste pause people phone pin plus-end plus-nl plus position-empty position-filled positions-medium prev print query question-large question-xlarge radio-selected radio record refresh-tool refresh remove-employee restore rewind right-scroller right roles-medium rotate rss salary save search-light search-medium search-trigger search secure settings-medium slider-horizontal slider-vertical spinner-down spinner-up spinner start startdate stop tag tags-medium task tee time trigger-down unpin up user warning-large warning-xlarge warning write-large, $dimensions, $prefix, $offset-x, $offset-y)

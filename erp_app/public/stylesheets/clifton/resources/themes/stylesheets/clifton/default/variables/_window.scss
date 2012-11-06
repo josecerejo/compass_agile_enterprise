@@ -1,0 +1,46 @@
+$window-base-color: $base-color !default;
+$window-padding: 0 !default;
+$window-border-radius: 6px 6px !default;
+$window-border-width: 1px !default;
+$window-border-color: $border-color !default;
+$window-inner-border-width: 1px !default;
+$window-inner-border-color: $border-color !default;
+$window-background-color: $base-color !default;
+
+$window-body-border-width: 0 !default;
+$window-body-border-style: solid !default;
+$window-body-border-color: $border-color;
+$window-body-background-color: $base-color !default;
+$window-body-color: $color !default;
+
+$window-header-padding: 6px 6px 0 !default;
+$window-header-margin: 4px 8px !default;
+$window-header-font-size: $font-size + 8 !default; //20px
+$window-header-line-height: 40px !default;
+$window-header-color: $color !default;
+$window-header-font-weight: bold !default;
+
+
+// window copy
+$window-header-border-width: 1px !default;
+$window-header-border-style: solid !default;
+$window-header-border-radius: 6px 6px !default;
+$window-header-inner-border: false !default;
+$window-header-inner-border-width: 0 0 0 !default;
+
+//padding
+$window-header-padding: 3px 5px 4px !default;
+$window-header-vertical-padding: 5px 4px !default;
+
+//fonts
+$window-header-font-size: ceil($font-size + 2) !default; //14px
+$window-header-line-height: 17px !default;
+$window-header-font-weight: bold !default;
+$window-header-font-family: $font-family !default;
+
+//icon
+$window-header-icon-width: 16px !default;
+$window-header-icon-height: 16px !default;
+
+//background
+$window-header-background-gradient: $panel-header-background-gradient !default;

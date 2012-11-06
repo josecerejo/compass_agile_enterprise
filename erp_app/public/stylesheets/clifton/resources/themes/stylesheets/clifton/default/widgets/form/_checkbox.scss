@@ -1,0 +1,66 @@
+@mixin extjs-form-checkboxfield {
+    .#{$prefix}form-cb-wrap {
+        padding-top: 3px;
+    }
+
+    .#{$prefix}form-checkbox,
+    .#{$prefix}form-radio {
+        vertical-align: -1px;
+
+        width: $form-checkbox-size;
+        height: $form-checkbox-size;
+
+        overflow: hidden;
+        padding: 0;
+        border: 0;
+        &::-moz-focus-inner {
+            padding: 0;
+            border: 0;
+        }
+    }
+
+    .#{$prefix}form-checkbox {
+        @include icon-sprite(checkbox);
+    }
+
+
+    @if $include-ie {
+        /* Hack for IE; causes alignment problem in IE9 standards mode so exclude that */
+        .#{$prefix}nbr.#{$prefix}ie {
+            .#{$prefix}form-checkbox,
+            .#{$prefix}form-radio {
+                font-size: 0;
+            }
+        }
+    }
+    .#{$prefix}form-cb-checked {
+        .#{$prefix}form-checkbox {
+            @include icon-sprite(checkbox-selected);
+        }
+
+        .#{$prefix}form-radio {
+            @include icon-sprite(radio-selected);
+        }
+    }
+
+    /* Focused */
+    .#{$prefix}form-cb-focus {
+        @include opacity(0.7);
+    }
+
+    /* Radios */
+    .#{$prefix}form-radio {
+        @include icon-sprite(radio);
+    }
+
+    /* boxLabel */
+    .#{$prefix}form-cb-label-before {
+        margin-right: 4px;
+    }
+    .#{$prefix}form-cb-label-after {
+        margin-left: 4px;
+    }
+
+
+
+}

@@ -13,7 +13,7 @@ terms contained in a written agreement between you and Sencha.
 If you are unsure which license is appropriate for your use, please contact the sales department
 at http://www.sencha.com/contact.
 
-Build date: 2012-09-07 16:54:29 (4861809b76e43ce65f9f8bfed1f258813adb26de)
+Build date: 2012-10-25 15:13:53 (240477695016a85fb9ed1098fd5f8e116327fcc3)
 */
 @import url("//fonts.googleapis.com/css?family=false:false");
 /**
@@ -3781,7 +3781,7 @@ input, textarea, select {
   background-image: linear-gradient(top, #2591e8, #1574c0 3%, #115d9b); }
   /* line 743, ../themes/stylesheets/neptune/default/widgets/_button.scss */
   .x-btn-default-small-disabled .x-btn-inner {
-    color: #f4fafe !important; }
+    color: white !important; }
 
 /* line 760, ../themes/stylesheets/neptune/default/widgets/_button.scss */
 .x-ie .x-btn-default-small-disabled .x-btn-inner {
@@ -4155,7 +4155,7 @@ input, textarea, select {
   background-image: linear-gradient(top, #2591e8, #1574c0 3%, #115d9b); }
   /* line 743, ../themes/stylesheets/neptune/default/widgets/_button.scss */
   .x-btn-default-medium-disabled .x-btn-inner {
-    color: #f4fafe !important; }
+    color: white !important; }
 
 /* line 760, ../themes/stylesheets/neptune/default/widgets/_button.scss */
 .x-ie .x-btn-default-medium-disabled .x-btn-inner {
@@ -4529,7 +4529,7 @@ input, textarea, select {
   background-image: linear-gradient(top, #2591e8, #1574c0 3%, #115d9b); }
   /* line 743, ../themes/stylesheets/neptune/default/widgets/_button.scss */
   .x-btn-default-large-disabled .x-btn-inner {
-    color: #f4fafe !important; }
+    color: white !important; }
 
 /* line 760, ../themes/stylesheets/neptune/default/widgets/_button.scss */
 .x-ie .x-btn-default-large-disabled .x-btn-inner {
@@ -4903,7 +4903,7 @@ input, textarea, select {
   background-image: linear-gradient(top, #cef113, #a4c10b 3%, #849b09); }
   /* line 743, ../themes/stylesheets/neptune/default/widgets/_button.scss */
   .x-btn-confirm-small-disabled .x-btn-inner {
-    color: #fbfeec !important; }
+    color: white !important; }
 
 /* line 760, ../themes/stylesheets/neptune/default/widgets/_button.scss */
 .x-ie .x-btn-confirm-small-disabled .x-btn-inner {
@@ -5277,7 +5277,7 @@ input, textarea, select {
   background-image: linear-gradient(top, #cef113, #a4c10b 3%, #849b09); }
   /* line 743, ../themes/stylesheets/neptune/default/widgets/_button.scss */
   .x-btn-confirm-medium-disabled .x-btn-inner {
-    color: #fbfeec !important; }
+    color: white !important; }
 
 /* line 760, ../themes/stylesheets/neptune/default/widgets/_button.scss */
 .x-ie .x-btn-confirm-medium-disabled .x-btn-inner {
@@ -5651,7 +5651,7 @@ input, textarea, select {
   background-image: linear-gradient(top, #e81c30, #b91324 3%, #930f1c); }
   /* line 743, ../themes/stylesheets/neptune/default/widgets/_button.scss */
   .x-btn-drastic-medium-disabled .x-btn-inner {
-    color: #fdecee !important; }
+    color: white !important; }
 
 /* line 760, ../themes/stylesheets/neptune/default/widgets/_button.scss */
 .x-ie .x-btn-drastic-medium-disabled .x-btn-inner {
@@ -6370,7 +6370,7 @@ input, textarea, select {
   background-image: linear-gradient(top, rgba(255, 255, 255, 0), rgba(223, 239, 252, 0) 3%, rgba(186, 220, 248, 0)); }
   /* line 743, ../themes/stylesheets/neptune/default/widgets/_button.scss */
   .x-btn-default-toolbar-small-disabled .x-btn-inner {
-    color: #136cb4 !important; }
+    color: white !important; }
 
 /* line 760, ../themes/stylesheets/neptune/default/widgets/_button.scss */
 .x-ie .x-btn-default-toolbar-small-disabled .x-btn-inner {
@@ -6734,7 +6734,7 @@ input, textarea, select {
   background-image: linear-gradient(top, rgba(255, 255, 255, 0), rgba(223, 239, 252, 0) 3%, rgba(186, 220, 248, 0)); }
   /* line 743, ../themes/stylesheets/neptune/default/widgets/_button.scss */
   .x-btn-default-toolbar-medium-disabled .x-btn-inner {
-    color: #136cb4 !important; }
+    color: white !important; }
 
 /* line 760, ../themes/stylesheets/neptune/default/widgets/_button.scss */
 .x-ie .x-btn-default-toolbar-medium-disabled .x-btn-inner {
@@ -7098,7 +7098,7 @@ input, textarea, select {
   background-image: linear-gradient(top, rgba(255, 255, 255, 0), rgba(223, 239, 252, 0) 3%, rgba(186, 220, 248, 0)); }
   /* line 743, ../themes/stylesheets/neptune/default/widgets/_button.scss */
   .x-btn-default-toolbar-large-disabled .x-btn-inner {
-    color: #136cb4 !important; }
+    color: white !important; }
 
 /* line 760, ../themes/stylesheets/neptune/default/widgets/_button.scss */
 .x-ie .x-btn-default-toolbar-large-disabled .x-btn-inner {

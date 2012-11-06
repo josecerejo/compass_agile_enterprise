@@ -242,11 +242,14 @@
     }
 
     .#{$prefix}grid-row-selected .#{$prefix}grid-cell,
-    .#{$prefix}grid-row-selected .#{$prefix}grid-rowwrap-div {
+    .#{$prefix}grid-row-selected .#{$prefix}grid-rowwrap-div,
+    .#{$prefix}grid-row-selected .#{$prefix}grid-cell-rowbody {
+        background-color: $grid-row-cell-selected-background-color !important;
+    }
+    
+    .#{$prefix}grid-row-selected .#{$prefix}grid-cell {
         border-style: $grid-row-cell-selected-border-style;
         border-color: $grid-row-cell-selected-border-color;
-
-        background-color: $grid-row-cell-selected-background-color !important;
     }
 
     .#{$prefix}grid-rowwrap-div {

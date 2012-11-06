@@ -5,7 +5,7 @@
     <title>Compass AE Login</title>
 
     <%= static_stylesheet_link_tag('erp_app/shared/compass-ext-all.css','erp_app/login/main.css') %>
-    <%= include_extjs( :theme => 'clifton.css', :debug => (Rails.env != 'production') ) %>
+    <%= include_extjs(:theme => 'extjs:ext-all', :debug => (Rails.env != 'production') ) %>
 
     <%= static_javascript_include_tag("erp_app/utility.js","erp_app/login/window.js")%>
     <%= add_authenticity_token_to_extjs%>

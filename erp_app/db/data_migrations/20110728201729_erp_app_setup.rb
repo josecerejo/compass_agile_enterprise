@@ -53,10 +53,14 @@ class ErpAppSetup
       blue_background_po         = PreferenceOption.create(:description => 'Blue', :internal_identifier => 'blue_desktop_background', :value => 'blue.gif')
 
       #desktop theme options
-      clifton_extjs_theme_po = PreferenceOption.create(:description => 'Clifton', :internal_identifier => 'clifton_extjs_theme', :value => 'clifton.css')
-      access_extjs_theme_po = PreferenceOption.create(:description => 'Access', :internal_identifier => 'access_extjs_theme', :value => 'ext-all-access.css')
-      gray_extjs_theme_po   = PreferenceOption.create(:description => 'Gray', :internal_identifier => 'gray_extjs_theme', :value => 'ext-all-gray.css')
-      blue_extjs_theme_po   = PreferenceOption.create(:description => 'Blue', :internal_identifier => 'blue_extjs_theme', :value => 'ext-all.css')
+      clifton_extjs_theme_po = PreferenceOption.create(:description => 'Clifton Default', :internal_identifier => 'clifton_extjs_theme', :value => 'clifton:clifton')
+      clifton_extjs_theme_green_po = PreferenceOption.create(:description => 'Clifton Green', :internal_identifier => 'clifton_extjs_theme', :value => 'clifton:clifton-green')
+      clifton_extjs_theme_yellow_po = PreferenceOption.create(:description => 'Clifton Yellow', :internal_identifier => 'clifton_extjs_theme', :value => 'clifton:clifton-yellow')
+      clifton_extjs_theme_pink_po = PreferenceOption.create(:description => 'Clifton Pink', :internal_identifier => 'clifton_extjs_theme', :value => 'clifton:clifton-pink')
+      clifton_extjs_theme_blue_po = PreferenceOption.create(:description => 'Clifton Blue', :internal_identifier => 'clifton_extjs_theme', :value => 'clifton:clifton-blue')
+      access_extjs_theme_po = PreferenceOption.create(:description => 'Extjs Access', :internal_identifier => 'access_extjs_theme', :value => 'extjs:ext-all-access')
+      gray_extjs_theme_po   = PreferenceOption.create(:description => 'Extjs Gray', :internal_identifier => 'gray_extjs_theme', :value => 'extjs:ext-all-gray')
+      blue_extjs_theme_po   = PreferenceOption.create(:description => 'Extjs Blue', :internal_identifier => 'blue_extjs_theme', :value => 'extjs:ext-all')
 
       #associate options
       desktop_shortcut_pt.preference_options << yes_po
@@ -75,6 +79,10 @@ class ErpAppSetup
       desktop_backgroud_pt.save
 
       extjs_theme_pt.preference_options << clifton_extjs_theme_po
+      extjs_theme_pt.preference_options << clifton_extjs_theme_green_po
+      extjs_theme_pt.preference_options << clifton_extjs_theme_yellow_po
+      extjs_theme_pt.preference_options << clifton_extjs_theme_pink_po
+      extjs_theme_pt.preference_options << clifton_extjs_theme_blue_po
       extjs_theme_pt.preference_options << access_extjs_theme_po
       extjs_theme_pt.preference_options << gray_extjs_theme_po
       extjs_theme_pt.preference_options << blue_extjs_theme_po

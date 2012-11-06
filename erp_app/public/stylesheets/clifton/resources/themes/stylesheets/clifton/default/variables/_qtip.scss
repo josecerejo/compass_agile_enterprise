@@ -1,0 +1,33 @@
+$tip-base-color: $base-color !default;
+
+//background
+$tip-background-color: $tip-base-color !default;
+$tip-background-gradient: null !default;
+
+//text
+$tip-body-color      : $color !default;
+$tip-body-font-size  : $font-size + 2 !default;
+$tip-body-font-weight: normal !default;
+$tip-body-padding: 6px !default;
+$tip-body-link-color: darken($tip-body-color, 10%) !default;
+
+$tip-header-color      : $tip-body-color !default;
+$tip-header-font-size  : $tip-body-font-size + 4 !default;
+$tip-header-font-weight: bold !default;
+$tip-header-padding    : 6px !default;
+$tip-header-border-color: $border-color !default;
+$tip-header-border-width: 0 !default;
+$tip-header-background-color: $border-color !default;
+$tip-header-background-gradient: 'panel-header' !default;
+
+//borders
+$tip-border-color: $color !default;
+$tip-border-width: 2px !default;
+$tip-border-radius: 6px !default;
+
+//error tips
+$tip-error-inner-border-color: #d87166 !default;
+$tip-error-border-color: #a1311f !default;
+$tip-error-border-radius: 6px !default;
+$tip-error-border-width: 1px !default;
+$tip-error-background-color: $base-color !default;
