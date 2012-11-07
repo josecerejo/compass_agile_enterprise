@@ -808,7 +808,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.FormBuilder",{
                                             Ext.getStore('formsTreeStore').load();
                                         }else{
                                             formBuilder.setTitle(form_props.findField('description').getValue());
-                                            Ext.Msg.alert('Success', 'Form saved.');  
+                                            //Ext.Msg.alert('Success', 'Form saved.');
                                         }
                                     }
                                     else{
