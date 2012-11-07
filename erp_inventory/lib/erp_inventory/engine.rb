@@ -10,9 +10,7 @@ module ErpInventory
       include ErpInventory::Extensions::ActiveRecord::ActsAsInventoryEntry
     end
 
-    engine = self
-    config.to_prepare do
-      ErpBaseErpSvcs.register_compass_ae_engine(engine)
-    end
+    ErpBaseErpSvcs.register_as_compass_ae_engine(config, self)
+
   end
 end

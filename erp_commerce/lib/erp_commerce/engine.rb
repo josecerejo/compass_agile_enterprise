@@ -13,13 +13,8 @@ module ErpCommerce
       include ErpCommerce::Extensions::ActiveRecord::ActsAsPriceable
     end
 
-    #TODO
-    #this will be removed once rails 3.2 adds the ability to set the order of engine loading
-    engine = self
-    config.to_prepare do
-      ErpBaseErpSvcs.register_compass_ae_engine(engine)
-      ::ErpApp::Widgets::Loader.load_compass_ae_widgets(engine)
-    end
+    ErpBaseErpSvcs.register_as_compass_ae_engine(config, self)
+    ::ErpApp::Widgets::Loader.load_compass_ae_widgets(config, self)
     
   end#Engine
 end#ErpCommerce
