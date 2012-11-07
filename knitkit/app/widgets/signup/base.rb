@@ -4,8 +4,8 @@ module Widgets
       def index
         @login_url = params[:login_url]
         @user = User.new
+
         render
-	
       end
 
       def new
@@ -34,8 +34,7 @@ module Widgets
             @user.save
             render :update => {:id => "#{@uuid}_result", :view => :success}
           else
-            render :update => {:id => "#{@uuid}_result_form", :view => :error}
-             
+            render :update => {:id => "#{@uuid}_result", :view => :error}
           end
         rescue Exception=>ex
           logger.error ex.message
