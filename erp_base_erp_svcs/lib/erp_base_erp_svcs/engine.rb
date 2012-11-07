@@ -19,11 +19,8 @@ module ErpBaseErpSvcs
       extend ErpBaseErpSvcs::Extensions::ActiveRecord::StiInstantiation::ActMacro
     end
 
-    engine = self
-    config.to_prepare do
-      ErpBaseErpSvcs.register_compass_ae_engine(engine)
-      ErpBaseErpSvcs.load_root_compass_ae_framework_extensions
-    end
+    ErpBaseErpSvcs.register_as_compass_ae_engine(config, self)
+    ErpBaseErpSvcs.load_root_compass_ae_framework_extensions(config)
     
   end
 end

@@ -2,21 +2,30 @@ require "erp_base_erp_svcs/version"
 require "erp_base_erp_svcs/extensions"
 require "erp_base_erp_svcs/ar_fixtures"
 require "erp_base_erp_svcs/config"
-require "erp_base_erp_svcs/engine"
 require "erp_base_erp_svcs/non_escape_json_string"
 
 module ErpBaseErpSvcs
   class << self
+    def determine_callback
+      (Rails.env == 'development') ?  'to_prepare' : 'after_initialize'
+    end
+
     def mount_compass_ae_engines(routes)
       Rails.application.config.erp_base_erp_svcs.compass_ae_engines.each do |engine|
         routes.mount engine => "/#{engine.name.split("::").first.underscore}"
       end
     end
 
-    def register_compass_ae_engine(engine)
+    def register_as_compass_ae_engine(config, engine)
+      config.send(ErpBaseErpSvcs.determine_callback) do
+        ErpBaseErpSvcs.load_compass_ae_engine(engine, config)
+      end
+    end
+
+    def load_compass_ae_engine(engine, config)
       Rails.application.config.erp_base_erp_svcs.compass_ae_engines << engine unless Rails.application.config.erp_base_erp_svcs.compass_ae_engines.include?(engine)
       load_compass_ae_extensions(engine)
-      load_root_compass_ae_framework_extensions()
+      load_root_compass_ae_framework_extensions(config)
     end
 
     #forces rails to reload model extensions and framework extensions
@@ -87,13 +96,19 @@ module ErpBaseErpSvcs
       end
     end
 
-    def load_root_compass_ae_framework_extensions
-      Dir.glob(File.join(Rails.root,"lib/extensions/compass_ae/**/*.rb")).each do |file|
-        load file
+    def load_root_compass_ae_framework_extensions(config)
+      config.send(ErpBaseErpSvcs.determine_callback) do
+        Dir.glob(File.join(Rails.root,"lib/extensions/compass_ae/**/*.rb")).each do |file|
+          load file
+        end
       end
+
     end
     
   end
 end
+
+#load the engine after this module is defined
+require "erp_base_erp_svcs/engine"
 
 

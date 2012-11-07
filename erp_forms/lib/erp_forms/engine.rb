@@ -13,11 +13,10 @@ module ErpForms
       include ErpForms::Extensions::ActiveRecord::HasDynamicForms
     end
 
-    engine = self
-    config.to_prepare do
-      ErpBaseErpSvcs.register_compass_ae_engine(engine)
-      ::ErpApp::Widgets::Loader.load_compass_ae_widgets(engine)
+    ErpBaseErpSvcs.register_as_compass_ae_engine(config, self)
+    ::ErpApp::Widgets::Loader.load_compass_ae_widgets(config, self)
 
+    config.to_prepare do
       #dynamic_attributes patch
       require "erp_forms/dynamic_attributes_patch"
   	end
