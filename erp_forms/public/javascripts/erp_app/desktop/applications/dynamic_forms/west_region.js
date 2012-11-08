@@ -396,7 +396,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.WestRegion",{
               layout:'fit',
               width:375,
               title:'New Dynamic Form Model',
-              height:100,
+              //height:100,
               plain: true,
               buttonAlign:'center',
               items: Ext.create("Ext.form.Panel",{
@@ -425,6 +425,17 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.WestRegion",{
                       }
                     }                
                   }
+                },
+                {
+                  xtype:'combobox',
+                  fieldLabel:'File Security Default',
+                  allowBlank:false,
+                  name:'file_security_default',
+                  value: 'private',
+                  store:[
+                    ['private','Private'],
+                    ['public','Public']
+                  ]
                 }]
               }),
               buttons: [{

@@ -4,6 +4,7 @@ class DynamicForms < ActiveRecord::Migration
       create_table :dynamic_form_models do |t|
         t.string :model_name
         t.boolean :show_in_multitask, :default => false 
+        t.string :file_security_default, :default => 'private'
 
         t.timestamps
       end
@@ -29,11 +30,11 @@ class DynamicForms < ActiveRecord::Migration
         t.string :model_name
         t.string :internal_identifier
         t.boolean :default
-        t.string  :widget_action, :default => 'save' 
+        t.string :widget_action, :default => 'save' 
         t.string :widget_email_recipients 
         t.boolean :focus_first_field, :default => true 
         t.boolean :submit_empty_text, :default => false 
-        t.string :msg_target
+        t.string :msg_target, :default => 'qtip'
         t.string :submit_button_label, :default => 'Submit'
         t.string :cancel_button_label, :default => 'Cancel'
         t.text :comment

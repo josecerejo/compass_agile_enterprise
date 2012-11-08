@@ -883,7 +883,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.FormBuilder",{
                         }
                       },
                       { xtype: 'button', 
-                        text: 'Remove Selected Field',
+                        text: 'Remove Field',
                         iconCls: 'icon-delete',
                         listeners:{
                           click: function(button){
