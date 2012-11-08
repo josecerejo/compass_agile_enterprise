@@ -821,6 +821,8 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.FormBuilder",{
                                   }
                                 });
                             }else{
+                                var east_tabs = formBuilder.query('#east_tabs').first();
+                                east_tabs.setActiveTab('form_props');
                                 Ext.Msg.alert('Error', "There is a validation error with this form's properties. Please correct fields marked red.");
                             }
                           }

@@ -175,6 +175,9 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.WestRegion",{
 
                     var form_props = formBuilder.query('#form_props').first().getForm();
                     form_props.findField('description').setValue(form_name);
+                    form_props.findField('widget_action').setValue('save');
+                    form_props.findField('submit_button_label').setValue('Submit');
+                    form_props.findField('cancel_button_label').setValue('Cancel');
                     Ext.getCmp('dynamic_forms_westregion').setActiveTab('field_types');
                     var east_tabs = formBuilder.query('#east_tabs').first();
                     east_tabs.setActiveTab('form_props');
@@ -404,16 +407,25 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.WestRegion",{
                 defaults: {
                   width: 225
                 },
-                items: [
-                {
+                items: [{
                   xtype:'textfield',
                   fieldLabel:'Model Name',
                   allowBlank:false,
                   name:'model_name',
                   plugins: [new helpQtip('This should be a camel case class name.<br /> Example: WebsiteInquiry')],
-                  vtype: 'alphanum'
-                }
-                ]
+                  vtype: 'alphanum',
+                  listeners:{
+                    afterrender:function(field){
+                        field.focus(false, 200);
+                    },
+                    'specialkey': function(field, e){
+                      if (e.getKey() == e.ENTER) {
+                        var button = field.findParentByType('window').query('#submitButton').first();
+                        button.fireEvent('click', button);
+                      }
+                    }                
+                  }
+                }]
               }),
               buttons: [{
                 text:'Submit',
