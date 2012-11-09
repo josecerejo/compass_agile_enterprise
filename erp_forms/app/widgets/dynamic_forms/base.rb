@@ -79,7 +79,13 @@ module Widgets
 
         begin
           @root_node = File.join(ErpTechSvcs::Config.file_assets_location, form_data[:model_name], @myDynamicObject.id.to_s)
-          @myDynamicObject.add_file(data, File.join(@file_support.root, base_path, name))
+          file = @myDynamicObject.add_file(data, File.join(@file_support.root, base_path, name))
+
+          roles = ['admin']
+          roles << DynamicFormModel.get_role_iid(form_data[:model_name])
+          file_security_default = DynamicFormModel.get_file_security_default(form_data[:model_name])
+          (file_security_default == 'private') ? file.add_capability(:download, nil, roles) : file.remove_all_capabilities
+          
           return {:success => true}
         rescue Exception => e
           Rails.logger.error e.message

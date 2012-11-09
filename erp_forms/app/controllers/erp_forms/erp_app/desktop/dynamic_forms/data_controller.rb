@@ -197,7 +197,13 @@ module ErpForms::ErpApp::Desktop::DynamicForms
       begin
         @record = DynamicFormModel.get_constant(params[:model_name]).find(params[:id])
         set_root_node(params)
-        @record.add_file(data, File.join(@file_support.root,base_path,name))
+        file = @record.add_file(data, File.join(@file_support.root,base_path,name))
+
+        roles = ['admin']
+        roles << DynamicFormModel.get_role_iid(params[:model_name])
+        file_security_default = DynamicFormModel.get_file_security_default(params[:model_name])
+        (file_security_default == 'private') ? file.add_capability(:download, nil, roles) : file.remove_all_capabilities
+
         result = {:success => true}
       rescue Exception => e
         Rails.logger.error e.message
@@ -213,12 +219,12 @@ module ErpForms::ErpApp::Desktop::DynamicForms
       begin
         path   = params[:path]
         secure = params[:secure]
-        roles  = ['admin', 'file_downloader']
         
         @record = DynamicFormModel.get_constant(params[:model_name]).find(params[:id])
         file = @record.files.find(:first, :conditions => ['name = ? and directory = ?', ::File.basename(path), ::File.dirname(path)])
-        roles << DynamicFormModel.get_role_iid(params[:model_name])
-        
+
+        roles = ['admin']
+        roles << DynamicFormModel.get_role_iid(params[:model_name])        
         (secure == 'true') ? file.add_capability(:download, nil, roles) : file.remove_all_capabilities
 
         # if we're using S3, set file permissions to private or public_read   
@@ -307,7 +313,13 @@ module ErpForms::ErpApp::Desktop::DynamicForms
 
       begin
         set_root_node(form_data)
-        @record.add_file(data, File.join(@file_support.root, base_path, name))
+        file = @record.add_file(data, File.join(@file_support.root, base_path, name))
+
+        roles = ['admin']
+        roles << DynamicFormModel.get_role_iid(form_data[:model_name])
+        file_security_default = DynamicFormModel.get_file_security_default(form_data[:model_name])
+        (file_security_default == 'private') ? file.add_capability(:download, nil, roles) : file.remove_all_capabilities
+        
         return {:success => true}
       rescue Exception => e
         Rails.logger.error e.message
