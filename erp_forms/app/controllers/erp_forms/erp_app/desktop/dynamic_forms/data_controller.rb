@@ -10,7 +10,8 @@ module ErpForms::ErpApp::Desktop::DynamicForms
       columns = []
       definition.each do |field_hash|
         if field_hash[:display_in_grid]
-          field_hash[:width] = (field_hash[:width].to_f * 0.56).round.to_i # for some reason grid column widths are greater than form field widths
+          # for some reason grid column widths are greater than form field widths
+          field_hash[:width] = (field_hash[:width].to_f * 0.56).round.to_i unless field_hash[:width].nil?
           columns << DynamicGridColumn.build_column(field_hash)
         end
       end
@@ -96,7 +97,7 @@ module ErpForms::ErpApp::Desktop::DynamicForms
 
         form_data[:created_by] = current_user unless current_user.nil?
         form_data[:created_with_form_id] = params[:dynamic_form_id] if params[:dynamic_form_id]
-        @record = DynamicFormModel.save_all_attributes(@record, form_data, ErpForms::ErpApp::Desktop::DynamicForms::BaseController::IGNORED_PARAMS)
+        @record = @record.save_all_attributes(form_data, ErpForms::ErpApp::Desktop::DynamicForms::BaseController::IGNORED_PARAMS)
         save_file_asset(form_data) unless params[:file].nil?
 
         data = @record.data.sorted_dynamic_attributes
@@ -135,7 +136,7 @@ module ErpForms::ErpApp::Desktop::DynamicForms
 
         form_data[:updated_by] = current_user unless current_user.nil?
         form_data[:updated_with_form_id] = params[:dynamic_form_id] if params[:dynamic_form_id]      
-        @record = DynamicFormModel.save_all_attributes(@record, form_data, ErpForms::ErpApp::Desktop::DynamicForms::BaseController::IGNORED_PARAMS)
+        @record = @record.save_all_attributes(form_data, ErpForms::ErpApp::Desktop::DynamicForms::BaseController::IGNORED_PARAMS)
         save_file_asset(form_data) unless params[:file].nil?
 
         data = @record.data.sorted_dynamic_attributes
@@ -199,10 +200,8 @@ module ErpForms::ErpApp::Desktop::DynamicForms
         set_root_node(params)
         file = @record.add_file(data, File.join(@file_support.root,base_path,name))
 
-        roles = ['admin']
-        roles << DynamicFormModel.get_role_iid(params[:model_name])
-        file_security_default = DynamicFormModel.get_file_security_default(params[:model_name])
-        (file_security_default == 'private') ? file.add_capability(:download, nil, roles) : file.remove_all_capabilities
+        roles = ['admin', @record.role_iid]
+        (@record.file_security_default == 'private') ? file.add_capability(:download, nil, roles) : file.remove_all_capabilities
 
         result = {:success => true}
       rescue Exception => e
@@ -223,8 +222,7 @@ module ErpForms::ErpApp::Desktop::DynamicForms
         @record = DynamicFormModel.get_constant(params[:model_name]).find(params[:id])
         file = @record.files.find(:first, :conditions => ['name = ? and directory = ?', ::File.basename(path), ::File.dirname(path)])
 
-        roles = ['admin']
-        roles << DynamicFormModel.get_role_iid(params[:model_name])        
+        roles = ['admin', @record.role_iid]
         (secure == 'true') ? file.add_capability(:download, nil, roles) : file.remove_all_capabilities
 
         # if we're using S3, set file permissions to private or public_read   
@@ -315,11 +313,9 @@ module ErpForms::ErpApp::Desktop::DynamicForms
         set_root_node(form_data)
         file = @record.add_file(data, File.join(@file_support.root, base_path, name))
 
-        roles = ['admin']
-        roles << DynamicFormModel.get_role_iid(form_data[:model_name])
-        file_security_default = DynamicFormModel.get_file_security_default(form_data[:model_name])
-        (file_security_default == 'private') ? file.add_capability(:download, nil, roles) : file.remove_all_capabilities
-        
+        roles = ['admin', @record.role_iid]
+        (@record.file_security_default == 'private') ? file.add_capability(:download, nil, roles) : file.remove_all_capabilities
+
         return {:success => true}
       rescue Exception => e
         Rails.logger.error e.message

@@ -29,7 +29,7 @@ module Widgets
         params[:created_by] = current_user unless current_user.nil?
         params[:created_with_form_id] = params[:dynamic_form_id] if params[:dynamic_form_id] and params[:is_html_form].blank?
         params[:website_id] = @website.id
-        @website_inquiry = DynamicFormModel.save_all_attributes(@website_inquiry, params, ErpApp::Widgets::Base::IGNORED_PARAMS)
+        @website_inquiry = @website_inquiry.save_all_attributes(params, ErpApp::Widgets::Base::IGNORED_PARAMS)
 				
         if @website_inquiry
           if @website.email_inquiries?

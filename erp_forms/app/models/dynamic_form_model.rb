@@ -15,14 +15,6 @@ class DynamicFormModel < ActiveRecord::Base
     Role.iid(role_iid)
   end
 
-  def self.get_role_iid(model_name)
-    DynamicFormModel.find_by_model_name(model_name).role_iid
-  end
-
-  def self.get_file_security_default(model_name)
-    DynamicFormModel.find_by_model_name(model_name).file_security_default
-  end
-
   def self.get_constant(klass_name)
   	result = nil
   	begin
@@ -36,34 +28,6 @@ class DynamicFormModel < ActiveRecord::Base
 
   def self.get_instance(klass_name)
     DynamicFormModel.get_constant(klass_name).new
-  end
-
-  # handles both static and dynamic attributes
-  def self.assign_all_attributes(dynamicObject, params, ignored_params=[])    
-    params.each do |k,v|
-      k = k.to_s
-      unless ignored_params.include?(k) or k == '' or k == '_'
-        if dynamicObject.attributes.include?(k)
-          dynamicObject.send(k + '=', v) 
-        else
-          if ['created_by','updated_by','created_at','updated_at','created_with_form_id','updated_with_form_id'].include?(k)
-            key = k + '='
-          else
-            key = DynamicDatum::DYNAMIC_ATTRIBUTE_PREFIX + k + '='
-          end
-          
-          dynamicObject.data.send(key, v) 
-        end
-      end
-    end
-
-    dynamicObject
-  end
-
-  # handles both static and dynamic attributes
-  def self.save_all_attributes(dynamicObject, params, ignored_params=[])
-    DynamicFormModel.assign_all_attributes(dynamicObject, params, ignored_params)
-    (dynamicObject.valid? and dynamicObject.save) ? dynamicObject : nil
   end
 
 end

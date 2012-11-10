@@ -1,6 +1,7 @@
 class Ticket < ActiveRecord::Base
   belongs_to :user, :foreign_key => 'assigned_to_id'
 
+  acts_as_dynamic_form_model
   has_file_assets
   has_dynamic_forms
   has_dynamic_data

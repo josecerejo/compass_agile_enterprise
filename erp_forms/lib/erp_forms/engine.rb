@@ -9,6 +9,7 @@ module ErpForms
     end
 	
     ActiveSupport.on_load(:active_record) do
+      include ErpForms::Extensions::ActiveRecord::ActsAsDynamicFormModel
       include ErpForms::Extensions::ActiveRecord::HasDynamicData
       include ErpForms::Extensions::ActiveRecord::HasDynamicForms
     end
