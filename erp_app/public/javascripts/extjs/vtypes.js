@@ -35,8 +35,6 @@ Ext.onReady(function(){
         // vtype Text property to display error Text
         // when the validation function returns false
         emailListText : "Must be a valid comma separated list of email addresses."
-        // vtype Mask property for keystroke filter mask
-        //emailListMask : /[a-z_\-\.\@,]/i
     });
 
     // custom Vtype for vtype:'IPAddress'
