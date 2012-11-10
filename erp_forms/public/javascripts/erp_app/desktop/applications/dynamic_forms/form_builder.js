@@ -470,6 +470,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.FormBuilder",{
                     ['alpha','Alpha'],
                     ['alphanum','Alphanumeric'],
                     ['email','Email'],
+                    ['IPAddress','IP Address'],
                     ['url','URL']
                 ],
                 plugins: [new helpQtip('Use a built-in or custom ExtJS VType.')],
@@ -1246,6 +1247,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.FormBuilder",{
                                     fieldLabel: 'Email Recipients',
                                     name: 'widget_email_recipients',
                                     xtype: 'textfield',
+                                    vtype: 'emailList',
                                     width: 215,
                                     listeners:{
                                         render:function(field){

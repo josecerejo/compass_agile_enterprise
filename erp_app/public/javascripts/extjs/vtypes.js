@@ -17,4 +17,34 @@ Ext.onReady(function(){
         // vtype Mask property for keystroke filter mask
         fileMask : /[a-z_\.]/i
     });
+
+    Ext.apply(Ext.form.field.VTypes, {
+        //  vtype validation function
+        emailList : function(value, field) {
+            var isvalid = true;
+            var emailArray = value.split(',');
+            Ext.each(emailArray, function(email){
+                if(validateEmail(email) === false) {
+                    isvalid = false;
+                    return;
+                }
+            });
+
+            return isvalid;
+        },
+        // vtype Text property to display error Text
+        // when the validation function returns false
+        emailListText : "Must be a valid comma separated list of email addresses."
+        // vtype Mask property for keystroke filter mask
+        //emailListMask : /[a-z_\-\.\@,]/i
+    });
+
+    // custom Vtype for vtype:'IPAddress'
+    Ext.apply(Ext.form.field.VTypes, {
+        IPAddress:  function(v) {
+            return (/^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$/).test(v);
+        },
+        IPAddressText: 'Must be a numeric IP address',
+        IPAddressMask: /[\d\.]/i
+    });
 });
