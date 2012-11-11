@@ -6,7 +6,7 @@ namespace :sunspot do
     if use_solr?
       DynamicFormModel.order('id asc').all.each do |m|
         next if m.model_name == 'DynamicFormDocument'
-        if m.get_constant.respond_to?(:solr_reindex)
+        if m.get_constant.is_searchable?
           m.get_constant.sunspot_setup
           puts "Indexing #{m.model_name} ..."
           m.get_constant.solr_reindex
@@ -20,7 +20,7 @@ namespace :sunspot do
     if use_solr?
       DynamicFormModel.all.each do |m|
         next if m.model_name == 'DynamicFormDocument'
-        if m.get_constant.respond_to?(:solr_reindex)
+        if m.get_constant.is_searchable?
           m.get_constant.sunspot_setup
           puts "Removing Indexes for #{m.model_name} ..."
           m.get_constant.solr_remove_all_from_index!

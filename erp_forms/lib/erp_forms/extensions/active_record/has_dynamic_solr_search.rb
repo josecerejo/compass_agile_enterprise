@@ -19,6 +19,10 @@ module ErpForms
         end
 
         module ClassMethods
+          def is_searchable?
+            respond_to?(:solr_search)
+          end
+
           def has_dynamic_solr_search
             include HasDynamicSolrSearch::InstanceMethods   
             
