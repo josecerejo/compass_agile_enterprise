@@ -406,6 +406,27 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.WestRegion",{
             }
 
           }
+        },
+        {xtype: 'tbspacer', width: 10},
+        {
+            fieldLabel: '<span data-qtitle="Search" data-qwidth="200" data-qtip="">Search</span>',
+            labelWidth : 40,
+            itemId: 'dynamicDataSearchValue',
+            xtype: 'textfield',
+            width: 180,
+            value: ''
+        },
+        {xtype: 'tbspacer', width: 1},
+        {
+            xtype: 'button',
+            iconCls: 'x-btn-icon icon-search',
+            handler: function(button) {
+              var tabPanel = button.findParentByType('tabpanel');
+              var value = tabPanel.query('#dynamicDataSearchValue').first().getValue();
+              tabPanel.query('#'+record.data.text).first().query('shared_dynamiceditablegrid').first().getStore().load({
+                params: {query_filter: value}                
+              });              
+            }
         }
         ]
       }

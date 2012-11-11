@@ -6,6 +6,7 @@ class Ticket < ActiveRecord::Base
   has_dynamic_forms
   has_dynamic_data
   acts_as_commentable
+  has_dynamic_solr_search if $USE_SOLR_FOR_DYNAMIC_FORM_MODELS
   
   def send_email(subject='')
     begin

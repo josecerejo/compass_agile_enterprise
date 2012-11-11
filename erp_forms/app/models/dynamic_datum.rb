@@ -24,12 +24,16 @@ class DynamicDatum < ActiveRecord::Base
     related_fields.each do |r|
       data.each do |k,v|
         if k == r[key]
-          data[k] = r[:extraParams]['model'].camelize.constantize.find(v).send(r[:displayField]) rescue nil
+          data[k] = DynamicDatum.related_data_value(r[:extraParams]['model'], v, r[:displayField])
         end
       end
     end
 
     data
+  end
+
+  def self.related_data_value(model, id, column)
+    model.camelize.constantize.find(id).send(column) rescue nil
   end
 
   # we cannot assume that dynamic attributes are stored in order in the database as this is often not the case

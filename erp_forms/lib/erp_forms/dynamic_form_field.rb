@@ -202,6 +202,7 @@ class DynamicFormField
     options[:height] = nil if options[:height].nil?
     options[:labelWidth] = 75 if options[:labelWidth].nil?
     options[:display_in_grid] = true if options[:display_in_grid].nil?
+    options[:searchable] = true if options[:searchable].nil?
     
     options
   end

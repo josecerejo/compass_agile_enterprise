@@ -49,12 +49,24 @@ module ErpForms::ErpApp::Desktop::DynamicForms
     # get dynamic data records
     def index
       begin
-        sort  = params[:sort] || 'created_at'
-        dir   = params[:dir] || 'DESC'
+        sort  = (params[:sort] || 'created_at').downcase
+        dir   = (params[:dir] || 'desc').downcase
+        query_filter = params[:query_filter].strip rescue nil
 
         myDynamicObject = DynamicFormModel.get_constant(params[:model_name])
-        
-        dynamic_records = myDynamicObject.paginate(:page => page, :per_page => per_page, :order => "#{sort} #{dir}")
+
+        if $USE_SOLR_FOR_DYNAMIC_FORM_MODELS
+          solr_search_results = myDynamicObject.search do
+            keywords query_filter unless params[:query_filter].blank?
+            paginate(:page => page, :per_page => per_page)
+            order_by(sort.to_sym, dir.to_sym)
+          end
+          dynamic_records = solr_search_results.results
+        else     
+          dynamic_records = myDynamicObject.paginate(:page => page, :per_page => per_page, :order => "#{sort} #{dir}")
+          dynamic_records = dynamic_records.joins(:dynamic_data).where("dynamic_attributes LIKE '%#{query_filter}%'") unless params[:query_filter].blank?
+        end
+
         related_fields = dynamic_records.first.form.related_fields rescue []
 
         wi = []
