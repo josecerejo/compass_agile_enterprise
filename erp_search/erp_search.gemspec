@@ -31,6 +31,6 @@ Gem::Specification.new do |s|
   s.add_dependency 'rails', "~> 3.1.0"
   #nasty I know
   
-  s.add_dependency "sunspot_rails", "1.3.1"
-  s.add_dependency "sunspot_solr", "1.3.1"
+  s.add_dependency "sunspot_rails", "~> 1.3.3"
+  s.add_dependency "sunspot_solr", "~> 1.3.3"
 end
