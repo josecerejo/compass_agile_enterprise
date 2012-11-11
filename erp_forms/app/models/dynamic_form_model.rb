@@ -30,4 +30,12 @@ class DynamicFormModel < ActiveRecord::Base
     DynamicFormModel.get_constant(klass_name).new
   end
 
+  def get_constant
+    DynamicFormModel.get_constant(self.model_name)
+  end
+
+  def get_instance
+    DynamicFormModel.get_instance(self.model_name)
+  end
+
 end
