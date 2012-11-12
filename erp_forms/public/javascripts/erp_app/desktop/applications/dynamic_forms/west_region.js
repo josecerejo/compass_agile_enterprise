@@ -404,7 +404,6 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.WestRegion",{
             }else{
               Ext.Msg.alert('Error', 'No record selected.');
             }
-
           }
         },
         {xtype: 'tbspacer', width: 10},
@@ -414,18 +413,30 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.WestRegion",{
             itemId: 'dynamicDataSearchValue',
             xtype: 'textfield',
             width: 180,
-            value: ''
+            value: '',
+            listeners:{
+              specialkey: function(field, e){
+                if (e.getKey() == e.ENTER) {
+                  var grid = field.findParentByType('tabpanel').query('#centerRegionLayout_'+record.data.text).first();
+                  var button = grid.query('#searchButton').first();
+                  button.fireEvent('click', button);
+                }
+              }              
+            }
         },
         {xtype: 'tbspacer', width: 1},
         {
             xtype: 'button',
+            itemId: 'searchButton',
             iconCls: 'x-btn-icon icon-search',
-            handler: function(button) {
-              var tabPanel = button.findParentByType('tabpanel');
-              var value = tabPanel.query('#dynamicDataSearchValue').first().getValue();
-              tabPanel.query('#'+record.data.text).first().query('shared_dynamiceditablegrid').first().getStore().load({
-                params: {query_filter: value}                
-              });              
+            listeners:{
+              click: function(button) {
+                var grid = button.findParentByType('tabpanel').query('#centerRegionLayout_'+record.data.text).first();
+                var value = grid.query('#dynamicDataSearchValue').first().getValue();
+                grid.query('shared_dynamiceditablegrid').first().getStore().load({
+                  params: {query_filter: value}                
+                });              
+              }              
             }
         }
         ]
@@ -522,7 +533,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.WestRegion",{
                         var button = field.findParentByType('window').query('#submitButton').first();
                         button.fireEvent('click', button);
                       }
-                    }                
+                    }
                   }
                 },
                 {
