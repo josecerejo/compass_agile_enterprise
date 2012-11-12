@@ -55,7 +55,7 @@ module ErpForms::ErpApp::Desktop::DynamicForms
 
         myDynamicObject = DynamicFormModel.get_constant(params[:model_name])
 
-        if $USE_SOLR_FOR_DYNAMIC_FORM_MODELS
+        if $USE_SOLR_FOR_DYNAMIC_FORM_MODELS and myDynamicObject.is_searchable?
           solr_search_results = myDynamicObject.search do
             keywords query_filter unless params[:query_filter].blank?
             paginate(:page => page, :per_page => per_page)
@@ -64,7 +64,7 @@ module ErpForms::ErpApp::Desktop::DynamicForms
           dynamic_records = solr_search_results.results
         else     
           dynamic_records = myDynamicObject.paginate(:page => page, :per_page => per_page, :order => "#{sort} #{dir}")
-          dynamic_records = dynamic_records.joins(:dynamic_data).where("dynamic_attributes LIKE '%#{query_filter}%'") unless params[:query_filter].blank?
+          dynamic_records = dynamic_records.joins(:dynamic_data).where("UPPER(dynamic_data.dynamic_attributes) LIKE UPPER('%#{query_filter}%')") unless params[:query_filter].blank?
         end
 
         related_fields = dynamic_records.first.form.related_fields rescue []

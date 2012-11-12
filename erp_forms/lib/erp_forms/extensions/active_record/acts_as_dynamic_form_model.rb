@@ -13,12 +13,6 @@ module ErpForms
               include ActsAsDynamicFormModel::InstanceMethods  
             end
 
-            if !respond_to?(:is_searchable?)
-              def is_searchable?
-                false
-              end
-            end
-
           end
         
           module InstanceMethods

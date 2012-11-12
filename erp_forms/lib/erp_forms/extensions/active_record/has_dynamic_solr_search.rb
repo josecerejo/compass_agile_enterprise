@@ -1,13 +1,23 @@
 require 'sunspot'
 Sunspot::Setup.class_eval do
-  def self.clear_setup_for_class(clazz)
+  def self.clear_setup_for_class(klass)
     Rails.logger.info "clear_setup_for_class"
+    Sunspot.searchable.delete!(klass)
     Rails.logger.info "searchable #{Sunspot.searchable.inspect}"
-    Rails.logger.info "setups[clazz.name.to_sym] #{setups.keys}"
-    setups.reject!{|key, value| key == clazz.name.to_sym }
-    #setups[clazz.name.to_sym] = new(clazz)
-    Rails.logger.info "setups[clazz.name.to_sym] #{setups.keys}"
+    #Rails.logger.info "field_factories #{field_factories.inspect}"
+    Rails.logger.info "setups[klass.name.to_sym] #{setups.keys}"
+    setups.delete_if{|key, value| key == klass.name.to_sym }
+    #setups[klass.name.to_sym] = new(clazz)
+    Rails.logger.info "setups[klass.name.to_sym] #{setups.keys}"
   end
+end
+
+Sunspot::ClassSet.class_eval do
+
+  def delete!(klass)
+    @name_to_klass.delete_if{|key, value| key == klass.name.to_sym }
+  end
+
 end
 
 module ErpForms
@@ -43,13 +53,13 @@ module ErpForms
           end
 
           def sunspot_setup(options={})
-            clazz = DynamicFormModel.get_constant(self.name)
-            Sunspot::Setup.clear_setup_for_class(clazz)
+            klass = DynamicFormModel.get_constant(self.name)
+            Sunspot::Setup.clear_setup_for_class(klass)
             definition = DynamicForm.get_form(self.name).definition_object rescue nil
 
             unless definition.nil?
               Rails.logger.info "calling sunspot setup"
-              Sunspot.setup(clazz) do
+              Sunspot.setup(klass) do
                 integer :id
                 date :created_at do data.created_at end
                 date :updated_at do data.updated_at end
