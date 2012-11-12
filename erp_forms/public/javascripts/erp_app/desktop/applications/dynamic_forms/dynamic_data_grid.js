@@ -11,7 +11,6 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.FileTree",{
   rootVisible:true,
   multiSelect:true,
   containerScroll: true,
-  additionalContextMenuItems:[],
   listeners:{
     'load':function(store){
       store.getRootNode().expand();
@@ -34,7 +33,45 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.FileTree",{
     }
   },
 
+  changeSecurityOnFile : function(node, secure, fileTree){
+      var msg = secure ? 'Securing file...' : 'Unsecuring file...';
+      var waitMsg = Ext.Msg.wait("Please Wait", msg);
+      Ext.Ajax.request({
+        url: '/erp_forms/erp_app/desktop/dynamic_forms/data/update_file_security',
+        method: 'POST',
+        params:{
+          path: node.get('id'),
+          secure: secure,
+          model_name: fileTree.extraPostData.model_name,
+          id: fileTree.extraPostData.id
+        },
+        success: function(response) {
+          var obj = Ext.decode(response.responseText);
+          if(obj.success){
+            waitMsg.hide();
+            if(secure){
+              node.set('iconCls', 'icon-document_lock');
+            }
+            else{
+              node.set('iconCls', 'icon-document');
+            }
+            node.set('isSecured',secure);
+            node.commit();
+          }
+          else{
+            Ext.Msg.alert('Error', 'Error securing file.');
+          }
+        },
+        failure: function(response) {
+          waitMsg.hide();
+          Ext.Msg.alert('Error', 'Error securing file.');
+        }
+      });
+  },
+
   constructor:function (config) {
+    var self = this;
+
     config = Ext.apply({
       autoDestroy:true,
       title: 'Files',
@@ -47,6 +84,18 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.FileTree",{
       showNewFolderMenuItem:false,
       showRenameMenuItem:false,
       enableViewContents:false,
+      additionalContextMenuItems:[{
+        nodeType:'leaf',
+        text:'Update Security',
+        iconCls:'icon-document_lock',
+        listeners:{
+          scope:self,
+          'click':function(){
+            var node = self.selectedNode;
+            self.changeSecurityOnFile(node, !node.get('isSecured'), self);
+          }
+        }
+      }],
       controllerPath:'/erp_forms/erp_app/desktop/dynamic_forms/data',
       standardUploadUrl:'/erp_forms/erp_app/desktop/dynamic_forms/data/upload_file',
       url:'/erp_forms/erp_app/desktop/dynamic_forms/data/get_files'
@@ -127,10 +176,12 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.DynamicDataGridPane
     viewRecord : function(rec, formPanel){
         var self = this;
         var gridpanel_id = self.id;
+        var record_id = (Ext.isEmpty(rec.model_name) ? rec.get("id") : rec.id);
+        var model_name = (Ext.isEmpty(rec.model_name) ? rec.get("model_name") : rec.model_name);
 
         // check and see if tab already open
         var center_region = self.findParentByType('dynamic_forms_centerregion');
-        var tab = center_region.workArea.query('#'+rec.get("model_name")+'-'+rec.get("id")).first();
+        var tab = center_region.workArea.query('#'+model_name+'-'+record_id).first();
         if (tab){
             center_region.workArea.setActiveTab(center_region.workArea.items.length - 1);
             return;    
@@ -141,8 +192,8 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.DynamicDataGridPane
             url: '/erp_forms/erp_app/desktop/dynamic_forms/data/get',
             method: 'POST',
             params:{
-                id:rec.get("id"),
-                model_name:rec.get("model_name")
+                id:record_id,
+                model_name:model_name
             },
             success: function(response) {
                 Ext.getCmp('dynamic_forms_westregion').clearWindowStatus();
@@ -150,7 +201,6 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.DynamicDataGridPane
                 var center_region = self.findParentByType('dynamic_forms_centerregion');
                 var ticket_div_id = gridpanel_id+'_ticket';
 
-                formPanel.close_selector = '#'+rec.get("model_name")+'-'+rec.get("id");
                 var leftPanelItems = [formPanel];
 
                 //comments
@@ -166,7 +216,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.DynamicDataGridPane
                     comments_string += '</div>';
 
                     var commentsPanel = {
-                        id: 'commentsPanel'+rec.get("model_name")+rec.get("id"),
+                        id: 'commentsPanel'+model_name+record_id,
                         xtype: 'panel',
                         title: 'Comments',
                         html: comments_string,
@@ -176,7 +226,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.DynamicDataGridPane
                             iconCls: 'icon-add',
                             listeners:{
                               click: function(button){
-                                Ext.getCmp(gridpanel_id).addCommentWindow(rec.get("id"), rec.get("model_name"), comment_div_id);
+                                Ext.getCmp(gridpanel_id).addCommentWindow(record_id, model_name, comment_div_id);
                               }
                             }
                         }]
@@ -227,8 +277,8 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.DynamicDataGridPane
                       minHeight: 800,
                       listeners:{
                         'beforeload':function(store){
-                            store.getProxy().extraParams.id = rec.get('id');
-                            store.getProxy().extraParams.model_name = rec.get('model_name');
+                            store.getProxy().extraParams.id = record_id;
+                            store.getProxy().extraParams.model_name = model_name;
                         },
                         'load':function(store){
                             store.getRootNode().expand();
@@ -241,8 +291,8 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.DynamicDataGridPane
                       }
                     });
                     fileTree.extraPostData = {
-                        id: rec.get('id'),
-                        model_name: rec.get('model_name')
+                        id: record_id,
+                        model_name: model_name
                     };
 
                     rightPanelItems.push(fileTree);
@@ -256,18 +306,24 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.DynamicDataGridPane
                 };
 
                 var viewPanel = Ext.create('Ext.panel.Panel',{
-                    itemId: rec.get("model_name")+'-'+rec.get("id"),
+                    itemId: model_name+'-'+record_id,
                     layout: 'border',
-                    title: rec.get("model_name")+' '+rec.get("id"),
+                    title: model_name+' '+record_id,
                     closable: true,
                     autoScroll: true,
                     record: rec,                    
                     items: [leftPanel, rightPanel],
                     listeners:{
-                        'afterrender':function(){
+                        'afterrender':function(panel){
                             codemirrorHighlight(ticket_div_id);
                             codemirrorHighlight(comment_div_id);
-                        }
+                            panel.query('dynamic_form_panel').first().addListener('afterupdate', function(){
+                                // update status bar with save message
+                                // reload grid
+                                var tabPanel = panel.findParentByType('tabpanel');
+                                tabPanel.query('#'+model_name).first().query('shared_dynamiceditablegrid').first().getStore().load({});
+                            });
+                        }                        
                     }
                 });
                 center_region.workArea.add(viewPanel);
@@ -287,10 +343,10 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.DynamicDataGridPane
         Ext.Ajax.request({
             url: '/erp_forms/erp_app/desktop/dynamic_forms/forms/get',
             method: 'POST',
-            params:{
-                id:rec.get("form_id"),
-                record_id:rec.get("id"),
-                model_name:rec.get("model_name"),
+            params:{ // params can come from create response or grid store
+                id:(Ext.isEmpty(rec.model_name) ? rec.get("form_id") : rec.form_id),
+                record_id:(Ext.isEmpty(rec.model_name) ? rec.get("id") : rec.id),
+                model_name:(Ext.isEmpty(rec.model_name) ? rec.get("model_name") : rec.model_name),
                 form_action: 'update'
             },
             success: function(response, options){

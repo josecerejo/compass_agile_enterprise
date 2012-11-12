@@ -260,6 +260,12 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.FormBuilder",{
                 fieldLabel: 'Display In Grid',
                 name: 'updateDisplayInGrid',
                 xtype: 'checkbox'
+            },
+            {
+                fieldLabel: 'Searchable',
+                name: 'updateSearchable',
+                xtype: 'checkbox',
+                plugins: [new helpQtip("Make this field searchable. Requires Solr via Compass AE's erp_search engine.")]
             }
         ];
 
@@ -470,6 +476,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.FormBuilder",{
                     ['alpha','Alpha'],
                     ['alphanum','Alphanumeric'],
                     ['email','Email'],
+                    ['IPAddress','IP Address'],
                     ['url','URL']
                 ],
                 plugins: [new helpQtip('Use a built-in or custom ExtJS VType.')],
@@ -596,7 +603,9 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.FormBuilder",{
     },
 
     addValidationToField : function(field){
-        if(!Ext.isEmpty(field.validator_function)){
+        if(!Ext.isEmpty(field.validation_regex)){
+            field.regex = initRegex(field.validation_regex);
+        }else if(!Ext.isEmpty(field.validator_function)){
             field.validator = function(v){ return eval(field.validator_function); };
         }
         return field;
@@ -680,6 +689,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.FormBuilder",{
                         try { prop_form.findField('updateEmptyText').setValue(item.emptyText); } catch(e) {}
                         try { prop_form.findField('updateAllowBlank').setValue(item.allowBlank); } catch(e) {}
                         try { prop_form.findField('updateDisplayInGrid').setValue(item.display_in_grid); } catch(e) {}
+                        try { prop_form.findField('updateSearchable').setValue(item.searchable); } catch(e) {}
                         try { prop_form.findField('updateReadOnly').setValue(item.readOnly); } catch(e) {}
                         try { prop_form.findField('updateWidth').setValue(item.width); } catch(e) {}
                         try { prop_form.findField('updateHeight').setValue(item.height); } catch(e) {}
@@ -806,7 +816,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.FormBuilder",{
                                             Ext.getStore('formsTreeStore').load();
                                         }else{
                                             formBuilder.setTitle(form_props.findField('description').getValue());
-                                            Ext.Msg.alert('Success', 'Form saved.');  
+                                            //Ext.Msg.alert('Success', 'Form saved.');
                                         }
                                     }
                                     else{
@@ -819,6 +829,8 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.FormBuilder",{
                                   }
                                 });
                             }else{
+                                var east_tabs = formBuilder.query('#east_tabs').first();
+                                east_tabs.setActiveTab('form_props');
                                 Ext.Msg.alert('Error', "There is a validation error with this form's properties. Please correct fields marked red.");
                             }
                           }
@@ -879,7 +891,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.FormBuilder",{
                         }
                       },
                       { xtype: 'button', 
-                        text: 'Remove Selected Field',
+                        text: 'Remove Field',
                         iconCls: 'icon-delete',
                         listeners:{
                           click: function(button){
@@ -983,12 +995,15 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.FormBuilder",{
                                                 xtype: droppedField.get('field_xtype'),
                                                 name: field_name,
                                                 fieldLabel: (droppedField.get('field_xtype') == 'hiddenfield' ? 'Hidden Field' : field_name.titleize()),
-                                                display_in_grid: true
+                                                display_in_grid: true,
+                                                searchable: true,
+                                                labelWidth: 75
                                             };
 
                                             switch(fieldDefinition.xtype){
                                                 case 'hiddenfield':
                                                     fieldDefinition.display_in_grid = false;
+                                                    fieldDefinition.searchable = false;
                                                     break;
                                                 case 'related_combobox':
                                                     fieldDefinition.width = 175;
@@ -1085,6 +1100,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.FormBuilder",{
                                               if (!Ext.isEmpty(updateEmptyText)) fieldDefinition.emptyText = updateEmptyText; } catch(e){}
                                         try { fieldDefinition.allowBlank = updateFieldForm.findField('updateAllowBlank').getValue(); } catch(e){}
                                         try { fieldDefinition.display_in_grid = updateFieldForm.findField('updateDisplayInGrid').getValue(); } catch(e){}                                        
+                                        try { fieldDefinition.searchable = updateFieldForm.findField('updateSearchable').getValue(); } catch(e){}                                        
                                         try { var updateValue = updateFieldForm.findField('updateValue').getValue();
                                               if (selected_field.xtype == 'related_combobox') {
                                                 if (!Ext.isEmpty(updateValue)) fieldDefinition.default_value = parseInt(updateValue, 10);
@@ -1103,7 +1119,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.FormBuilder",{
                                             switch(updateFieldForm.findField('updateValidationType').getValue()){
                                                 case 'regex':
                                                     var validationRegex = updateFieldForm.findField('updateValidationRegex').getValue();
-                                                    if(!Ext.isEmpty(validationRegex)) fieldDefinition.regex = initRegex(validationRegex);
+                                                    if(!Ext.isEmpty(validationRegex)) fieldDefinition.validation_regex = validationRegex;
                                                     fieldDefinition.regexText = updateFieldForm.findField('updateValidationRegexText').getValue();
                                                     break;
                                                 case 'function':
@@ -1241,6 +1257,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.FormBuilder",{
                                     fieldLabel: 'Email Recipients',
                                     name: 'widget_email_recipients',
                                     xtype: 'textfield',
+                                    vtype: 'emailList',
                                     width: 215,
                                     listeners:{
                                         render:function(field){

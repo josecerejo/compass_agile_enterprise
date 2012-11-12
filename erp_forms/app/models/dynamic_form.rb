@@ -45,8 +45,10 @@ class DynamicForm < ActiveRecord::Base
   end
   
   def add_validation(def_object)
-    def_object.each do |item|      
-      if item[:validator_function] and item[:validator_function] != ""
+    def_object.each do |item|
+      if !item[:validation_regex].blank?
+        item[:regex] = NonEscapeJsonString.new(item[:validation_regex].match('^\/') ? item[:validation_regex] : '/'+item[:validation_regex]+'/')
+      elsif !item[:validator_function].blank?
         item[:validator] = NonEscapeJsonString.new("function(v){ return #{item[:validator_function]}; }")
       end
     end
@@ -97,7 +99,7 @@ class DynamicForm < ActiveRecord::Base
 
   def to_extjs_formpanel(options={})   
     form_hash = {
-      :xtype => 'form',
+      :xtype => 'dynamic_form_panel',
       :url => options[:url],
       :title => self.description,
       :frame => true,
@@ -120,7 +122,7 @@ class DynamicForm < ActiveRecord::Base
     form_hash[:buttons] << {
       :text => self.submit_button_label,
       :listeners => NonEscapeJsonString.new("{
-          \"click\":function(button){
+          click:function(button){
               var form = button.findParentByType('form').getForm();
               //jsonSubmit option only works when there is no filefield so we have to do it ourselves
               //JSON is important to preserve data types (ie. we want integers to save as integers not strings)
@@ -133,22 +135,26 @@ class DynamicForm < ActiveRecord::Base
               if (form.isValid()){
                 form.submit({
                     #{submit_empty_text_js}
-                    reset:true,
+                    reset:false,
                     params:{
                       form_data_json: Ext.encode(form_data)
                     },
                     success:function(form, action){
-                        if (form.owner.close_selector){
-                          form.owner.up(form.owner.close_selector).close();
+                        var obj = Ext.decode(action.response.responseText);
+                        if(obj.success){
+                          if (form.getRecord()){
+                            form.owner.fireEvent('afterupdate');
+                          }else{
+                            form.owner.fireEvent('aftercreate', {
+                              record: obj
+                            });
+                          }
                         }else{
-                          form.owner.up('window').close();
-                        }
-                        if (Ext.getCmp('#{model_name}')){
-                            Ext.getCmp('#{model_name}').query('shared_dynamiceditablegrid')[0].store.load();                                                                      
+                          Ext.Msg.alert('Error', obj.message);
                         }
                     },
                     failure:function(form, action){
-                      Ext.Msg.alert('Error', action.response.responseText);                                
+                      Ext.Msg.alert('Error', action.response.responseText);
                     }
                 });
               }else{

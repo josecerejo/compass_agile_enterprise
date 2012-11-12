@@ -47,12 +47,12 @@ Ext.define("Compass.ErpApp.Shared.DynamicEditableGrid",{
 
         this.store = store;
 
-        if(config['page'] == true){
+        if(config.page === true){
             this.bbar = new Ext.PagingToolbar({
                 store: store,
                 displayInfo: true,
-                displayMsg: config['displayMsg'],
-                emptyMsg: config['emptyMsg']
+                displayMsg: config.displayMsg,
+                emptyMsg: config.emptyMsg
             });
         }
 
@@ -71,7 +71,7 @@ Ext.define("Compass.ErpApp.Shared.DynamicEditableGrid",{
                 extend:'Ext.data.Model',
                 fields:config.fields,
                 validations:config.validations,
-                idProperty: ((config.id_property != undefined) ? config.id_property : "id")
+                idProperty: ((config.id_property !== undefined) ? config.id_property : "id")
             });
             plugins.push(this.editing);
             

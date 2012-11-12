@@ -11,6 +11,7 @@ class UpdateContactForm
     d = DynamicForm.find_by_internal_identifier('contact_us')
     unless d.nil?
       d.definition = fields.to_json
+      d.msg_target = 'qtip'
       d.save    
     end    
   end

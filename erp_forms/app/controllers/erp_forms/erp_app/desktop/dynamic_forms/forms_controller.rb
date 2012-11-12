@@ -15,6 +15,8 @@ class ErpForms::ErpApp::Desktop::DynamicForms::FormsController < ErpForms::ErpAp
         :id => "form_model_#{form_model.id}",
         :formModelId => form_model.id,
         :isFormModel => true, 
+        :file_security_default => form_model.file_security_default, 
+        :show_in_multitask => form_model.show_in_multitask, 
         :isForm => false, 
         :leaf => false,
         :expanded => true,
@@ -119,6 +121,10 @@ class ErpForms::ErpApp::Desktop::DynamicForms::FormsController < ErpForms::ErpAp
     dform = DynamicForm.find_by_id(params[:id])
     dform = assign_form_attributes(dform)
     dform.updated_by_id = current_user.id
+
+    # update solr config for model
+    DynamicFormModel.get_constant(dform.model_name).sunspot_setup if $USE_SOLR_FOR_DYNAMIC_FORM_MODELS
+
     if dform.save
       render :json => {:success => true}
     else

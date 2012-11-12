@@ -24,13 +24,13 @@ module ErpApp
 	  #this is ugly need a better way
 	  (config.active_record.observers.nil?) ? config.active_record.observers = [:user_app_container_observer] : config.active_record.observers << :user_app_container_observer
 
-    engine = self
-  	config.to_prepare do 
-      ErpBaseErpSvcs.register_compass_ae_engine(engine)
-      ::ErpApp::Widgets::Loader.load_root_widgets
+    ErpBaseErpSvcs.register_as_compass_ae_engine(config, self)
+    ::ErpApp::Widgets::Loader.load_root_widgets(config)
 
+  	config.to_prepare do
       #will_paginate patch
       require 'erp_app/extensions/will_paginate_patch'
-  	end
+    end
+
   end
 end

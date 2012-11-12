@@ -28,7 +28,7 @@ class DynamicFormField
   # SPECIAL FIELDS #
   ##################
   def self.email(options={})
-    options[:validation_function] = 'validateEmail(v)'
+    options[:validator_function] = 'validateEmail(v)'
     DynamicFormField.basic_field('textfield', options)
   end
 
@@ -162,33 +162,31 @@ class DynamicFormField
         :display_in_grid => options[:display_in_grid]
     }
 
+    field[:buttonText] = options[:buttonText] unless options[:buttonText].blank?
     field[:displayField] = options[:displayField] unless options[:displayField].blank?
+    field[:disabled] = options[:disabled] unless options[:disabled].nil?
+    field[:editable] = options[:editable] unless options[:editable].nil?
+    field[:emptyText] = options[:emptyText] unless options[:emptyText].blank?
     field[:extraParams] = options[:extraParams] unless options[:extraParams].blank?
-    field[:url] = options[:url] unless options[:url].blank?
     field[:fields] = options[:fields] unless options[:fields].blank?
+    field[:forceSelection] = options[:forceSelection] unless options[:forceSelection].nil?
+    field[:hidden] = options[:hidden] unless options[:hidden].nil?
+    field[:hideTrigger] = options[:hideTrigger] unless options[:hideTrigger].nil?
+    field[:hideMode] = options[:hideMode] unless options[:hideMode].blank?
+    field[:labelAlign] = options[:labelAlign] unless options[:labelAlign].blank?
     field[:mapping] = options[:mapping] unless options[:mapping].blank?
     field[:minLength] = options[:minLength] unless options[:minLength].nil?
     field[:maxLength] = options[:maxLength] unless options[:maxLength].nil?
     field[:minValue] = options[:minValue] unless options[:minValue].nil?
     field[:maxValue] = options[:maxValue] unless options[:maxValue].nil?
-    field[:hideTrigger] = options[:hideTrigger] unless options[:hideTrigger].nil?
-    field[:hideMode] = options[:hideMode] unless options[:hideMode].blank?
-    field[:hidden] = options[:hidden] unless options[:hidden].nil?
-    field[:disabled] = options[:disabled] unless options[:disabled].nil?
-    field[:buttonText] = options[:buttonText] unless options[:buttonText].blank?
-    field[:forceSelection] = options[:forceSelection] unless options[:forceSelection].nil?
-    field[:editable] = options[:editable] unless options[:editable].nil?
-    field[:emptyText] = options[:emptyText] unless options[:emptyText].blank?
     field[:msgTarget] = options[:msgTarget] unless options[:msgTarget].blank?
-    field[:labelAlign] = options[:labelAlign] unless options[:labelAlign].blank?
+    field[:regexText] = options[:regexText] unless options[:regexText].blank?
+    field[:url] = options[:url] unless options[:url].blank?
+    field[:vtype] = options[:vtype] unless options[:vtype].blank?
+    field[:validation_regex] = options[:validation_regex] unless options[:validation_regex].blank?
+    field[:validator_function] = options[:validator_function] unless options[:validator_function].blank?
 
-    if selections and selections != []
-      field[:store] = selections
-    end
-    
-    if options[:validator_function] and options[:validator_function] != ''
-      field[:validator_function] = options[:validator_function]
-    end
+    field[:store] = selections if selections and selections != []    
     
     field
   end
@@ -204,6 +202,7 @@ class DynamicFormField
     options[:height] = nil if options[:height].nil?
     options[:labelWidth] = 75 if options[:labelWidth].nil?
     options[:display_in_grid] = true if options[:display_in_grid].nil?
+    options[:searchable] = true if options[:searchable].nil?
     
     options
   end

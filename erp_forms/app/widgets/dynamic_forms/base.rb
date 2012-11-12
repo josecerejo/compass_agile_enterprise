@@ -32,7 +32,7 @@ module Widgets
       		form_data[:created_with_form_id] = form_data[:dynamic_form_id] if form_data[:dynamic_form_id] and params[:is_html_form].blank?
       		form_data[:website] = @website.title
 
-      		@myDynamicObject = DynamicFormModel.assign_all_attributes(@myDynamicObject, form_data, ErpApp::Widgets::Base::IGNORED_PARAMS)
+      		@myDynamicObject = @myDynamicObject.assign_all_attributes(form_data, ErpApp::Widgets::Base::IGNORED_PARAMS)
   			
           # get dynamic for from form_data[:created_with_form_id]
           form = DynamicForm.find(form_data[:created_with_form_id])
@@ -79,7 +79,11 @@ module Widgets
 
         begin
           @root_node = File.join(ErpTechSvcs::Config.file_assets_location, form_data[:model_name], @myDynamicObject.id.to_s)
-          @myDynamicObject.add_file(data, File.join(@file_support.root, base_path, name))
+          file = @myDynamicObject.add_file(data, File.join(@file_support.root, base_path, name))
+
+          roles = ['admin', @myDynamicObject.role_iid]
+          (@myDynamicObject.file_security_default == 'private') ? file.add_capability(:download, nil, roles) : file.remove_all_capabilities
+          
           return {:success => true}
         rescue Exception => e
           Rails.logger.error e.message

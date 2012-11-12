@@ -4,7 +4,6 @@ Compass.ErpApp.Widgets.DynamicForms = {
             layout:'fit',
             width:375,
             title:'Add DynamicForm Widget',
-            height:190,
             plain: true,
             buttonAlign:'center',
             items: Ext.create("Ext.form.Panel",{
@@ -17,7 +16,6 @@ Compass.ErpApp.Widgets.DynamicForms = {
                 items: [
                 {
                     xtype:'combo',
-                    id:'WidgetDynamicFormModelName',
                     value:'',
                     loadingText:'Retrieving Dynamic Form Models ...',
                     store:Ext.create('Ext.data.Store',{
@@ -30,32 +28,32 @@ Compass.ErpApp.Widgets.DynamicForms = {
                           url:'/erp_forms/erp_app/desktop/dynamic_forms/models/index'
                         },
                         fields:[
-                        {
-                            name:'id'
-                        },
-                        {
-                            name:'model_name'
-
-                        }
+                            {
+                                name:'id'
+                            },
+                            {
+                                name:'model_name'
+                            }
                         ]
                     }),
                     forceSelection:true,
                     editable:true,
-                    fieldLabel:'Dynamic Form Model Name (Class)',
+                    fieldLabel:'Model Name',
                     autoSelect:true,
-                    typeAhead: true,
                     mode: 'remote',
+                    name: 'model_name',
                     displayField:'model_name',
                     valueField:'model_name',
                     triggerAction: 'all',
-                    allowBlank:false
+                    allowBlank:false,
+                    plugins: [new helpQtip("Dynamic Form Model Name (Class)")]
                 },
                 {
                     xtype:'textfield',
-                    fieldLabel:'Form Width in Pixels',
-                    allowBlank:false,
-                    value:'410',
-                    id:'WidgetDynamicFormWidth'
+                    fieldLabel:'Form Width',
+                    name: 'form_width',
+                    allowBlank:true,
+                    plugins: [new helpQtip("Form Width in Pixels. Leave blank for auto width.")]
                 }
                 ]
             }),
@@ -65,30 +63,34 @@ Compass.ErpApp.Widgets.DynamicForms = {
                     'click':function(button){
                         var tpl = null;
                         var content = null;
-                        var window = button.findParentByType('window');
-                        var formPanel = window.query('form')[0];
+                        var formPanel = button.findParentByType('window').query('form').first();
                         var basicForm = formPanel.getForm();
+                        var WidgetDynamicFormModelName = basicForm.findField('model_name');
+                        var WidgetDynamicFormWidth = basicForm.findField('form_width');
+                        if (basicForm.isValid()){
+                            var data = {
+                                WidgetDynamicFormModelName: WidgetDynamicFormModelName.getValue(),
+                                WidgetDynamicFormWidth: WidgetDynamicFormWidth.getValue()
+                            };
 
-                        var WidgetDynamicFormModelName = basicForm.findField('WidgetDynamicFormModelName');
-                        var data = {};
-                        data.WidgetDynamicFormModelName = WidgetDynamicFormModelName.getValue();
+                            tpl = new Ext.XTemplate(
+                                "<% # Optional Parameters:\n",
+                                "   # internal_identifier: Models can have multiple forms\n",
+                                "   #                      Leave blank if you want to use the default form\n",
+                                "   #                      Specify internal_identifier to choose a specific form %>\n",
+                                "<%= render_widget :dynamic_forms,\n",
+                                "   :params => {:model_name => '{WidgetDynamicFormModelName}',\n",
+                                "               :internal_identifier => ''",
+                                '<tpl if="WidgetDynamicFormWidth">',
+                                ",\n               :width => {WidgetDynamicFormWidth} ",
+                                '</tpl>',
+                                "} %>");
+                            content = tpl.apply(data);
 
-                        var WidgetDynamicFormWidth = basicForm.findField('WidgetDynamicFormWidth');
-                        data.WidgetDynamicFormWidth = WidgetDynamicFormWidth.getValue();
-                        tpl = new Ext.XTemplate(
-                            "<% # Optional Parameters:\n",
-                            "   # internal_identifier: Models can have multiple forms\n",
-                            "   #                      Leave blank if you want to use the default form\n",
-                            "   #                      Specify internal_identifier to choose a specific form %>\n",
-                            "<%= render_widget :dynamic_forms,\n",
-                            "   :params => {:model_name => '{WidgetDynamicFormModelName}',\n",
-                            "               :internal_identifier => '',\n",
-                            "               :width => {WidgetDynamicFormWidth}} %>");
-                        content = tpl.apply(data);
-
-                        //add rendered template to center region editor
-                        Ext.getCmp('knitkitCenterRegion').addContentToActiveCodeMirror(content);
-                        addDynamicFormWidgetWindow.close();
+                            //add rendered template to center region editor
+                            Ext.getCmp('knitkitCenterRegion').addContentToActiveCodeMirror(content);
+                            addDynamicFormWidgetWindow.close();                            
+                        }
                     }
                 }
             },{
@@ -100,7 +102,7 @@ Compass.ErpApp.Widgets.DynamicForms = {
         });
         addDynamicFormWidgetWindow.show();
     }
-}
+};
 
 Compass.ErpApp.Widgets.AvailableWidgets.push({
     name:'Dynamic Forms',

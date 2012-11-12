@@ -32,32 +32,12 @@ class DynamicFormModel < ActiveRecord::Base
     DynamicFormModel.get_constant(klass_name).new
   end
 
-  # handles both static and dynamic attributes
-  def self.assign_all_attributes(dynamicObject, params, ignored_params=[])    
-    params.each do |k,v|
-      k = k.to_s
-      unless ignored_params.include?(k) or k == '' or k == '_'
-        if dynamicObject.attributes.include?(k)
-          dynamicObject.send(k + '=', v) 
-        else
-          if ['created_by','updated_by','created_at','updated_at','created_with_form_id','updated_with_form_id'].include?(k)
-            key = k + '='
-          else
-            key = DynamicDatum::DYNAMIC_ATTRIBUTE_PREFIX + k + '='
-          end
-          
-          dynamicObject.data.send(key, v) 
-        end
-      end
-    end
-
-    dynamicObject
+  def get_constant
+    DynamicFormModel.get_constant(self.model_name)
   end
 
-  # handles both static and dynamic attributes
-  def self.save_all_attributes(dynamicObject, params, ignored_params=[])
-    DynamicFormModel.assign_all_attributes(dynamicObject, params, ignored_params)
-    (dynamicObject.valid? and dynamicObject.save) ? dynamicObject : nil
+  def get_instance
+    DynamicFormModel.get_instance(self.model_name)
   end
 
 end

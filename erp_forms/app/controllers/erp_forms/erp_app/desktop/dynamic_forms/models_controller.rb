@@ -8,7 +8,9 @@ class ErpForms::ErpApp::Desktop::DynamicForms::ModelsController < ErpForms::ErpA
     dynamic_form_models.each do |m|
       model_hash = {
         :id => m.id,
-        :model_name => m.model_name   
+        :model_name => m.model_name,
+        :file_security_default => m.file_security_default,
+        :show_in_multitask => m.show_in_multitask
       }
       
       models << model_hash
@@ -34,11 +36,21 @@ class ErpForms::ErpApp::Desktop::DynamicForms::ModelsController < ErpForms::ErpA
   
   # create a dynamic form model
   def create
-    model_name = params[:model_name]
     DynamicFormModel.create({
-      :model_name => model_name
+      :model_name => params[:model_name],
+      :file_security_default => params[:file_security_default]
     })
 	
+    render :json => {:success => true}
+  end
+
+  # update a dynamic form model
+  def update
+    m = DynamicFormModel.find(params[:id])
+    m.file_security_default = params[:file_security_default] unless params[:file_security_default].blank?
+    m.show_in_multitask = params[:show_in_multitask] unless params[:show_in_multitask].nil?
+    m.save
+    
     render :json => {:success => true}
   end
   

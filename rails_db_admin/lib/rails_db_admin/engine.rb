@@ -8,11 +8,8 @@ module RailsDbAdmin
       app.middleware.insert_before Rack::Lock, ::ActionDispatch::Static, "#{root}/public"
     end
 
-    engine = self
-    config.to_prepare do
-      ErpBaseErpSvcs.register_compass_ae_engine(engine)
-      ::ErpApp::Widgets::Loader.load_compass_ae_widgets(engine)
-    end
+    ErpBaseErpSvcs.register_as_compass_ae_engine(config, self)
+    ::ErpApp::Widgets::Loader.load_compass_ae_widgets(config, self)
     
   end
 end

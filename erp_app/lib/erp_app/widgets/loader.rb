@@ -2,16 +2,19 @@ module ErpApp
   module Widgets
     class Loader
       class << self
-        def load_compass_ae_widgets(engine)
-          require_widgets_and_helpers(engine.root)
-          load_widget_extensions(engine)
+        def load_compass_ae_widgets(config, engine)
+          config.send(ErpBaseErpSvcs.determine_callback) do
+            ::ErpApp::Widgets::Loader.require_widgets_and_helpers(engine.root)
+            ::ErpApp::Widgets::Loader.load_widget_extensions(engine)
+          end
+
         end
 
-        def load_root_widgets
-          require_widgets_and_helpers(Rails.root.to_s)
+        def load_root_widgets(config)
+          config.send(ErpBaseErpSvcs.determine_callback) do
+            ::ErpApp::Widgets::Loader.require_widgets_and_helpers(Rails.root.to_s)
+          end
         end
-
-        private
 
         def require_widgets_and_helpers(path)
           widgets = []
@@ -38,10 +41,39 @@ module ErpApp
             end
             #get all view files for theme generation
             get_widget_view_files(widget_hash, widget_hash[:view_paths].first)
-            #load any rails root extensions
+
+            #load root widget extensions that should override this widget
             load_root_widget_extensions(widget_hash)
           end
         end
+
+        def load_widget_extensions(engine)
+          widgets_path = File.join(engine.root,"lib",engine.railtie_name,"extensions/widgets")
+          widgets = File.directory?(widgets_path) ? Dir.entries(widgets_path) : []
+          widgets.delete_if{|name| name =~ /^\./}
+
+          widgets.each do |widget_name|
+            widget_hash = Rails.application.config.erp_app.widgets.find{|item| item[:name] == widget_name}
+            #load any extensions to existing widgets
+            Dir.glob(File.join(widgets_path,widget_name,"*.rb")).each do |file|
+              load file
+            end
+
+            #add any additional view paths to widgets
+            if File.directory?(File.join(widgets_path,widget_name,'views'))
+              view_path = File.join(widgets_path,widget_name,'views')
+              widget_hash[:view_paths] << view_path
+              #get all view files for theme generation
+              get_widget_view_files(widget_hash, view_path)
+            end
+
+            #overwrite with any extensions in rails root
+            load_root_widget_extensions(widget_hash)
+          end
+
+        end
+
+        private
 
         def load_widget_view_helpers(path)
           helpers = Dir.entries(path)
@@ -75,32 +107,6 @@ module ErpApp
               get_widget_view_files(widget_hash, node[:id])
             end
           end
-        end
-
-        def load_widget_extensions(engine)
-          widgets_path = File.join(engine.root,"lib",engine.railtie_name,"extensions/widgets")
-          widgets = File.directory?(widgets_path) ? Dir.entries(widgets_path) : []
-          widgets.delete_if{|name| name =~ /^\./}
-
-          widgets.each do |widget_name|
-            widget_hash = Rails.application.config.erp_app.widgets.find{|item| item[:name] == widget_name}
-            #load any extensions to existing widgets
-            Dir.glob(File.join(widgets_path,widget_name,"*.rb")).each do |file|
-              load file
-            end
-
-            #add any additional view paths to widgets
-            if File.directory?(File.join(widgets_path,widget_name,'views'))
-              view_path = File.join(widgets_path,widget_name,'views')
-              widget_hash[:view_paths] << view_path
-              #get all view files for theme generation
-              get_widget_view_files(widget_hash, view_path)
-            end
-
-            #overwrite with any extensions in rails root
-            load_root_widget_extensions(widget_hash)
-          end
- 
         end
 
         def load_root_widget_extensions(widget_hash)

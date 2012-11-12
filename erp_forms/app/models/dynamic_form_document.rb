@@ -3,9 +3,11 @@ class DynamicFormDocument < ActiveRecord::Base
 
   belongs_to :dynamic_form_model
 
+  acts_as_dynamic_form_model
   has_file_assets
   has_dynamic_forms
 	has_dynamic_data
+  has_dynamic_solr_search if $USE_SOLR_FOR_DYNAMIC_FORM_MODELS
 
   # declare a subclass
   # pass in name of subclass
@@ -24,14 +26,14 @@ class DynamicFormDocument < ActiveRecord::Base
   end
   
   def self.class_exists?(class_name)
-	result = nil
-	begin
-	  klass = Module.const_get(class_name)
+  	result = nil
+  	begin
+  	  klass = Module.const_get(class_name)
       result = klass.is_a?(Class) ? ((klass.superclass == ActiveRecord::Base or klass.superclass == DynamicModel) ? true : nil) : nil
-	rescue NameError
-	  result = nil
-	end
-	result
+  	rescue NameError
+  	  result = nil
+  	end
+  	result
   end
 
 end
