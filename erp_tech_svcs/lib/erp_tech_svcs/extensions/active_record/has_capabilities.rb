@@ -29,6 +29,23 @@ module ErpTechSvcs
             Capability.joins(:capable_models).where('capable_model_record_type = ?', self.name)
           end
 
+          # get records for this model without capabilities or that are not in a list of denied roles
+          def secure_scope(denied_roles=[])
+            joins("LEFT OUTER JOIN capable_models ON capable_models.capable_model_record_id = file_assets.id AND capable_models.capable_model_record_type = '#{self.name}'").
+            joins("LEFT JOIN capabilities_capable_models ON capabilities_capable_models.capable_model_id = capable_models.id").
+            joins("LEFT JOIN capabilities ON capabilities_capable_models.capability_id = capabilities.id").
+            joins("LEFT JOIN secured_models ON secured_models.secured_record_id = capabilities.id AND secured_models.secured_record_type = 'Capability'").
+            joins("LEFT JOIN roles_secured_models ON roles_secured_models.secured_model_id = secured_models.id").
+            joins("LEFT JOIN roles ON roles.id = roles_secured_models.role_id").
+            where("roles.id IS NULL OR roles.id NOT IN (?)", denied_roles.collect{|r| r.id }).
+            group(columns.collect{|c| "#{self.table_name}.#{c.name}" })
+          end
+
+          # get records for this model that the given user has access to
+          def user_secure_scope(current_user=nil)
+            all_roles = FileAsset.capabilities.collect{|c| c.roles }.first.uniq
+            secure_scope(all_roles - current_user.roles)
+          end
 				end
 				
 				module SingletonMethods			
