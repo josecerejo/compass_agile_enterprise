@@ -23,6 +23,12 @@ module ErpTechSvcs
 
             default_scope :include => :capabilities
 				  end
+
+          # class method to get all capabilities for this model
+          def capabilities
+            Capability.joins(:capable_models).where('capable_model_record_type = ?', self.name)
+          end
+
 				end
 				
 				module SingletonMethods			
