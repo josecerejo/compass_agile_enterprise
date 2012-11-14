@@ -21,24 +21,22 @@ module ErpTechSvcs
             has_one :capable_model, :as => :capable_model_record				
             has_many :capabilities, :through => :capable_model
 
-            default_scope :include => :capabilities
+            # get records for this model without capabilities or that are not in a list of denied roles
+            scope :secure_scope, lambda{|denied_roles|
+                                    joins("LEFT OUTER JOIN capable_models AS cm ON cm.capable_model_record_id = #{self.table_name}.id AND cm.capable_model_record_type = '#{self.name}'").
+                                    joins("LEFT JOIN capabilities_capable_models AS ccm ON ccm.capable_model_id = cm.id").
+                                    joins("LEFT JOIN capabilities AS c ON ccm.capability_id = c.id").
+                                    joins("LEFT JOIN secured_models AS sm ON sm.secured_record_id = c.id AND sm.secured_record_type = 'Capability'").
+                                    joins("LEFT JOIN roles_secured_models AS rsm ON rsm.secured_model_id = sm.id").
+                                    joins("LEFT JOIN roles AS r ON r.id = rsm.role_id").
+                                    where("r.id IS NULL OR r.id NOT IN (?)", denied_roles.collect{|r| r.id }).
+                                    group(columns.collect{|c| "#{self.table_name}.#{c.name}" })
+                                  }
 				  end
 
           # class method to get all capabilities for this model
           def capabilities
             Capability.joins(:capable_models).where('capable_model_record_type = ?', self.name)
-          end
-
-          # get records for this model without capabilities or that are not in a list of denied roles
-          def secure_scope(denied_roles=[])
-            joins("LEFT OUTER JOIN capable_models ON capable_models.capable_model_record_id = file_assets.id AND capable_models.capable_model_record_type = '#{self.name}'").
-            joins("LEFT JOIN capabilities_capable_models ON capabilities_capable_models.capable_model_id = capable_models.id").
-            joins("LEFT JOIN capabilities ON capabilities_capable_models.capability_id = capabilities.id").
-            joins("LEFT JOIN secured_models ON secured_models.secured_record_id = capabilities.id AND secured_models.secured_record_type = 'Capability'").
-            joins("LEFT JOIN roles_secured_models ON roles_secured_models.secured_model_id = secured_models.id").
-            joins("LEFT JOIN roles ON roles.id = roles_secured_models.role_id").
-            where("roles.id IS NULL OR roles.id NOT IN (?)", denied_roles.collect{|r| r.id }).
-            group(columns.collect{|c| "#{self.table_name}.#{c.name}" })
           end
 
           # get records for this model that the given user has access to
