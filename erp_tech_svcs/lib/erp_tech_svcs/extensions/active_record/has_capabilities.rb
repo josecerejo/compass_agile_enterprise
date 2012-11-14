@@ -43,7 +43,7 @@ module ErpTechSvcs
 
           # get records for this model that the given user has access to
           def user_secure_scope(current_user=nil)
-            all_roles = FileAsset.capabilities.collect{|c| c.roles }.first.uniq
+            all_roles = capabilities.collect{|c| c.roles }.first.uniq
             secure_scope(all_roles - current_user.roles)
           end
 				end
