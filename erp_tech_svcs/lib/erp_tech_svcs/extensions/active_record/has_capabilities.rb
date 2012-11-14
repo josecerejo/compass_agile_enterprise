@@ -34,6 +34,9 @@ module ErpTechSvcs
                                   }
 				  end
 
+				end
+				
+				module SingletonMethods			
           # class method to get all capabilities for this model
           def capabilities
             Capability.joins(:capable_models).where('capable_model_record_type = ?', self.name)
@@ -44,9 +47,6 @@ module ErpTechSvcs
             all_roles = capabilities.collect{|c| c.roles }.first.uniq
             secure_scope(all_roles - current_user.roles)
           end
-				end
-				
-				module SingletonMethods			
 				end
 						
 				module InstanceMethods
