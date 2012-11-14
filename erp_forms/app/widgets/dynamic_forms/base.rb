@@ -82,7 +82,7 @@ module Widgets
           file = @myDynamicObject.add_file(data, File.join(@file_support.root, base_path, name))
 
           roles = ['admin', @myDynamicObject.role_iid]
-          (@myDynamicObject.file_security_default == 'private') ? file.add_capability(:download, nil, roles) : file.remove_all_capabilities
+          (@myDynamicObject.file_security_default == 'private') ? file.add_capability(:download, 'FileAsset', roles) : file.remove_all_capabilities
           
           return {:success => true}
         rescue Exception => e

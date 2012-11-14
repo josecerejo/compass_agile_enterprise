@@ -232,7 +232,7 @@ module ErpForms::ErpApp::Desktop::DynamicForms
         file = @record.add_file(data, File.join(@file_support.root,base_path,name))
 
         roles = ['admin', @record.role_iid]
-        (@record.file_security_default == 'private') ? file.add_capability(:download, nil, roles) : file.remove_all_capabilities
+        (@record.file_security_default == 'private') ? file.add_capability(:download, 'FileAsset', roles) : file.remove_all_capabilities
 
         result = {:success => true}
       rescue Exception => e
@@ -254,7 +254,7 @@ module ErpForms::ErpApp::Desktop::DynamicForms
         file = @record.files.find(:first, :conditions => ['name = ? and directory = ?', ::File.basename(path), ::File.dirname(path)])
 
         roles = ['admin', @record.role_iid]
-        (secure == 'true') ? file.add_capability(:download, nil, roles) : file.remove_all_capabilities
+        (secure == 'true') ? file.add_capability(:download, 'FileAsset', roles) : file.remove_all_capabilities
 
         # if we're using S3, set file permissions to private or public_read   
         @file_support.set_permissions(path, ((secure == 'true') ? :private : :public_read)) if ErpTechSvcs::Config.file_storage == :s3
@@ -345,7 +345,7 @@ module ErpForms::ErpApp::Desktop::DynamicForms
         file = @record.add_file(data, File.join(@file_support.root, base_path, name))
 
         roles = ['admin', @record.role_iid]
-        (@record.file_security_default == 'private') ? file.add_capability(:download, nil, roles) : file.remove_all_capabilities
+        (@record.file_security_default == 'private') ? file.add_capability(:download, 'FileAsset', roles) : file.remove_all_capabilities
 
         return {:success => true}
       rescue Exception => e
