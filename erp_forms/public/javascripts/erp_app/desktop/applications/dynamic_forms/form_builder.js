@@ -1039,7 +1039,13 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.FormBuilder",{
                                             var field_name = addFieldFormPanel.getForm().findField('field_name').getValue();
                                             var formBuilder = formPanel.findParentByType('dynamic_forms_FormBuilder');
                                             
-                                            if (!formBuilder.validateFieldNameUnique(formPanel, field_name)){
+                                            if (!addFieldFormPanel.getForm().isValid()){
+                                                Ext.Msg.alert('Error', 'Please correct form.');
+                                                return;
+                                            } else if (field_name == 'text'){
+                                                Ext.Msg.alert('Error', 'Field Name cannot be "text".');
+                                                return;
+                                            } else if (!formBuilder.validateFieldNameUnique(formPanel, field_name)){
                                                 Ext.Msg.alert('Error', 'Field Name must be unique.');
                                                 return;
                                             }
