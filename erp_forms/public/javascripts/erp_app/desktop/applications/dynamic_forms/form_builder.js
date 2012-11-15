@@ -488,6 +488,34 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.FormBuilder",{
             }
         ];
 
+        var hideMode = [
+            {
+                fieldLabel: 'Hide Mode',
+                name: 'updateHideMode',
+                xtype: 'combobox',
+                queryMode: 'local',
+                store:[
+                    ['display','Display'],
+                    ['visibility','Visibility'],
+                    ['offsets','Offsets']
+                ],
+                value: 'display',
+                plugins: [new helpQtip("A String which specifies how this Component's encapsulating DOM element will be hidden. Values may be:<br /> 'display' : The Component will be hidden using the display: none style.<br /> 'visibility' : The Component will be hidden using the visibility: hidden style.<br /> 'offsets' : The Component will be hidden by absolutely positioning it out of the visible area of the document. This is useful when a hidden Component must maintain measurable dimensions. Hiding using display results in a Component having zero dimensions.<br /> Defaults to: 'display'")],
+                editable: false,
+                forceSelection: true,
+                allowBlank: true
+            }
+        ];
+
+        var hideTrigger = [
+            {
+                fieldLabel: 'Hide Trigger',
+                name: 'updateHideTrigger',
+                xtype: 'checkbox',
+                plugins: [new helpQtip('Hide the trigger element and display only the base text field.')]
+            }
+        ];
+
         var result = [];
         if (Ext.isEmpty(field_xtype)){
             result = result.concat(base_top);
@@ -496,22 +524,27 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.FormBuilder",{
         }else if (field_xtype == 'hiddenfield'){
             result = result.concat(base_top);
             result = result.concat(base_bottom);
+            result = result.concat(hideMode);
             return result;
         }
         switch(xtype){
-            case 'related_combobox':            
+            case 'related_combobox':
               result = result.concat(common_combobox);
+              result = result.concat(hideTrigger);
               result = result.concat(related_combobox);
               break;
-            case 'combo':            
+            case 'combo':
               result = result.concat(common_combobox);
+              result = result.concat(hideTrigger);
               result = result.concat(combobox);
               break;
             case 'combobox':
               result = result.concat(common_combobox);
+              result = result.concat(hideTrigger);
               result = result.concat(combobox);
               break;
             case 'datefield':
+              result = result.concat(hideTrigger);
               result = result.concat(dateMinMaxValue);
               result = result.concat(validation);
               break;
@@ -521,11 +554,13 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.FormBuilder",{
               break;
             case 'filefield':   
               result = result.concat(filefield);
+              result = result.concat(hideTrigger);
               result = result.concat(validation);
               break;
             case 'numberfield':
+              result = result.concat(hideTrigger);
               result = result.concat(minMaxLength);
-              result = result.concat(numberMinMaxValue);              
+              result = result.concat(numberMinMaxValue);
               result = result.concat(validation);
               break;
             case 'password':
@@ -541,6 +576,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.FormBuilder",{
               result = result.concat(validation);
               break;
             case 'timefield':
+              result = result.concat(hideTrigger);
               result = result.concat(timeMinMaxValue);
               result = result.concat(validation);
               break;
@@ -694,6 +730,8 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.FormBuilder",{
                         try { prop_form.findField('updateWidth').setValue(item.width); } catch(e) {}
                         try { prop_form.findField('updateHeight').setValue(item.height); } catch(e) {}
                         try { prop_form.findField('updateLabelWidth').setValue(item.labelWidth); } catch(e) {}
+                        try { prop_form.findField('updateHideTrigger').setValue(item.hideTrigger); } catch(e) {}
+                        try { prop_form.findField('updateHideMode').setValue(item.hideMode); } catch(e) {}
 
                         if (item.xtype == 'datefield' || item.xtype == 'timefield'){
                             prop_form.findField('updateMinValue').setValue(item.minValue);
@@ -736,7 +774,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.FormBuilder",{
                             prop_form.findField('updateDisplayField').setValue(item.displayField);
                         }else if (item.xtype == 'combobox' || item.xtype == 'combo'){
                             var options = Ext.encode(item.getStore().proxy.reader.rawData).replace(/\"/g,'').replace(/\[/g,'').replace(/\]/g,'');
-                            prop_form.findField('updateOptions').setValue(options);
+                            prop_form.findField('updateOptions').setValue(options == 'null' ? '' : options);
                             prop_form.findField('updateEditable').setValue(item.editable);
                             prop_form.findField('updateForceSelection').setValue(item.forceSelection);
                             prop_form.findField('updateMultiSelect').setValue(item.multiSelect);
@@ -1093,9 +1131,13 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.FormBuilder",{
                                             name: updateName,
                                             fieldLabel: updateFieldForm.findField('updateLabel').getValue()
                                         };
-
+                                        if (selected_field.field_xtype == 'hiddenfield'){
+                                            try { var updateHideMode = updateFieldForm.findField('updateHideMode').getValue();
+                                                if (!Ext.isEmpty(updateHideMode)) fieldDefinition.hideMode = updateHideMode; } catch(e){}
+                                        }
                                         try { fieldDefinition.labelAlign = updateFieldForm.findField('updateLabelAlign').getValue(); } catch(e){}
                                         try { fieldDefinition.readOnly = updateFieldForm.findField('updateReadOnly').getValue(); } catch(e){}
+                                        try { fieldDefinition.hideTrigger = updateFieldForm.findField('updateHideTrigger').getValue(); } catch(e){}
                                         try { var updateEmptyText = updateFieldForm.findField('updateEmptyText').getValue();
                                               if (!Ext.isEmpty(updateEmptyText)) fieldDefinition.emptyText = updateEmptyText; } catch(e){}
                                         try { fieldDefinition.allowBlank = updateFieldForm.findField('updateAllowBlank').getValue(); } catch(e){}
