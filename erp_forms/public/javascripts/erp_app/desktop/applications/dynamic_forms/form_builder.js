@@ -239,6 +239,12 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.FormBuilder",{
                 xtype: 'textfield'
             },
             {
+                fieldLabel: 'Help Text',
+                name: 'updateHelpQtip',
+                xtype: 'textfield',
+                plugins: [new helpQtip("Add help text via a mouseover icon to the right of the field.")]
+            },
+            {
                 fieldLabel: 'Allow Blank',
                 name: 'updateAllowBlank',
                 xtype: 'checkbox'
@@ -647,6 +653,13 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.FormBuilder",{
         return field;
     },
 
+    addHelpQtipToField : function(field){
+        if(!Ext.isEmpty(field.help_qtip)){
+            field.plugins = [new helpQtip(field.help_qtip)];
+        }
+        return field;
+    },
+
     convertHiddenFieldToDisplayFieldForUi : function(field){
         if (field.xtype == 'hiddenfield'){
             field.xtype = 'displayfield';
@@ -675,6 +688,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.FormBuilder",{
         Ext.each(form_definition_copy, function(field){
             field = self.convertHiddenFieldToDisplayFieldForUi(field);
             field = self.addValidationToField(field);
+            field = self.addHelpQtipToField(field);
             //field = self.alterFileUploadField(field);
             field = self.addHighlightListenerForSelectedField(field);
         });
@@ -723,6 +737,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.FormBuilder",{
                         try { var updateValue = ((item.xtype == 'related_combobox') ? item.default_value : item.value);
                               prop_form.findField('updateValue').setValue(updateValue); } catch(e) {}
                         try { prop_form.findField('updateEmptyText').setValue(item.emptyText); } catch(e) {}
+                        try { prop_form.findField('updateHelpQtip').setValue(item.help_qtip); } catch(e) {}
                         try { prop_form.findField('updateAllowBlank').setValue(item.allowBlank); } catch(e) {}
                         try { prop_form.findField('updateDisplayInGrid').setValue(item.display_in_grid); } catch(e) {}
                         try { prop_form.findField('updateSearchable').setValue(item.searchable); } catch(e) {}
@@ -1140,6 +1155,9 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.FormBuilder",{
                                         try { fieldDefinition.hideTrigger = updateFieldForm.findField('updateHideTrigger').getValue(); } catch(e){}
                                         try { var updateEmptyText = updateFieldForm.findField('updateEmptyText').getValue();
                                               if (!Ext.isEmpty(updateEmptyText)) fieldDefinition.emptyText = updateEmptyText; } catch(e){}
+                                        try { var updateHelpQtip = updateFieldForm.findField('updateHelpQtip').getValue();
+                                              if (!Ext.isEmpty(updateHelpQtip)) fieldDefinition.help_qtip = updateHelpQtip; } catch(e){}
+
                                         try { fieldDefinition.allowBlank = updateFieldForm.findField('updateAllowBlank').getValue(); } catch(e){}
                                         try { fieldDefinition.display_in_grid = updateFieldForm.findField('updateDisplayInGrid').getValue(); } catch(e){}                                        
                                         try { fieldDefinition.searchable = updateFieldForm.findField('updateSearchable').getValue(); } catch(e){}                                        

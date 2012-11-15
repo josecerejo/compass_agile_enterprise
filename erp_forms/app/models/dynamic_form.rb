@@ -6,18 +6,7 @@ class DynamicForm < ActiveRecord::Base
   validates_uniqueness_of :internal_identifier, :scope => :model_name
 
   has_permalink :description, :internal_identifier, :update => false
-  
-  def self.class_exists?(class_name)
-  	result = nil
-  	begin
-  	  klass = Module.const_get(class_name)
-      result = (klass.is_a?(Class) ? ((klass.superclass == ActiveRecord::Base or klass.superclass == DynamicModel) ? true : nil) : nil)
-  	rescue NameError
-  	  result = nil
-  	end
-  	result
-  end
-  
+
   def self.get_form(klass_name, internal_identifier='')
     result = nil  	
 	  result = DynamicForm.find_by_model_name_and_internal_identifier(klass_name, internal_identifier) unless internal_identifier.blank?
@@ -45,6 +34,14 @@ class DynamicForm < ActiveRecord::Base
       elsif !item[:validator_function].blank?
         item[:validator] = NonEscapeJsonString.new("function(v){ return #{item[:validator_function]}; }")
       end
+    end
+    
+    def_object
+  end
+
+  def add_help_qtip(def_object)
+    def_object.each do |item|
+      item[:plugins] = NonEscapeJsonString.new('[new helpQtip("'+item[:help_qtip].gsub(/\"/,'\"')+'")]') unless item[:help_qtip].blank?
     end
     
     def_object
@@ -104,7 +101,7 @@ class DynamicForm < ActiveRecord::Base
         :model_name => self.model_name
       },
       :defaults => {},
-      :items => definition_with_validation
+      :items => add_help_qtip(definition_with_validation)
     }
     form_hash[:defaults][:msgTarget] = self.msg_target unless self.msg_target.blank?
     form_hash[:width] = options[:width] if options[:width]
@@ -195,7 +192,7 @@ class DynamicForm < ActiveRecord::Base
         :dynamic_form_model_id => self.dynamic_form_model_id,
         :model_name => self.model_name
       },
-      :items => definition_with_validation,
+      :items => add_help_qtip(definition_with_validation),
       :defaults => {},
       :listeners => {
         :afterrender => NonEscapeJsonString.new("function(form) { #{focus_first_field_js} }")
