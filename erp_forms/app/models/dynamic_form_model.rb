@@ -15,6 +15,13 @@ class DynamicFormModel < ActiveRecord::Base
     Role.iid(role_iid)
   end
 
+  def self.sunspot_setup_all
+    DynamicFormModel.all.each do |m|
+      next if m.model_name == 'DynamicFormDocument'
+      m.get_constant.sunspot_setup unless DynamicFormModel.class_exists?(m.model_name)
+    end
+  end
+
   def self.get_constant(klass_name)
   	result = nil
   	begin
@@ -24,6 +31,19 @@ class DynamicFormModel < ActiveRecord::Base
       result = klass_name.constantize
     end
   	result
+  end
+
+  # checks to see if class name exists as a static model or has already been declared
+  # used with sunspot_setup_all
+  def self.class_exists?(class_name)
+    result = nil
+    begin
+      klass = Module.const_get(class_name)
+      result = (klass.is_a?(Class) ? ((klass.superclass == ActiveRecord::Base or klass.superclass == DynamicFormModel) ? true : nil) : nil)
+    rescue NameError
+      result = nil
+    end
+    result
   end
 
   def self.get_instance(klass_name)
