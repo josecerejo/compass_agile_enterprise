@@ -1,5 +1,7 @@
 # Security Group
 class Group < ActiveRecord::Base
+  has_roles
+  
   after_create  :create_party
   after_save    :save_party
   after_destroy :destroy_party_relationships, :destroy_party
