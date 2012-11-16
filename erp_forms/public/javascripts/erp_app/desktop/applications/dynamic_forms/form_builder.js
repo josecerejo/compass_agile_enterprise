@@ -1069,6 +1069,10 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.FormBuilder",{
                                                     fieldDefinition.editable = true;
                                                     fieldDefinition.forceSelection = true;
                                                     break;
+                                                case 'checkbox':
+                                                    fieldDefinition.inputValue = true;
+                                                    fieldDefinition.uncheckedValue = false;
+                                                    break;
                                                 case 'combobox':
                                                     fieldDefinition.editable = true;
                                                     fieldDefinition.forceSelection = true;
