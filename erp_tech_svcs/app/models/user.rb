@@ -32,4 +32,26 @@ class User < ActiveRecord::Base
     @instance_attrs[k] = v
   end
 
+
+  # user lives on FROM side of relationship
+  def group_relationships
+    PartyRelationship.where(:party_id_from => self.party.id)
+  end
+
+  def group_parties
+    group_relationships.all.collect{|pr| pr.to_party }
+  end
+
+  def groups
+    group_parties.collect{|p| p.business_party }
+  end
+
+  def group_roles
+    groups.collect{|g| g.roles }.flatten.uniq
+  end
+
+  def all_roles
+    (group_roles + roles).uniq
+  end
+
 end
