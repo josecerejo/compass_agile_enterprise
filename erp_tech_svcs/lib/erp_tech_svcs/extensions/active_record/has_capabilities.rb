@@ -22,7 +22,7 @@ module ErpTechSvcs
             has_many :capabilities, :through => :capable_model
 
             # get records for this model without capabilities or that are not in a list of denied roles
-            scope :secure_scope, lambda{|denied_roles|
+            scope :with_security, lambda{|denied_roles|
                                     joins("LEFT OUTER JOIN capable_models AS cm ON cm.capable_model_record_id = #{self.table_name}.id AND cm.capable_model_record_type = '#{self.name}'").
                                     joins("LEFT JOIN capabilities_capable_models AS ccm ON ccm.capable_model_id = cm.id").
                                     joins("LEFT JOIN capabilities AS c ON ccm.capability_id = c.id").
@@ -32,6 +32,9 @@ module ErpTechSvcs
                                     where("r.id IS NULL OR r.id NOT IN (?)", denied_roles.collect{|r| r.id }).
                                     group(columns.collect{|c| "#{self.table_name}.#{c.name}" })
                                   }
+
+            # get records for this model that the given user has access to
+            scope :with_user_security, lambda{|user| with_security(capability_roles - user.all_roles) }
 				  end
 
 				end
@@ -42,10 +45,9 @@ module ErpTechSvcs
             Capability.joins(:capable_models).where('capable_model_record_type = ?', self.name)
           end
 
-          # get records for this model that the given user has access to
-          def user_secure_scope(current_user=nil)
-            all_roles = capabilities.collect{|c| c.roles }.flatten.uniq
-            secure_scope(all_roles - current_user.roles)
+          # collect unique roles on capabilities
+          def capability_roles
+            capabilities.collect{|c| c.roles }.flatten.uniq
           end
 				end
 						
