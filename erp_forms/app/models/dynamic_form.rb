@@ -55,6 +55,14 @@ class DynamicForm < ActiveRecord::Base
     
     def_object
   end
+
+  def add_help_qtip(def_object)
+    def_object.each do |item|
+      item[:plugins] = NonEscapeJsonString.new('[new helpQtip("'+item[:help_qtip].gsub(/\"/,'\"')+'")]') unless item[:help_qtip].blank?
+    end
+    
+    def_object
+  end
   
   # will return an array of field names that are of xtype 'related_combobox'
   def related_fields
@@ -110,7 +118,7 @@ class DynamicForm < ActiveRecord::Base
         :model_name => self.model_name
       },
       :defaults => {},
-      :items => definition_with_validation
+      :items => add_help_qtip(definition_with_validation)
     }
     form_hash[:defaults][:msgTarget] = self.msg_target unless self.msg_target.blank?
     form_hash[:width] = options[:width] if options[:width]
@@ -201,7 +209,7 @@ class DynamicForm < ActiveRecord::Base
         :dynamic_form_model_id => self.dynamic_form_model_id,
         :model_name => self.model_name
       },
-      :items => definition_with_validation,
+      :items => add_help_qtip(definition_with_validation),
       :defaults => {},
       :listeners => {
         :afterrender => NonEscapeJsonString.new("function(form) { #{focus_first_field_js} }")

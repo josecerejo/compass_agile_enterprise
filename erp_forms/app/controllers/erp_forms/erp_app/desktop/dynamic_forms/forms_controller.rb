@@ -15,6 +15,8 @@ class ErpForms::ErpApp::Desktop::DynamicForms::FormsController < ErpForms::ErpAp
         :id => "form_model_#{form_model.id}",
         :formModelId => form_model.id,
         :isFormModel => true, 
+        :allow_comments => form_model.allow_comments, 
+        :allow_files => form_model.allow_files, 
         :file_security_default => form_model.file_security_default, 
         :show_in_multitask => form_model.show_in_multitask, 
         :isForm => false, 

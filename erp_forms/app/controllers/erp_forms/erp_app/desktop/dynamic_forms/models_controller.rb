@@ -38,6 +38,8 @@ class ErpForms::ErpApp::Desktop::DynamicForms::ModelsController < ErpForms::ErpA
   def create
     DynamicFormModel.create({
       :model_name => params[:model_name],
+      :allow_comments => params[:allow_comments],
+      :allow_files => params[:allow_files],
       :file_security_default => params[:file_security_default]
     })
 	
@@ -47,6 +49,8 @@ class ErpForms::ErpApp::Desktop::DynamicForms::ModelsController < ErpForms::ErpA
   # update a dynamic form model
   def update
     m = DynamicFormModel.find(params[:id])
+    m.allow_comments = params[:allow_comments] unless params[:allow_comments].nil?
+    m.allow_files = params[:allow_files] unless params[:allow_files].nil?
     m.file_security_default = params[:file_security_default] unless params[:file_security_default].blank?
     m.show_in_multitask = params[:show_in_multitask] unless params[:show_in_multitask].nil?
     m.save

@@ -29,6 +29,14 @@ module ErpForms
               dynamic_model.role
             end
 
+            def allow_comments?
+              dynamic_model.allow_comments
+            end
+
+            def allow_files?
+              dynamic_model.allow_files
+            end
+
             def file_security_default
               dynamic_model.file_security_default
             end
