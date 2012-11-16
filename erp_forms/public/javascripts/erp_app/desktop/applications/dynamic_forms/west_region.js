@@ -206,6 +206,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.WestRegion",{
       plain: true,
       buttonAlign:'center',
       items: Ext.create("Ext.form.Panel",{
+        itemId:'configureModelForm',
         labelWidth: 110,
         frame:false,
         bodyStyle:'padding:5px 5px 0',
@@ -215,15 +216,33 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.WestRegion",{
         },
         items: [
         {
+            xtype: 'checkbox',
+            fieldLabel: 'Allow Comments',
+            name: 'allow_comments',
+            inputValue: true,
+            uncheckedValue:false,
+            plugins: [new helpQtip("Do you want to allow comments on this model's records?")]
+        },
+        {
+            xtype: 'checkbox',
+            fieldLabel: 'Allow Files',
+            name: 'allow_files',
+            inputValue: true,
+            uncheckedValue:false,
+            plugins: [new helpQtip("Do you want to allow files to be attached to this model's records?")]
+        },
+        {
           xtype:'combobox',
           fieldLabel:'File Security Default',
-          allowBlank:false,
           name:'file_security_default',
-          value: record.get('file_security_default'),
+          allowBlank:false,
+          editable: false,
+          forceSelection:true,
           store:[
             ['private','Private'],
             ['public','Public']
-          ]
+          ],
+          plugins: [new helpQtip("Should attached files be automatically secured? If so, select Private. If not, select Public.")]
         }]
       }),
       buttons: [{
@@ -232,8 +251,9 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.WestRegion",{
           'click':function(button){
             var formPanel = button.findParentByType('window').query('form').first();
             self.setWindowStatus('Updating dynamic form model ...');
-            if (formPanel.getForm().isValid()){
-              formPanel.getForm().submit({
+            var form = formPanel.getForm();
+            if (form.isValid()){
+              form.submit({
                 params:{
                   id: record.get("formModelId")
                 },
@@ -269,6 +289,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.WestRegion",{
         }
       }]
     });
+    configureModelWindow.query('#configureModelForm').first().loadRecord(record);
     configureModelWindow.show();
   },
 
@@ -461,6 +482,8 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.WestRegion",{
             {name: 'text', type: 'string'},
             {name: 'iconCls', type: 'string'},
             {name: 'isFormModel', type: 'boolean'},
+            {name: 'allow_comments', type: 'boolean'},
+            {name: 'allow_files', type: 'boolean'},
             {name: 'file_security_default', type: 'string'},
             {name: 'show_in_multitask', type: 'boolean'},
             {name: 'formModelName', type: 'string'},
@@ -535,6 +558,22 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.WestRegion",{
                       }
                     }
                   }
+                },
+                {
+                    xtype: 'checkbox',
+                    fieldLabel: 'Allow Comments',
+                    name: 'allow_comments',
+                    inputValue: true,
+                    uncheckedValue:false,
+                    plugins: [new helpQtip("Do you want to allow comments on this model's records?")]
+                },
+                {
+                    xtype: 'checkbox',
+                    fieldLabel: 'Allow Files',
+                    name: 'allow_files',
+                    inputValue: true,
+                    uncheckedValue:false,
+                    plugins: [new helpQtip("Do you want to allow files to be attached to this model's records?")]
                 },
                 {
                   xtype:'combobox',

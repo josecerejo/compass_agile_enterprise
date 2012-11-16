@@ -98,7 +98,7 @@ module ErpForms::ErpApp::Desktop::DynamicForms
       @record = DynamicFormModel.get_constant(params[:model_name]).find(params[:id])
 
       data = @record.data.sorted_dynamic_attributes
-      result_hash = {:success => true, :data => data, :metadata => get_metadata, :comments => get_comments, :has_file_assets => @record.respond_to?(:files)}
+      result_hash = {:success => true, :data => data, :metadata => get_metadata, :comments => get_comments, :has_file_assets => has_file_assets?}
 
       render :json => (@record ? result_hash : {:success => false})
     end
@@ -109,7 +109,7 @@ module ErpForms::ErpApp::Desktop::DynamicForms
 
       related_fields = @record.form.related_fields
       data = @record.data.dynamic_attributes_with_related_data(related_fields, true)
-      result_hash = {:success => true, :data => data, :metadata => get_metadata, :comments => get_comments, :has_file_assets => @record.respond_to?(:files)}
+      result_hash = {:success => true, :data => data, :metadata => get_metadata, :comments => get_comments, :has_file_assets => has_file_assets?}
 
       render :json => (@record ? result_hash : {:success => false})
     end
@@ -140,7 +140,7 @@ module ErpForms::ErpApp::Desktop::DynamicForms
           :data => data, 
           :metadata => get_metadata, 
           :comments => get_comments, 
-          :has_file_assets => @record.respond_to?(:files)
+          :has_file_assets => has_file_assets?
         }
         render :inline => @record ? result_hash.to_json : {:success => false}.to_json
       rescue Exception => e
@@ -179,7 +179,7 @@ module ErpForms::ErpApp::Desktop::DynamicForms
           :data => data, 
           :metadata => get_metadata, 
           :comments => get_comments, 
-          :has_file_assets => @record.respond_to?(:files)
+          :has_file_assets => has_file_assets?
         }
         render :inline => @record ? result_hash.to_json : {:success => false}.to_json
       rescue Exception => e
@@ -315,8 +315,12 @@ module ErpForms::ErpApp::Desktop::DynamicForms
       }
     end
 
+    def has_file_assets?
+      @record.allow_files? and @record.respond_to?(:files)
+    end
+
     def get_comments
-      if @record.respond_to?(:comments)
+      if @record.allow_comments? and @record.respond_to?(:comments)
         comments = @record.comments.order('id ASC').all
         comments.each_with_index do |c, i|
           comments[i] = c.to_hash

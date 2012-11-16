@@ -4,6 +4,8 @@ class DynamicForms < ActiveRecord::Migration
       create_table :dynamic_form_models do |t|
         t.string :model_name
         t.boolean :show_in_multitask, :default => false 
+        t.boolean :allow_comments, :default => true 
+        t.boolean :allow_files, :default => true 
         t.string :file_security_default, :default => 'private'
 
         t.timestamps
