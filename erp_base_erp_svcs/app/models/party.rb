@@ -1,11 +1,14 @@
 class Party < ActiveRecord::Base
   has_notes
-  
+    
   has_many   :contacts, :dependent => :destroy
   has_many   :created_notes, :class_name => 'Note', :foreign_key => 'created_by_id'
   belongs_to :business_party, :polymorphic => true
-  has_many   :party_roles, :dependent => :destroy
+
+  has_many   :party_roles, :dependent => :destroy #role_types
 	has_many   :role_types, :through => :party_roles
+
+  has_and_belongs_to_many :security_roles
 
   after_destroy :destroy_business_party
 
@@ -19,10 +22,9 @@ class Party < ActiveRecord::Base
   end
 
   def find_relationships_by_type(relationship_type_iid)
-    PartyRelationship.includes(:relationship_type)
-                     .where('party_id_from = ? or party_id_to = ?', id, id)
-                     .where('relationship_types.internal_identifier' => relationship_type_iid.to_s)
-
+    PartyRelationship.includes(:relationship_type).
+                      where('party_id_from = ? or party_id_to = ?', id, id).
+                      where('relationship_types.internal_identifier' => relationship_type_iid.to_s)
   end
 
   # Creates a new PartyRelationship for this particular
