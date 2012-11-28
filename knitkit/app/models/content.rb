@@ -1,6 +1,7 @@
 require 'will_paginate/array'
 
 class Content < ActiveRecord::Base
+  protected_by_capabilities
   acts_as_taggable
   acts_as_commentable
   acts_as_versioned  :table_name => :content_versions

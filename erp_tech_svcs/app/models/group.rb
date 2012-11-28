@@ -1,7 +1,7 @@
 # Security Group
 class Group < ActiveRecord::Base
-  has_roles
-  
+  has_capability_accessors
+
   after_create  :create_party
   after_save    :save_party
   after_destroy :destroy_party_relationships, :destroy_party
@@ -12,6 +12,10 @@ class Group < ActiveRecord::Base
 
   def self.add(description)
     Group.create(:description => description)
+  end
+
+  def roles
+    party.security_roles
   end
 
   def create_party

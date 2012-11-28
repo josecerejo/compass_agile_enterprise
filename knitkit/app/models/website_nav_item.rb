@@ -2,8 +2,9 @@ class WebsiteNavItem < ActiveRecord::Base
   belongs_to :website_nav
   belongs_to :linked_to_item, :polymorphic => true
   
-  has_roles
+  protected_by_capabilities
   acts_as_nested_set
+
   include ErpTechSvcs::Utils::DefaultNestedSetMethods
 
   def path

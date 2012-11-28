@@ -1,8 +1,9 @@
 class Capability < ActiveRecord::Base
-  has_roles
 
+  belongs_to :scope_type
   belongs_to :capability_type
-  has_and_belongs_to_many :capable_models
+  belongs_to :capability_resource, :polymorphic => true
+  has_many :capability_accessors, :dependent => :destroy
 
   alias :type :capability_type
 end

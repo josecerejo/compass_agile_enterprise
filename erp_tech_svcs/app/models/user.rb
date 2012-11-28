@@ -3,13 +3,13 @@ class User < ActiveRecord::Base
 
   attr_accessor :password_validator
 
-  has_roles
   include ErpTechSvcs::Utils::CompassAccessNegotiator
 
   belongs_to :party
 
   attr_accessible :email, :password, :password_confirmation
   authenticates_with_sorcery!
+  has_capability_accessors
 
   #password validations
   validates_confirmation_of :password, :message => "should match confirmation", :if => :password
@@ -30,6 +30,10 @@ class User < ActiveRecord::Base
   def add_instance_attribute(k,v)
     @instance_attrs = {} if @instance_attrs.nil?
     @instance_attrs[k] = v
+  end
+
+  def roles
+    party.security_roles
   end
 
   # user lives on FROM side of relationship
@@ -55,6 +59,28 @@ class User < ActiveRecord::Base
   # composite roles for this user
   def all_roles
     (group_roles + roles).uniq
+  end
+
+  def capabilities
+    capability_accessors.collect{|ca| ca.capability }.uniq
+  end
+
+  def group_capabilities
+    groups.collect{|r| r.capability_accessors }.flatten.uniq.collect{|ca| ca.capability }.uniq
+  end
+
+  def role_capabilities
+    all_roles.collect{|r| r.capability_accessors }.flatten.uniq.collect{|ca| ca.capability }.uniq
+  end
+
+  def all_capabilities
+    (role_capabilities + group_capabilities + capabilities).uniq
+  end
+
+  def has_capability?(capability_type_iid, klass)
+    capability = Capability.joins(:capability_type).where(:capability_resource_type => klass).where(:capability_types => {:internal_identifier => capability_type_iid}).first
+    result = all_capabilities.find{|c| c == capability }
+    result.nil? ? false : true
   end
 
 end
