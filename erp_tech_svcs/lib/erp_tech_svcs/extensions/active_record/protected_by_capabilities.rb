@@ -15,6 +15,19 @@ module ErpTechSvcs
     				
             has_many :capabilities, :as => :capability_resource
 
+            # get records filtered via query scope capabilities
+            # by default Compass AE treat query scopes as user restrictions
+            # a user will see all records unless the user has a capability accessor with a query scope
+            scope :with_query_security, lambda{|user|
+              scope_type = ScopeType.find_by_internal_identifier('query')
+              granted_capabilities = user.all_capabilities.collect{|c| c if c.scope_type_id == scope_type.id and c.capability_resource_type == self.name }.compact
+              query = nil
+              granted_capabilities.each do |scope_capability|
+                query = query.nil? ? where(scope_capability.scope_query) : query.where(scope_capability.scope_query)
+              end
+              query
+            }
+
             # get records for this model without capabilities or that are not in a list of denied roles
             scope :with_instance_security, lambda{|denied_roles|
                                     joins("LEFT JOIN capabilities AS c ON c.capability_resource_id = #{self.table_name}.id AND c.capability_resource_type = '#{self.name}'").
@@ -23,9 +36,12 @@ module ErpTechSvcs
                                   }
 
             # get records for this model that the given user has access to
-            scope :with_user_security, lambda{|user| with_instance_security(capabilities - user.all_capabilities) }
+            scope :with_user_security, lambda{|user| 
+              scope_type = ScopeType.find_by_internal_identifier('instance')
+              granted_capabilities = user.all_capabilities.collect{|c| c if c.scope_type_id == scope_type.id and c.capability_resource_type == self.name }.compact
+              with_query_security(user).with_instance_security(capabilities - granted_capabilities) 
+            }
 				  end
-
 				end
 				
 				module SingletonMethods
