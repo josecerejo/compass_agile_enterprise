@@ -62,15 +62,15 @@ class User < ActiveRecord::Base
   end
 
   def capabilities
-    capability_accessors.collect{|ca| ca.capability }.uniq
+    capability_accessors.collect{|ca| ca.capability }.uniq.compact
   end
 
   def group_capabilities
-    groups.collect{|r| r.capability_accessors }.flatten.uniq.collect{|ca| ca.capability }.uniq
+    groups.collect{|r| r.capability_accessors }.flatten.uniq.collect{|ca| ca.capability }.uniq.compact
   end
 
   def role_capabilities
-    all_roles.collect{|r| r.capability_accessors }.flatten.uniq.collect{|ca| ca.capability }.uniq
+    all_roles.collect{|r| r.capability_accessors }.flatten.uniq.collect{|ca| ca.capability }.uniq.compact
   end
 
   def all_capabilities

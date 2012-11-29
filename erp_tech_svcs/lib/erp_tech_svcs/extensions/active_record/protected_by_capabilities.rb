@@ -29,17 +29,30 @@ module ErpTechSvcs
             }
 
             # get records for this model without capabilities or that are not in a list of denied roles
-            scope :with_instance_security, lambda{|denied_roles|
-                                    joins("LEFT JOIN capabilities AS c ON c.capability_resource_id = #{self.table_name}.id AND c.capability_resource_type = '#{self.name}'").
-                                    where("c.id IS NULL OR c.id NOT IN (?)", denied_roles.collect{|c| c.id }).
-                                    group(columns.collect{|c| "#{self.table_name}.#{c.name}" })
+            scope :with_instance_security, lambda{|denied_capabilities|
+                                    query = joins("LEFT JOIN capabilities AS c ON c.capability_resource_id = #{self.table_name}.id AND c.capability_resource_type = '#{self.name}'").
+                                            group(columns.collect{|c| "#{self.table_name}.#{c.name}" })
+                                    query = (denied_capabilities.empty? ? query.where("c.id IS NULL OR c.id = c.id") : query.where("c.id IS NULL OR c.id NOT IN (?)", denied_capabilities.collect{|c| c.id }))
+                                    query                                    
                                   }
 
             # get records for this model that the given user has access to
-            scope :with_user_security, lambda{|user| 
+            # arguments: user, capability_type_iids (capability_type_iids is optional)
+            scope :with_user_security, lambda{|*args|
+              raise ArgumentError if args.empty? || args.size > 2
+              user = args.first
+              capability_type_iids = args.second || []
+              capability_type_iids = [capability_type_iids] if capability_type_iids.is_a?(String)
+
               scope_type = ScopeType.find_by_internal_identifier('instance')
               granted_capabilities = user.all_capabilities.collect{|c| c if c.scope_type_id == scope_type.id and c.capability_resource_type == self.name }.compact
-              with_query_security(user).with_instance_security(capabilities - granted_capabilities) 
+
+              unless capability_type_iids.empty?
+                capability_type_ids = capability_type_iids.collect{|type| convert_capability_type(type).id }
+                granted_capabilities = granted_capabilities.collect{|c| c if capability_type_ids.include?(c.capability_type_id)}.compact
+              end
+              
+              with_query_security(user).with_instance_security(instance_capabilities - granted_capabilities) 
             }
 				  end
 				end
