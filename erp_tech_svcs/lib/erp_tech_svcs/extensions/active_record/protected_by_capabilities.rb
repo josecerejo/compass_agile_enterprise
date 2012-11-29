@@ -37,7 +37,10 @@ module ErpTechSvcs
                                   }
 
             # get records for this model that the given user has access to
-            # arguments: user, capability_type_iids (capability_type_iids is optional)
+            # arguments: user, capability_type_iids 
+            # capability_type_iids is optional and can be a single string or an array of strings
+            # Example: which files can this user download? FileAsset.with_user_security(user, 'download').all
+            # Example: which website sections can this user either view or edit? WebsiteSection.with_user_security(user, ['view','edit']).all
             scope :with_user_security, lambda{|*args|
               raise ArgumentError if args.empty? || args.size > 2
               user = args.first
