@@ -522,7 +522,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.Knitkit.WestRegion", {
                         items = Compass.ErpApp.Desktop.Applications.Knitkit.addWebsiteOptions(self, items, record);
                     }
                     else if (record.data['isHostRoot']) {
-                        if (currentUser.hasCapability('create','Host')) {
+                        if (currentUser.hasCapability('create','WebsiteHost')) {
                             items.push({
                                 text:'Add Host',
                                 iconCls:'icon-add',
