@@ -127,6 +127,10 @@ class FileAsset < ActiveRecord::Base
     super attributes.merge(:directory => directory, :name => name, :data => data)
   end
 
+  def is_secured?
+    self.protected_by_capability?('download')
+  end
+
   # compass file download url
   def url
     "/download/#{self.name}?#{self.directory}"

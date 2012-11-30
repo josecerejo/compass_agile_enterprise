@@ -396,10 +396,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.Knitkit.WestRegion", {
 
         var pluginItems = [];
 
-        if (currentUser.hasApplicationCapability('knitkit', {
-            capability_type_iid:'drag_item',
-            resource:'WebsiteTree'
-        })) {
+        if (currentUser.hasCapability('drag_item','WebsiteTree')) {
             pluginItems.push({
                 ptype:'treeviewdragdrop'
             });
@@ -525,10 +522,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.Knitkit.WestRegion", {
                         items = Compass.ErpApp.Desktop.Applications.Knitkit.addWebsiteOptions(self, items, record);
                     }
                     else if (record.data['isHostRoot']) {
-                        if (currentUser.hasApplicationCapability('knitkit', {
-                            capability_type_iid:'create',
-                            resource:'Host'
-                        })) {
+                        if (currentUser.hasCapability('create','Host')) {
                             items.push({
                                 text:'Add Host',
                                 iconCls:'icon-add',
@@ -611,10 +605,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.Knitkit.WestRegion", {
                         items = Compass.ErpApp.Desktop.Applications.Knitkit.addHostOptions(self, items, record);
                     }
                     else if (record.data['isSectionRoot']) {
-                        if (currentUser.hasApplicationCapability('knitkit', {
-                            capability_type_iid:'create',
-                            resource:'Section'
-                        })) {
+                        if (currentUser.hasCapability('create','WebsiteSection')) {
                             items.push({
                                 text:'Add Section',
                                 iconCls:'icon-add',
@@ -758,10 +749,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.Knitkit.WestRegion", {
                         }
                     }
                     else if (record.data['isMenuRoot']) {
-                        if (currentUser.hasApplicationCapability('knitkit', {
-                            capability_type_iid:'create',
-                            resource:'Menu'
-                        })) {
+                        if (currentUser.hasCapability('create','WebsiteNav')) {
                             items.push({
                                 text:'Add Menu',
                                 iconCls:'icon-add',
@@ -838,10 +826,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.Knitkit.WestRegion", {
                         }
                     }
                     else if (record.data['isWebsiteNav']) {
-                        if (currentUser.hasApplicationCapability('knitkit', {
-                            capability_type_iid:'edit',
-                            resource:'Menu'
-                        })) {
+                        if (currentUser.hasCapability('edit','WebsiteNav')) {
                             items.push({
                                 text:'Update',
                                 iconCls:'icon-edit',
@@ -921,10 +906,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.Knitkit.WestRegion", {
                             });
                         }
 
-                        if (currentUser.hasApplicationCapability('knitkit', {
-                            capability_type_iid:'delete',
-                            resource:'Menu'
-                        })) {
+                        if (currentUser.hasCapability('delete','WebsiteNav')) {
                             items.push({
                                 text:'Delete',
                                 iconCls:'icon-delete',
@@ -985,10 +967,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.Knitkit.WestRegion", {
 
         var tbarItems = [];
 
-        if (currentUser.hasApplicationCapability('knitkit', {
-            capability_type_iid:'create',
-            resource:'Website'
-        })) {
+        if (currentUser.hasCapability('create','Website')) {
             tbarItems.push({
                     text:'New Website',
                     iconCls:'icon-add',
@@ -1071,10 +1050,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.Knitkit.WestRegion", {
             );
         }
 
-        if (currentUser.hasApplicationCapability('knitkit', {
-            capability_type_iid:'import',
-            resource:'Website'
-        })) {
+        if (currentUser.hasCapability('import','Website')) {
             tbarItems.push({
                 text:'Import Website',
                 iconCls:'icon-globe',
@@ -1162,10 +1138,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.Knitkit.WestRegion", {
             }
         });
 
-        if (currentUser.hasApplicationCapability('knitkit', {
-            capability_type_iid:'view',
-            resource:'Theme'
-        })) {
+        if (currentUser.hasCapability('view','Theme')) {
             this.items = [layout,
                 {
                     xtype:'knitkit_themestreepanel',

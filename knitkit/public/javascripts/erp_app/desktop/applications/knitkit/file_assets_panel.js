@@ -129,16 +129,10 @@ Compass.ErpApp.Desktop.Applications.Knitkit.FileAssetsPanel = function(module) {
     }],
     listeners:{
       'allowdelete':function(){
-         return currentUser.hasApplicationCapability('knitkit', {
-         capability_type_iid:'delete',
-         resource:'GlobalFileAsset'
-       });
+         return currentUser.hasCapability('delete','GlobalFileAsset');
     },
       'allowupload':function(){
-        return currentUser.hasApplicationCapability('knitkit', {
-        capability_type_iid:'upload',
-        resource:'GlobalFileAsset'
-      });
+        return currentUser.hasCapability('upload','GlobalFileAsset');
     },
       'itemclick':function(view, record, item, index, e){
         e.stopEvent();
@@ -266,20 +260,12 @@ Compass.ErpApp.Desktop.Applications.Knitkit.FileAssetsPanel = function(module) {
   
   var items = [];
 
-    if (currentUser.hasApplicationCapability('knitkit', {
-        capability_type_iid:'view',
-        resource:'GlobalFileAsset'
-    }))
-
+    if (currentUser.hasCapability('view','GlobalFileAsset'))
     {
         items.push(this.sharedFileAssetsTreePanel);
     }
 
-    if (currentUser.hasApplicationCapability('knitkit', {
-        capability_type_iid:'view',
-        resource:'SiteFileAsset'
-    }))
-
+    if (currentUser.hasCapability('view','SiteFileAsset'))
     {
         items.push(this.websiteFileAssetsTreePanel);
     }
@@ -295,7 +281,7 @@ Compass.ErpApp.Desktop.Applications.Knitkit.FileAssetsPanel = function(module) {
   this.selectWebsite = function(websiteId, websiteName){
     this.websiteId = websiteId;
     this.websiteName = websiteName;
-  }
+  };
 
   this.reloadWebsiteFileAssetsTreePanel = function(websiteId){
     this.websiteFileAssetsTreePanel.extraPostData = {
@@ -319,5 +305,5 @@ Compass.ErpApp.Desktop.Applications.Knitkit.FileAssetsPanel = function(module) {
         this.websiteFileAssetsTreePanel.getStore().load();
       }
     }
-  }
-}
+  };
+};

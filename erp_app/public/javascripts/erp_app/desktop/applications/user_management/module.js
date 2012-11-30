@@ -7,7 +7,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.UserManagement",{
       iconCls:'icon-user',
       handler : this.createWindow,
       scope: this
-    }
+    };
   },
   createWindow : function(){
     var desktop = this.app.getDesktop();
@@ -266,10 +266,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.UserManagement.UsersGrid",{
       });
     }
 
-    if(currentUser.hasApplicationCapability('user_management', {
-      capability_type_iid:'delete',
-      resource:'User'
-    })){
+    if(currentUser.hasCapability('delete','User')){
       columns.push({
         menuDisabled:true,
         resizable:false,
@@ -297,10 +294,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.UserManagement.UsersGrid",{
     }
 
     var toolBarItems = [];
-    if(currentUser.hasApplicationCapability('user_management', {
-      capability_type_iid:'create',
-      resource:'User'
-    })){
+    if(currentUser.hasCapability('create','User')){
       toolBarItems.push({
         text:'Add User',
         iconCls:'icon-add',

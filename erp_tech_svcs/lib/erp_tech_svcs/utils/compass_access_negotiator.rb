@@ -6,6 +6,7 @@ module ErpTechSvcs
       # Example: can user upload files? user.has_capability?('upload', 'FileAsset')
       # Example: can download this file? user.has_capability?('download', file_asset)
       def has_capability?(capability_type_iid, klass)
+        capability_type_iid = capability_type_iid.to_s if capability_type_iid.is_a?(Symbol)
         if klass.is_a?(String)
           scope_type = ScopeType.find_by_internal_identifier('class')
           capability = Capability.joins(:capability_type).
@@ -23,13 +24,13 @@ module ErpTechSvcs
         result.nil? ? false : true
       end
 
-      # pass in (capability_type_iid, any class instance, block)
+      # pass in (capability_type_iid, class name or any class instance, a block of code)
       # Example: do something if user can download this file: 
       # user.with_capability('download', file_asset) do
       #   something
       # end
       def with_capability(capability_type_iid, klass_instance, &block)
-        if klass_instance.protected_by_capabilities?
+        if !klass_instance.is_a?(String) and klass_instance.protected_by_capabilities?
           if self.has_capability?(capability_type_iid, klass_instance)
             yield
           else

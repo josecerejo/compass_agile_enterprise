@@ -14,4 +14,9 @@ class SecurityRole < ActiveRecord::Base
   	super(options)
   end
 
+  # creating method because we only want a getter, not a setter for iid
+  def iid
+    self.internal_identifier
+  end
+
 end

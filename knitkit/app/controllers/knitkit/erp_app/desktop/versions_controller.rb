@@ -61,9 +61,8 @@ module Knitkit
         end
 
         def publish_content
-          model = DesktopApplication.find_by_internal_identifier('knitkit')
           begin
-            current_user.with_capability(model, 'publish', 'Article') do
+            current_user.with_capability('publish', 'Content') do
               content = Content.find(Content::Version.find(params[:id]).content_id)
               content.publish(Website.find(params[:site_id]), params[:comment], params[:version], current_user)
 
@@ -75,9 +74,8 @@ module Knitkit
         end
 
         def revert_content
-          model = DesktopApplication.find_by_internal_identifier('knitkit')
           begin
-            current_user.with_capability(model, 'revert_version', 'Article') do
+            current_user.with_capability('revert_version', 'Content') do
               content = Content.find(Content::Version.find(params[:id]).content_id)
               version = params[:version]
               content.revert_to(version)

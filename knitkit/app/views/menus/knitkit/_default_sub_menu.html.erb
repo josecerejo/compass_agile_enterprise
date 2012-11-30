@@ -2,14 +2,12 @@
 <div id="side_menu_container">
   <ul id="side_menu">
     <%
-    menu_items.each do |menu_item| %>
-      <%if menu_item.has_access?(@current_user)%>
-        <% if menu_item_selected(menu_item) %>
+    menu_items.each do |menu_item| 
+      if @current_user.has_capability?(:view, menu_item)
+        if menu_item_selected(menu_item) %>
           <li class="selected">
-        <%
-          selected_menu_item = menu_item
-        else
-         %>
+        <% selected_menu_item = menu_item
+        else %>
           <li>
         <% end %>
           <a href="<%= menu_item.path %>"><span><%= menu_item.title %></span></a>
@@ -18,9 +16,9 @@
         <% unless selected_menu_item.nil? %>
           <% unless selected_menu_item.positioned_children.nil? %>
             <ul class="side_menu_children">
-            <% selected_menu_item.positioned_children.each do |child_menu_item| %>
-              <% if child_menu_item.has_access?(@current_user)%>
-                <% if menu_item_selected(child_menu_item) %>
+            <% selected_menu_item.positioned_children.each do |child_menu_item|
+              if @current_user.has_capability?(:view, child_menu_item)
+                if menu_item_selected(child_menu_item) %>
                   <li class="selected">
                 <% else %>
                   <li>

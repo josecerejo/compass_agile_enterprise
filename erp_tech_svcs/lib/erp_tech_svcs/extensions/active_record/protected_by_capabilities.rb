@@ -137,6 +137,10 @@ module ErpTechSvcs
             capabilities.where(:capability_type_id => capability_type.id).first
           end   
 
+          def protected_by_capability?(capability_type_iid)
+            !get_capability(capability_type_iid).nil?
+          end
+
           def remove_capability(capability_type_iid)
             capability = get_capability(capability_type_iid)
             capability.destroy unless capability.nil?
@@ -147,16 +151,6 @@ module ErpTechSvcs
 				  def protected_by_capabilities?
             !capabilities.empty?
           end
-
-          # def capabilites_to_hash
-          #   self.capabilities.map do|capability| 
-          #     {
-          #       :capability_type_iid => capability.type.internal_identifier,
-          #       :resource => capability.resource,
-          #       :roles => capability.roles.collect{|role| role.internal_identifier}
-          #     }
-          #   end
-          # end
 
           private
 

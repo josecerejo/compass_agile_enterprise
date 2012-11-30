@@ -155,7 +155,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.Knitkit.PublishedGridPanel",{
               return false;
             }
             else{
-              grid.ownerCt.setViewingVersion(rec)
+              grid.ownerCt.setViewingVersion(rec);
             }
           }
         }]
@@ -178,17 +178,14 @@ Ext.define("Compass.ErpApp.Desktop.Applications.Knitkit.PublishedGridPanel",{
             }
           },
           handler: function(grid, rowIndex, colIndex) {
-             if (currentUser.hasApplicationCapability('knitkit', {
-                            capability_type_iid:'activate',
-                            resource:'Website'
-                        }))
+             if (currentUser.hasCapability('activate','Website'))
               {
               var rec = grid.getStore().getAt(rowIndex);
               if(rec.get('active')){
                 return false;
               }
               else{
-                grid.ownerCt.activate(rec)
+                grid.ownerCt.activate(rec);
               }
             }
             else{
@@ -213,7 +210,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.Knitkit.PublishedGridPanel",{
             return false;
           }
         }]
-      },
+      }
       ],
       bbar: new Ext.PagingToolbar({
         pageSize: 9,

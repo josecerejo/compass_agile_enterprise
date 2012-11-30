@@ -34,9 +34,8 @@ module Knitkit
         end
 
         def new
-          model = DesktopApplication.find_by_internal_identifier('knitkit')
           begin
-            current_user.with_capability(model, 'view', 'Theme') do
+            current_user.with_capability('view', 'Theme') do
               unless params[:theme_data].blank?
                 @website.themes.import(params[:theme_data], @website)
               else
@@ -57,9 +56,8 @@ module Knitkit
         end
 
         def delete
-          model = DesktopApplication.find_by_internal_identifier('knitkit')
           begin
-            current_user.with_capability(model, 'view', 'Theme') do
+            current_user.with_capability('view', 'Theme') do
               if @theme.destroy
                 render :json => {:success => true}
               else
@@ -80,9 +78,8 @@ module Knitkit
         end
 
         def change_status
-          model = DesktopApplication.find_by_internal_identifier('knitkit')
           begin
-            current_user.with_capability(model, 'view', 'Theme') do
+            current_user.with_capability('view', 'Theme') do
               #clear active themes
               @website.deactivate_themes! if (params[:active] == 'true')
               (params[:active] == 'true') ? @theme.activate! : @theme.deactivate!
@@ -101,9 +98,8 @@ module Knitkit
         ##############################################################
 
         def create_file
-          model = DesktopApplication.find_by_internal_identifier('knitkit')
           begin
-            current_user.with_capability(model, 'view', 'Theme') do
+            current_user.with_capability('view', 'Theme') do
               path = File.join(@file_support.root,params[:path])
               name = params[:name]
 
@@ -118,9 +114,8 @@ module Knitkit
         end
 
         def create_folder
-          model = DesktopApplication.find_by_internal_identifier('knitkit')
           begin
-            current_user.with_capability(model, 'view', 'Theme') do
+            current_user.with_capability('view', 'Theme') do
               path = File.join(@file_support.root,params[:path])
               name = params[:name]
 
@@ -133,9 +128,8 @@ module Knitkit
         end
 
         def update_file
-          model = DesktopApplication.find_by_internal_identifier('knitkit')
           begin
-            current_user.with_capability(model, 'view', 'Theme') do
+            current_user.with_capability('view', 'Theme') do
               path = File.join(@file_support.root,params[:node])
               content = params[:content]
 
@@ -157,10 +151,9 @@ module Knitkit
         def save_move
           result        = {}
           nodes_to_move = (params[:selected_nodes] ? JSON(params[:selected_nodes]) : [params[:node]])
-          model = DesktopApplication.find_by_internal_identifier('knitkit')
           begin
             nodes_to_move.each do |node|
-              current_user.with_capability(model, 'view', 'Theme') do
+              current_user.with_capability('view', 'Theme') do
                 path            = File.join(@file_support.root, node)
                 new_parent_path = File.join(@file_support.root, params[:parent_node])
 
@@ -180,9 +173,8 @@ module Knitkit
         end
 
         def download_file
-          model = DesktopApplication.find_by_internal_identifier('knitkit')
           begin
-            current_user.with_capability(model, 'view', 'Theme') do
+            current_user.with_capability('view', 'Theme') do
               path = File.join(@file_support.root,params[:path])
               contents, message = @file_support.get_contents(path)
 
@@ -205,9 +197,8 @@ module Knitkit
         end
 
         def upload_file
-          model = DesktopApplication.find_by_internal_identifier('knitkit')
           begin
-            current_user.with_capability(model, 'view', 'Theme') do
+            current_user.with_capability('view', 'Theme') do
               result = {}
               upload_path = params[:directory]
               name = params[:name]
@@ -235,11 +226,10 @@ module Knitkit
         def delete_file
           messages = []
           nodes_to_delete = (params[:selected_nodes] ? JSON(params[:selected_nodes]) : [params[:node]])
-          model = DesktopApplication.find_by_internal_identifier('knitkit')
           begin
             result = false
             nodes_to_delete.each do |path|
-              current_user.with_capability(model, 'view', 'Theme') do                
+              current_user.with_capability('view', 'Theme') do                
                 begin
                   name = File.basename(path)
                   result, message, is_folder = @file_support.delete_file(File.join(@file_support.root,path))
@@ -266,9 +256,8 @@ module Knitkit
         end
 
         def rename_file
-          model = DesktopApplication.find_by_internal_identifier('knitkit')
           begin
-            current_user.with_capability(model, 'view', 'Theme') do
+            current_user.with_capability('view', 'Theme') do
               result = {:success => true, :data => {:success => true}}
               path = params[:node]
               name = params[:file_name]

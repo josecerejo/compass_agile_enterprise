@@ -28,10 +28,10 @@ module ErpApp
       file = file.first
 
       unless file.nil?
-        if file.has_capabilities?
+        if file.is_secured?
           begin
             unless current_user == false
-              current_user.with_capability(file, :download, nil) do
+              current_user.with_capability(:download, file) do
                 serve_file(file, disposition)
               end
             else
@@ -58,7 +58,7 @@ module ErpApp
       if ErpTechSvcs::Config.file_storage == :s3
         path = File.join(file.directory,file.name).sub(%r{^/},'')
         options = { :response_content_disposition => disposition }
-        options[:expires] = ErpTechSvcs::Config.s3_url_expires_in_seconds if file.has_capabilities?
+        options[:expires] = ErpTechSvcs::Config.s3_url_expires_in_seconds if file.protected_by_capabilities?
         redirect_to @file_support.bucket.objects[path].url_for(:read, options).to_s
       else
         # to use X-Sendfile or X-Accel-Redirect, set config.action_dispatch.x_sendfile_header in environment config file

@@ -19,4 +19,8 @@ class WebsiteNavItem < ActiveRecord::Base
     website_nav_id.nil? ? self.parent.website_nav : WebsiteNav.find(website_nav_id)
   end
 
+  def is_secured?
+    self.protected_by_capability?('view')
+  end
+  
 end

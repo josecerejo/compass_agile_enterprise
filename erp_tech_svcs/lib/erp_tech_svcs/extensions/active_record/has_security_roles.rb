@@ -28,26 +28,17 @@ module ErpTechSvcs
 				  end
 
           # TODO, refactor
-          def has_access?(user)
-					  has_access = true
-  					unless self.secured_model.roles.empty?
-  					  has_access = if user.nil?
-  						  false
-  					  else
-  					    user.has_role?(self.secured_model.roles.collect{|item| item.internal_identifier})
-  					  end
-  					end
-            has_access
-				  end
-
-          # TODO, refactor
-          def with_access(user, &block)
-            if has_access?(user)
-              yield
-            else
-              raise ErpTechSvcs::Extensions::ActiveRecord::HasSecurityRoles::UserDoesNotHaveAccess
-            end
-          end
+      #     def has_access?(user)
+					 #  has_access = true
+  				# 	unless self.secured_model.roles.empty?
+  				# 	  has_access = if user.nil?
+  				# 		  false
+  				# 	  else
+  				# 	    user.has_role?(self.secured_model.roles.collect{|item| item.internal_identifier})
+  				# 	  end
+  				# 	end
+      #       has_access
+				  # end
 
 				  def add_role(role)
 					  role = role.is_a?(SecurityRole) ? role : Role.find_by_internal_identifier(role.to_s)

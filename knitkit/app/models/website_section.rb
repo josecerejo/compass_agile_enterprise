@@ -67,6 +67,10 @@ class WebsiteSection < ActiveRecord::Base
     ['Page', 'Blog'].include? type
   end
   
+  def is_secured?
+    self.protected_by_capability?('view')
+  end
+
   def is_document_section?
     type == 'OnlineDocumentSection'
   end

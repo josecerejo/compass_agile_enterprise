@@ -1,9 +1,8 @@
 class User < ActiveRecord::Base
+  include ErpTechSvcs::Utils::CompassAccessNegotiator
   include ActiveModel::Validations
 
   attr_accessor :password_validator
-
-  include ErpTechSvcs::Utils::CompassAccessNegotiator
 
   belongs_to :party
 
@@ -75,6 +74,14 @@ class User < ActiveRecord::Base
 
   def all_capabilities
     (role_capabilities + group_capabilities + capabilities).uniq
+  end
+
+  def class_capabilites_to_hash
+    all_capabilities.map {|capability| 
+      { :capability_type_iid => capability.capability_type.internal_identifier, 
+        :capability_resource_type => capability.capability_resource_type 
+      } if capability.scope_type.internal_identifier == 'class'
+    }.compact
   end
 
 end

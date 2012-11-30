@@ -37,152 +37,152 @@ Ext.define("Compass.ErpApp.Desktop.Applications.Knitkit.SectionArticlesGridPanel
 		if (self.alias.first() == 'widget.knitkit_pagearticlesgridpanel'){
 			var addFormItems = [
 				{
-			  	xtype:'textfield',
-					fieldLabel:'Content Area',
-					name:'content_area',
-					value:record.data.content_area
-			   },
-	      {
-	        xtype:'numberfield',
-	        fieldLabel:'Position',
-	        name:'position',
-					value:record.data.position
-	      }
-			]
+                    xtype:'textfield',
+                    fieldLabel:'Content Area',
+                    name:'content_area',
+                    value:record.data.content_area
+                },
+                {
+                    xtype:'numberfield',
+                    fieldLabel:'Position',
+                    name:'position',
+                    value:record.data.position
+                }
+            ];
 		} 
 		else {
 			if (self.alias.first() == 'widget.knitkit_blogarticlesgridpanel'){
-				var addFormItems = [
-					{
-		        xtype:'textfield',
-		        fieldLabel:'Tags',
-		        allowBlank:true,
-		        name:'tags',
-						value:record.data.tag_list
-		      }
-				]
+                var addFormItems = [
+                    {
+                        xtype:'textfield',
+                        fieldLabel:'Tags',
+                        allowBlank:true,
+                        name:'tags',
+                        value:record.data.tag_list
+                    }
+				];
 			}
 		}
 
     if(Compass.ErpApp.Utility.isBlank(editArticleWindow)){  
-	    var editArticleWindow = Ext.create("Ext.window.Window",{
-	      layout:'fit',
-	      width:375,
-	      title:'Edit Article',
-				itemId:itemId,
-	      plain: true,
-	      buttonAlign:'center',
-	      items: {
-	        xtype: 'form',
-	        labelWidth: 110,
-	        frame:false,
-	        bodyStyle:'padding:5px 5px 0',
-	        width: 425,
-	        url:'/knitkit/erp_app/desktop/articles/update/' + self.sectionId,
-	        defaults: {
-	          width: 225
-	        },
-	        items: [
-					{
-		        xtype:'hidden',
-		        allowBlank:false,
-		        name:'id',
-		        value: record.data.id
-		      },
-	        {
-	          xtype:'textfield',
-	          fieldLabel:'Title',
-	          allowBlank:false,
-	          name:'title',
-	          value: record.data.title
-	        },
-	        {
-	          xtype:'radiogroup',
-	          fieldLabel:'Display title?',
-	          name:'display_title',
-	          columns:2,
-	          items:[
-	          {
-	            boxLabel:'Yes',
-	            name:'display_title',
-	            inputValue: 'yes',
-	            checked:record.data.display_title
-	          },
-	          {
-	            boxLabel:'No',
-	            name:'display_title',
-	            inputValue:'no',
-	            checked:!record.data.display_title
-	          }]
-	        },
-	        {
-	          xtype:'textfield',
-	          fieldLabel:'Internal ID',
-	          allowBlank:true,
-	          name:'internal_identifier',
-	          value: record.data.internal_identifier
-	        },
-	        addFormItems,
-	        {
-	          xtype: 'displayfield',
-	          fieldLabel: 'Created At',
-	          name: 'created_at',
-	          value: record.data.created_at
-	        },
-	        {
-	          xtype: 'displayfield',
-	          fieldLabel: 'Updated At',
-	          name: 'updated_at',
-	          value: record.data.updated_at
-	        }
-	        ]
-	      },
-	      buttons: [{
-	        text:'Submit',
-	        listeners:{
-	          'click':function(button){
-	            var window = button.findParentByType('window');
-	            var formPanel = window.query('form')[0];
-	            self.initialConfig['centerRegion'].setWindowStatus('Updating article...');
-	            formPanel.getForm().submit({
-	              reset:false,
-	              success:function(form, action){
-	                self.initialConfig['centerRegion'].clearWindowStatus();
-	                var obj = Ext.decode(action.response.responseText);
-	                if(obj.success){
-	                  self.getStore().load();
-	                  if(formPanel.getForm().findField('tag_list')){
-	                    var tag_list = formPanel.getForm().findField('tag_list').getValue();
-	                    record.set('tag_list', tag_list);
-	                  }
-	                  if(formPanel.getForm().findField('content_area')){
-	                    var content_area = formPanel.getForm().findField('content_area').getValue();
-	                    record.set('content_area', content_area);
-	                  }
-	                  if(formPanel.getForm().findField('position')){
-	                    var position = formPanel.getForm().findField('position').getValue();
-	                    record.set('position', position);
-	                  }
-	                  editArticleWindow.close();
-	                }
-	                else{
-	                  Ext.Msg.alert("Error", obj.msg);
-	                }
-	              },
-	              failure:function(form, action){
-	                self.initialConfig['centerRegion'].clearWindowStatus();
-	                Ext.Msg.alert("Error", "Error updating article");
-	              }
-	            });
-	          }
-	        }
-	      },{
-	        text: 'Close',
-	        handler: function(){
-	          editArticleWindow.close();
-	        }
-	      }]
-	    });
+        var editArticleWindow = Ext.create("Ext.window.Window",{
+          layout:'fit',
+          width:375,
+          title:'Edit Article',
+          itemId:itemId,
+          plain: true,
+          buttonAlign:'center',
+          items: {
+            xtype: 'form',
+            labelWidth: 110,
+            frame:false,
+            bodyStyle:'padding:5px 5px 0',
+            width: 425,
+            url:'/knitkit/erp_app/desktop/articles/update/' + self.sectionId,
+            defaults: {
+              width: 225
+            },
+            items: [
+            {
+                xtype:'hidden',
+                allowBlank:false,
+                name:'id',
+                value: record.data.id
+            },
+            {
+              xtype:'textfield',
+              fieldLabel:'Title',
+              allowBlank:false,
+              name:'title',
+              value: record.data.title
+            },
+            {
+              xtype:'radiogroup',
+              fieldLabel:'Display title?',
+              name:'display_title',
+              columns:2,
+              items:[
+              {
+                boxLabel:'Yes',
+                name:'display_title',
+                inputValue: 'yes',
+                checked:record.data.display_title
+              },
+              {
+                boxLabel:'No',
+                name:'display_title',
+                inputValue:'no',
+                checked:!record.data.display_title
+              }]
+            },
+            {
+              xtype:'textfield',
+              fieldLabel:'Internal ID',
+              allowBlank:true,
+              name:'internal_identifier',
+              value: record.data.internal_identifier
+            },
+            addFormItems,
+            {
+              xtype: 'displayfield',
+              fieldLabel: 'Created At',
+              name: 'created_at',
+              value: record.data.created_at
+            },
+            {
+              xtype: 'displayfield',
+              fieldLabel: 'Updated At',
+              name: 'updated_at',
+              value: record.data.updated_at
+            }
+            ]
+          },
+          buttons: [{
+            text:'Submit',
+            listeners:{
+              'click':function(button){
+                var window = button.findParentByType('window');
+                var formPanel = window.query('form')[0];
+                self.initialConfig['centerRegion'].setWindowStatus('Updating article...');
+                formPanel.getForm().submit({
+                  reset:false,
+                  success:function(form, action){
+                    self.initialConfig['centerRegion'].clearWindowStatus();
+                    var obj = Ext.decode(action.response.responseText);
+                    if(obj.success){
+                      self.getStore().load();
+                      if(formPanel.getForm().findField('tag_list')){
+                        var tag_list = formPanel.getForm().findField('tag_list').getValue();
+                        record.set('tag_list', tag_list);
+                      }
+                      if(formPanel.getForm().findField('content_area')){
+                        var content_area = formPanel.getForm().findField('content_area').getValue();
+                        record.set('content_area', content_area);
+                      }
+                      if(formPanel.getForm().findField('position')){
+                        var position = formPanel.getForm().findField('position').getValue();
+                        record.set('position', position);
+                      }
+                      editArticleWindow.close();
+                    }
+                    else{
+                      Ext.Msg.alert("Error", obj.msg);
+                    }
+                  },
+                  failure:function(form, action){
+                    self.initialConfig['centerRegion'].clearWindowStatus();
+                    Ext.Msg.alert("Error", "Error updating article");
+                  }
+                });
+              }
+            }
+          },{
+            text: 'Close',
+            handler: function(){
+              editArticleWindow.close();
+            }
+          }]
+        });
 		}
     editArticleWindow.show();
   },
@@ -209,17 +209,17 @@ Ext.define("Compass.ErpApp.Desktop.Applications.Knitkit.SectionArticlesGridPanel
       },
       remoteSort: true,
       fields:[
-	      {name:'id'},
-	      {name:'title'},
-	      {name:'tag_list'},
-	      {name:'excerpt_html'},
-	      {name:'position'},
-	      {name:'content_area'},
-	      {name:'body_html'},
-	      {name:'internal_identifier'},
-	      {name:'display_title'},
-	      {name:'created_at'},
-	      {name:'updated_at'}
+          {name:'id'},
+          {name:'title'},
+          {name:'tag_list'},
+          {name:'excerpt_html'},
+          {name:'position'},
+          {name:'content_area'},
+          {name:'body_html'},
+          {name:'internal_identifier'},
+          {name:'display_title'},
+          {name:'created_at'},
+          {name:'updated_at'}
       ]
     });
 
@@ -253,11 +253,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.Knitkit.SectionArticlesGridPanel
             }]
         }]);
         
-        if (currentUser.hasApplicationCapability('knitkit', {
-            capability_type_iid:'edit',
-            resource:'Article'
-        }))
-
+        if (currentUser.hasCapability('edit','Content'))
         {
             overiddenColumns = overiddenColumns.concat([
             {
@@ -279,11 +275,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.Knitkit.SectionArticlesGridPanel
             }]);
         }
 
-        if (currentUser.hasApplicationCapability('knitkit', {
-            capability_type_iid:'delete',
-            resource:'Article'
-        }))
-
+        if (currentUser.hasCapability('delete','Content'))
         {
             overiddenColumns = overiddenColumns.concat([
             {
@@ -354,11 +346,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.Knitkit.SectionArticlesGridPanel
     
         var tbarItems = [];
 
-        if (currentUser.hasApplicationCapability('knitkit', {
-            capability_type_iid:'create',
-            resource:'Article'
-        }))
-
+        if (currentUser.hasCapability('create','Content'))
         {
             tbarItems.push(
             {
@@ -422,11 +410,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.Knitkit.SectionArticlesGridPanel
             });
         }
 
-        if (currentUser.hasApplicationCapability('knitkit', {
-            capability_type_iid:'add_existing',
-            resource:'Article'
-        }))
-
+        if (currentUser.hasCapability('add_existing','Content'))
         {
             tbarItems.push(
             {

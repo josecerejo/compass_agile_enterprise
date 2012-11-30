@@ -10,10 +10,7 @@ Compass.ErpApp.Desktop.Applications.Knitkit.addSectionOptions = function (self, 
     });
 
     if (record.data.isSecured) {
-        if (currentUser.hasApplicationCapability('knitkit', {
-            capability_type_iid:'unsecure',
-            resource:'Section'
-        })) {
+        if (currentUser.hasCapability('unsecure','WebsiteSection')) {
             items.push({
                 text:'Unsecure',
                 iconCls:'icon-document',
@@ -26,10 +23,7 @@ Compass.ErpApp.Desktop.Applications.Knitkit.addSectionOptions = function (self, 
         }
     }
     else {
-        if (currentUser.hasApplicationCapability('knitkit', {
-            capability_type_iid:'secure',
-            resource:'Section'
-        })) {
+        if (currentUser.hasCapability('secure','WebsiteSection')) {
             items.push({
                 text:'Secure',
                 iconCls:'icon-document_lock',
@@ -42,10 +36,7 @@ Compass.ErpApp.Desktop.Applications.Knitkit.addSectionOptions = function (self, 
         }
     }
 
-    if (currentUser.hasApplicationCapability('knitkit', {
-        capability_type_iid:'create',
-        resource:'Section'
-    })) {
+    if (currentUser.hasCapability('create','WebsiteSection')) {
         items.push({
             text:'Add Section',
             iconCls:'icon-add',
@@ -191,10 +182,7 @@ Compass.ErpApp.Desktop.Applications.Knitkit.addSectionOptions = function (self, 
         });
     }
 
-    if (currentUser.hasApplicationCapability('knitkit', {
-        capability_type_iid:'edit',
-        resource:'Section'
-    })) {
+    if (currentUser.hasCapability('edit','WebsiteSection')) {
         items.push({
             text:'Update Section',
             iconCls:'icon-edit',
@@ -328,10 +316,7 @@ Compass.ErpApp.Desktop.Applications.Knitkit.addSectionOptions = function (self, 
 
 //no layouts for blogs.
     if (Compass.ErpApp.Utility.isBlank(record.data['isBlog']) && record.data['hasLayout']) {
-        if (currentUser.hasApplicationCapability('knitkit', {
-            capability_type_iid:'edit',
-            resource:'Layout'
-        })) {
+        if (currentUser.hasCapability('edit','WebsiteSectionLayout')) {
             items.push({
                 text:'Edit Layout',
                 iconCls:'icon-edit',
@@ -344,10 +329,7 @@ Compass.ErpApp.Desktop.Applications.Knitkit.addSectionOptions = function (self, 
         }
     }
     else if (Compass.ErpApp.Utility.isBlank(record.data['isBlog'])) {
-        if (currentUser.hasApplicationCapability('knitkit', {
-            capability_type_iid:'create',
-            resource:'Layout'
-        })) {
+        if (currentUser.hasCapability('create','WebsiteSectionLayout')) {
             items.push({
                 text:'Add Layout',
                 iconCls:'icon-add',
@@ -380,10 +362,7 @@ Compass.ErpApp.Desktop.Applications.Knitkit.addSectionOptions = function (self, 
         }
     }
 
-    if (currentUser.hasApplicationCapability('knitkit', {
-        capability_type_iid:'delete',
-        resource:'Section'
-    })) {
+    if (currentUser.hasCapability('delete','WebsiteSection')) {
         items.push({
             text:'Delete ' + record.data["type"],
             iconCls:'icon-delete',
@@ -396,4 +375,4 @@ Compass.ErpApp.Desktop.Applications.Knitkit.addSectionOptions = function (self, 
     }
 
     return items;
-}
+};

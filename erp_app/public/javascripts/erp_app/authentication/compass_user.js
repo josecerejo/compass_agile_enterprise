@@ -4,16 +4,16 @@ Ext.ns("ErpApp.CompassAccessNegotiator");
  * @class ErpApp.CompassAccessNegotiator.CompassUser
  **/
 
-ErpApp.CompassAccessNegotiator.CompassUser = function(user, applicationRoleManager){
+ErpApp.CompassAccessNegotiator.CompassUser = function(user){
   this.id = user.id,
-  this.roles = user.roles,
   this.username = user.username,
+  this.roles = user.roles,
+  this.capabilities = user.capabilities,
   this.lastloginAt = user.lastloginAt,
   this.lastActivityAt = user.lastActivityAt,
   this.failedLoginCount = user.failedLoginCount,
   this.email = user.email,
-  this.applicationRoleManager = applicationRoleManager,
-  this.description = user.description
+  this.description = user.description;
 
   /**
    * Checks to see if the passed roles exists in this.roles
@@ -44,21 +44,27 @@ ErpApp.CompassAccessNegotiator.CompassUser = function(user, applicationRoleManag
     return result;
   },
 
-  this.hasApplicationCapability = function(application_iid, capability){
-    return this.applicationRoleManager.hasApplicationCapability(application_iid, capability, this);
+  this.hasCapability = function(capability_type_iid, klass){
+    for(var i = 0; i < this.capabilities.length; i++){
+      if (this.capabilities[i].capability_type_iid == capability_type_iid && this.capabilities[i].capability_resource_type == klass){
+        return true;
+      }
+    }
+
+    return false;
   },
 
-  this.hasWidgetCapability = function(xtype, capability){
-    return this.applicationRoleManager.hasWidgetCapability(xtype, capability, this);
-  },
+  // this.hasWidgetCapability = function(xtype, capability){
+  //   return this.applicationRoleManager.hasWidgetCapability(xtype, capability, this);
+  // },
 
-  this.hasAccessToWidget = function(xtype){
-    return this.applicationRoleManager.hasAccessToWidget(xtype, this);
-  },
+  // this.hasAccessToWidget = function(xtype){
+  //   return this.applicationRoleManager.hasAccessToWidget(xtype, this);
+  // },
 
-  this.validWidgets = function(application_iid, filters){
-    return this.applicationRoleManager.validWidgets(application_iid, filters, this);
-  },
+  // this.validWidgets = function(application_iid, filters){
+  //   return this.applicationRoleManager.validWidgets(application_iid, filters, this);
+  // },
 
   /**
    * Use when role check fails, displays message add logging if needed.
@@ -75,9 +81,6 @@ ErpApp.CompassAccessNegotiator.CompassUser = function(user, applicationRoleManag
       fn: options['fn'] || null,
       iconCls:'icon-warning'
     });
-  }
+  };
 
 };
-
-
-
