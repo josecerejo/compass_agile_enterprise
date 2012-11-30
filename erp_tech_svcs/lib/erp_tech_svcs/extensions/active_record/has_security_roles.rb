@@ -41,7 +41,7 @@ module ErpTechSvcs
 				  # end
 
 				  def add_role(role)
-					  role = role.is_a?(SecurityRole) ? role : Role.find_by_internal_identifier(role.to_s)
+					  role = role.is_a?(SecurityRole) ? role : SecurityRole.find_by_internal_identifier(role.to_s)
             unless self.has_role?(role)
   					  self.security_roles << role
   					  self.save
@@ -57,7 +57,7 @@ module ErpTechSvcs
           end
 
           def remove_role(role)
-            role = role.is_a?(SecurityRole) ? role : Role.find_by_internal_identifier(role.to_s)
+            role = role.is_a?(SecurityRole) ? role : SecurityRole.find_by_internal_identifier(role.to_s)
             self.security_roles.delete(role) if has_role?(role)
 				  end
 

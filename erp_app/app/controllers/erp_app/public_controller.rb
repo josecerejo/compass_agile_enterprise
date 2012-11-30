@@ -2,17 +2,6 @@ module ErpApp
 	class PublicController < ActionController::Base
     before_filter :set_file_support
 
-    # DEPRECATED, use erp_app/public#download
-    # def download_file
-    #    path = params[:path]
-    #    file_klass = FileAsset.type_by_extension(File.extname(path))
-    #    if file_klass == Image
-    #      send_file path, :type => "image/#{File.extname(path)}"
-    #    else
-    #      send_file path, :type => file_klass.content_type
-    #    end
-	  # end
-
     # TODO:
     # reorder menuitems
     # drag and drop image into ckeditor uses bad (but somehow not broken, i.e. ../../images/) url (filesystem on firefox, chrome OK) 

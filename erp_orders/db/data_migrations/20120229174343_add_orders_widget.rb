@@ -17,7 +17,7 @@ class AddOrdersWidget
         app.save
       end
       
-      orders.roles << Role.find_by_internal_identifier('admin')
+      orders.roles << SecurityRole.find_by_internal_identifier('admin')
       orders.save      
     end
   end

@@ -15,7 +15,7 @@ class AddBillpayWidget
       app.widgets << billpay
       app.save
 
-      billpay.roles << Role.find_by_internal_identifier('admin')
+      billpay.roles << SecurityRole.find_by_internal_identifier('admin')
       billpay.save
     end
   end

@@ -5,7 +5,7 @@ module ErpApp
 
 			  def available_roles
           user_id = params[:user_id]
-          roles = Role.all
+          roles = SecurityRole.all
 
           unless user_id.empty?
             current_role_ids = User.find(user_id).roles.collect{|r| r.id}
@@ -31,7 +31,7 @@ module ErpApp
           user_id  = params[:user_id]
 
           user = User.find(user_id)
-          roles = Role.where("id in (#{role_ids.join(',')})").all
+          roles = SecurityRole.where("id in (#{role_ids.join(',')})").all
           user.remove_all_roles
           user.add_roles(roles)
           user.save
