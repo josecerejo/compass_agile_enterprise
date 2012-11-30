@@ -6,11 +6,4 @@ class Widget < ActiveRecord::Base
   validates_uniqueness_of :xtype
   validates_uniqueness_of :internal_identifier
 
-  def to_access_hash
-    {
-      :xtype => self.xtype,
-      :roles => self.roles.collect{|role| role.internal_identifier},
-      :capabilities => self.capabilites_to_hash
-    }
-  end
 end
