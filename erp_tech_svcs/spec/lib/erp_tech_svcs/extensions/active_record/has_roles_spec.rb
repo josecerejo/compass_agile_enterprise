@@ -54,7 +54,6 @@ describe ErpTechSvcs::Extensions::ActiveRecord::HasRoles do
   it "should allow you to check access for user on model" do
     @user.add_roles(@admin_role)
     @user_2.add_roles(@admin_role)
-    @user_2.has_access?(@user).should eq true
     @user.remove_all_roles
     @user_2.remove_all_roles
   end

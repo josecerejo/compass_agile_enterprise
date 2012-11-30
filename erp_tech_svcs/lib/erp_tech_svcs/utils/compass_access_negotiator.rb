@@ -41,10 +41,6 @@ module ErpTechSvcs
         end
       end
 
-      # def has_access_to_widget?(widget)
-      #   widget.has_access?(self)
-      # end
-
       # def valid_widgets(application)
       #   widgets = []
       #   application.widgets.each do |widget|

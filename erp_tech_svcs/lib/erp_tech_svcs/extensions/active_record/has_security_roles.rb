@@ -27,19 +27,6 @@ module ErpTechSvcs
 					  self.security_roles
 				  end
 
-          # TODO, refactor
-      #     def has_access?(user)
-					 #  has_access = true
-  				# 	unless self.secured_model.roles.empty?
-  				# 	  has_access = if user.nil?
-  				# 		  false
-  				# 	  else
-  				# 	    user.has_role?(self.secured_model.roles.collect{|item| item.internal_identifier})
-  				# 	  end
-  				# 	end
-      #       has_access
-				  # end
-
 				  def add_role(role)
 					  role = role.is_a?(SecurityRole) ? role : SecurityRole.find_by_internal_identifier(role.to_s)
             unless self.has_role?(role)
@@ -71,7 +58,7 @@ module ErpTechSvcs
           def remove_all_roles
             self.security_roles = []
             self.save
-				  end
+          end
 
           def has_role?(*passed_roles)
             result = false

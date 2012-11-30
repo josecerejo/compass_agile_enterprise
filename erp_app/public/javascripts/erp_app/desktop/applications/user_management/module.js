@@ -21,6 +21,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.UserManagement",{
         title:'User Management',
         width:1100,
         height:550,
+        maximized: true,
         iconCls: 'icon-user',
         shim:false,
         animCollapse:false,
@@ -109,60 +110,49 @@ Ext.define("Compass.ErpApp.Desktop.Applications.UserManagement.UsersGrid",{
         var response = Ext.decode(responseObject.responseText);
         self.tabPanel.removeAll();
 
-        if(currentUser.hasAccessToWidget("shared_notesgrid"))
+        self.initialConfig.tabPanel.add(
         {
-          self.initialConfig.tabPanel.add(
-          {
-            xtype:'shared_notesgrid',
-            partyId:rec.get('party_id'),
-            title:'Notes'
-          });
-        }
+          xtype:'usermanagement_personalinfopanel',
+          businessParty:response.businessParty,
+          userInfo:response.userInfo,
+          entityType:response.entityType
+        });
 
-        if(currentUser.hasAccessToWidget("usermanagement_personalinfopanel"))
+        self.initialConfig.tabPanel.add(
         {
-          self.initialConfig.tabPanel.add(
-          {
-            xtype:'usermanagement_personalinfopanel',
-            businessParty:response.businessParty,
-            userInfo:response.userInfo,
-            entityType:response.entityType
-          });
-        }
+          xtype:'usermanagement_rolemanagementpanel',
+          userId:userId
+        });
 
-        if(currentUser.hasAccessToWidget("usermanagement_rolemanagementpanel"))
+        self.initialConfig.tabPanel.add(
         {
-          self.initialConfig.tabPanel.add(
-          {
-            xtype:'usermanagement_rolemanagementpanel',
-            userId:userId
-          });
-        }
+          xtype:'controlpanel_userapplicationmgtpanel',
+          userId:userId,
+          title:'Desktop Applications',
+          appContainerType:'Desktop'
+        });
+        self.initialConfig.tabPanel.add(
+        {
+          xtype:'controlpanel_userapplicationmgtpanel',
+          userId:userId,
+          appContainerType:'Organizer',
+          title:'Organizer Applications'
+        });
+        self.initialConfig.tabPanel.add(
+        {
+          xtype:'controlpanel_userapplicationmgtpanel',
+          userId:userId,
+          appContainerType:'Mobile',
+          title:'Mobile Applications'
+        });
 
-        if(currentUser.hasAccessToWidget("controlpanel_userapplicationmgtpanel"))
+        self.initialConfig.tabPanel.add(
         {
-          self.initialConfig.tabPanel.add(
-          {
-            xtype:'controlpanel_userapplicationmgtpanel',
-            userId:userId,
-            title:'Desktop Applications',
-            appContainerType:'Desktop'
-          });
-          self.initialConfig.tabPanel.add(
-          {
-            xtype:'controlpanel_userapplicationmgtpanel',
-            userId:userId,
-            appContainerType:'Organizer',
-            title:'Organizer Applications'
-          });
-          self.initialConfig.tabPanel.add(
-          {
-            xtype:'controlpanel_userapplicationmgtpanel',
-            userId:userId,
-            appContainerType:'Mobile',
-            title:'Mobile Applications'
-          });
-        }
+          xtype:'shared_notesgrid',
+          partyId:rec.get('party_id'),
+          title:'Notes'
+        });
+
         self.initialConfig.tabPanel.setActiveTab(0);
         self.clearWindowStatus('Loading User...');
       },

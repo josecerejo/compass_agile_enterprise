@@ -129,10 +129,7 @@ Ext.define("Compass.ErpApp.Shared.NotesGrid",{
     }
     ];
 
-    if(currentUser.hasWidgetCapability('shared_notesgrid', {
-      capability_type_iid:'view',
-      resource:'Note'
-    })){
+    if(currentUser.hasCapability('view','Note')){
       columns.push({
         menuDisabled:true,
         resizable:false,
@@ -167,10 +164,7 @@ Ext.define("Compass.ErpApp.Shared.NotesGrid",{
       });
     }
 
-    if(currentUser.hasWidgetCapability('shared_notesgrid', {
-      capability_type_iid:'delete',
-      resource:'Note'
-    })){
+    if(currentUser.hasCapability('delete','Note')){
       columns.push({
         menuDisabled:true,
         resizable:false,
@@ -197,11 +191,8 @@ Ext.define("Compass.ErpApp.Shared.NotesGrid",{
       });
     }
 
-    var toolBarItems = []
-    if(currentUser.hasWidgetCapability('shared_notesgrid', {
-      capability_type_iid:'create',
-      resource:'Note'
-    })){
+    var toolBarItems = [];
+    if(currentUser.hasCapability('create','Note')){
       toolBarItems.push( {
         text:'Add Note',
         iconCls:'icon-add',
