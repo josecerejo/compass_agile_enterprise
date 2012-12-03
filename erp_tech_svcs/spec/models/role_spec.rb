@@ -3,7 +3,7 @@ require 'spec_helper'
 describe Role do
 
   before(:all) do
-    @role = Role.create(:internal_identifier => 'employee')
+    @role = SecurityRole.create(:internal_identifier => 'employee')
   end
 
   it "can transform into xml" do
@@ -11,7 +11,7 @@ describe Role do
   end
 
   after(:all) do
-    Role.destroy_all
+    SecurityRole.destroy_all
   end
 
 end

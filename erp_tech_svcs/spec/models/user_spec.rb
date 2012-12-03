@@ -7,7 +7,7 @@ describe User do
   end
 
   it "should allow you to add and remove roles" do
-    role = Role.create(:internal_identifier => 'employee')
+    role = SecurityRole.create(:internal_identifier => 'employee')
     @user.add_role(role)
     @user.has_role?(role).should eq true
     @user.remove_role(role)
@@ -21,7 +21,7 @@ describe User do
 
   after(:all) do
     User.destroy_all
-    Role.destroy_all
+    SecurityRole.destroy_all
   end
 
 end

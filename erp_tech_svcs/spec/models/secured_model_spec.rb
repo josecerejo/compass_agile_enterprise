@@ -3,7 +3,7 @@ require 'spec_helper'
 describe SecuredModel do
 
   it "can find models by Class and role" do
-    admin_role = Role.create(:description => 'Admin', :internal_identifier => 'admin')
+    admin_role = SecurityRole.create(:description => 'Admin', :internal_identifier => 'admin')
     admin_user = User.create(:username => "admin",:email => "admin@portablemind.com")
     admin_user.add_role('admin')
 

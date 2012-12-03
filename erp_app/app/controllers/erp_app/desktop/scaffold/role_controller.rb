@@ -2,7 +2,7 @@ module ErpApp
 	module Desktop
 		module Scaffold
 			class RoleController < ErpApp::Desktop::Scaffold::BaseController
-			  active_ext Role do |options|
+			  active_ext SecurityRole do |options|
 				options[:inline_edit] = true
 				options[:use_ext_forms] = false
 				options[:ignore_associations] = true

@@ -1,9 +1,6 @@
 Compass.ErpApp.Desktop.Applications.Knitkit.addMenuOptions = function (self, items, record) {
     if (record.data['canAddMenuItems']) {
-        if (currentUser.hasApplicationCapability('knitkit', {
-            capability_type_iid:'create',
-            resource:'MenuItem'
-        })) {
+        if (currentUser.hasCapability('create','WebsiteNavItem')) {
             items.push({
                 text:'Add Menu Item',
                 iconCls:'icon-add',
@@ -143,7 +140,7 @@ Compass.ErpApp.Desktop.Applications.Knitkit.addMenuOptions = function (self, ite
                                             },
                                             failure:function (form, action) {
                                                 self.clearWindowStatus();
-                                                if (action.response == null) {
+                                                if (action.response === null) {
                                                     Ext.Msg.alert("Error", 'Could not create menu item');
                                                 }
                                                 else {
@@ -171,4 +168,4 @@ Compass.ErpApp.Desktop.Applications.Knitkit.addMenuOptions = function (self, ite
     }
 
     return items;
-}
+};

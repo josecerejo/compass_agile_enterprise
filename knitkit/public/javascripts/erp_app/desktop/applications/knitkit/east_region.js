@@ -8,23 +8,11 @@ Ext.define("Compass.ErpApp.Desktop.Applications.Knitkit.EastRegion",{
         this.fileAssetsPanel = Ext.create('Compass.ErpApp.Desktop.Applications.Knitkit.FileAssetsPanel', { module: config.module });
         this.items = [];
 
-        if (currentUser.hasApplicationCapability('knitkit', {
-            capability_type_iid:'view',
-            resource:'GlobalImageAsset'
-        }) || currentUser.hasApplicationCapability('knitkit', {
-            capability_type_iid:'view',
-            resource:'SiteImageAsset'}))
-        {
+        if (currentUser.hasCapability('view','GlobalImageAsset') || currentUser.hasCapability('view','SiteImageAsset')){
             this.items.push(this.imageAssetsPanel);
         }
 
-        if (currentUser.hasApplicationCapability('knitkit', {
-            capability_type_iid:'view',
-            resource:'GlobalFileAsset'
-        }) || currentUser.hasApplicationCapability('knitkit', {
-            capability_type_iid:'view',
-            resource:'SiteFileAsset'}))
-        {
+        if (currentUser.hasCapability('view','GlobalFileAsset') || currentUser.hasCapability('view','SiteFileAsset')){
             this.items.push(this.fileAssetsPanel);
         }
         

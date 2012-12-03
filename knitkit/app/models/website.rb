@@ -2,6 +2,7 @@ class Website < ActiveRecord::Base
   after_destroy :remove_sites_directory, :remove_website_role
   after_create  :setup_website
 
+  protected_by_capabilities
   has_file_assets
   has_permalink :name, :internal_identifier, :update => false
 
@@ -123,12 +124,12 @@ class Website < ActiveRecord::Base
   end
 
   def role
-    Role.iid(website_role_iid)
+    SecurityRole.iid(website_role_iid)
   end
 
   def setup_website
     PublishedWebsite.create(:website => self, :version => 0, :active => true, :comment => 'New Site Created')
-    Role.create(:description => "Website #{self.title}", :internal_identifier => website_role_iid) if self.role.nil?
+    SecurityRole.create(:description => "Website #{self.title}", :internal_identifier => website_role_iid) if self.role.nil?
     configuration = ::Configuration.find_template('default_website_configuration').clone(true)
     configuration.description = "Website #{self.name} Configuration"
     configuration.internal_identifier = configuration.description.underscore
@@ -443,7 +444,7 @@ class Website < ActiveRecord::Base
       end
       unless hash[:roles].empty?
         hash[:roles].each do |role|
-          website_item.add_role(Role.find_by_internal_identifier(role)) rescue nil #do nothing if the role does not exist
+          website_item.add_role(SecurityRole.find_by_internal_identifier(role)) rescue nil #do nothing if the role does not exist
         end
       end
       website_item
@@ -504,7 +505,7 @@ class Website < ActiveRecord::Base
       end
       unless hash[:roles].empty?
         hash[:roles].each do |role|
-          section.add_role(Role.find_by_internal_identifier(role)) rescue nil #do nothing if the role does not exist
+          section.add_role(SecurityRole.find_by_internal_identifier(role)) rescue nil #do nothing if the role does not exist
         end
       end
       section
@@ -513,7 +514,7 @@ class Website < ActiveRecord::Base
   end
 
   def website_role_iid
-    "website_#{self.name.underscore.gsub("'","").gsub(",","")}_access"
+    "website_#{self.iid}_access"
   end
 
   private

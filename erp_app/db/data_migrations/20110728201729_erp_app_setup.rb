@@ -30,8 +30,8 @@ class ErpAppSetup
       #######################################
       #roles
       #######################################
-      Role.create(:description => 'Admin', :internal_identifier => 'admin')
-      Role.create(:description => 'Employee', :internal_identifier => 'employee')
+      SecurityRole.create(:description => 'Admin', :internal_identifier => 'admin')
+      SecurityRole.create(:description => 'Employee', :internal_identifier => 'employee')
     
       #######################################
       #desktop setup
@@ -97,9 +97,6 @@ class ErpAppSetup
         :xtype => 'shared_notesgrid',
         :internal_identifier => 'shared_notes_grid'
       )
-
-      notes_grid.add_role('admin')
-      notes_grid.add_role('employee')
       notes_grid.save
     
       #######################################
@@ -111,8 +108,6 @@ class ErpAppSetup
         :xtype => 'controlpanel_userapplicationmgtpanel',
         :internal_identifier => 'application_management'
       )
-
-      app_mgr.add_role('admin')
       app_mgr.save
     
       role_mgr = ::Widget.create(
@@ -121,8 +116,6 @@ class ErpAppSetup
         :xtype => 'usermanagement_rolemanagementpanel',
         :internal_identifier => 'role_management'
       )
-
-      role_mgr.add_role('admin')
       role_mgr.save
 
       personal_info = ::Widget.create(
@@ -131,9 +124,6 @@ class ErpAppSetup
         :xtype => 'usermanagement_personalinfopanel',
         :internal_identifier => 'user_personal_info'
       )
-
-      personal_info.add_role('admin')
-      personal_info.add_role('employee')
       personal_info.save
 
       #create application and assign widgets
@@ -154,34 +144,6 @@ class ErpAppSetup
       user_mgr_app.widgets << notes_grid
       user_mgr_app.save
     
-      #######################################
-      #system management app
-      #######################################
-      app_role_management = ::Widget.create(
-        :description => 'Application Role Management',
-        :icon => 'icon-document',
-        :xtype => 'systemmanagement_applicationrolemanagment',
-        :internal_identifier => 'application_role_management'
-      )
-
-      app_role_management.add_role('admin')
-      app_role_management.save
-
-      system_management_app = DesktopApplication.create(
-        :description => 'System Management',
-        :icon => 'icon-monitor',
-        :javascript_class_name => 'Compass.ErpApp.Desktop.Applications.SystemManagement',
-        :internal_identifier => 'system_management',
-        :shortcut_id => 'system_management-win'
-      )
-
-      system_management_app.preference_types << desktop_shortcut_pt
-      system_management_app.preference_types << auto_load_app_pt
-
-      system_management_app.widgets << app_role_management
-      system_management_app.save
-    
-
       #######################################
       #scaffold app
       #######################################
@@ -207,9 +169,6 @@ class ErpAppSetup
         :xtype => 'contactmechanismgrid',
         :internal_identifier => 'party_contact_management'
       )
-
-      party_contact_mgm_widget.add_role('admin')
-      party_contact_mgm_widget.add_role('employee')
       party_contact_mgm_widget.save
 
       party_mgm_widget = ::Widget.create(
@@ -218,9 +177,6 @@ class ErpAppSetup
         :xtype => 'partygrid',
         :internal_identifier => 'party_management_widget'
       )
-
-      party_mgm_widget.add_role('admin')
-      party_mgm_widget.add_role('employee')
       party_mgm_widget.save
 
       #create application

@@ -132,17 +132,11 @@ Ext.define("Compass.ErpApp.Desktop.Applications.Knitkit.FileAssetsPanel",{
       }],
       listeners:{
         'allowdelete':function(){
-           return currentUser.hasApplicationCapability('knitkit', {
-           capability_type_iid:'delete',
-           resource:'GlobalFileAsset'
-         });
-      },
+          return currentUser.hasCapability('delete','GlobalFileAsset');
+        },
         'allowupload':function(){
-          return currentUser.hasApplicationCapability('knitkit', {
-          capability_type_iid:'upload',
-          resource:'GlobalFileAsset'
-        });
-      },
+          return currentUser.hasCapability('upload','GlobalFileAsset');
+        },
         'itemclick':function(view, record, item, index, e){
           e.stopEvent();
           return false;
@@ -302,20 +296,14 @@ Ext.define("Compass.ErpApp.Desktop.Applications.Knitkit.FileAssetsPanel",{
 
     var items = [];
 
-    if (currentUser.hasApplicationCapability('knitkit', {
-        capability_type_iid:'view',
-        resource:'GlobalFileAsset'}))
-    {
-        items.push(this.sharedFileAssetsTreePanel);
+    if (currentUser.hasCapability('view','GlobalFileAsset')){
+      items.push(this.sharedFileAssetsTreePanel);
     }
 
-    if (currentUser.hasApplicationCapability('knitkit', {
-        capability_type_iid:'view',
-        resource:'SiteFileAsset'}))
-    {
-        items.push(this.websiteFileAssetsTreePanel);
+    if (currentUser.hasCapability('view','SiteFileAsset')){
+      items.push(this.websiteFileAssetsTreePanel);
     }
-
+  
     config = Ext.apply({
       deferredRender:false,
       layout: 'fit',

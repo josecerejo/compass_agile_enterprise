@@ -91,7 +91,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.Knitkit.VersionsGridPanel", {
                                 return false;
                             }
                             else {
-                                grid.ownerCt.publish(rec)
+                                grid.ownerCt.publish(rec);
                             }
 
                         }
@@ -107,10 +107,10 @@ Ext.define("Compass.ErpApp.Desktop.Applications.Knitkit.VersionsGridPanel", {
                 renderer:function () {
                     var rec = arguments[2];
                     if (rec.get('active')) {
-                        return '<img class="x-action-col-0 active-col" ext:qtip="Active" src="data:image/gif;base64,R0lGODlhAQABAID/AMDAwAAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==" alt="">'
+                        return '<img class="x-action-col-0 active-col" ext:qtip="Active" src="data:image/gif;base64,R0lGODlhAQABAID/AMDAwAAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==" alt="">';
                     }
                     else {
-                        return '<img class="x-action-col-0 activate-col" ext:qtip="Not Active" src="data:image/gif;base64,R0lGODlhAQABAID/AMDAwAAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==" alt="">'
+                        return '<img class="x-action-col-0 activate-col" ext:qtip="Not Active" src="data:image/gif;base64,R0lGODlhAQABAID/AMDAwAAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==" alt="">';
                     }
                 }
             }
@@ -141,10 +141,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.Knitkit.VersionsArticleGridPanel
     },
 
     revert:function (rec) {
-        if (currentUser.hasApplicationCapability('knitkit', {
-            capability_type_iid:'revert_version',
-            resource:'Article'
-        })) {
+        if (currentUser.hasCapability('revert_version','Content')) {
             var self = this;
             self.initialConfig['centerRegion'].setWindowStatus('Reverting...');
 
@@ -178,10 +175,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.Knitkit.VersionsArticleGridPanel
     },
 
     publish:function (rec) {
-        if (currentUser.hasApplicationCapability('knitkit', {
-            capability_type_iid:'publish',
-            resource:'Article'
-        })) {
+        if (currentUser.hasCapability('publish','Content')) {
             var self = this;
 
             var publishWindow = Ext.create('Compass.ErpApp.Desktop.Applications.Knitkit.PublishWindow',{
@@ -279,10 +273,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.Knitkit.VersionsBlogGridPanel", 
     },
 
     revert:function (rec) {
-        if (currentUser.hasApplicationCapability('knitkit', {
-            capability_type_iid:'revert_version',
-            resource:'Article'
-        })) {
+        if (currentUser.hasCapability('revert_version','Content')) {
             var self = this;
             self.initialConfig['centerRegion'].setWindowStatus('Reverting...');
             Ext.Ajax.request({
@@ -433,7 +424,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.Knitkit.VersionsWebsiteSectionGr
             },
             success:function (response) {
                 self.initialConfig['centerRegion'].clearWindowStatus();
-                var template = response.responseText
+                var template = response.responseText;
                 self.initialConfig['centerRegion'].viewSectionLayout(rec.get('title'), template);
             },
             failure:function (response) {
@@ -444,10 +435,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.Knitkit.VersionsWebsiteSectionGr
     },
 
     revert:function (rec) {
-        if (currentUser.hasApplicationCapability('knitkit', {
-            capability_type_iid:'revert_version',
-            resource:'Article'
-        })) {
+        if (currentUser.hasCapability('revert_version','Content')) {
             var self = this;
             self.initialConfig['centerRegion'].setWindowStatus('Reverting...');
             Ext.Ajax.request({
@@ -564,10 +552,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.Knitkit.NonPublishedVersionsGrid
     },
 
     revert:function (rec) {
-        if (currentUser.hasApplicationCapability('knitkit', {
-            capability_type_iid:'revert_version',
-            resource:'Article'
-        })) {
+        if (currentUser.hasCapability('revert_version','Content')) {
             var self = this;
             self.initialConfig['centerRegion'].setWindowStatus('Reverting...');
             Ext.Ajax.request({

@@ -85,11 +85,11 @@ module Knitkit
             :linkToType => link_to_type,
             :canAddMenuItems => true,
             :websiteId => website.id,
-            :isSecured => !item.roles.empty?,
+            :isSecured => item.is_secured?,
             :linkedToId => linked_to_item_id,
             :websiteNavItemId => item.id,
             :url => url,
-            :iconCls => 'icon-document',
+            :iconCls => item.is_secured? ? 'icon-document_lock' : 'icon-document',
             :isWebsiteNavItem => true,
             :leaf => false
           }
@@ -106,7 +106,7 @@ module Knitkit
             :siteName => website.name,
             :siteId => website.id,
             :type => website_section.type,
-            :isSecured => !website_section.roles.empty?,
+            :isSecured => website_section.is_secured?,
             :isSection => website_section.is_section?,
             :isDocument => website_section.is_document_section?,
             :inMenu => website_section.in_menu,

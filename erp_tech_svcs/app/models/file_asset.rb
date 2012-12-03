@@ -43,7 +43,7 @@ class FileAsset < ActiveRecord::Base
   belongs_to :file_asset_holder, :polymorphic => true
   instantiates_with_sti
 
-  has_capabilities
+  protected_by_capabilities
   
   #paperclip
   has_attached_file :data,
@@ -108,7 +108,7 @@ class FileAsset < ActiveRecord::Base
     end
   end
 
-  def initialize(attributes = {}, options)
+  def initialize(attributes = {}, options={})
     attributes ||= {}
 
     base_path = attributes.delete(:base_path)
@@ -125,6 +125,10 @@ class FileAsset < ActiveRecord::Base
     data = StringIO.new(data) if data.is_a?(String)
 
     super attributes.merge(:directory => directory, :name => name, :data => data)
+  end
+
+  def is_secured?
+    self.protected_by_capability?('download')
   end
 
   # compass file download url

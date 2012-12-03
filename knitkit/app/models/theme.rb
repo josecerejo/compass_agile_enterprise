@@ -8,6 +8,7 @@ class Theme < ActiveRecord::Base
   @knitkit_website_stylesheets_path = "#{Knitkit::Engine.root.to_s}/public/stylesheets/knitkit"
   @knitkit_website_images_path = "#{Knitkit::Engine.root.to_s}/public/images/knitkit"
 
+  protected_by_capabilities
   has_file_assets
 
   class << self

@@ -40,8 +40,9 @@ Ext.define("Compass.ErpApp.Desktop.Applications.Knitkit.ImageAssetsPanel",{
             var imgTagHtml = '<img';
             if(!Ext.isEmpty(node.data.width) && !Ext.isEmpty(node.data.height)){
               imgTagHtml += (' width="'+node.data.width+'" height="'+node.data.height+'"');
+
             }
-            imgTagHtml += ' alt="'+node.data.text+'" src="/download/'+node.data.text+'?path='+node.data.downloadPath+'" />'
+            imgTagHtml += ' alt="'+node.data.text+'" src="/download/'+node.data.text+'?path='+node.data.downloadPath+'" />';
             self.module.centerRegion.insertHtmlIntoActiveCkEditorOrCodemirror(imgTagHtml);
           }
         }
@@ -49,18 +50,12 @@ Ext.define("Compass.ErpApp.Desktop.Applications.Knitkit.ImageAssetsPanel",{
       ],
       listeners:{
        'allowdelete':function(){
-            return currentUser.hasApplicationCapability('knitkit', {
-                capability_type_iid:'delete',
-                resource:'GlobalImageAsset'
-            });
+            return currentUser.hasCapability('delete','GlobalImageAsset');
         },
         'allowupload':function(){
-            return currentUser.hasApplicationCapability('knitkit', {
-                capability_type_iid:'upload',
-                resource:'GlobalImageAsset'
-            });
+            return currentUser.hasCapability('upload','GlobalImageAsset');
         },
-        'itemclick':function(view, record, item, index, e){
+       'itemclick':function(view, record, item, index, e){
           e.stopEvent();
           if(!record.data["leaf"]){
             var store = self.sharedImageAssetsDataView.getStore();
@@ -73,6 +68,84 @@ Ext.define("Compass.ErpApp.Desktop.Applications.Knitkit.ImageAssetsPanel",{
           else{
             return false;
           }
+        },
+        'fileDeleted':function(fileTreePanel, node){
+          var store = self.sharedImageAssetsDataView.getStore();
+          store.load({
+            params:{
+              directory:node.data.downloadPath
+            }
+          });
+        },
+      'fileUploaded':function(fileTreePanel, node){
+        var store = self.sharedImageAssetsDataView.getStore();
+        store.load({
+          params:{
+            directory:node.data.id
+          }
+        });
+      },
+      'downloadfile':function(fileTreePanel, node){
+        window.open("/download/"+node.data.text+"?path=" + node.data.downloadPath+'&disposition=attachment','mywindow','width=400,height=200');
+        return false;
+      }      
+    }
+  });
+
+  this.websiteImageAssetsTreePanel = Ext.create("Compass.ErpApp.Shared.FileManagerTree",{
+    autoLoadRoot:false,
+    region:'north',
+    rootText:'Images',
+    collapsible:false,
+    allowDownload:false,
+    addViewContentsToContextMenu:false,
+    showNewFileMenuItem:false,
+    rootVisible:true,
+    multiSelect:true,
+    controllerPath:'/knitkit/erp_app/desktop/image_assets/website',
+    standardUploadUrl:'/knitkit/erp_app/desktop/image_assets/website/upload_file',
+    url:'/knitkit/erp_app/desktop/image_assets/website/expand_directory',
+    containerScroll: true,
+    height:200,
+    additionalContextMenuItems:[
+    {
+      nodeType:'leaf',
+      text:'Insert image at cursor',
+      iconCls:'icon-add',
+      listeners:{
+        scope:self,
+        'click':function(){
+          var node = this.websiteImageAssetsTreePanel.selectedNode;
+          var imgTagHtml = '<img';
+          if(!Ext.isEmpty(node.data.width) && !Ext.isEmpty(node.data.height)){
+            imgTagHtml += (' width="'+node.data.width+'" height="'+node.data.height+'"');
+          }
+          imgTagHtml += ' alt="'+node.data.text+'" src="/download/'+node.data.text+'?path='+node.data.downloadPath+'" />';
+          self.module.centerRegion.insertHtmlIntoActiveCkEditorOrCodemirror(imgTagHtml);
+        }
+      }
+    }
+    ],
+    listeners:{
+      'load':function(store, node, records){
+        store.getRootNode().data.text = self.websiteName;
+        self.websiteImageAssetsTreePanel.view.refresh();
+      },        
+      'itemclick':function(view, record, item, index, e){
+        if(self.websiteId !== null){
+          e.stopEvent();
+          if(!record.data["leaf"]){
+            var store = self.sharedImageAssetsDataView.getStore();
+            store.load({
+              params:{
+                directory:record.data.id
+              }
+            });
+          }
+          else{
+            return false;
+          }
+        }
         },
         'fileDeleted':function(fileTreePanel, node){
           var store = self.sharedImageAssetsDataView.getStore();
@@ -125,7 +198,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.Knitkit.ImageAssetsPanel",{
             if(!Ext.isEmpty(node.data.width) && !Ext.isEmpty(node.data.height)){
               imgTagHtml += (' width="'+node.data.width+'" height="'+node.data.height+'"');
             }
-            imgTagHtml += ' alt="'+node.data.text+'" src="/download/'+node.data.text+'?path='+node.data.downloadPath+'" />'
+            imgTagHtml += ' alt="'+node.data.text+'" src="/download/'+node.data.text+'?path='+node.data.downloadPath+'" />';
             self.module.centerRegion.insertHtmlIntoActiveCkEditorOrCodemirror(imgTagHtml);
           }
         }
@@ -137,7 +210,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.Knitkit.ImageAssetsPanel",{
           self.websiteImageAssetsTreePanel.view.refresh();
         },        
         'itemclick':function(view, record, item, index, e){
-          if(self.websiteId != null){
+          if(self.websiteId !== null){
             e.stopEvent();
             if(!record.data["leaf"]){
               var store = self.websiteImageAssetsDataView.getStore();
@@ -197,7 +270,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.Knitkit.ImageAssetsPanel",{
       title:'Shared',
       items: [this.sharedImageAssetsTreePanel, sharedImagesPanel]
     });
-  	
+	
     var websiteImagesLayout =  Ext.create('Ext.panel.Panel',{
       autoRender: true,
       layout: 'border',
@@ -241,17 +314,11 @@ Ext.define("Compass.ErpApp.Desktop.Applications.Knitkit.ImageAssetsPanel",{
     };
 
     var items = [];
-    if (currentUser.hasApplicationCapability('knitkit', {
-        capability_type_iid:'view',
-        resource:'GlobalImageAsset'}))
-    {
+    if (currentUser.hasCapability('view','GlobalImageAsset')){
         items.push(sharedImagesLayout);
     }
 
-    if (currentUser.hasApplicationCapability('knitkit', {
-        capability_type_iid:'view',
-        resource:'SiteImageAsset'}))
-    {
+    if (currentUser.hasCapability('view','SiteImageAsset')){
         items.push(websiteImagesLayout);
     }
 

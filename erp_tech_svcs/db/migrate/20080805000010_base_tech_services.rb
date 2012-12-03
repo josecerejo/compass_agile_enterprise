@@ -49,9 +49,16 @@ class BaseTechServices < ActiveRecord::Migration
     
     end
 
-    unless table_exists?(:roles)
+    unless table_exists?(:groups)
+      create_table :groups do |t|
+        t.column :description, :string
+        t.timestamps
+      end
+    end
+
+    unless table_exists?(:security_roles)
       # create the roles table
-      create_table :roles do |t|
+      create_table :security_roles do |t|
         t.column :description, :string
         t.column :internal_identifier, :string
         t.column :external_identifier, :string
@@ -139,26 +146,6 @@ class BaseTechServices < ActiveRecord::Migration
       end
     end
     
-    unless table_exists?(:secured_models)
-      create_table :secured_models do |t|
-        t.references :secured_record, :polymorphic => true
-        
-        t.timestamps
-      end
-      add_index :secured_models, [:secured_record_id, :secured_record_type], :name => 'secured_record_idx'
-    end
-
-    unless table_exists?(:roles_secured_models)
-      create_table :roles_secured_models, :id => false do |t|
-        t.references :secured_model
-        t.references :role
-
-        t.timestamps
-      end
-      add_index :roles_secured_models, :secured_model_id
-      add_index :roles_secured_models, :role_id
-    end
-
     unless table_exists?(:file_assets)
       create_table :file_assets do |t|
         t.references :file_asset_holder, :polymorphic => true
@@ -219,31 +206,56 @@ class BaseTechServices < ActiveRecord::Migration
     unless table_exists?(:capabilities)
       # create the roles table
       create_table :capabilities do |t|
-        t.string :resource
         t.references :capability_type
+        t.string :capability_resource_type
+        t.integer :capability_resource_id
+        t.integer :scope_type_id
+        t.text :scope_query  
         t.timestamps
       end
 
       add_index :capabilities, :capability_type_id
+      add_index :capabilities, :scope_type_id
+      add_index :capabilities, [:capability_resource_id, :capability_resource_type], :name => 'capability_resource_index'
     end
 
-    unless table_exists?(:capabilities_capable_models)
-      # create the roles table
-      create_table :capabilities_capable_models, :id => false do |t|
-        t.references :capable_model
-        t.references :capability
+    unless table_exists?(:capability_accessors)
+      create_table :capability_accessors do |t|
+        t.string :capability_accessor_record_type
+        t.integer :capability_accessor_record_id
+        t.integer :capability_id
         t.timestamps
       end
 
-      add_index :capabilities_capable_models, :capable_model_id
-      add_index :capabilities_capable_models, :capability_id
+      add_index :capability_accessors, :capability_id
+      add_index :capability_accessors, [:capability_accessor_record_id, :capability_accessor_record_type], :name => 'capability_accessor_record_index'
+    end
+
+    unless table_exists?(:scope_types)
+      create_table :scope_types do |t|
+        t.string :description
+        t.string :internal_identifier
+        t.timestamps
+      end
+
+      add_index :scope_types, :internal_identifier
+    end
+
+    unless table_exists?(:parties_security_roles)
+      create_table :parties_security_roles do |t|
+        t.integer :party_id
+        t.integer :security_role_id
+      end
+
+      add_index :parties_security_roles, :party_id
+      add_index :parties_security_roles, :security_role_id
     end
 
   end
 
   def self.down
     # check that each table exists before trying to delete it.
-    [
+    [ :groups,
       :audit_logs, :sessions, :simple_captcha_data,
       :capable_models, :capability_types, :capabilities,:capabilities_capable_models,
       :roles_users, :roles, :audit_log_items, :audit_log_item_types,

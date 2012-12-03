@@ -57,7 +57,7 @@ module Knitkit
 
           model = DesktopApplication.find_by_internal_identifier('knitkit')
           begin
-            current_user.with_capability(model, capability_type, capability_resource) do
+            current_user.with_capability(capability_type, capability_resource) do
               result = {}
               upload_path = params[:directory]
               name = params[:name]
@@ -117,11 +117,10 @@ module Knitkit
 
           nodes_to_delete = (params[:selected_nodes] ? JSON(params[:selected_nodes]) : [params[:node]])
 
-          model = DesktopApplication.find_by_internal_identifier('knitkit')
           begin
             result = false
             nodes_to_delete.each do |path|
-              current_user.with_capability(model, capability_type, capability_resource) do
+              current_user.with_capability(capability_type, capability_resource) do
                 path = "#{path}/" if params[:leaf] == 'false' and path.match(/\/$/).nil?                
                 begin
                   name = File.basename(path)
@@ -165,56 +164,40 @@ module Knitkit
         def update_security
           path   = params[:path]
           secure = params[:secure]
-          roles  = ['admin', 'file_downloader']
           
           file = @assets_model.files.find(:first, :conditions => ['name = ? and directory = ?', ::File.basename(path), ::File.dirname(path)])
-          roles << @assets_model.website_role_iid if @context == :website
           
-          (secure == 'true') ? file.add_capability(:download, nil, roles) : file.remove_all_capabilities
-
-          # if we're using S3, set file permissions to private or public_read   
-          @file_support.set_permissions(path, ((secure == 'true') ? :private : :public_read)) if Rails.application.config.erp_tech_svcs.file_storage == :s3
-          
-          render :json =>  {:success => true}
-        end
-
-        # DEPRECATED, use erp_app/public#download
-        def download_file_asset
-          path = params[:path]
-
-          file = @assets_model.files.find(:first, :conditions => ['name = ? and directory = ?', ::File.basename(path), ::File.dirname(path)])
-          if(file.has_capabilities?)
-            begin
-              unless current_user == false
-                current_user.with_capability(file, :download, nil) do
-                  redirect_to file.data.url
-                end
-              else
-                raise ErpTechSvcs::Utils::CompassAccessNegotiator::Errors::UserDoesNotHaveCapability
-              end
-            rescue ErpTechSvcs::Utils::CompassAccessNegotiator::Errors::UserDoesNotHaveCapability=>ex
-              render :text => ex.message
-            rescue Exception=>ex
-              render :text => "User does not have capability."
+          if secure == 'true'
+            c = file.add_capability(:download)
+            roles = ['admin', 'website_author', 'content_author']
+            roles << @assets_model.website_role_iid if @context == :website
+            roles.each do |r|
+              role = SecurityRole.find_by_internal_identifier(r)
+              role.add_capability(c)
             end
           else
-            redirect_to file.data.url
+            file.remove_capability(:download)
           end
+
+          # if we're using S3, set file permissions to private or public_read   
+          @file_support.set_permissions(path, ((secure == 'true') ? :private : :public_read)) if ErpTechSvcs::Config.file_storage == :s3
+          
+          render :json =>  {:success => true}
         end
 
         protected
 
         def set_file_support
-          @file_support = ErpTechSvcs::FileSupport::Base.new(:storage => Rails.application.config.erp_tech_svcs.file_storage)
+          @file_support = ErpTechSvcs::FileSupport::Base.new(:storage => ErpTechSvcs::Config.file_storage)
         end
 
         def set_root_node
           @root_node = nil
 
           if @context == :website
-            @root_node = File.join(Rails.application.config.erp_tech_svcs.file_assets_location,"sites",@assets_model.iid) unless @assets_model.nil?
+            @root_node = File.join(ErpTechSvcs::Config.file_assets_location,"sites",@assets_model.iid) unless @assets_model.nil?
           else
-            @root_node = File.join(Rails.application.config.erp_tech_svcs.file_assets_location,"shared_site_files")
+            @root_node = File.join(ErpTechSvcs::Config.file_assets_location,"shared_site_files")
           end
 
           @root_node

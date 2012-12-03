@@ -1,8 +1,5 @@
 Compass.ErpApp.Desktop.Applications.Knitkit.addHostOptions = function (self, items, record) {
-    if (currentUser.hasApplicationCapability('knitkit', {
-        capability_type_iid:'edit',
-        resource:'Host'
-    })) {
+    if (currentUser.hasCapability('edit','WebsiteHost')) {
         items.push({
             text:'Update',
             iconCls:'icon-edit',
@@ -86,10 +83,7 @@ Compass.ErpApp.Desktop.Applications.Knitkit.addHostOptions = function (self, ite
         });
     }
 
-    if (currentUser.hasApplicationCapability('knitkit', {
-        capability_type_iid:'delete',
-        resource:'Host'
-    })) {
+    if (currentUser.hasCapability('delete','WebsiteHost')) {
         items.push({
             text:'Delete',
             iconCls:'icon-delete',
@@ -130,4 +124,4 @@ Compass.ErpApp.Desktop.Applications.Knitkit.addHostOptions = function (self, ite
     }
 
     return items;
-}
+};

@@ -7,7 +7,7 @@ class WebsiteSection < ActiveRecord::Base
   include ErpTechSvcs::Utils::DefaultNestedSetMethods
   acts_as_versioned :table_name => :website_section_versions, :non_versioned_columns => %w{parent_id lft rgt}
   can_be_published
-  has_roles
+  protected_by_capabilities
 
   belongs_to :website
   has_many :website_section_contents, :dependent => :destroy
@@ -67,6 +67,10 @@ class WebsiteSection < ActiveRecord::Base
     ['Page', 'Blog'].include? type
   end
   
+  def is_secured?
+    self.protected_by_capability?('view')
+  end
+
   def is_document_section?
     type == 'OnlineDocumentSection'
   end

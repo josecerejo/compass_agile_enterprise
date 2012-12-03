@@ -42,9 +42,8 @@ module Knitkit
         end
 
         def activate_publication
-          model = DesktopApplication.find_by_internal_identifier('knitkit')
           begin
-            current_user.with_capability(model, 'activate', 'Website') do
+            current_user.with_capability('activate', 'Website') do
               @website.set_publication_version(params[:version].to_f, current_user)
 
               render :json => {:success => true}
@@ -67,9 +66,8 @@ module Knitkit
         end
 
         def publish
-          model = DesktopApplication.find_by_internal_identifier('knitkit')
           begin
-            current_user.with_capability(model, 'publish', 'Website') do
+            current_user.with_capability('publish', 'Website') do
               @website.publish(params[:comment], current_user)
 
               render :json => {:success => true}
@@ -80,9 +78,8 @@ module Knitkit
         end
 
         def new
-          model = DesktopApplication.find_by_internal_identifier('knitkit')
-          #begin
-            #current_user.with_capability(model, 'create', 'Website') do
+          begin
+            current_user.with_capability('create', 'Website') do
               result = {}
               website = Website.new
               website.subtitle                  = params[:subtitle]
@@ -116,16 +113,15 @@ module Knitkit
               puts website.errors.full_messages
 
               render :json => result
-            #end
-          #rescue ErpTechSvcs::Utils::CompassAccessNegotiator::Errors::UserDoesNotHaveCapability=>ex
-            #render :json => {:success => false, :message => ex.message}
-          #end
+            end
+          rescue ErpTechSvcs::Utils::CompassAccessNegotiator::Errors::UserDoesNotHaveCapability=>ex
+            render :json => {:success => false, :message => ex.message}
+          end
         end
 
         def update
-          model = DesktopApplication.find_by_internal_identifier('knitkit')
           begin
-            current_user.with_capability(model, 'edit', 'Website') do
+            current_user.with_capability('edit', 'Website') do
               @website.name                      = params[:name]
               @website.title                     = params[:title]
               @website.subtitle                  = params[:subtitle]
@@ -139,9 +135,8 @@ module Knitkit
   
  
         def delete
-          model = DesktopApplication.find_by_internal_identifier('knitkit')
           begin
-            current_user.with_capability(model, 'delete', 'Website') do
+            current_user.with_capability('delete', 'Website') do
               render :json => @website.destroy ? {:success => true} : {:success => false}
             end
           rescue ErpTechSvcs::Utils::CompassAccessNegotiator::Errors::UserDoesNotHaveCapability=>ex
@@ -166,9 +161,8 @@ module Knitkit
         end
 
         def add_host
-          model = DesktopApplication.find_by_internal_identifier('knitkit')
           begin
-            current_user.with_capability(model, 'create', 'Host') do
+            current_user.with_capability('create', 'Host') do
               website = Website.find(params[:id])
               website_host = WebsiteHost.create(:host => params[:host])
               website.hosts << website_host
@@ -193,9 +187,8 @@ module Knitkit
         end
 
         def update_host
-          model = DesktopApplication.find_by_internal_identifier('knitkit')
           begin
-            current_user.with_capability(model, 'edit', 'Host') do
+            current_user.with_capability('edit', 'WebsiteHost') do
               website_host = WebsiteHost.find(params[:id])
               website_host.host = params[:host]
               website_host.save
@@ -208,9 +201,8 @@ module Knitkit
         end
 
         def delete_host
-          model = DesktopApplication.find_by_internal_identifier('knitkit')
           begin
-            current_user.with_capability(model, 'delete', 'Host') do
+            current_user.with_capability('delete', 'WebsiteHost') do
               render :json => WebsiteHost.destroy(params[:id]) ? {:success => true} : {:success => false}
             end
           rescue ErpTechSvcs::Utils::CompassAccessNegotiator::Errors::UserDoesNotHaveCapability=>ex
