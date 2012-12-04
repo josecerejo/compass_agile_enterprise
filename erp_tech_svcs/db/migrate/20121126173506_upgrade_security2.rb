@@ -1,6 +1,15 @@
 class UpgradeSecurity2 < ActiveRecord::Migration
   def self.up
     if table_exists?(:secured_models)
+      Website.all.each do |w|
+        old_role_iid = "website_#{w.name.underscore.gsub("'","").gsub(",","")}_access"
+
+        r = SecurityRole.find_by_internal_identifier(old_role_iid)
+        unless r.nil?
+          r.internal_identifier = w.website_role_iid
+          r.save      
+        end
+      end
       instance = ScopeType.create(:description => 'Instance', :internal_identifier => 'instance')
       class_scope_type = ScopeType.create(:description => 'Class', :internal_identifier => 'class')
       ScopeType.create(:description => 'Query', :internal_identifier => 'query')
@@ -97,7 +106,6 @@ class UpgradeSecurity2 < ActiveRecord::Migration
       # delete obsolete records: Application, Widget, dupes?
       Capability.where("capability_resource_type IS NULL").delete_all
 
-      # add knitkit capabilities to roles
       admin = SecurityRole.find_by_internal_identifier('admin')
       website_author = SecurityRole.find_by_internal_identifier('website_author')
       layout_author = SecurityRole.find_by_internal_identifier('layout_author')
@@ -105,6 +113,32 @@ class UpgradeSecurity2 < ActiveRecord::Migration
       designer = SecurityRole.find_by_internal_identifier('designer')
       publisher = SecurityRole.find_by_internal_identifier('publisher')
 
+      # add instance capabilities to roles
+      instance_capabilities = Capability.where(:scope_type_id => instance.id).all
+      instance_capabilities.each do |c|
+        case c.capability_resource_type
+        when 'FileAsset'
+          admin.add_capability(c)
+          website_author.add_capability(c)
+          content_author.add_capability(c)
+          if c.capability_resource.file_asset_holder_type == 'Website'
+            website_role = c.capability_resource.file_asset_holder.role
+            website_role.add_capability(c)
+          end
+        when 'WebsiteSection'
+          admin.add_capability(c)
+          website_author.add_capability(c)
+          website_role = c.capability_resource.website.role
+          website_role.add_capability(c)
+        when 'WebsiteNavItem'
+          admin.add_capability(c)
+          website_author.add_capability(c)
+          website_role = c.capability_resource.website_nav.website.role
+          website_role.add_capability(c)
+        end
+      end
+
+      # add knitkit class capabilities to roles
       admin.add_capability('create', 'WebsiteNav')
       admin.add_capability('delete', 'WebsiteNav')
       admin.add_capability('edit', 'WebsiteNav')

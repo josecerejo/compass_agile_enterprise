@@ -30,14 +30,10 @@ module ErpTechSvcs
       #   something
       # end
       def with_capability(capability_type_iid, klass_instance, &block)
-        if !klass_instance.is_a?(String) and klass_instance.protected_by_capabilities?
-          if self.has_capability?(capability_type_iid, klass_instance)
-            yield
-          else
-            raise ErpTechSvcs::Utils::CompassAccessNegotiator::Errors::UserDoesNotHaveCapability
-          end
-        else
+        if self.has_capability?(capability_type_iid, klass_instance)
           yield
+        else
+          raise ErpTechSvcs::Utils::CompassAccessNegotiator::Errors::UserDoesNotHaveCapability
         end
       end
 
