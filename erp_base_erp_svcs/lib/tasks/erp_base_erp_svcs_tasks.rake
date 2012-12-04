@@ -1,3 +1,17 @@
+namespace :db do
+  namespace :migrate do
+
+    desc "list pending migrations"
+    task :list_pending => :environment do
+      pending_migrations = ActiveRecord::Migrator.new('up', 'db/migrate/').pending_migrations.collect{|item| File.basename(item.filename)}
+      puts "================Pending Migrations=========="
+      puts pending_migrations
+      puts "============================================"
+    end
+
+  end#migrate
+end#db
+
 namespace :compass_ae do
   namespace :install do
     desc "Install all CompassAE migrations"
