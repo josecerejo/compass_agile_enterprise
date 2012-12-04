@@ -1,6 +1,9 @@
 class UpdateTicketForm
   
   def self.up
+    model = DynamicFormModel.find_by_model_name('Ticket')
+    model.create_role
+
     #insert data here
     fields = []
 
