@@ -1,6 +1,9 @@
 class UpdateContactForm
   
   def self.up
+    model = DynamicFormModel.find_by_model_name('WebsiteInquiry')
+    model.create_role
+
     fields = []
 
     fields << DynamicFormField.textfield({:fieldLabel => 'First Name', :name => 'first_name', :width => 250, :allowBlank => false })
