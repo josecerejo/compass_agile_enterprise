@@ -51,7 +51,7 @@ class DynamicForm < ActiveRecord::Base
   def related_fields
     related_fields = []
     definition_object.each do |f|
-      related_fields << f if f[:xtype] == 'related_combobox'
+      related_fields << f if ['related_combobox','related_searchbox'].include?(f[:xtype])
     end
 
     related_fields
