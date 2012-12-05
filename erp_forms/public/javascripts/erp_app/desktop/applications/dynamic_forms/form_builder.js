@@ -379,14 +379,14 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.FormBuilder",{
                 allowBlank: false,
                 value: 10,
                 plugins: [new helpQtip('Number of results per page.')]
-            },
-            {
-                fieldLabel: 'Type Ahead',
-                name: 'updateTypeAhead',
-                xtype: 'checkbox',
-                value: false,
-                plugins: [new helpQtip('Populate and autoselect the remainder of the text being typed after 250 milliseconds if it matches a known value.')]
             }
+            // {
+            //     fieldLabel: 'Type Ahead',
+            //     name: 'updateTypeAhead',
+            //     xtype: 'checkbox',
+            //     value: false,
+            //     plugins: [new helpQtip('Populate and autoselect the remainder of the text being typed after 250 milliseconds if it matches a known value.')]
+            // }
         ];
 
         var minMaxLength = [
@@ -857,7 +857,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.FormBuilder",{
                                 prop_form.findField('updateSearchFields').setValue(item.search_fields);
                                 prop_form.findField('updateDisplayFields').setValue(item.display_fields);
                                 prop_form.findField('updateDisplayTemplate').setValue(item.display_template);
-                                prop_form.findField('updateTypeAhead').setValue(item.typeAhead);
+                                //prop_form.findField('updateTypeAhead').setValue(item.typeAhead);
                                 prop_form.findField('updatePageSize').setValue(item.pageSize);
                             }
                         }else if (item.xtype == 'combobox' || item.xtype == 'combo'){
@@ -1146,7 +1146,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.FormBuilder",{
                                                     fieldDefinition.width = 350;
                                                     fieldDefinition.editable = true;
                                                     fieldDefinition.forceSelection = true;
-                                                    fieldDefinition.typeAhead = true;
+                                                    //fieldDefinition.typeAhead = true;
                                                     fieldDefinition.pageSize = 10;
                                                     break;
                                                 case 'checkbox':
@@ -1321,7 +1321,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.FormBuilder",{
                                                 fieldDefinition.search_fields = updateFieldForm.findField('updateSearchFields').getValue();
                                                 fieldDefinition.display_fields = updateFieldForm.findField('updateDisplayFields').getValue();
                                                 fieldDefinition.display_template = updateFieldForm.findField('updateDisplayTemplate').getValue();
-                                                fieldDefinition.typeAhead = updateFieldForm.findField('updateTypeAhead').getValue();
+                                                //fieldDefinition.typeAhead = updateFieldForm.findField('updateTypeAhead').getValue();
                                                 fieldDefinition.pageSize = updateFieldForm.findField('updatePageSize').getValue();
                                                 fieldDefinition.fields = [{ name: 'id' }];
                                                 Ext.each(fieldDefinition.display_fields.split(','), function(f){

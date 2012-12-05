@@ -59,11 +59,16 @@ Ext.define("Compass.ErpForms.DynamicForms.DynamicRelatedSearchBox",{
                     return config.display_template;
                 }
             },
+            displayTpl : Ext.create('Ext.XTemplate',
+              '<tpl for=".">' +
+                   config.display_template +
+              '</tpl>'
+            ),
             hideTrigger:true,
-            typeAhead: true,
-            pageSize: config.pageSize,
+            typeAhead: (config.typeAhead || true),
+            pageSize: (config.pageSize || 10),
             store: Ext.create('Ext.data.Store', {
-                pageSize: config.pageSize,
+                pageSize: (config.pageSize || 10),
                 fields: (config.fields || [{ name: 'id' }]),
                 proxy: {
                     type:'ajax',
