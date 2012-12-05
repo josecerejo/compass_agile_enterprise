@@ -9,6 +9,6 @@ class ErpForms::ErpApp::Desktop::DynamicForms::BaseController < ::ErpApp::Deskto
   end
   
   def per_page
-	 params[:limit].nil? ? 20 : params[:limit].to_i
+    params[:limit].nil? ? 20 : params[:limit].to_i
   end  
 end

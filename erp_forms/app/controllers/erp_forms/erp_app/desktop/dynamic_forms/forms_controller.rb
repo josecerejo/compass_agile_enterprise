@@ -94,12 +94,29 @@ class ErpForms::ErpApp::Desktop::DynamicForms::FormsController < ErpForms::ErpAp
 
   # get related data for a related field
   def related_field
-    if params[:model].blank? or params[:displayField].blank?
+    if params[:model].blank? or (params[:displayField].blank? and params[:search_fields].blank?)
       render :inline => '[]'
     else
       related_model = params[:model].camelize.constantize
-      data = related_model.all
-      render :inline => data.to_json(:only => [:id, params[:displayField].to_sym])
+      query = related_model
+
+      unless params[:search_fields].blank?
+        #related_searchbox
+        search_fields = params[:search_fields].split(',')
+        unless params[:query].blank?
+          sql = ''
+          search_fields.each_with_index do |f,i|
+            sql += " OR " if i > 0
+            sql += "UPPER(#{f}) LIKE UPPER('%#{params[:query]}%')"
+          end
+          query = query.where(sql)
+        end
+        query = query.paginate(:page => page, :per_page => per_page)
+      end
+
+      total = query.count
+      data = query.all
+      render :inline => { :data => data, :total => total}.to_json
     end
   end
 

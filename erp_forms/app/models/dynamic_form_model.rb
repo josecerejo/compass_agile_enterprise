@@ -3,6 +3,8 @@ class DynamicFormModel < ActiveRecord::Base
   has_many :dynamic_forms, :dependent => :destroy
   after_create  :create_role
 
+  validates_uniqueness_of :model_name
+
   def create_role
     SecurityRole.create(:description => self.model_name.titleize.pluralize, :internal_identifier => role_iid) if self.role.nil?
   end
