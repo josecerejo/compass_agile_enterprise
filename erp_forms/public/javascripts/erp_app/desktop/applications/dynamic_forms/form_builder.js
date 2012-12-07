@@ -1318,8 +1318,8 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.FormBuilder",{
                                                 fieldDefinition.displayField = updateFieldForm.findField('updateDisplayField').getValue();
                                                 fieldDefinition.extraParams.displayField = fieldDefinition.displayField;
                                             }else if (selected_field.xtype == 'related_searchbox'){
-                                                fieldDefinition.search_fields = updateFieldForm.findField('updateSearchFields').getValue();
-                                                fieldDefinition.display_fields = updateFieldForm.findField('updateDisplayFields').getValue();
+                                                fieldDefinition.search_fields = updateFieldForm.findField('updateSearchFields').getValue().replace(/\s/g,'');
+                                                fieldDefinition.display_fields = updateFieldForm.findField('updateDisplayFields').getValue().replace(/\s/g,'');
                                                 fieldDefinition.display_template = updateFieldForm.findField('updateDisplayTemplate').getValue();
                                                 //fieldDefinition.typeAhead = updateFieldForm.findField('updateTypeAhead').getValue();
                                                 fieldDefinition.pageSize = updateFieldForm.findField('updatePageSize').getValue();
