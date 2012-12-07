@@ -24,10 +24,11 @@ Gem::Specification.new do |s|
   s.add_dependency('has_many_polymorphic','>= 2.0.1')
   s.add_dependency('uuid','2.3.5')
 
+  s.add_development_dependency "cucumber-rails", "~> 1.3.0"
   s.add_development_dependency "database_cleaner"
-  s.add_development_dependency "factory_girl_rails", "~> 3.3.0"
-  s.add_development_dependency "rspec-rails", "~> 2.10.1"
-  s.add_development_dependency "simplecov", "~> 0.6.4"
+  s.add_development_dependency "factory_girl_rails", "~> 4.1.0"
+  s.add_development_dependency "rspec-rails", "~> 2.12.0"
+  s.add_development_dependency "simplecov", "~> 0.7.1"
   s.add_development_dependency "spork", "~> 0.9.2"
   s.add_development_dependency "sqlite3", "~> 1.3.6"
   s.add_development_dependency "watchr", "~> 0.7"

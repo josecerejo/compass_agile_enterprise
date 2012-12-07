@@ -1,8 +1,7 @@
 class Category < ActiveRecord::Base
-  attr_protected :created_at, :updated_at
-  
   acts_as_nested_set
-  include ErpTechSvcs::Utils::DefaultNestedSetMethods
+
+  attr_protected :created_at, :updated_at
 
   belongs_to :category_record, :polymorphic => true
   has_many :category_classifications, :dependent => :destroy

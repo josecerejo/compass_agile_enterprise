@@ -31,21 +31,27 @@ Spork.prefork do
 
   RSpec.configure do |config|
     config.use_transactional_fixtures = true
+    config.include FactoryGirl::Syntax::Methods
   end
 end
 
 Spork.each_run do
-  FactoryGirl.find_definitions
-
   #We have to execute the migrations from dummy app directory
   Dir.chdir DUMMY_APP_ROOT
-  `rake db:drop`
+  `rake db:drop RAILS_ENV=spec`
   Dir.chdir ENGINE_RAILS_ROOT
 
-  #We have to execute the migrations from dummy app directory
+  #We have to execute the migratiapp:compass_ae:install:data_migrationsons from dummy app directory
   Dir.chdir DUMMY_APP_ROOT
-  `rake db:migrate`
+  `rake compass_ae:install:migrations RAILS_ENV=spec`
+  `rake compass_ae:install:data_migrations RAILS_ENV=spec`
+  `rake db:migrate RAILS_ENV=spec`
+  `rake db:migrate_data RAILS_ENV=spec`
   Dir.chdir ENGINE_RAILS_ROOT
+
+  Rails::Application::Railties.engines.map{|p| p.config.root.to_s}.each do |engine_dir|
+    Dir.glob(File.join(engine_dir,'spec','factories','*')) {|file| require file} if File.directory? File.join(engine_dir,'spec','factories')
+  end
 
   require 'simplecov'
   SimpleCov.start 'rails' do
@@ -54,4 +60,5 @@ Spork.each_run do
   #Need to explictly load the files in lib/ until we figure out how to
   #get rails to autoload them for spec like it used to...
   Dir[File.join(ENGINE_RAILS_ROOT, "lib/**/*.rb")].each {|f| load f}
+  Dir[File.join(ENGINE_RAILS_ROOT, "app/models/extensions/**/*.rb")].each {|f| load f}
 end
