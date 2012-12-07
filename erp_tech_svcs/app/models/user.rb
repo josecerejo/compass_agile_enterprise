@@ -35,6 +35,23 @@ class User < ActiveRecord::Base
     party.security_roles
   end
 
+  def has_role?(role)
+    role = role.is_a?(SecurityRole) ? role : SecurityRole.find_by_internal_identifier(role.to_s)
+    all_roles.include?(role)
+  end
+
+  def add_role(role)
+    party.add_role(role)
+  end
+
+  def remove_role(role)
+    party.remove_role(role)
+  end
+
+  def remove_all_roles
+    party.remove_all_roles
+  end
+
   # user lives on FROM side of relationship
   def group_relationships
     PartyRelationship.where(:party_id_from => self.party.id)
