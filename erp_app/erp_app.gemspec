@@ -19,6 +19,7 @@ Gem::Specification.new do |s|
   s.test_files = Dir["spec/**/*"]
 
   s.add_dependency 'will_paginate', '3.0.3'
+  s.add_dependency 'uglifier', '~> 1.3.0'
 
   #compass dependencies
   s.add_dependency 'erp_tech_svcs', "~> 3.1"
