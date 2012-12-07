@@ -32,6 +32,10 @@ module ErpTechSvcs
             ca
           end
 
+          def grant_capability(*capability)
+            add_capability(*capability)
+          end
+
           def get_or_create_capability(capability_type_iid, klass)
             capability_type = convert_capability_type(capability_type_iid)
             scope_type = ScopeType.find_by_internal_identifier('class')
@@ -51,6 +55,10 @@ module ErpTechSvcs
             ca.destroy unless ca.nil?
             self.reload
             ca
+          end
+
+          def revoke_capability(*capability)
+            remove_capability(*capability)
           end
 
           def has_capabilities?

@@ -31,7 +31,7 @@ module Knitkit
     def set_section
       unless params[:section_id].nil?
         @website_section = WebsiteSection.find(params[:section_id])
-        if @website_section.protected_by_capability?(:view)
+        if @website_section.protected_with_capability?(:view)
           if !current_user and @website_section.path != @login_path
             redirect_to @login_path
           elsif current_user and !current_user.has_capability?(:view, @website_section)

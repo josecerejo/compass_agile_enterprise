@@ -1,5 +1,5 @@
 class WebsiteNav < ActiveRecord::Base
-  protected_by_capabilities
+  protected_with_capabilities
   belongs_to :website
 
   validates_uniqueness_of :name, :scope => [:website_id], :message => "That Name is Already in Use"

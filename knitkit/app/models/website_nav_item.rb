@@ -2,7 +2,7 @@ class WebsiteNavItem < ActiveRecord::Base
   belongs_to :website_nav
   belongs_to :linked_to_item, :polymorphic => true
   
-  protected_by_capabilities
+  protected_with_capabilities
   acts_as_nested_set
 
   include ErpTechSvcs::Utils::DefaultNestedSetMethods
@@ -20,7 +20,7 @@ class WebsiteNavItem < ActiveRecord::Base
   end
 
   def is_secured?
-    self.protected_by_capability?('view')
+    self.protected_with_capability?('view')
   end
   
 end
