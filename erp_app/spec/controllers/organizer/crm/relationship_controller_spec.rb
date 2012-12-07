@@ -27,7 +27,7 @@ describe ErpApp::Organizer::Crm::RelationshipController do
 
       #for some reason I had to use Factory's instead of Rspec doubles because of a method call
       #on this object in the controller
-      relationships = [Factory.build(:party_relationship), Factory.build(:party_relationship)]
+      relationships = [FactoryGirl.build(:party_relationship), FactoryGirl.build(:party_relationship)]
 
       #Since find_relationships_by_type is an instance method, need to mock a instance of 
       #Party and then spec the return value for the above method

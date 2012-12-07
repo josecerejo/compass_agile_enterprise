@@ -5,7 +5,7 @@ class OrganizerApplicationGenerator < Rails::Generators::NamedBase
 
   def generate_organizer_application
     #Controller
-    template "controllers/controller_template.rb", "app/controllers/erp_app/organizer/#{file_name}/base_controller.rb"
+    template "controllers/controller_template.erb", "app/controllers/erp_app/organizer/#{file_name}/base_controller.rb"
 
     #make javascript
     template "public/base.js.erb", "public/javascripts/erp_app/organizer/applications/#{file_name}/base.js"
@@ -20,6 +20,6 @@ class OrganizerApplicationGenerator < Rails::Generators::NamedBase
     route "match '/erp_app/organizer/#{file_name}(/:action)' => \"erp_app/organizer/#{file_name}/base\""
     
     #migration
-    template "migrate/migration_template.rb", "db/data_migrations/#{RussellEdge::DataMigrator.next_migration_number}_create_#{file_name}_organizer_application.rb"
+    template "migrate/migration_template.erb", "db/data_migrations/#{RussellEdge::DataMigrator.next_migration_number}_create_#{file_name}_organizer_application.rb"
   end
 end

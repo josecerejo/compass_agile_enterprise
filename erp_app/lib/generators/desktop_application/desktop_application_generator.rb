@@ -5,7 +5,7 @@ class DesktopApplicationGenerator < Rails::Generators::NamedBase
 
   def generate_desktop_application
     #Controller
-    template "controllers/controller_template.rb", "app/controllers/erp_app/desktop/#{file_name}/base_controller.rb"
+    template "controllers/controller_template.erb", "app/controllers/erp_app/desktop/#{file_name}/base_controller.rb"
 
     #make javascript
     template "public/module.js.erb", "public/javascripts/erp_app/desktop/applications/#{file_name}/module.js"
@@ -20,6 +20,6 @@ class DesktopApplicationGenerator < Rails::Generators::NamedBase
     route "match '/erp_app/desktop/#{file_name}(/:action)' => \"erp_app/desktop/#{file_name}/base\""
     
     #migration
-    template "migrate/migration_template.rb", "db/data_migrations/#{RussellEdge::DataMigrator.next_migration_number}_create_#{file_name}_desktop_application.rb"
+    template "migrate/migration_template.erb", "db/data_migrations/#{RussellEdge::DataMigrator.next_migration_number}_create_#{file_name}_desktop_application.rb"
   end
 end

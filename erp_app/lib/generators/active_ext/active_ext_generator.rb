@@ -7,7 +7,7 @@ class ActiveExtGenerator < Rails::Generators::NamedBase
     #check_class_collision :suffix => "Controller"
     
     #controller
-    template "controllers/controller_template.rb", File.join("app/controllers/erp_app",container_file_name,application_file_name,"#{file_name}_controller.rb")
+    template "controllers/controller_template.erb", File.join("app/controllers/erp_app",container_file_name,application_file_name,"#{file_name}_controller.rb")
     
     #javascript
     template "public/module.js.erb", File.join("public/javascripts/erp_app",container_file_name,"applications",application_file_name,"#{file_name}_active_ext.js")
