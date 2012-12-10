@@ -20,7 +20,7 @@ class AddOrdersWidget
     #  orders.roles << SecurityRole.find_by_internal_identifier('admin')
     #  orders.save      
     #end
-  #end
+  end
   
   def self.down
     #remove data here
