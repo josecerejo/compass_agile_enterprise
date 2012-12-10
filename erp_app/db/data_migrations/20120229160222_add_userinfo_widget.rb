@@ -18,8 +18,8 @@ class AddUserinfoWidget
       end
       
       #user.roles << SecurityRole.find_by_internal_identifier('admin')
-      user.add_role('admin')
       user.save
+      user.add_role('admin')
     end
   end
   
