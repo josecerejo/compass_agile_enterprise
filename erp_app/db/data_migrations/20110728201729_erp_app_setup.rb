@@ -231,14 +231,14 @@ class ErpAppSetup
       truenorth_user.save
     
       admin_user.desktop.applications << user_mgr_app
-      admin_user.desktop.applications << system_management_app
+     # admin_user.desktop.applications << system_management_app #no longer exists
       admin_user.desktop.applications << scaffold_app
       admin_user.desktop.save
       admin_user.organizer.applications << crm_app
       admin_user.organizer.save
     
       truenorth_user.desktop.applications << user_mgr_app
-      truenorth_user.desktop.applications << system_management_app
+      #truenorth_user.desktop.applications << system_management_app #no longer exists
       truenorth_user.desktop.applications << scaffold_app
       truenorth_user.desktop.save
       truenorth_user.organizer.applications << crm_app
