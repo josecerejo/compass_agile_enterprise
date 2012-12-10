@@ -1,7 +1,7 @@
 class AddNewContactWidgets
   
   def self.up
-    crm_app = OrganizerApplication.find_by_internal_identifier('crm')
+=begin    crm_app = OrganizerApplication.find_by_internal_identifier('crm')
     unless crm_app.nil?
       Widget.find_by_internal_identifier('party_contact_management').destroy
 
@@ -41,7 +41,7 @@ class AddNewContactWidgets
 
       crm_app.save
     end
-  end
+=end  end
   
   def self.down
     #remove data here
