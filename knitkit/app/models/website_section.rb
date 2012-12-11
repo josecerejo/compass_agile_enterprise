@@ -30,6 +30,15 @@ class WebsiteSection < ActiveRecord::Base
     end
   end
 
+  def secure
+    c = @website_section.add_capability(:view)
+    roles = ['admin', 'website_author', @website_section.website.website_role_iid]
+    roles.each do |r|
+      role = SecurityRole.find_by_internal_identifier(r)
+      role.add_capability(c)
+    end
+  end
+
   def iid
     internal_identifier
   end

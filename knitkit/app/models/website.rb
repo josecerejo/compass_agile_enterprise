@@ -169,7 +169,9 @@ class Website < ActiveRecord::Base
       website_section.layout = widget_class.base_layout
       website_section.save
       #make manage profile secured
-      website_section.add_role(self.role) if widget_class.title == 'Manage Profile'
+      #website_section.add_role(self.role) if widget_class.title == 'Manage Profile'
+
+      website_section.secure if widget_class.title == 'Manage Profile'
       self.website_sections << website_section
     end
     self.save
