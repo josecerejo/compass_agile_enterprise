@@ -16,6 +16,8 @@ class BaseOrders < ActiveRecord::Migration
 		    t.column 		:ship_to_last_name,      :string
 		    t.column 		:ship_to_address_line_1, :string
         t.column 		:ship_to_address_line_2, :string
+        t.column 		:bill_to_address_line_1, :string
+        t.column 		:bill_to_address_line_2, :string
 		    t.column 		:ship_to_city,           :string
 		    t.column    :ship_to_state,          :string
 		    t.column 		:ship_to_postal_code,    :string
