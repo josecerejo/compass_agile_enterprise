@@ -30,13 +30,17 @@ class WebsiteSection < ActiveRecord::Base
     end
   end
 
-  def secure
-    c = self.add_capability(:view)
-    roles = ['admin', 'website_author',self.website.website_role_iid]
-    roles.each do |r|
-      role = SecurityRole.find_by_internal_identifier(r)
-      role.add_capability(c)
+  def secure(website_role=nil)
+    capability = self.add_capability(:view)
+    roles = ['admin', 'website_author']#,self.website.website_role_iid]
+    roles.each do |role|
+      role = SecurityRole.find_by_internal_identifier(role)
+      role.add_capability(capability)
     end
+    description= website_role.description
+
+    Rails.logger.debug("--------------------#{description}")
+    website_role.add_capability(capability) unless website_role.nil?
   end
 
   def iid
@@ -48,6 +52,8 @@ class WebsiteSection < ActiveRecord::Base
   end
 
   def website
+    Rails.logger.debug("-------------Website id = #{website_id}")
+    Rails.logger.debug("------------parent = #{self.parent}")
     website_id.nil? ? self.parent.website : Website.find(website_id)
   end
 
@@ -134,7 +140,7 @@ class WebsiteSection < ActiveRecord::Base
       :type => self.class.to_s,
       :in_menu => self.in_menu,
       :articles => [],
-      :roles => self.roles.collect{|role| role.internal_identifier},
+      :roles => [],#self.roles.collect{|role| role.internal_identifier},
       :path => self.path,
       :permalink => self.permalink,
       :internal_identifier => self.internal_identifier,

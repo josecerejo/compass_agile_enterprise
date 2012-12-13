@@ -171,7 +171,7 @@ class Website < ActiveRecord::Base
       #make manage profile secured
       #website_section.add_role(self.role) if widget_class.title == 'Manage Profile'
 
-      website_section.secure if widget_class.title == 'Manage Profile'
+      website_section.secure(self.role) if widget_class.title == 'Manage Profile'
       self.website_sections << website_section
     end
     self.save

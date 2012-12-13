@@ -79,19 +79,21 @@ module Knitkit
 
         def new
           begin
-            current_user.with_capability('create', 'Website') do
-              result = {}
-              website = Website.new
-              website.subtitle                  = params[:subtitle]
-              website.title                     = params[:title]
-              website.name                      = params[:name]
+            Website.transaction do
+              current_user.with_capability('create', 'Website') do
+                website = Website.new
+                website.subtitle                  = params[:subtitle]
+                website.title                     = params[:title]
+                website.name                      = params[:name]
 
-              # create homepage
-              website_section = WebsiteSection.new
-              website_section.title = "Home"
-              website_section.in_menu = true
-              website.website_sections << website_section
-              if website.save
+                # create homepage
+                website_section = WebsiteSection.new
+                website_section.title = "Home"
+                website_section.in_menu = true
+                website.website_sections << website_section
+
+                website.save
+
                 website.setup_default_pages
 
                 #set default publication published by user
@@ -104,19 +106,17 @@ module Knitkit
                 website.save
 
                 website.publish("Publish Default Sections", current_user)
-                PublishedWebsite.activate(website, 1, current_user)
-      
-                result[:success] = true
-              else
-                result[:success] = false
-              end
-              puts website.errors.full_messages
 
-              render :json => result
+                PublishedWebsite.activate(website, 1, current_user)
+
+                render :json => {:success => true}
+              end
             end
-          rescue ErpTechSvcs::Utils::CompassAccessNegotiator::Errors::UserDoesNotHaveCapability=>ex
+          rescue Exception => ex
+            Rails.logger.error("#{ex.message} + #{ex.backtrace}")
             render :json => {:success => false, :message => ex.message}
           end
+
         end
 
         def update
