@@ -1,7 +1,6 @@
 require 'spork'
 require 'rake'
 require 'factory_girl'
-require 'rails/generators'
 
 Spork.prefork do
   # Loading more in this block will cause your tests to run faster. However,

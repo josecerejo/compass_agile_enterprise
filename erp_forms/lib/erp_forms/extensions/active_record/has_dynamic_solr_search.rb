@@ -18,6 +18,8 @@
 #   end
 # end
 
+#TODO: this needs to be moved into erp_search in a class_eval
+
 module ErpForms
   module Extensions
     module ActiveRecord
