@@ -1,5 +1,7 @@
 #compass libraries
+require 'erp_base_erp_svcs'
 require 'erp_tech_svcs'
+require 'erp_app'
 
 require "friendly_id"
 
