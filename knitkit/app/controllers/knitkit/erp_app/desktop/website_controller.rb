@@ -162,7 +162,7 @@ module Knitkit
 
         def add_host
           begin
-            current_user.with_capability('create', 'Host') do
+            current_user.with_capability('create', 'WebsiteHost') do
               website = Website.find(params[:id])
               website_host = WebsiteHost.create(:host => params[:host])
               website.hosts << website_host
@@ -181,7 +181,8 @@ module Knitkit
                   :children => []}
               }
             end
-          rescue ErpTechSvcs::Utils::CompassAccessNegotiator::Errors::UserDoesNotHaveCapability=>ex
+          rescue Exception => ex
+            Rails.logger.error("#{ex.message} + #{ex.backtrace}")
             render :json => {:success => false, :message => ex.message}
           end
         end
