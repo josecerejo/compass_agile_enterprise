@@ -93,7 +93,6 @@ module Knitkit
                 website.website_sections << website_section
 
                 website.save
-
                 website.setup_default_pages
 
                 #set default publication published by user
@@ -113,7 +112,7 @@ module Knitkit
               end
             end
           rescue Exception => ex
-            Rails.logger.error("#{ex.message} + #{ex.backtrace}")
+            Rails.logger.error("#{ex.message} + #{ex.backtrace.join("\n")}")
             render :json => {:success => false, :message => ex.message}
           end
 

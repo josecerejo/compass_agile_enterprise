@@ -41,7 +41,7 @@ class Website < ActiveRecord::Base
     end
   end
 
-  validates_uniqueness_of :internal_identifier
+  validates_uniqueness_of :internal_identifier, :case_sensitive => false
 
   alias :sections :website_sections
   alias :hosts :website_hosts
@@ -62,7 +62,6 @@ class Website < ActiveRecord::Base
 
   def all_section_paths
     WebsiteSection.select(:path).where(:website_id => self.id).collect{|row| row['path']}
-    #ActiveRecord::Base.connection.execute("select path from website_sections where website_id = #{self.id}").collect{|row| row['path']}
   end
 
   def config_value(config_item_type_iid)
@@ -162,20 +161,21 @@ class Website < ActiveRecord::Base
       ::Widgets::Signup::Base,
       ::Widgets::ResetPassword::Base
     ]
+    profile_page = nil
     widget_classes.each do |widget_class|
       website_section = WebsiteSection.new
       website_section.title = widget_class.title
       website_section.in_menu = true unless ["Login", "Sign Up", "Reset Password"].include?(widget_class.title)
       website_section.layout = widget_class.base_layout
       website_section.save
-      #make manage profile secured
-      #website_section.add_role(self.role) if widget_class.title == 'Manage Profile'
 
-      website_section.secure(self.role) if widget_class.title == 'Manage Profile'
+      profile_page = website_section if widget_class.title == 'Manage Profile'
+
       self.website_sections << website_section
     end
     self.save
     self.website_sections.update_paths!
+    profile_page.secure unless profile_page.nil?
   end
 
   def export_setup
@@ -525,7 +525,7 @@ class Website < ActiveRecord::Base
     {
       :title => menu_item.title,
       :url => menu_item.url,
-      :roles => menu_item.roles.collect{|role| role.internal_identifier},
+      :is_secured => menu_item.is_secured?,
       :linked_to_item_type => menu_item.linked_to_item_type,
       :linked_to_item_path => menu_item.linked_to_item.nil? ? nil : menu_item.linked_to_item.path,
       :position => menu_item.position,
