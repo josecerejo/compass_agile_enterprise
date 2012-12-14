@@ -1,5 +1,8 @@
+require 'erp_base_erp_svcs'
+
 require "erp_search/version"
 require "erp_search/engine"
+require "erp_search/extensions"
 
 $USE_SOLR_FOR_CONTENT = true
 $USE_SOLR_FOR_DYNAMIC_FORM_MODELS = true

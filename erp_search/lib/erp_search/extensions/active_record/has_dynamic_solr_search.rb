@@ -1,24 +1,22 @@
-# require 'sunspot'
-# Sunspot::Setup.class_eval do
-#   def self.clear_setup_for_class(klass)
-#     Rails.logger.info "clear_setup_for_class"
-#     Sunspot.searchable.delete!(klass)
-#     Rails.logger.info "searchable #{Sunspot.searchable.inspect}"
-#     #Rails.logger.info "field_factories #{field_factories.inspect}"
-#     Rails.logger.info "setups[klass.name.to_sym] #{setups.keys}"
-#     setups.delete_if{|key, value| key == klass.name.to_sym }
-#     #setups[klass.name.to_sym] = new(clazz)
-#     Rails.logger.info "setups[klass.name.to_sym] #{setups.keys}"
-#   end
-# end
+require 'sunspot'
+Sunspot::Setup.class_eval do
+  def self.clear_setup_for_class(klass)
+    Rails.logger.info "clear_setup_for_class"
+    Sunspot.searchable.delete!(klass)
+    Rails.logger.info "searchable #{Sunspot.searchable.inspect}"
+    #Rails.logger.info "field_factories #{field_factories.inspect}"
+    Rails.logger.info "setups[klass.name.to_sym] #{setups.keys}"
+    setups.delete_if{|key, value| key == klass.name.to_sym }
+    #setups[klass.name.to_sym] = new(clazz)
+    Rails.logger.info "setups[klass.name.to_sym] #{setups.keys}"
+  end
+end
 
-# Sunspot::ClassSet.class_eval do
-#   def delete!(klass)
-#     @name_to_klass.delete_if{|key, value| key == klass.name.to_sym }
-#   end
-# end
-
-#TODO: this needs to be moved into erp_search in a class_eval
+Sunspot::ClassSet.class_eval do
+  def delete!(klass)
+    @name_to_klass.delete_if{|key, value| key == klass.name.to_sym }
+  end
+end
 
 module ErpForms
   module Extensions
