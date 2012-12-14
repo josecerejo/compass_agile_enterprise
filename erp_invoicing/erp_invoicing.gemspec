@@ -21,6 +21,7 @@ Gem::Specification.new do |s|
   s.add_dependency "erp_inventory", "~> 3.1"
   s.add_dependency "erp_work_effort", "~> 3.1"
   s.add_dependency "erp_commerce", "~> 3.1"
+  s.add_dependency "knitkit", "~> 2.1"
 
   s.add_development_dependency "erp_dev_svcs", "~> 3.1"
 end

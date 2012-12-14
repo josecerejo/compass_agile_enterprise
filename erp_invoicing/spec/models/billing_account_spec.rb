@@ -12,10 +12,8 @@ describe BillingAccount do
         :mothers_maiden_name => 'William'
       )
 
-      @billing_account = BillingAccount.new
-      @billing_account = BillingAccount.create()
+      @billing_account = BillingAccount.new 
       @billing_account.account_number = '123456789B'
-      @billing_account.calculate_balance = false
       @billing_account.payment_due = 72.20
       @billing_account.balance = 72.20
       @billing_account.due_date = '2012-02-15'
@@ -35,10 +33,6 @@ describe BillingAccount do
 
     it "should get billing_date from billing_account" do
       @billing_account.billing_date.should eq '2012-01-15'.to_date
-    end
-
-    it "should get balance_date from financial_txn_acct.balance_date" do
-      @billing_account.balance_date.should eq '2012-01-15'.to_date
     end
 
     it "should get payment_due from financial_txn_acct.payment_due" do
