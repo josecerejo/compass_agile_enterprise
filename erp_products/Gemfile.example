@@ -10,7 +10,6 @@ gemspec
 # gem 'erp_agreements', :path => '../erp_agreements'
 # gem 'erp_app', :path => '../erp_app'
 # gem 'erp_commerce', :path => '../erp_commerce'
-# gem 'prismpay', :path => '/var/www/PrismPay-Gateway'
 
 # group :development, :test do
 #   gem 'erp_dev_svcs', :path => '../erp_dev_svcs'
