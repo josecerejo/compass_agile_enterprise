@@ -55,7 +55,7 @@ class Theme < ActiveRecord::Base
     :only_when_blank => false, :sync_url => true
 
   validates :name, :presence => {:message => 'Name cannot be blank'}
-  validates_uniqueness_of :theme_id, :scope => :website_id
+  validates_uniqueness_of :theme_id, :scope => :website_id, :case_sensitive => false
 
   before_destroy :delete_theme_files!
 

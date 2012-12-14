@@ -14,7 +14,7 @@ class Content < ActiveRecord::Base
   belongs_to :updated_by, :class_name => "User"
     
   validates :type, :presence => {:message => 'Type cannot be blank'}
-  validates_uniqueness_of :internal_identifier
+  validates_uniqueness_of :internal_identifier, :case_sensitive => false
 
   def self.search(options = {})
     if options[:section_unique_name].nil? or options[:section_unique_name].empty?

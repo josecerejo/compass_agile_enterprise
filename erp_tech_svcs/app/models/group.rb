@@ -8,7 +8,7 @@ class Group < ActiveRecord::Base
   
   has_one :party, :as => :business_party
 
-  validates_uniqueness_of :description
+  validates_uniqueness_of :description, :case_sensitive => false
 
   def self.add(description)
     Group.create(:description => description)

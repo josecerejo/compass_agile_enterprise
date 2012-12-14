@@ -2,7 +2,7 @@ class WebsiteNav < ActiveRecord::Base
   protected_with_capabilities
   belongs_to :website
 
-  validates_uniqueness_of :name, :scope => [:website_id], :message => "That Name is Already in Use"
+  validates_uniqueness_of :name, :scope => [:website_id], :message => "That Name is Already in Use", :case_sensitive => false
 
   has_many :website_nav_items, :dependent => :destroy do
     def positioned

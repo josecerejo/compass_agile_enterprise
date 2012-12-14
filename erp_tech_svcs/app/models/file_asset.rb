@@ -64,7 +64,7 @@ class FileAsset < ActiveRecord::Base
   validates_attachment_size :data, :less_than => ErpTechSvcs::Config.max_file_size_in_mb.megabytes
 
   validates :name, :presence => {:message => 'Name can not be blank'}
-  validates_uniqueness_of :name, :scope => [:directory]
+  validates_uniqueness_of :name, :scope => [:directory], :case_sensitive => false
   validates_each :directory, :name do |record, attr, value|
     record.errors.add attr, 'may not contain consequtive dots' if value =~ /\.\./
   end

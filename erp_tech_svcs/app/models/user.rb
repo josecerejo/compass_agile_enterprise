@@ -15,11 +15,11 @@ class User < ActiveRecord::Base
   validates :password, :presence => true, :password_strength => true, :if => :password
 
   #email validations
-  validates :email, :presence => {:message => 'Email cannot be blank'}, :uniqueness => true
+  validates :email, :presence => {:message => 'Email cannot be blank'}, :uniqueness => {:case_sensitive => false}
   validates_format_of :email, :with => /\b[A-Z0-9._%a-z\-]+@(?:[A-Z0-9a-z\-]+\.)+[A-Za-z]{2,4}\z/
 
   #username validations
-  validates :username, :presence => {:message => 'Username cannot be blank'}, :uniqueness => true
+  validates :username, :presence => {:message => 'Username cannot be blank'}, :uniqueness => {:case_sensitive => false}
 
   #these two methods allow us to assign instance level attributes that are not persisted.  These are used for mailers
   def instance_attributes
