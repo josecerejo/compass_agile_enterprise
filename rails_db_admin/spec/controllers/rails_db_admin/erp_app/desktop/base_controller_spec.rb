@@ -8,8 +8,8 @@ describe RailsDbAdmin::ErpApp::Desktop::BaseController do
   end
 
   before(:all) do 
-    Factory.create(:role_type, :internal_identifier => "execute_query_test_role")
-    Factory.create(:role_type, :internal_identifier => "execute_query_test_role_2")
+    FactoryGirl.create(:role_type, :internal_identifier => "execute_query_test_role")
+    FactoryGirl.create(:role_type, :internal_identifier => "execute_query_test_role_2")
   end
 
   describe "POST setup_table_grid" do
@@ -126,7 +126,7 @@ describe RailsDbAdmin::ErpApp::Desktop::BaseController do
                         :table => 'preference_options_preference_types'}
 
       parsed_body = JSON.parse(response.body)
-      parsed_body["total"].should eq(13)
+      parsed_body["total"].should eq(14)
     end
   end
 

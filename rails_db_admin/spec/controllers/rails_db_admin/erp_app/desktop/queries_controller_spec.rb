@@ -10,7 +10,7 @@ describe RailsDbAdmin::ErpApp::Desktop::QueriesController do
   describe "POST execute_query" do
 
     before(:all) do 
-      Factory.create(:role_type, :internal_identifier => "execute_query_test_role")
+      FactoryGirl.create(:role_type, :internal_identifier => "execute_query_test_role")
     end
 
     it "returns unsuccessful because of an empty result set" do
