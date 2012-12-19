@@ -12,6 +12,7 @@ module ErpForms
       include ErpForms::Extensions::ActiveRecord::ActsAsDynamicFormModel
       include ErpForms::Extensions::ActiveRecord::HasDynamicData
       include ErpForms::Extensions::ActiveRecord::HasDynamicForms
+      include ErpForms::Extensions::ActiveRecord::ActsAsCommentable
       #include ErpForms::Extensions::ActiveRecord::HasDynamicSolrSearch
     end
 

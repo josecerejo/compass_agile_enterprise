@@ -1,4 +1,4 @@
-module Knitkit
+module ErpForms
   module Extensions
     module ActiveRecord
       module ActsAsCommentable

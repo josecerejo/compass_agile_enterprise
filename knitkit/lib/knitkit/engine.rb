@@ -14,7 +14,6 @@ module Knitkit
     end
 
 	  ActiveSupport.on_load(:active_record) do
-      include Knitkit::Extensions::ActiveRecord::ActsAsCommentable
       include Knitkit::Extensions::ActiveRecord::ActsAsPublishable
       include Knitkit::Extensions::ActiveRecord::ThemeSupport::HasManyThemes
       include Knitkit::Extensions::ActiveRecord::ActsAsDocument
