@@ -18,7 +18,7 @@ Sunspot::ClassSet.class_eval do
   end
 end
 
-module ErpForms
+module ErpSearch
   module Extensions
     module ActiveRecord
       module HasDynamicSolrSearch

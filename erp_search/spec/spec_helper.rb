@@ -10,6 +10,20 @@ Spork.prefork do
   ENGINE_RAILS_ROOT=File.join(File.dirname(__FILE__), '../')
   DUMMY_APP_ROOT=File.join(File.dirname(__FILE__), '/dummy')
 
+  #run migrations first
+  #We have to execute the migrations from dummy app directory
+  Dir.chdir DUMMY_APP_ROOT
+  `rake db:drop RAILS_ENV=spec`
+  Dir.chdir ENGINE_RAILS_ROOT
+
+  #We have to execute the migratiapp:compass_ae:install:data_migrationsons from dummy app directory
+  Dir.chdir DUMMY_APP_ROOT
+  `rake compass_ae:install:migrations RAILS_ENV=spec`
+  `rake compass_ae:install:data_migrations RAILS_ENV=spec`
+  `rake db:migrate RAILS_ENV=spec`
+  `rake db:migrate_data RAILS_ENV=spec`
+  Dir.chdir ENGINE_RAILS_ROOT
+
   require 'active_support'
   require 'active_model'
   require 'active_record'
@@ -37,19 +51,6 @@ Spork.prefork do
     config.include ErpDevSvcs
     config.include ErpDevSvcs::ControllerSupport, :type => :controller
   end
-  
-  #We have to execute the migrations from dummy app directory
-  Dir.chdir DUMMY_APP_ROOT
-  `rake db:drop RAILS_ENV=spec`
-  Dir.chdir ENGINE_RAILS_ROOT
-
-  #We have to execute the migratiapp:compass_ae:install:data_migrationsons from dummy app directory
-  Dir.chdir DUMMY_APP_ROOT
-  `rake compass_ae:install:migrations RAILS_ENV=spec`
-  `rake compass_ae:install:data_migrations RAILS_ENV=spec`
-  `rake db:migrate RAILS_ENV=spec`
-  `rake db:migrate_data RAILS_ENV=spec`
-  Dir.chdir ENGINE_RAILS_ROOT
 end
 
 Spork.each_run do

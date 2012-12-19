@@ -20,6 +20,7 @@ class DynamicFormModel < ActiveRecord::Base
   def self.sunspot_setup_all
     DynamicFormModel.all.each do |m|
       next if m.model_name == 'DynamicFormDocument'
+      next unless ActiveRecord::Base.connection.table_exists? m.get_constant.table_name
       m.get_constant.sunspot_setup unless DynamicFormModel.class_exists?(m.model_name)
     end
   end
