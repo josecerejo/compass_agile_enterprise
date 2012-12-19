@@ -11,10 +11,10 @@ describe WebsiteSection do
 end
 
 describe WebsiteSection, "is_section? and is_document_section?" do
-  let!(:website) { Factory.create(:website, :name => "Website")}
-  let(:page) { Factory.create(:website_section,:website => website) }
-  let(:blog) { Factory.create(:blog,:website => website) }
-  let(:document) { Factory.create(:online_document_section,:website => website) }
+  let!(:website) { FactoryGirl.create(:website, :name => "Website")}
+  let(:page) { FactoryGirl.create(:website_section,:website => website) }
+  let(:blog) { FactoryGirl.create(:blog,:website => website) }
+  let(:document) { FactoryGirl.create(:online_document_section,:website => website) }
   
   describe WebsiteSection, "is_section?" do
     it "should return true for the page" do

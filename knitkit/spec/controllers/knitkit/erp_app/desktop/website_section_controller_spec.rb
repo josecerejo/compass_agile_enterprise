@@ -5,8 +5,8 @@ describe Knitkit::ErpApp::Desktop::WebsiteSectionController do
 
   before(:each) do 
     basic_user_auth_with_admin
-    @website = Factory.create(:website, :name => "Some name")
-    @website.hosts << Factory.create(:website_host)
+    @website = FactoryGirl.create(:website, :name => "Some name")
+    @website.hosts << FactoryGirl.create(:website_host)
   end
 
   describe "POST new" do
@@ -33,7 +33,7 @@ describe Knitkit::ErpApp::Desktop::WebsiteSectionController do
     end
 
     it "can be a child of another section" do
-      @website_section = Factory.create(:website_section)
+      @website_section = FactoryGirl.create(:website_section)
       @website.website_sections << @website_section
       post :new, {:use_route => :knitkit,
                      :action => "new",
@@ -59,7 +59,7 @@ describe Knitkit::ErpApp::Desktop::WebsiteSectionController do
 
   describe "Post delete" do
     before(:each) do
-      @website_section = Factory.create(:website_section)
+      @website_section = FactoryGirl.create(:website_section)
       @website.website_sections << @website_section
     end
 
@@ -74,7 +74,7 @@ describe Knitkit::ErpApp::Desktop::WebsiteSectionController do
   
   describe "Post update_security" do
     before(:each) do
-      @website_section = Factory.create(:website_section)
+      @website_section = FactoryGirl.create(:website_section)
       @website.website_sections << @website_section
     end
     
@@ -106,7 +106,7 @@ describe Knitkit::ErpApp::Desktop::WebsiteSectionController do
 
   describe "Post update" do
     before(:each) do
-      @website_section = Factory.create(:website_section)
+      @website_section = FactoryGirl.create(:website_section)
       @website.website_sections << @website_section
     end
 
@@ -137,7 +137,7 @@ describe Knitkit::ErpApp::Desktop::WebsiteSectionController do
   describe "Post add_layout" do
 
     it "should call create_layout" do
-      @website_section = Factory.create(:website_section)
+      @website_section = FactoryGirl.create(:website_section)
       @website.website_sections << @website_section
       @website_section_double = double("WebsiteSection")
       WebsiteSection.should_receive(:find).and_return(@website_section_double)
@@ -151,7 +151,7 @@ describe Knitkit::ErpApp::Desktop::WebsiteSectionController do
 
   describe "Get get_layout" do
     it "should call layout" do
-      @website_section = Factory.create(:website_section)
+      @website_section = FactoryGirl.create(:website_section)
       @website.website_sections << @website_section
       @website_section_double = double("WebsiteSection")
       WebsiteSection.should_receive(:find).and_return(@website_section_double)
@@ -165,7 +165,7 @@ describe Knitkit::ErpApp::Desktop::WebsiteSectionController do
 
   describe "Post save_layout" do
     before(:each) do
-      @website_section = Factory.create(:website_section)
+      @website_section = FactoryGirl.create(:website_section)
       @website.website_sections << @website_section
     end
 
@@ -186,14 +186,14 @@ describe Knitkit::ErpApp::Desktop::WebsiteSectionController do
         WorkflowProcess.create(:internal_identifier => "test_content_mgmt", :process_template => true)
         WorkflowStep.create(:internal_identifier => "Start", :executable_command_id => 1, :executable_command_type => "ManualWorkflowStep", :workflow_process_id => 1, :initial_step => true)
       end
-      @website_section = Factory.create(:website_section)
+      @website_section = FactoryGirl.create(:website_section)
       @website.website_sections << @website_section
-      @article = Factory.create(:article, :internal_identifier => "article_1", :created_by_id => 1)
+      @article = FactoryGirl.create(:article, :internal_identifier => "article_1", :created_by_id => 1)
       @website_section.contents << @article
 
-      @website_section_2 = Factory.create(:website_section)
+      @website_section_2 = FactoryGirl.create(:website_section)
       @website.website_sections << @website_section_2
-      @article_2 = Factory.create(:article, :internal_identifier => "article_2", :created_by_id => 1)
+      @article_2 = FactoryGirl.create(:article, :internal_identifier => "article_2", :created_by_id => 1)
       @website_section_2.contents << @article_2
 
       get :available_articles, {:use_route => :knitkit,
@@ -209,7 +209,7 @@ describe Knitkit::ErpApp::Desktop::WebsiteSectionController do
 
   describe "Get existing_sections" do
     it "should call website.sections.to_json with :only => [:id], :methods => [:title_permalink]" do
-      @website_section = Factory.create(:website_section, :title => "some_title")
+      @website_section = FactoryGirl.create(:website_section, :title => "some_title")
       @website.website_sections << @website_section
 
       get :existing_sections, {:use_route => :knitkit,

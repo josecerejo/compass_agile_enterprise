@@ -4,8 +4,8 @@ require "erp_dev_svcs"
 describe Knitkit::ErpApp::Desktop::WebsiteNavController do
   before(:each) do
     basic_user_auth_with_admin
-    @website = Factory.create(:website, :name => "Some name")
-    @website.hosts << Factory.create(:website_host)
+    @website = FactoryGirl.create(:website, :name => "Some name")
+    @website.hosts << FactoryGirl.create(:website_host)
   end
 
   describe "Post new" do
@@ -35,7 +35,7 @@ describe Knitkit::ErpApp::Desktop::WebsiteNavController do
 
   describe "Post update" do
     before do
-      @website_nav = Factory.create(:website_nav, :name => "Some Name")
+      @website_nav = FactoryGirl.create(:website_nav, :name => "Some Name")
       @website.website_navs << @website_nav
     end
 
@@ -52,7 +52,7 @@ describe Knitkit::ErpApp::Desktop::WebsiteNavController do
 
   describe "Post delete" do
     before do
-      @website_nav = Factory.create(:website_nav, :name => "Some Name")
+      @website_nav = FactoryGirl.create(:website_nav, :name => "Some Name")
       @website.website_navs << @website_nav
     end
 
@@ -68,9 +68,9 @@ describe Knitkit::ErpApp::Desktop::WebsiteNavController do
 
   describe "Post add_menu_item" do
     before do
-      @website_nav = Factory.create(:website_nav, :name => "Some Name")
+      @website_nav = FactoryGirl.create(:website_nav, :name => "Some Name")
       @website.website_navs << @website_nav
-      @website_nav_item = Factory.create(:website_nav_item)
+      @website_nav_item = FactoryGirl.create(:website_nav_item)
       @website_nav.items << @website_nav_item
     end
     
@@ -94,7 +94,7 @@ describe Knitkit::ErpApp::Desktop::WebsiteNavController do
     end
 
     it "should return success:true and node given :klass => WebsiteNav and :link_to => website_section" do
-      @website_section = Factory.create(:website_section)
+      @website_section = FactoryGirl.create(:website_section)
       @website.website_sections << @website_section
 
       post :add_menu_item, {:use_route => :knitkit,
@@ -135,7 +135,7 @@ describe Knitkit::ErpApp::Desktop::WebsiteNavController do
     end
 
     it "should return success:true and node given :klass => WebsiteNavItem and :link_to => website_section" do
-      @website_section = Factory.create(:website_section)
+      @website_section = FactoryGirl.create(:website_section)
       @website.website_sections << @website_section
 
       post :add_menu_item, {:use_route => :knitkit,
@@ -159,9 +159,9 @@ describe Knitkit::ErpApp::Desktop::WebsiteNavController do
 
   describe "Post update_menu_item" do
     before do
-      @website_nav = Factory.create(:website_nav, :name => "Some Name")
+      @website_nav = FactoryGirl.create(:website_nav, :name => "Some Name")
       @website.website_navs << @website_nav
-      @website_nav_item = Factory.create(:website_nav_item)
+      @website_nav_item = FactoryGirl.create(:website_nav_item)
       @website_nav.items << @website_nav_item
     end
 
@@ -182,7 +182,7 @@ describe Knitkit::ErpApp::Desktop::WebsiteNavController do
     end
 
     it "should return success:true title linkedToId linkToType and url given link_to => website_section" do
-      @website_section = Factory.create(:website_section)
+      @website_section = FactoryGirl.create(:website_section)
       @website.website_sections << @website_section
 
       post :update_menu_item, {:use_route => :knitkit,
@@ -203,9 +203,9 @@ describe Knitkit::ErpApp::Desktop::WebsiteNavController do
 
   describe "Post update_security" do
     before do
-      @website_nav = Factory.create(:website_nav, :name => "Some Name")
+      @website_nav = FactoryGirl.create(:website_nav, :name => "Some Name")
       @website.website_navs << @website_nav
-      @website_nav_item = Factory.create(:website_nav_item)
+      @website_nav_item = FactoryGirl.create(:website_nav_item)
       @website_nav.items << @website_nav_item
     end
     
@@ -242,9 +242,9 @@ describe Knitkit::ErpApp::Desktop::WebsiteNavController do
 
   describe "Post delete_menu_item" do
     before do
-      @website_nav = Factory.create(:website_nav, :name => "Some Name")
+      @website_nav = FactoryGirl.create(:website_nav, :name => "Some Name")
       @website.website_navs << @website_nav
-      @website_nav_item = Factory.create(:website_nav_item)
+      @website_nav_item = FactoryGirl.create(:website_nav_item)
       @website_nav.items << @website_nav_item
     end
     

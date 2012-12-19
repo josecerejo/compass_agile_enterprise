@@ -1,17 +1,17 @@
 require 'spec_helper'
 
 describe OnlineDocumentSection, "#build_section_hash" do
-  let!(:website) { Factory.create(:website, :name => "Website")}
-  let!(:root_section) { Factory.create(:online_document_section, :title => "Parent", :website => website, :in_menu => true)}
-  let!(:root_documented_content) { Factory.create(:documented_content, :title => "Parent")}
-  let!(:root_documented_item) { Factory.create(:documented_item, 
+  let!(:website) { FactoryGirl.create(:website, :name => "Website")}
+  let!(:root_section) { FactoryGirl.create(:online_document_section, :title => "Parent", :website => website, :in_menu => true)}
+  let!(:root_documented_content) { FactoryGirl.create(:documented_content, :title => "Parent")}
+  let!(:root_documented_item) { FactoryGirl.create(:documented_item,
                                             :online_document_section => root_section, 
                                             :documented_content_id => root_documented_content.id, 
                                             :online_document_section => root_section) }
   
-  let!(:child_section) { Factory.create(:online_document_section, :title => "Child", :parent => root_section, :website => website, :in_menu => true)}                                          
-  let!(:child_documented_content) { Factory.create(:documented_content, :title => "Child")}
-  let!(:child_documented_item) { Factory.create(:documented_item, 
+  let!(:child_section) { FactoryGirl.create(:online_document_section, :title => "Child", :parent => root_section, :website => website, :in_menu => true)}
+  let!(:child_documented_content) { FactoryGirl.create(:documented_content, :title => "Child")}
+  let!(:child_documented_item) { FactoryGirl.create(:documented_item,
                                             :online_document_section => child_section, 
                                             :documented_content_id => child_documented_content.id, 
                                             :online_document_section => child_section) }
