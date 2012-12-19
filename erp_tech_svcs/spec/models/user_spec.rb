@@ -3,7 +3,7 @@ require 'spec_helper'
 describe User do
 
   before(:all) do
-    @user = Factory(:user)
+    @user = FactoryGirl.create(:user)
   end
 
   it "should allow you to add and remove roles" do

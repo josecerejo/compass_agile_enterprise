@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe AuditLog do
   before(:all) do
-    @party = Factory(:party)
+    @party = FactoryGirl.create(:party)
   end
   
   it "should allow you to create custom application log message" do

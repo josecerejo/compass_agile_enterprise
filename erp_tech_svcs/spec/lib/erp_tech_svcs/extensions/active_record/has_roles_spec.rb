@@ -2,8 +2,8 @@ require 'spec_helper'
 
 describe ErpTechSvcs::Extensions::ActiveRecord::HasRoles do
   before(:all) do
-    @user = Factory(:user)
-    @user_2 = Factory(:user)
+    @user = FactoryGirl.create(:user)
+    @user_2 = FactoryGirl.create(:user)
     @admin_role = Role.create(:internal_identifier => 'admin')
     @employee_role = Role.create(:internal_identifier => 'employee')
     @manager_role = Role.create(:internal_identifier => 'manager')

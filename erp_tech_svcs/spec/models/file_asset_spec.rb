@@ -28,7 +28,10 @@ describe FileAsset do
     end
 
     it "should have method to get all valid extensions for all subclasses" do
-      FileAsset.all_valid_extensions.should eq [".jpg", ".JPG", ".jpeg", ".JPEG", ".gif", ".GIF", ".png", ".PNG", ".ico", ".ICO", ".bmp", ".BMP", ".tif", ".tiff", ".TIF", ".TIFF", ".txt", ".TXT", ".text", ".js", ".JS", ".css", ".CSS", ".erb", ".haml", ".liquid", ".builder", ".html", ".HTML", ".pdf", ".PDF", ".swf", ".SWF"]
+      FileAsset.all_valid_extensions.should eq [".jpg", ".JPG", ".jpeg", ".JPEG", ".gif", ".GIF", ".png", ".PNG", ".ico", ".ICO", ".bmp",
+                                                ".BMP", ".tif", ".tiff", ".TIF", ".TIFF", ".txt", ".TXT", ".text", ".pdf", ".PDF",
+                                                ".swf", ".SWF", ".js", ".JS", ".css", ".CSS", ".erb", ".haml", ".liquid", ".builder",
+                                                ".html", ".HTML"]
     end
 
     it "should be able to lookup subclass based on extension" do
