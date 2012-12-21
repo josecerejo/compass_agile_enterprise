@@ -44,6 +44,10 @@ module ErpApp
         merge_params
       end
 
+      def widget_result_id
+        "#{self.uuid}_result"
+      end
+
       def render(opts={})
         render_view_for(opts, self.view)
       end

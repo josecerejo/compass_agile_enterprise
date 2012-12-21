@@ -12,7 +12,7 @@ module ErpTechSvcs
 						extend HasFileAssets::SingletonMethods
 						include HasFileAssets::InstanceMethods
 						
-						has_many :files, :as => :file_asset_holder, :class_name => 'FileAsset', :dependent => :delete_all, :include => :capabilities
+						has_many :files, :as => :file_asset_holder, :class_name => 'FileAsset', :dependent => :destroy, :include => :capabilities
 					end
 				end
   		
@@ -44,6 +44,14 @@ module ErpTechSvcs
 
           def templates
 						self.files.where('type = ?', 'Template')
+          end
+
+          def pdfs
+            self.files.where('type = ?', 'Pdf')
+          end
+
+          def xmls
+            self.files.where('type = ?', 'XmlFile')
           end
           
 				end
