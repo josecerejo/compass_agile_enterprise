@@ -23,6 +23,15 @@ module ErpTechSvcs
 				end
 						
 				module InstanceMethods
+
+          def join_parties_security_roles
+            "parties_security_roles ON parties_security_roles.security_role_id=security_roles.id"
+          end
+
+          def roles_not
+            SecurityRole.joins("LEFT JOIN #{join_parties_security_roles}").where("parties_security_roles.id IS NULL")
+          end
+
 				  def roles
 					  self.security_roles
 				  end

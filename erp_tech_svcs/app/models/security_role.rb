@@ -19,4 +19,28 @@ class SecurityRole < ActiveRecord::Base
     self.internal_identifier
   end
 
+  def join_parties_security_roles
+    "parties_security_roles ON parties_security_roles.party_id=parties.id"
+  end
+
+  # users with this role
+  def users
+    User.joins(:party).joins("JOIN #{join_parties_security_roles}").where("parties_security_roles.security_role_id = #{self.id}")
+  end
+
+  # users without this role
+  def users_not
+    User.joins(:party).joins("LEFT JOIN #{join_parties_security_roles}").where("parties_security_roles.id IS NULL")
+  end
+
+  # groups with this role
+  def groups
+    Group.joins(:party).joins("JOIN #{join_parties_security_roles}").where("parties_security_roles.security_role_id = #{self.id}")
+  end
+
+  # groups without this role
+  def groups_not
+    Group.joins(:party).joins("LEFT JOIN #{join_parties_security_roles}").where("parties_security_roles.id IS NULL")
+  end
+
 end

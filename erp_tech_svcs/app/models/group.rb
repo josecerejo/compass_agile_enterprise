@@ -14,6 +14,12 @@ class Group < ActiveRecord::Base
     Group.create(:description => description)
   end
 
+  # roles this group does NOT have
+  def roles_not
+    party.roles_not
+  end
+
+  # roles this group has
   def roles
     party.security_roles
   end
@@ -64,12 +70,22 @@ class Group < ActiveRecord::Base
     PartyRelationship.where(:party_id_to => self.party.id)
   end
 
+  def join_party_relationships
+    "party_relationships ON party_id_to = #{self.party.id} AND party_id_from = parties.id"
+  end
+
   def members
-    party_relationships.all.collect{|pr| pr.from_party }
+    Party.joins("JOIN #{join_party_relationships}")
   end
   
+  # get users in this group
   def users
-    members.collect{|p| p.user }
+    User.joins(:party).joins("JOIN #{join_party_relationships}")
+  end
+
+  # get users not in this group
+  def users_not
+    User.joins(:party).joins("LEFT JOIN #{join_party_relationships}").where("party_relationships.id IS NULL")
   end
 
   # add user to group

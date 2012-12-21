@@ -31,6 +31,12 @@ class User < ActiveRecord::Base
     @instance_attrs[k] = v
   end
 
+  # roles this user does NOT have
+  def roles_not
+    party.roles_not
+  end
+
+  # roles this user has
   def roles
     party.security_roles
   end
@@ -57,14 +63,23 @@ class User < ActiveRecord::Base
     PartyRelationship.where(:party_id_from => self.party.id)
   end
 
+  def join_party_relationships
+    "party_relationships ON party_id_from = #{self.party.id} AND party_id_to = parties.id"
+  end
+
   # party records for the groups this user belongs to
   def group_parties
-    group_relationships.all.collect{|pr| pr.to_party }
+    Party.joins("JOIN #{join_party_relationships}")
   end
 
   # groups this user belongs to
   def groups
-    group_parties.collect{|p| p.business_party }
+    Group.joins(:party).joins("JOIN #{join_party_relationships}")
+  end
+
+  # groups this user does NOT belong to
+  def groups_not
+    Group.joins(:party).joins("LEFT JOIN #{join_party_relationships}").where("party_relationships.id IS NULL")
   end
 
   # roles assigned to the groups this user belongs to
@@ -77,20 +92,28 @@ class User < ActiveRecord::Base
     (group_roles + roles).uniq
   end
 
-  def capabilities
-    capability_accessors.collect{|ca| ca.capability }.uniq.compact
-  end
-
   def group_capabilities
-    groups.collect{|r| r.capability_accessors }.flatten.uniq.collect{|ca| ca.capability }.uniq.compact
+    groups.collect{|r| r.capabilities }.flatten.uniq.compact
   end
 
   def role_capabilities
-    all_roles.collect{|r| r.capability_accessors }.flatten.uniq.collect{|ca| ca.capability }.uniq.compact
+    all_roles.collect{|r| r.capabilities }.flatten.compact
   end
 
   def all_capabilities
     (role_capabilities + group_capabilities + capabilities).uniq
+  end
+
+  def group_class_capabilities
+    groups.collect{|g| g.class_capabilities }.flatten.uniq.compact
+  end
+
+  def role_class_capabilities
+    all_roles.collect{|r| r.class_capabilities }.flatten.uniq.compact
+  end
+
+  def all_capabilities
+    (role_class_capabilities + group_class_capabilities + class_capabilities).uniq
   end
 
   def class_capabilites_to_hash
