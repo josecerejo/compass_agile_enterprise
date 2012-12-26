@@ -112,7 +112,7 @@ class User < ActiveRecord::Base
     all_roles.collect{|r| r.class_capabilities }.flatten.uniq.compact
   end
 
-  def all_capabilities
+  def all_class_capabilities
     (role_class_capabilities + group_class_capabilities + class_capabilities).uniq
   end
 
