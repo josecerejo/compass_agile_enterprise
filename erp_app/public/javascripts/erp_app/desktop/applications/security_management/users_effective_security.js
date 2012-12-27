@@ -26,8 +26,16 @@ Ext.define("Compass.ErpApp.Desktop.Applications.SecurityManagement.UsersEffectiv
         success: function(response) {
           var json_response = Ext.decode(response.responseText);
           if (json_response.success){
-            tab.down('#roles').update(json_response.roles);
-            tab.down('#capabilities').update(json_response.capabilities);
+            if (json_response.capabilities.length > 0){
+              tab.down('#roles').update(json_response.roles);
+            }else{
+              tab.down('#roles').update("No roles.");
+            }
+            if (json_response.capabilities.length > 0){
+              tab.down('#capabilities').update(json_response.capabilities);
+            }else{
+              tab.down('#capabilities').update("No capabilities.");
+            }
           }else{
             Ext.Msg.alert('Error', Ext.decode(response.responseText).message);
           }
