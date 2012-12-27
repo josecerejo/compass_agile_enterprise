@@ -3,8 +3,6 @@ Ext.define("Compass.ErpApp.Login.Window",{
   alias:"compass.erpapp.login.window",
   requires:["Ext.Window"],
   layout:'fit',
-  width:300,
-  height:300,
   defaultButton:'login',
   buttonAlign:'center',
   closable:false,

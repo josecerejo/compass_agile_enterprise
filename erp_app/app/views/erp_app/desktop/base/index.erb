@@ -217,13 +217,6 @@
         }
       });
 
-      Ext.Loader.setPath({
-        'Ext.ux.desktop': 'js',
-        MyDesktop: ''
-      });
-
-      Ext.require('MyDesktop.App');
-
       var compassDesktop;
       Ext.onReady(function () {
         compassDesktop = new MyDesktop.App();
