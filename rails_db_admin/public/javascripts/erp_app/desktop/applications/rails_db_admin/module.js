@@ -268,6 +268,26 @@ Ext.define("Compass.ErpApp.Desktop.Applications.RailsDbAdmin", {
         });
     },
 
+    //************ Reporting ************************************************
+
+    editReport : function(reportObj){
+        var me = this;
+
+        me.container.add({
+            title:reportObj.title,
+            xtype:'railsdbadmin_reportpanel',
+            module:me,
+            query:reportObj.query,
+            reportId:reportObj.id,
+            template:reportObj.template,
+            internalIdentifier:reportObj.internalIdentifier,
+            closable:true
+        });
+        me.container.setActiveTab(me.container.items.length - 1);
+    },
+
+    //***********************************************************************
+
     init:function () {
         this.launcher = {
             text:'RailsDbAdmin',
@@ -346,10 +366,11 @@ Ext.define("Compass.ErpApp.Desktop.Applications.RailsDbAdmin", {
                     {
                         xtype:'railsdbadmin_tablestreemenu',
                         module:this
-                    },
-
-                    {
+                    }, {
                         xtype:'railsdbadmin_queriestreemenu',
+                        module:this
+                    }, {
+                        xtype:'railsdbadmin_reportstreepanel',
                         module:this
                     }
                 ]

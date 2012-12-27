@@ -5,7 +5,8 @@ module RailsDbAdmin
 
       def init!
         @defaults = {
-          :@query_location => File.join('lib', 'rails_db_admin', 'queries')
+          :@query_location => File.join('lib', 'rails_db_admin', 'queries'),
+          :@reports_location => File.join('lib', 'rails_db_admin', 'reports')
         }
       end
 
