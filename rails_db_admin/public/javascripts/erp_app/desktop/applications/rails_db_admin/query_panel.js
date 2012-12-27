@@ -1,6 +1,11 @@
 Ext.define("Compass.ErpApp.Desktop.Applications.RailsDbAdmin.QueryPanel", {
     extend:"Ext.panel.Panel",
     alias:'widget.railsdbadmin_querypanel',
+
+    getSql: function(){
+        return this.down('codemirror').getValue();
+    },
+
     initComponent:function () {
         var self = this;
         var messageBox = null;
@@ -204,10 +209,9 @@ Ext.define("Compass.ErpApp.Desktop.Applications.RailsDbAdmin.QueryPanel", {
     },
 
     constructor:function (config) {
-        config = Ext.apply({
+        config = Ext.applyIf({
             title:'Query',
             layout:'border',
-            closable:true,
             border:false
         }, config);
         this.callParent([config]);

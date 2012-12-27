@@ -113,6 +113,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.RailsDbAdmin", {
 
                 var queryPanel = Ext.create('Compass.ErpApp.Desktop.Applications.RailsDbAdmin.QueryPanel', {
                     module:self,
+                    closable:true,
                     sqlQuery:sql,
                     southRegion:readOnlyDataGrid
                 });
@@ -243,7 +244,8 @@ Ext.define("Compass.ErpApp.Desktop.Applications.RailsDbAdmin", {
                     var queryPanel = Ext.create('Compass.ErpApp.Desktop.Applications.RailsDbAdmin.QueryPanel', {
                         module:self,
                         sqlQuery:query,
-                        southRegion:readOnlyDataGrid
+                        southRegion:readOnlyDataGrid,
+                        closable:true
                     });
 
                     self.container.add(queryPanel);
@@ -253,6 +255,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.RailsDbAdmin", {
                     Ext.Msg.alert('Error', response.exception);
                     queryPanel = Ext.create('Compass.ErpApp.Desktop.Applications.RailsDbAdmin.QueryPanel', {
                         module:self,
+                        closable:true,
                         sqlQuery:query
                     });
 
@@ -318,6 +321,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.RailsDbAdmin", {
 
                     queryPanel = Ext.create('Compass.ErpApp.Desktop.Applications.RailsDbAdmin.QueryPanel', {
                         module:self,
+                        closable:true,
                         sqlQuery:query
                     });
 
@@ -328,6 +332,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.RailsDbAdmin", {
                     Ext.Msg.alert('Error', response.exception);
                     queryPanel = Ext.create('Compass.ErpApp.Desktop.Applications.RailsDbAdmin.QueryPanel', {
                         module:self,
+                        closable:true,
                         sqlQuery:query
                     });
 
