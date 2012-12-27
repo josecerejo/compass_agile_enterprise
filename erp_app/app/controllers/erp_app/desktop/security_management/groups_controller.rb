@@ -79,6 +79,24 @@ module ErpApp
           end
         end
 
+        def delete
+          begin
+            unless params[:id].blank?
+              Group.destroy(params[:id]) 
+              render :json => {:success => true, :message => 'Group deleted'}
+            else
+              raise "No Group ID"
+            end
+          rescue Exception => e
+            Rails.logger.error e.message
+            Rails.logger.error e.backtrace.join("\n")
+            render :inline => {
+              :success => false,
+              :message => e.message
+            }.to_json             
+          end
+        end
+
         def add
           begin
             assign_to = params[:assign_to]

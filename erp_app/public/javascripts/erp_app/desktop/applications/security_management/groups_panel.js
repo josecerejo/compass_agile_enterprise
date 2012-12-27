@@ -114,12 +114,48 @@ Ext.define("Compass.ErpApp.Desktop.Applications.SecurityManagement.GroupsPanel",
             });
             newWindow.show();
           }
-        }        
+        },
+        {
+          text:'Delete Group',
+          iconCls:'icon-delete',
+          handler:function(btn){
+            var all_groups = self.down('#all_groups').down('shared_dynamiceditablegrid');
+            var selection = all_groups.getSelectionModel().getSelection().first();
+            if (Ext.isEmpty(selection)){
+              Ext.Msg.alert('Please make a selection.');
+              return false;
+            }
+            Ext.MessageBox.confirm('Confirm', 'Are you sure?', function(btn){
+                  if(btn == 'no'){
+                    return false;
+                  }
+                  else if(btn == 'yes'){
+                    Ext.Ajax.request({
+                      url: '/erp_app/desktop/security_management/groups/delete',
+                      method: 'POST',
+                      params:{
+                        id: selection.get('id')
+                      },
+                      success: function(response) {
+                        var json_response = Ext.decode(response.responseText);
+                        if (json_response.success){
+                          all_groups.getStore().load();
+                        }else{
+                          Ext.Msg.alert('Error', Ext.decode(response.responseText).message);
+                        }
+                      },
+                      failure: function(response) {
+                        Ext.Msg.alert('Error', 'Error Retrieving Effective Security');
+                      }
+                    });
+                  }
+            });
+          }
+        }       
         ],
         items:[{
           xtype: 'security_management_group_grid',
           itemId: 'all_groups',
-          //title: 'All Groups',
           width: 400,
           setupUrl: '/erp_app/desktop/security_management/groups/available_setup',
           dataUrl: '/erp_app/desktop/security_management/groups/available',
