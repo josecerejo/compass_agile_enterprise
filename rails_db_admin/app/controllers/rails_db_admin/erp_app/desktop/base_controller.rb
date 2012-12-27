@@ -179,7 +179,8 @@ module RailsDbAdmin
 		
           database_name
         end
-      end
-    end
-  end
-end
+
+      end #BaseController
+    end #Desktop
+  end #ErpApp
+end #RailsDbAdmin

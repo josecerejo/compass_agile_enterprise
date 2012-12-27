@@ -1,7 +1,8 @@
 module RailsDbAdmin
   module ErpApp
     module Desktop
-      class QueriesController < RailsDbAdmin::ErpApp::Desktop::BaseController
+      class QueriesController < BaseController
+
         def save_query
           query = params[:query]
           query_name  = params[:query_name]
@@ -167,7 +168,8 @@ module RailsDbAdmin
           end
           render :json => result
         end
-      end
-    end
-  end
-end
+
+      end #QueriesController
+    end #Desktop
+  end #ErpApp
+end #RailsDbAdmin

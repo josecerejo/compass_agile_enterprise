@@ -189,7 +189,7 @@ class FileAsset < ActiveRecord::Base
 
   def get_contents
     file_support = ErpTechSvcs::FileSupport::Base.new(:storage => ErpTechSvcs::Config.file_storage)
-    file_support.get_contents(File.join(self.directory,self.data_file_name))
+    file_support.get_contents(File.join(file_support.root, self.directory, self.data_file_name))
   end
 
   def move(new_parent_path)
@@ -258,7 +258,13 @@ class HtmlFile < TextFile
   self.valid_extensions = %w(.html .HTML)
 end
 
-class Pdf < FileAsset
+class XmlFile < TextFile
+  self.file_type = :xml
+  self.content_type = 'text/plain'
+  self.valid_extensions = %w(.xml .XML)
+end
+
+class Pdf < TextFile
   self.file_type = :pdf
   self.content_type = 'application/pdf'
   self.valid_extensions = %w(.pdf .PDF)

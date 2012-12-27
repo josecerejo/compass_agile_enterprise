@@ -116,7 +116,7 @@ Ext.define("Compass.ErpApp.Shared.CodeMirror",{
   },
 
   onRender : function(ct, position){
-    Compass.ErpApp.Shared.CodeMirror.superclass.onRender.apply(this, arguments);
+    this.callParent(arguments);
     this.on('afterlayout', this.setupCodeMirror, this, {
       single: true
     });

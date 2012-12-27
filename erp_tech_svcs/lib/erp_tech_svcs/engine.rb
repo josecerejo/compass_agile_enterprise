@@ -3,7 +3,9 @@ module ErpTechSvcs
     config.erp_tech_svcs = ErpTechSvcs::Config
 
     isolate_namespace ErpTechSvcs
-	
+
+    Mime::Type.register "application/pdf", :pdf
+
 	  ActiveSupport.on_load(:active_record) do
       include ErpTechSvcs::Extensions::ActiveRecord::HasRoles
       include ErpTechSvcs::Extensions::ActiveRecord::HasFileAssets

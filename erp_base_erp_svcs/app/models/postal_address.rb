@@ -6,12 +6,16 @@ class PostalAddress < ActiveRecord::Base
   belongs_to :geo_country
   belongs_to :geo_zone
 
-	def summary_line
+  def summary_line
 		"#{description} : #{address_line_1}, #{city}"
 	end
 	
-	def to_label
-		"#{description} : #{address_line_1}, #{city}"    
+	def to_label(&block)
+    if block_given?
+      block.call(self)
+    else
+      "#{description} : #{address_line_1}, #{city}"
+    end
 	end
 
   def zip_eql_to?(zip)

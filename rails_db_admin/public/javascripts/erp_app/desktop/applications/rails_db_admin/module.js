@@ -113,6 +113,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.RailsDbAdmin", {
 
                 var queryPanel = Ext.create('Compass.ErpApp.Desktop.Applications.RailsDbAdmin.QueryPanel', {
                     module:self,
+                    closable:true,
                     sqlQuery:sql,
                     southRegion:readOnlyDataGrid
                 });
@@ -243,7 +244,8 @@ Ext.define("Compass.ErpApp.Desktop.Applications.RailsDbAdmin", {
                     var queryPanel = Ext.create('Compass.ErpApp.Desktop.Applications.RailsDbAdmin.QueryPanel', {
                         module:self,
                         sqlQuery:query,
-                        southRegion:readOnlyDataGrid
+                        southRegion:readOnlyDataGrid,
+                        closable:true
                     });
 
                     self.container.add(queryPanel);
@@ -253,6 +255,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.RailsDbAdmin", {
                     Ext.Msg.alert('Error', response.exception);
                     queryPanel = Ext.create('Compass.ErpApp.Desktop.Applications.RailsDbAdmin.QueryPanel', {
                         module:self,
+                        closable:true,
                         sqlQuery:query
                     });
 
@@ -267,6 +270,26 @@ Ext.define("Compass.ErpApp.Desktop.Applications.RailsDbAdmin", {
             }
         });
     },
+
+    //************ Reporting ************************************************
+
+    editReport : function(reportObj){
+        var me = this;
+
+        me.container.add({
+            title:reportObj.title,
+            xtype:'railsdbadmin_reportpanel',
+            module:me,
+            query:reportObj.query,
+            reportId:reportObj.id,
+            template:reportObj.template,
+            internalIdentifier:reportObj.internalIdentifier,
+            closable:true
+        });
+        me.container.setActiveTab(me.container.items.length - 1);
+    },
+
+    //***********************************************************************
 
     init:function () {
         this.launcher = {
@@ -298,6 +321,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.RailsDbAdmin", {
 
                     queryPanel = Ext.create('Compass.ErpApp.Desktop.Applications.RailsDbAdmin.QueryPanel', {
                         module:self,
+                        closable:true,
                         sqlQuery:query
                     });
 
@@ -308,6 +332,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.RailsDbAdmin", {
                     Ext.Msg.alert('Error', response.exception);
                     queryPanel = Ext.create('Compass.ErpApp.Desktop.Applications.RailsDbAdmin.QueryPanel', {
                         module:self,
+                        closable:true,
                         sqlQuery:query
                     });
 
@@ -346,10 +371,11 @@ Ext.define("Compass.ErpApp.Desktop.Applications.RailsDbAdmin", {
                     {
                         xtype:'railsdbadmin_tablestreemenu',
                         module:this
-                    },
-
-                    {
+                    }, {
                         xtype:'railsdbadmin_queriestreemenu',
+                        module:this
+                    }, {
+                        xtype:'railsdbadmin_reportstreepanel',
                         module:this
                     }
                 ]

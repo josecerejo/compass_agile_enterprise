@@ -10,7 +10,7 @@ module ErpApp
 
           sort_hash = params[:sort].blank? ? {} : Hash.symbolize_keys(JSON.parse(params[:sort]).first)
           sort = sort_hash[:property] || 'id'
-          dir  = sort_hash[:direction] || 'ASC'
+          dir  = sort_hash[:direction] || 'DESC'
           limit = params[:limit] || 15
           start = params[:start] || 0
 

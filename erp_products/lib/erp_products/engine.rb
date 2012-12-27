@@ -13,6 +13,5 @@ module ErpProducts
     end
 
     ErpBaseErpSvcs.register_as_compass_ae_engine(config, self)
-
   end
 end

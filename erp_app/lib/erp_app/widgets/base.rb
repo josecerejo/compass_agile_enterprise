@@ -47,6 +47,10 @@ module ErpApp
         @_prefixes ||= []
       end
 
+      def widget_result_id
+        "#{self.uuid}_result"
+      end
+
       def render(*args)
         render_view_for(self.action_name, *args)
       end
