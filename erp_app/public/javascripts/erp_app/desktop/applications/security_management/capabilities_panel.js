@@ -51,8 +51,8 @@ Ext.define("Compass.ErpApp.Desktop.Applications.SecurityManagement.CapabilitiesP
 
                 // get active tabpanel
                 var activeTabPanel = grid.findParentByType('security_management_capabilitiespanel').down('tabpanel').getActiveTab();
-                activeTabPanel.reloadGrids();
-                activeTabPanel.updateAssignmentTitle();
+                activeTabPanel.refreshWidget();
+                activeTabPanel.updateTitle();
             }
           }        
         },

@@ -136,4 +136,12 @@ class Group < ActiveRecord::Base
     end
   end
 
+  def class_capabilities_to_hash
+    class_capabilities.map {|capability| 
+      { :capability_type_iid => capability.capability_type.internal_identifier, 
+        :capability_resource_type => capability.capability_resource_type 
+      }
+    }.compact
+  end
+
 end

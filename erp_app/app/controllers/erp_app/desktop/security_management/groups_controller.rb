@@ -139,6 +139,22 @@ module ErpApp
           end
         end
         
+        def effective_security
+          begin
+            assign_to_id = params[:id]
+            u = Group.find(assign_to_id)
+
+            render :json => {:success => true, :capabilities => u.class_capabilities_to_hash }
+          rescue Exception => e
+            Rails.logger.error e.message
+            Rails.logger.error e.backtrace.join("\n")
+            render :inline => {
+              :success => false,
+              :message => e.message
+            }.to_json             
+          end
+        end
+
       end
     end
   end
