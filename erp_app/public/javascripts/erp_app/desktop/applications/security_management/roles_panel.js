@@ -124,7 +124,44 @@ Ext.define("Compass.ErpApp.Desktop.Applications.SecurityManagement.RolesPanel",{
             });
             newWindow.show();
           }
-        }        
+        },      
+        {
+          text:'Delete Role',
+          iconCls:'icon-delete',
+          handler:function(btn){
+            var all_roles = self.down('#all_roles').down('shared_dynamiceditablegrid');
+            var selection = all_roles.getSelectionModel().getSelection().first();
+            if (Ext.isEmpty(selection)){
+              Ext.Msg.alert('Please make a selection.');
+              return false;
+            }
+            Ext.MessageBox.confirm('Confirm', 'Are you sure?', function(btn){
+                  if(btn == 'no'){
+                    return false;
+                  }
+                  else if(btn == 'yes'){
+                    Ext.Ajax.request({
+                      url: '/erp_app/desktop/security_management/roles/delete',
+                      method: 'POST',
+                      params:{
+                        id: selection.get('id')
+                      },
+                      success: function(response) {
+                        var json_response = Ext.decode(response.responseText);
+                        if (json_response.success){
+                          all_roles.getStore().load();
+                        }else{
+                          Ext.Msg.alert('Error', Ext.decode(response.responseText).message);
+                        }
+                      },
+                      failure: function(response) {
+                        Ext.Msg.alert('Error', 'Error Retrieving Effective Security');
+                      }
+                    });
+                  }
+            });
+          }
+        }       
         ],
         items:[{
           xtype: 'security_management_role_grid',
