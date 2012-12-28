@@ -15,7 +15,7 @@ module ErpDevSvcs
         gem_names = ErpDevSvcs::Commands::Helper.compass_gem_names
 
         opt_parser = OptionParser.new do |opt|
-          opt.banner = "Usage: compass-util new_gem_owner --emails LISTOFEMAILS"
+          opt.banner = "Usage: compass_ae-dev new_gem_owner --emails LISTOFEMAILS"
 
           opt.on('-r', '--remove', String, "remove user from gem owner"){|r| options[:remove] = "-r"}
           

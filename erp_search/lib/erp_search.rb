@@ -1,5 +1,7 @@
 require 'erp_base_erp_svcs'
 
+require 'sunspot'
+
 require "erp_search/extensions"
 require "erp_search/version"
 require "erp_search/engine"

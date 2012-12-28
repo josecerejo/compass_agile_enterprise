@@ -28,7 +28,7 @@ when 'uninstall_gems'
   ErpDevSvcs::Commands::UninstallGems.execute
 else
   puts <<-EOT
-Usage: compass-util COMMAND [ARGS]
+Usage: compass_ae-dev COMMAND [ARGS]
 
 This app contains utility programs for Compass developers:
 

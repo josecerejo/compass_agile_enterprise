@@ -13,7 +13,7 @@ module ErpDevSvcs
         options = {:install => false, :gems => nil}
 
         opt_parser = OptionParser.new do |opt|
-          opt.banner = "Usage: compass-util uninstall_gems"
+          opt.banner = "Usage: compass_ae-dev uninstall_gems"
           
           opt.on("-g", "--gems [GEMLIST]", Array,
             "List of gems to uninstall; defaults to all") {|gem| options[:gems] = gem}

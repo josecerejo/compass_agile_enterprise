@@ -19,7 +19,7 @@ Gem::Specification.new do |s|
   s.test_files = Dir["spec/**/*"]
 
   s.bindir        = 'bin'
-  s.executables   = ['compass-util']
+  s.executables   = ['compass_ae-dev']
 
   #compass dependencies
   s.add_dependency 'erp_base_erp_svcs', '~> 3.1'
