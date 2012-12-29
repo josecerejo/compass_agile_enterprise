@@ -122,7 +122,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.SecurityManagement.GroupsPanel",
             var all_groups = self.down('#all_groups').down('shared_dynamiceditablegrid');
             var selection = all_groups.getSelectionModel().getSelection().first();
             if (Ext.isEmpty(selection)){
-              Ext.Msg.alert('Please make a selection.');
+              Ext.Msg.alert('Error','Please make a selection.');
               return false;
             }
             Ext.MessageBox.confirm('Confirm', 'Are you sure?', function(btn){
