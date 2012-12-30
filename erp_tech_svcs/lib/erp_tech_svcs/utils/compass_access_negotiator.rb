@@ -37,14 +37,6 @@ module ErpTechSvcs
         end
       end
 
-      # def valid_widgets(application)
-      #   widgets = []
-      #   application.widgets.each do |widget|
-      #     widgets << widget if self.has_access_to_widget?(widget)
-      #   end
-      #   widgets
-      # end
-      
       module Errors
         class CapabilityDoesNotExist < StandardError 
           def to_s

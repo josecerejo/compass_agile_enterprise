@@ -84,7 +84,7 @@ module ErpApp
                 :failedLoginCount =>  user.failed_logins_count,
                 :email => user.email,
                 :roles => user.all_roles.collect{|role| role.internal_identifier},
-                :capabilities => user.class_capabilites_to_hash,
+                :capabilities => user.class_capabilities_to_hash,
                 :id => user.id,
                 :description => user.party.to_s
               }

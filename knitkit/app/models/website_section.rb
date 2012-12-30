@@ -7,7 +7,7 @@ class WebsiteSection < ActiveRecord::Base
   include ErpTechSvcs::Utils::DefaultNestedSetMethods
   acts_as_versioned :table_name => :website_section_versions, :non_versioned_columns => %w{parent_id lft rgt}
   can_be_published
-  protected_by_capabilities
+  protected_with_capabilities
 
   belongs_to :website
   has_many :website_section_contents, :dependent => :destroy
@@ -15,7 +15,7 @@ class WebsiteSection < ActiveRecord::Base
 
   validates :title, :presence => {:message => 'Title cannot be blank'}
   validates_uniqueness_of :permalink, :scope => [:website_id, :parent_id]
-  validates_uniqueness_of :internal_identifier, :scope => :website_id
+  validates_uniqueness_of :internal_identifier, :scope => :website_id, :case_sensitive => false
 
   KNIT_KIT_ROOT = Knitkit::Engine.root.to_s
   WEBSITE_SECTIONS_TEMP_LAYOUT_PATH = "#{Knitkit::Engine.root.to_s}/app/views/knitkit/website_sections"
@@ -27,6 +27,15 @@ class WebsiteSection < ActiveRecord::Base
     def register_type(type)
       @@types << type
       @@types.uniq!
+    end
+  end
+
+  def secure
+    capability = self.add_capability(:view)
+    roles = ['admin', 'website_author', self.website.website_role_iid]
+    roles.each do |role|
+      role = SecurityRole.find_by_internal_identifier(role)
+      role.add_capability(capability)
     end
   end
 
@@ -68,7 +77,7 @@ class WebsiteSection < ActiveRecord::Base
   end
   
   def is_secured?
-    self.protected_by_capability?('view')
+    self.protected_with_capability?('view')
   end
 
   def is_document_section?
@@ -125,7 +134,7 @@ class WebsiteSection < ActiveRecord::Base
       :type => self.class.to_s,
       :in_menu => self.in_menu,
       :articles => [],
-      :roles => self.roles.collect{|role| role.internal_identifier},
+      :is_secured => self.is_secured?,
       :path => self.path,
       :permalink => self.permalink,
       :internal_identifier => self.internal_identifier,

@@ -6,17 +6,15 @@ class AddBillpayWidget
       app = Application.find_by_internal_identifier('crm')
 
       billpay = Widget.create(
-          :description => 'Bill Pay',
-          :internal_identifier => 'billpay',
-          :icon => 'icon-grid',
-          :xtype => 'billpay'
-        )
+        :description => 'Bill Pay',
+        :internal_identifier => 'billpay',
+        :icon => 'icon-grid',
+        :xtype => 'billpay'
+      )
 
       app.widgets << billpay
       app.save
 
-      billpay.roles << SecurityRole.find_by_internal_identifier('admin')
-      billpay.save
     end
   end
   

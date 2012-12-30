@@ -1,5 +1,5 @@
 class WebsiteHost < ActiveRecord::Base
-  protected_by_capabilities
+  protected_with_capabilities
 
   belongs_to :website
 end

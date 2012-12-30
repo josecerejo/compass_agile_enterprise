@@ -8,14 +8,37 @@ class Group < ActiveRecord::Base
   
   has_one :party, :as => :business_party
 
-  validates_uniqueness_of :description
+  validates_uniqueness_of :description, :case_sensitive => false
 
   def self.add(description)
     Group.create(:description => description)
   end
 
+  # roles this group does NOT have
+  def roles_not
+    party.roles_not
+  end
+
+  # roles this group has
   def roles
     party.security_roles
+  end
+
+  def has_role?(role)
+    role = role.is_a?(SecurityRole) ? role : SecurityRole.find_by_internal_identifier(role.to_s)
+    all_roles.include?(role)
+  end
+
+  def add_role(role)
+    party.add_role(role)
+  end
+
+  def remove_role(role)
+    party.remove_role(role)
+  end
+
+  def remove_all_roles
+    party.remove_all_roles
   end
 
   def create_party
@@ -47,12 +70,22 @@ class Group < ActiveRecord::Base
     PartyRelationship.where(:party_id_to => self.party.id)
   end
 
+  def join_party_relationships
+    "party_relationships ON party_id_to = #{self.party.id} AND party_id_from = parties.id"
+  end
+
   def members
-    party_relationships.all.collect{|pr| pr.from_party }
+    Party.joins("JOIN #{join_party_relationships}")
   end
   
+  # get users in this group
   def users
-    members.collect{|p| p.user }
+    User.joins(:party).joins("JOIN #{join_party_relationships}")
+  end
+
+  # get users not in this group
+  def users_not
+    User.joins(:party).joins("LEFT JOIN #{join_party_relationships}").where("party_relationships.id IS NULL")
   end
 
   # add user to group
@@ -101,6 +134,14 @@ class Group < ActiveRecord::Base
       Rails.logger.error e.message
       return nil
     end
+  end
+
+  def class_capabilities_to_hash
+    class_capabilities.map {|capability| 
+      { :capability_type_iid => capability.capability_type.internal_identifier, 
+        :capability_resource_type => capability.capability_resource_type 
+      }
+    }.compact
   end
 
 end

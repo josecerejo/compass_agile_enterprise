@@ -9,7 +9,7 @@ module ErpTechSvcs
 
 				module ClassMethods
 
-				  def protected_by_capabilities
+				  def protected_with_capabilities
 				    extend ProtectedByCapabilities::SingletonMethods
     				include ProtectedByCapabilities::InstanceMethods
     				
@@ -105,6 +105,10 @@ module ErpTechSvcs
             Capability.find_or_create_by_capability_resource_type_and_capability_type_id_and_scope_type_id(get_superclass(self.name), capability_type.id, scope_type.id)
           end   
 
+          def protect_with_capability(capability_type_iid)
+            add_capability(capability_type_iid)
+          end
+
           def get_capability(capability_type_iid)
             capability_type = convert_capability_type(capability_type_iid)
             scope_type = ScopeType.find_by_internal_identifier('class')
@@ -115,6 +119,10 @@ module ErpTechSvcs
           def remove_capability(capability_type_iid)
             capability = get_capability(capability_type_iid)
             capability.destroy unless capability.nil?
+          end
+
+          def unprotect_with_capability(capability_type_iid)
+            remove_capability(capability_type_iid)
           end
 
           def convert_capability_type(type)
@@ -132,12 +140,16 @@ module ErpTechSvcs
             capability
           end   
 
+          def protect_with_capability(capability_type_iid)
+            add_capability(capability_type_iid)
+          end
+
           def get_capability(capability_type_iid)
             capability_type = convert_capability_type(capability_type_iid)
             capabilities.where(:capability_type_id => capability_type.id).first
           end   
 
-          def protected_by_capability?(capability_type_iid)
+          def protected_with_capability?(capability_type_iid)
             !get_capability(capability_type_iid).nil?
           end
 
@@ -148,7 +160,11 @@ module ErpTechSvcs
             capability
           end
 
-				  def protected_by_capabilities?
+          def unprotect_with_capability(capability_type_iid)
+            remove_capability(capability_type_iid)
+          end
+
+				  def protected_with_capabilities?
             !capabilities.empty?
           end
 
