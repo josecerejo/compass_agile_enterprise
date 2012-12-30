@@ -79,6 +79,28 @@ module ErpApp
           end
         end
 
+        def update
+          begin
+            description = params[:description].strip
+
+            unless description.blank? or params[:id].blank?
+              g = Group.find(params[:id])
+              g.description = description
+              g.save
+              render :json => {:success => true, :message => 'Group updated'}
+            else
+              raise "Group name blank or no group ID"
+            end
+          rescue Exception => e
+            Rails.logger.error e.message
+            Rails.logger.error e.backtrace.join("\n")
+            render :inline => {
+              :success => false,
+              :message => e.message
+            }.to_json             
+          end
+        end
+
         def delete
           begin
             unless params[:id].blank?

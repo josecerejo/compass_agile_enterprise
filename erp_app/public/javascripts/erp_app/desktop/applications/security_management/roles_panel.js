@@ -127,7 +127,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.SecurityManagement.RolesPanel",{
         },      
         {
           text:'Edit Role',
-          iconCls:'icon-add',
+          iconCls:'icon-edit',
           handler:function(btn){
             var all_roles = self.down('#all_roles').down('shared_dynamiceditablegrid');
             var selection = all_roles.getSelectionModel().getSelection().first();

@@ -116,6 +116,95 @@ Ext.define("Compass.ErpApp.Desktop.Applications.SecurityManagement.GroupsPanel",
           }
         },
         {
+          text:'Edit Group',
+          iconCls:'icon-edit',
+          handler:function(btn){
+            var all_groups = self.down('#all_groups').down('shared_dynamiceditablegrid');
+            var selection = all_groups.getSelectionModel().getSelection().first();
+            if (Ext.isEmpty(selection)){
+              Ext.Msg.alert('Error','Please make a selection.');
+              return false;
+            }
+            var newWindow = Ext.create("Ext.window.Window",{
+              layout:'fit',
+              width:375,
+              title:'Edit Group',
+              height:100,
+              plain: true,
+              buttonAlign:'center',
+              items: Ext.create('Ext.form.Panel',{
+                labelWidth: 110,
+                frame:false,
+                bodyStyle:'padding:5px 5px 0',
+                url:'/erp_app/desktop/security_management/groups/update',
+                defaults: {
+                  width: 225
+                },
+                items: [
+                {
+                  xtype:'textfield',
+                  fieldLabel:'Group Name',
+                  allowBlank:false,
+                  name:'description',
+                  listeners:{
+                    afterrender:function(field){
+                        field.focus(false, 200);
+                    },
+                    specialkey: function(field, e){
+                      if (e.getKey() == e.ENTER) {
+                        var button = field.findParentByType('window').down('#submitButton');
+                        button.fireEvent('click', button);
+                      }
+                    } 
+                  }
+                }
+                ]
+              }),
+              buttons: [{
+                text:'Submit',
+                itemId: 'submitButton',
+                listeners:{
+                  'click':function(button){
+                    var formPanel = button.findParentByType('window').down('form');
+                    formPanel.getForm().submit({
+                      params:{
+                        id: selection.get('id'),
+                        description: selection.get('description')
+                      },
+                      success:function(form, action){
+                        var obj =  Ext.decode(action.response.responseText);
+                        if(obj.success){
+                          var all_groups = self.down('#all_groups').down('shared_dynamiceditablegrid');
+                          all_groups.getStore().load();
+                          newWindow.close();
+                        }
+                        else{
+                          Ext.Msg.alert("Error", obj.message);
+                        }
+                      },
+                      failure:function(form, action){
+                        var obj =  Ext.decode(action.response.responseText);
+                        if(obj !== null){
+                          Ext.Msg.alert("Error", obj.message);
+                        }
+                        else{
+                          Ext.Msg.alert("Error", "Error importing website");
+                        }
+                      }
+                    });
+                  }
+                }
+              },{
+                text: 'Close',
+                handler: function(){
+                  newWindow.close();
+                }
+              }]
+            });
+            newWindow.show();
+          }
+        },        
+        {
           text:'Delete Group',
           iconCls:'icon-delete',
           handler:function(btn){
