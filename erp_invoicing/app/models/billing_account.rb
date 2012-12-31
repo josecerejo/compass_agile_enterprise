@@ -22,7 +22,8 @@ class BillingAccount < ActiveRecord::Base
   has_one  :recurring_payment, :dependent => :destroy
 
   def self.find_by_account_number(account_number)
-    self.includes(:financial_txn_account).where(:financial_txn_accounts => {:account_number => account_number.to_s}).first
+    #self.includes(:financial_txn_account).where(:financial_txn_accounts => {:account_number => account_number.to_s}).first
+    self.where(:account_number => account_number.to_s).first
   end
 
   def has_recurring_payment_enabled?
@@ -59,7 +60,7 @@ class BillingAccount < ActiveRecord::Base
     unless self.calculate_balance_strategy_type.nil?
       case self.calculate_balance_strategy_type.internal_identifier
         when 'invoices_and_payments'
-          (self.invoices.balance.amount - self.total_payments)
+          (self.invoices.all.sum(&:calculate_balance) - self.total_payments)
         when 'payments'
           balance_amt = (self.balance - self.total_payments)
           balance_amt == 0 ? 0 : balance_amt.round(2)
@@ -67,7 +68,7 @@ class BillingAccount < ActiveRecord::Base
           self.balance == 0 ? 0 : self.balance.round(2)
       end
     else
-      self.balance == 0 ? 0 : self.balance.round(2)
+      14#self.balance == 0 ? 0 : self.balance.round(2)
     end
   end
 
