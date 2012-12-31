@@ -2,10 +2,6 @@ Ext.define("Compass.ErpApp.Desktop.Applications.SecurityManagement.GroupsPanel",
   extend:"Ext.panel.Panel",
   alias:'widget.security_management_groupspanel',
 
-  initComponent: function() {
-    Compass.ErpApp.Desktop.Applications.SecurityManagement.GroupsPanel.superclass.initComponent.call(this, arguments);
-  },
-
   setGroup : function(record){
     var assign_to_id = record.get('id');
     var assign_to_description = record.get('description');
@@ -288,7 +284,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.SecurityManagement.GroupsPanel",
 
     }, config);
 
-    Compass.ErpApp.Desktop.Applications.SecurityManagement.GroupsPanel.superclass.constructor.call(this, config);
+    this.callParent([config]);
   }
 
 });

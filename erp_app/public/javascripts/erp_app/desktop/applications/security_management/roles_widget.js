@@ -2,10 +2,6 @@ Ext.define("Compass.ErpApp.Desktop.Applications.SecurityManagement.RolesWidget",
   extend:"Ext.panel.Panel",
   alias:'widget.security_management_roleswidget',
 
-  initComponent: function() {
-    Compass.ErpApp.Desktop.Applications.SecurityManagement.RolesWidget.superclass.initComponent.call(this, arguments);
-  },
-
   updateTitle : function(){
     if (this.assign_to_description){
       this.down('#assignment').setTitle('Assign Roles to '+this.assign_to+' '+this.assign_to_description);
@@ -97,7 +93,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.SecurityManagement.RolesWidget",
 
     }, config);
 
-    Compass.ErpApp.Desktop.Applications.SecurityManagement.RolesWidget.superclass.constructor.call(this, config);
+    this.callParent([config]);
   }
 });
 

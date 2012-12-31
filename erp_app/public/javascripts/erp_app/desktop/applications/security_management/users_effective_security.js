@@ -2,10 +2,6 @@ Ext.define("Compass.ErpApp.Desktop.Applications.SecurityManagement.UsersEffectiv
   extend:"Ext.panel.Panel",
   alias:'widget.security_management_userseffectivesecurity',
 
-  initComponent: function() {
-    Compass.ErpApp.Desktop.Applications.SecurityManagement.UsersEffectiveSecurity.superclass.initComponent.call(this, arguments);
-  },
-
   updateTitle : function(){
     if (this.assign_to_description){
       this.down('#effective').setTitle('Effective Security for User '+this.assign_to_description);
@@ -120,6 +116,6 @@ Ext.define("Compass.ErpApp.Desktop.Applications.SecurityManagement.UsersEffectiv
 
     }, config);
 
-    Compass.ErpApp.Desktop.Applications.SecurityManagement.UsersEffectiveSecurity.superclass.constructor.call(this, config);
+    this.callParent([config]);
   }
 });

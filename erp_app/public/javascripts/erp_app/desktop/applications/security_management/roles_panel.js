@@ -2,10 +2,6 @@ Ext.define("Compass.ErpApp.Desktop.Applications.SecurityManagement.RolesPanel",{
   extend:"Ext.panel.Panel",
   alias:'widget.security_management_rolespanel',
 
-  initComponent: function() {
-    Compass.ErpApp.Desktop.Applications.SecurityManagement.RolesPanel.superclass.initComponent.call(this, arguments);
-  },
-
   setRole : function(record){
     var assign_to_id = record.get('id');
     var assign_to_description = record.get('description');
@@ -292,7 +288,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.SecurityManagement.RolesPanel",{
 
     }, config);
 
-    Compass.ErpApp.Desktop.Applications.SecurityManagement.RolesPanel.superclass.constructor.call(this, config);
+    this.callParent([config]);
   }
 
 });

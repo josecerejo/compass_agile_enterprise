@@ -2,10 +2,6 @@ Ext.define("Compass.ErpApp.Desktop.Applications.SecurityManagement.UsersPanel",{
   extend:"Ext.panel.Panel",
   alias:'widget.security_management_userspanel',
 
-  initComponent: function() {
-    Compass.ErpApp.Desktop.Applications.SecurityManagement.UsersPanel.superclass.initComponent.call(this, arguments);
-  },
-
   setUser : function(field){
     var assign_to_id = field.getValue();
     var assign_to_username = field.getStore().getById(assign_to_id).data.username;
@@ -89,7 +85,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.SecurityManagement.UsersPanel",{
 
     }, config);
 
-    Compass.ErpApp.Desktop.Applications.SecurityManagement.UsersPanel.superclass.constructor.call(this, config);
+    this.callParent([config]);
   }
 
 });

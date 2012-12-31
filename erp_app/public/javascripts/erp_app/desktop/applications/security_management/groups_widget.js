@@ -2,10 +2,6 @@ Ext.define("Compass.ErpApp.Desktop.Applications.SecurityManagement.GroupsWidget"
   extend:"Ext.panel.Panel",
   alias:'widget.security_management_groupswidget',
 
-  initComponent: function() {
-    Compass.ErpApp.Desktop.Applications.SecurityManagement.GroupsWidget.superclass.initComponent.call(this, arguments);
-  },
-
   updateTitle : function(){
     if (this.assign_to_description){
       this.down('#assignment').setTitle('Assign Groups to '+this.assign_to+' '+this.assign_to_description);
@@ -97,7 +93,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.SecurityManagement.GroupsWidget"
 
     }, config);
 
-    Compass.ErpApp.Desktop.Applications.SecurityManagement.GroupsWidget.superclass.constructor.call(this, config);
+    this.callParent([config]);
   }
 });
 
