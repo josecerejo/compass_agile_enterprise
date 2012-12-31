@@ -116,11 +116,11 @@ class User < ActiveRecord::Base
     (role_class_capabilities + group_class_capabilities + class_capabilities).uniq
   end
 
-  def class_capabilites_to_hash
-    all_capabilities.map {|capability| 
+  def class_capabilities_to_hash
+    all_class_capabilities.map {|capability| 
       { :capability_type_iid => capability.capability_type.internal_identifier, 
         :capability_resource_type => capability.capability_resource_type 
-      } if capability.scope_type.internal_identifier == 'class'
+      }
     }.compact
   end
 

@@ -34,7 +34,7 @@ class UpgradeSecurity < ActiveRecord::Migration
     end
 
     unless table_exists?(:parties_security_roles)
-      create_table :parties_security_roles do |t|
+      create_table :parties_security_roles, :id => false do |t|
         t.integer :party_id
         t.integer :security_role_id
       end

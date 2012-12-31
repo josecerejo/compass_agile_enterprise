@@ -23,6 +23,10 @@ Ext.define("Compass.ErpApp.Desktop.Applications.SecurityManagement.UsersPanel",{
     var security_management_capabilitieswidget = security_management_userspanel.down('security_management_capabilitieswidget');
     security_management_capabilitieswidget.assign_to_id = assign_to_id;
     security_management_capabilitieswidget.assign_to_description = assign_to_username;
+
+    var security_management_userseffectivesecurity = security_management_userspanel.down('security_management_userseffectivesecurity');
+    security_management_userseffectivesecurity.assign_to_id = assign_to_id;
+    security_management_userseffectivesecurity.assign_to_description = assign_to_username;
   },
 
   constructor : function(config) {
@@ -53,8 +57,8 @@ Ext.define("Compass.ErpApp.Desktop.Applications.SecurityManagement.UsersPanel",{
 
                         // get active tabpanel
                         var activeTabPanel = field.findParentByType('security_management_userspanel').down('tabpanel').getActiveTab();
-                        activeTabPanel.reloadGrids();
-                        activeTabPanel.updateAssignmentTitle();
+                        activeTabPanel.refreshWidget();
+                        activeTabPanel.updateTitle();
                     }
                 }
             }
@@ -74,7 +78,11 @@ Ext.define("Compass.ErpApp.Desktop.Applications.SecurityManagement.UsersPanel",{
                 {
                     xtype:'security_management_capabilitieswidget',
                     assign_to: 'User'
+                },
+                {
+                    xtype:'security_management_userseffectivesecurity'
                 }
+                
             ]
         }
       ]

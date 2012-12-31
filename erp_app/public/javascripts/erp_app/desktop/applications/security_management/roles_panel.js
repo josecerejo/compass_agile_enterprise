@@ -124,7 +124,131 @@ Ext.define("Compass.ErpApp.Desktop.Applications.SecurityManagement.RolesPanel",{
             });
             newWindow.show();
           }
-        }        
+        },      
+        {
+          text:'Edit Role',
+          iconCls:'icon-edit',
+          handler:function(btn){
+            var all_roles = self.down('#all_roles').down('shared_dynamiceditablegrid');
+            var selection = all_roles.getSelectionModel().getSelection().first();
+            if (Ext.isEmpty(selection)){
+              Ext.Msg.alert('Error','Please make a selection.');
+              return false;
+            }
+            var newWindow = Ext.create("Ext.window.Window",{
+              layout:'fit',
+              width:375,
+              title:'Edit Role',
+              plain: true,
+              buttonAlign:'center',
+              items: Ext.create('Ext.form.Panel',{
+                labelWidth: 110,
+                frame:false,
+                bodyStyle:'padding:5px 5px 0',
+                url:'/erp_app/desktop/security_management/roles/update',
+                defaults: {
+                  width: 225
+                },
+                items: [
+                {
+                  xtype:'textfield',
+                  fieldLabel:'Role Name',
+                  allowBlank:false,
+                  name:'description',
+                  value: selection.get('description'),
+                  listeners:{
+                    afterrender:function(field){
+                        field.focus(true, 200);
+                    },
+                    specialkey: function(field, e){
+                      if (e.getKey() == e.ENTER) {
+                        var button = field.findParentByType('window').down('#submitButton');
+                        button.fireEvent('click', button);
+                      }
+                    } 
+                  }
+                }
+                ]
+              }),
+              buttons: [{
+                text:'Submit',
+                itemId: 'submitButton',
+                listeners:{
+                  'click':function(button){
+                    var formPanel = button.findParentByType('window').down('form');
+                    formPanel.getForm().submit({
+                      params:{
+                        id: selection.get('id')
+                      },
+                      success:function(form, action){
+                        var obj =  Ext.decode(action.response.responseText);
+                        if(obj.success){
+                          var all = self.down('#all_roles').down('shared_dynamiceditablegrid');
+                          all.getStore().load();
+                          newWindow.close();
+                        }
+                        else{
+                          Ext.Msg.alert("Error", obj.message);
+                        }
+                      },
+                      failure:function(form, action){
+                        var obj =  Ext.decode(action.response.responseText);
+                        if(obj !== null){
+                          Ext.Msg.alert("Error", obj.message);
+                        }
+                        else{
+                          Ext.Msg.alert("Error", "Error importing website");
+                        }
+                      }
+                    });
+                  }
+                }
+              },{
+                text: 'Close',
+                handler: function(){
+                  newWindow.close();
+                }
+              }]
+            });
+            newWindow.show();
+          }
+        },        {
+          text:'Delete Role',
+          iconCls:'icon-delete',
+          handler:function(btn){
+            var all_roles = self.down('#all_roles').down('shared_dynamiceditablegrid');
+            var selection = all_roles.getSelectionModel().getSelection().first();
+            if (Ext.isEmpty(selection)){
+              Ext.Msg.alert('Error','Please make a selection.');
+              return false;
+            }
+            Ext.MessageBox.confirm('Confirm', 'Are you sure?', function(btn){
+                  if(btn == 'no'){
+                    return false;
+                  }
+                  else if(btn == 'yes'){
+                    Ext.Ajax.request({
+                      url: '/erp_app/desktop/security_management/roles/delete',
+                      method: 'POST',
+                      params:{
+                        id: selection.get('id')
+                      },
+                      success: function(response) {
+                        var json_response = Ext.decode(response.responseText);
+                        if (json_response.success){
+                          all_roles.getStore().load();
+                        }else{
+                          Ext.Msg.alert('Error', Ext.decode(response.responseText).message);
+                        }
+                      },
+                      failure: function(response) {
+                        Ext.Msg.alert('Error', 'Error Retrieving Effective Security');
+                      }
+                    });
+                  }
+            });
+          }
+        }       
         ],
         items:[{
           xtype: 'security_management_role_grid',
@@ -143,8 +267,8 @@ Ext.define("Compass.ErpApp.Desktop.Applications.SecurityManagement.RolesPanel",{
 
                 // get active tabpanel
                 var activeTabPanel = grid.findParentByType('security_management_rolespanel').down('tabpanel').getActiveTab();
-                activeTabPanel.reloadGrids();
-                activeTabPanel.updateAssignmentTitle();
+                activeTabPanel.refreshWidget();
+                activeTabPanel.updateTitle();
             }
           }        
         },

@@ -79,6 +79,46 @@ module ErpApp
           end
         end
 
+        def update
+          begin
+            description = params[:description].strip
+
+            unless description.blank? or params[:id].blank?
+              g = Group.find(params[:id])
+              g.description = description
+              g.save
+              render :json => {:success => true, :message => 'Group updated'}
+            else
+              raise "Group name blank or no group ID"
+            end
+          rescue Exception => e
+            Rails.logger.error e.message
+            Rails.logger.error e.backtrace.join("\n")
+            render :inline => {
+              :success => false,
+              :message => e.message
+            }.to_json             
+          end
+        end
+
+        def delete
+          begin
+            unless params[:id].blank?
+              Group.destroy(params[:id]) 
+              render :json => {:success => true, :message => 'Group deleted'}
+            else
+              raise "No Group ID"
+            end
+          rescue Exception => e
+            Rails.logger.error e.message
+            Rails.logger.error e.backtrace.join("\n")
+            render :inline => {
+              :success => false,
+              :message => e.message
+            }.to_json             
+          end
+        end
+
         def add
           begin
             assign_to = params[:assign_to]
@@ -139,6 +179,22 @@ module ErpApp
           end
         end
         
+        def effective_security
+          begin
+            assign_to_id = params[:id]
+            u = Group.find(assign_to_id)
+
+            render :json => {:success => true, :capabilities => u.class_capabilities_to_hash }
+          rescue Exception => e
+            Rails.logger.error e.message
+            Rails.logger.error e.backtrace.join("\n")
+            render :inline => {
+              :success => false,
+              :message => e.message
+            }.to_json             
+          end
+        end
+
       end
     end
   end

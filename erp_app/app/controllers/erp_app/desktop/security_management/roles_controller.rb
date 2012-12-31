@@ -82,6 +82,46 @@ module ErpApp
           end
         end
 
+        def update
+          begin
+            description = params[:description].strip
+
+            unless description.blank? or params[:id].blank?
+              r = SecurityRole.find(params[:id])
+              r.description = description
+              r.save
+              render :json => {:success => true, :message => 'Security Role updated'}
+            else
+              raise "Role name blank or no role ID"
+            end
+          rescue Exception => e
+            Rails.logger.error e.message
+            Rails.logger.error e.backtrace.join("\n")
+            render :inline => {
+              :success => false,
+              :message => e.message
+            }.to_json             
+          end
+        end
+
+        def delete
+          begin
+            unless params[:id].blank?
+              SecurityRole.destroy(params[:id])
+              render :json => {:success => true, :message => 'Security Role deleted'}
+            else
+              raise "No Role ID"
+            end
+          rescue Exception => e
+            Rails.logger.error e.message
+            Rails.logger.error e.backtrace.join("\n")
+            render :inline => {
+              :success => false,
+              :message => e.message
+            }.to_json             
+          end
+        end
+
         def add
           begin
             assign_to = params[:assign_to]

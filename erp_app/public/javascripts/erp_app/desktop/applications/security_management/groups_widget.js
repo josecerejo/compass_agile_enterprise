@@ -6,13 +6,13 @@ Ext.define("Compass.ErpApp.Desktop.Applications.SecurityManagement.GroupsWidget"
     Compass.ErpApp.Desktop.Applications.SecurityManagement.GroupsWidget.superclass.initComponent.call(this, arguments);
   },
 
-  updateAssignmentTitle : function(){
+  updateTitle : function(){
     if (this.assign_to_description){
       this.down('#assignment').setTitle('Assign Groups to '+this.assign_to+' '+this.assign_to_description);
     }
   },
 
-  reloadGrids : function(tab){
+  refreshWidget : function(tab){
     if (tab === undefined) tab = this;
 
     if (tab.assign_to_id){
@@ -90,8 +90,8 @@ Ext.define("Compass.ErpApp.Desktop.Applications.SecurityManagement.GroupsWidget"
       ],
       listeners:{
         activate: function(tab){
-          self.reloadGrids(tab);
-          self.updateAssignmentTitle();
+          self.refreshWidget(tab);
+          self.updateTitle();
         }
       }
 

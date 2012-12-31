@@ -65,26 +65,6 @@ module ErpApp
           render :json => {:total => ar.count, :data => selected.map{|x| {:username => x.username, :email => x.email, :first_name => x.party.business_party.current_first_name, :last_name => x.party.business_party.current_last_name, :id => x.id}}}
         end
 
-        def create
-          begin
-            description = params[:description].strip
-
-            unless description.blank?
-              Group.create(:description => params[:description]) 
-              render :json => {:success => true, :message => 'Group created'}
-            else
-              raise "Group name blank"
-            end
-          rescue Exception => e
-            Rails.logger.error e.message
-            Rails.logger.error e.backtrace.join("\n")
-            render :inline => {
-              :success => false,
-              :message => e.message
-            }.to_json             
-          end
-        end
-
         def add
           begin
             assign_to = params[:assign_to]
@@ -145,6 +125,22 @@ module ErpApp
           end
         end
         
+        def effective_security
+          begin
+            assign_to_id = params[:id]
+            u = User.find(assign_to_id)
+
+            render :json => {:success => true, :roles => u.all_roles, :capabilities => u.class_capabilities_to_hash }
+          rescue Exception => e
+            Rails.logger.error e.message
+            Rails.logger.error e.backtrace.join("\n")
+            render :inline => {
+              :success => false,
+              :message => e.message
+            }.to_json             
+          end
+        end
+
       end
     end
   end
