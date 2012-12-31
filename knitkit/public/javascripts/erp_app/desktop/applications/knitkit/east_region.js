@@ -8,27 +8,15 @@ Ext.define("Compass.ErpApp.Desktop.Applications.Knitkit.EastRegion",{
         this.fileAssetsPanel = Ext.create('Compass.ErpApp.Desktop.Applications.Knitkit.FileAssetsPanel', { module: config.module });
         this.items = [];
 
-        if (currentUser.hasApplicationCapability('knitkit', {
-            capability_type_iid:'view',
-            resource:'GlobalImageAsset'
-        }) || currentUser.hasApplicationCapability('knitkit', {
-            capability_type_iid:'view',
-            resource:'SiteImageAsset'}))
-        {
-            this.items.push(this.imageAssetsPanel);
+        if (currentUser.hasCapability('view','GlobalImageAsset') || currentUser.hasCapability('view','SiteImageAsset')){
+            this.items.push(this.imageAssetsPanel.layout);
         }
 
-        if (currentUser.hasApplicationCapability('knitkit', {
-            capability_type_iid:'view',
-            resource:'GlobalFileAsset'
-        }) || currentUser.hasApplicationCapability('knitkit', {
-            capability_type_iid:'view',
-            resource:'SiteFileAsset'}))
-        {
-            this.items.push(this.fileAssetsPanel);
+        if (currentUser.hasCapability('view','GlobalFileAsset') || currentUser.hasCapability('view','SiteFileAsset')){
+            this.items.push(this.fileAssetsPanel.layout);
         }
         
-        this.items.push(this.widgetsPanel);
+        this.items.push(this.widgetsPanel.layout);
 
         config = Ext.apply({
             deferredRender:false,

@@ -7,7 +7,7 @@ module Knitkit
           result = {:success => true}
           model = DesktopApplication.find_by_internal_identifier('knitkit')
           begin
-            current_user.with_capability(model, 'edit_html', 'Article') do
+            current_user.with_capability('edit_html', 'Content') do
               id      = params[:id]
               html    = params[:html]
               content = Content.find(id)
@@ -35,7 +35,7 @@ module Knitkit
           result = {:success => true}
           model = DesktopApplication.find_by_internal_identifier('knitkit')
           begin
-            current_user.with_capability(model, 'edit_excerpt', 'Article') do
+            current_user.with_capability('edit_excerpt', 'Content') do
               id      = params[:id]
               html    = params[:html]
               content = Content.find(id)

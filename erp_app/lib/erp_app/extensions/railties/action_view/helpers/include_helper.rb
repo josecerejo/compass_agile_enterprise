@@ -86,12 +86,13 @@ module ErpApp
                 :lastActivityAt => user.last_activity_at,
                 :failedLoginCount =>  user.failed_logins_count,
                 :email => user.email,
-                :roles => user.roles.collect{|role| role.internal_identifier},
+                :roles => user.all_roles.collect{|role| role.internal_identifier},
+                :capabilities => user.class_capabilities_to_hash,
                 :id => user.id,
                 :description => user.party.to_s
               }
-              js_string = static_javascript_include_tag('erp_app/authentication/compass_user.js', 'erp_app/authentication/widget_manager.js')
-              js_string << (raw "<script type='text/javascript'>var applicationRoleManager = new ErpApp.CompassAccessNegotiator.ApplicationRoleManager(#{app_container.applications.collect{|application| application.to_access_hash}.to_json});var currentUser = new ErpApp.CompassAccessNegotiator.CompassUser(#{current_user.to_json}, applicationRoleManager);</script>")
+              js_string = static_javascript_include_tag('erp_app/authentication/compass_user.js')
+              js_string << (raw "<script type='text/javascript'>var currentUser = new ErpApp.CompassAccessNegotiator.CompassUser(#{current_user.to_json});</script>")
               js_string
             end
 

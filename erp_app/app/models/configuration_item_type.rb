@@ -1,7 +1,7 @@
 class ConfigurationItemType < ActiveRecord::Base
   attr_protected :created_at, :updated_at
   
-  validates :internal_identifier, :uniqueness => true
+  validates :internal_identifier, :uniqueness => {:case_sensitive => false}
 
   has_many :configuration_item_type_configuration_options
   has_many :configuration_options, :through => :configuration_item_type_configuration_options, :uniq => true do

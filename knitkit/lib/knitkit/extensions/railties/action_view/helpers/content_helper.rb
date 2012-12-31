@@ -40,9 +40,9 @@ module Knitkit
             def render_content_area(name)
               html = ''
 
-              section_contents = WebsiteSectionContent.includes(:content)
-                                 .where(:website_section_id => @website_section.id, :content_area => name.to_s)
-                                 .order(:position).all
+              section_contents = WebsiteSectionContent.includes(:content).
+                                 where(:website_section_id => @website_section.id, :content_area => name.to_s).
+                                 order(:position).all
               published_contents = []
               section_contents.each do |sc|
                 content_version = Content.get_published_version(@active_publication, sc.content)
@@ -64,12 +64,11 @@ module Knitkit
             
             def can_inline_edit?
               result = false
-              model = DesktopApplication.find_by_internal_identifier('knitkit')
-              unless ((current_user.nil? or current_user === false))
-                if ((current_user.has_capability?(model, 'edit_html', 'Article') rescue false))
+              unless (current_user.nil? or current_user === false)
+                if (current_user.has_capability?('edit_html', 'Content') rescue false)
                   if (@website.configurations.first.get_configuration_item(:auto_active_publications).options.first.value == 'yes' and @website.configurations.first.get_configuration_item(:publish_on_save).options.first.value == 'yes')
                     result = true
-                  end #make sure auto acitvate and publish on save our set
+                  end #make sure auto activate and publish on save our set
                 end #make sure they have this capability
               end #check for user
               result

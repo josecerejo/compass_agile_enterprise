@@ -9,10 +9,7 @@ Compass.ErpApp.Desktop.Applications.Knitkit.addWebsiteOptions = function (self, 
         }
     });
 
-    if (currentUser.hasApplicationCapability('knitkit', {
-        capability_type_iid:'publish',
-        resource:'Website'
-    })) {
+    if (currentUser.hasCapability('publish','Website')) {
         items.push({
             text:'Publish',
             iconCls:'icon-document_up',
@@ -44,10 +41,7 @@ Compass.ErpApp.Desktop.Applications.Knitkit.addWebsiteOptions = function (self, 
         }
     });
 
-    if (currentUser.hasApplicationCapability('knitkit', {
-        capability_type_iid:'edit',
-        resource:'Website'
-    })) {
+    if (currentUser.hasCapability('edit','Website')) {
         items.push({
             text:'Update Website',
             iconCls:'icon-edit',
@@ -110,7 +104,6 @@ Compass.ErpApp.Desktop.Applications.Knitkit.addWebsiteOptions = function (self, 
                                                 record.data['name'] = form.findField('name').getValue();
                                                 record.data['title'] = form.findField('title').getValue();
                                                 record.data['subtitle'] = form.findField('subtitle').getValue();
-                                                record.data['email'] = form.findField('email').getValue();
                                                 //node.setText(node.attributes['title']);
                                                 editWebsiteWindow.close();
                                             },
@@ -136,10 +129,7 @@ Compass.ErpApp.Desktop.Applications.Knitkit.addWebsiteOptions = function (self, 
         });
     }
 
-    if (currentUser.hasApplicationCapability('knitkit', {
-        capability_type_iid:'delete',
-        resource:'Website'
-    })) {
+    if (currentUser.hasCapability('delete','Website')) {
         items.push({
             text:'Delete',
             iconCls:'icon-delete',
@@ -162,4 +152,4 @@ Compass.ErpApp.Desktop.Applications.Knitkit.addWebsiteOptions = function (self, 
     });
 
     return items;
-}
+};

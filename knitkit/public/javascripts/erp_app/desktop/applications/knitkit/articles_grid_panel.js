@@ -214,11 +214,7 @@ var columnItems = [];
             }]
         });
 
-        if (currentUser.hasApplicationCapability('knitkit', {
-            capability_type_iid:'edit',
-            resource:'Article'
-        }))
-
+        if (currentUser.hasCapability('edit','Content'))
         {
             columnItems.push(
             {
@@ -259,11 +255,7 @@ var columnItems = [];
             }]
         });
 
-        if (currentUser.hasApplicationCapability('knitkit', {
-            capability_type_iid:'edit_excerpt',
-            resource:'Article'
-        }))
-
+        if (currentUser.hasCapability('edit_excerpt','Content'))
         {
             columnItems.push(
             {
@@ -304,11 +296,7 @@ var columnItems = [];
             }]
         });
 
-        if (currentUser.hasApplicationCapability('knitkit', {
-            capability_type_iid:'delete',
-            resource:'Article'
-        }))
-
+        if (currentUser.hasCapability('delete','Content'))
         {
             columnItems.push(
             {
@@ -341,11 +329,7 @@ var columnItems = [];
 
         var tbarItems = [];
 
-        if (currentUser.hasApplicationCapability('knitkit', {
-            capability_type_iid:'create',
-            resource:'Article'
-        }))
-
+        if (currentUser.hasCapability('create','Content'))
         {
             tbarItems.push(
             {

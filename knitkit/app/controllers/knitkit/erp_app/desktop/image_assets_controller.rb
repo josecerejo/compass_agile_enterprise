@@ -21,7 +21,7 @@ module Knitkit
 
           model = DesktopApplication.find_by_internal_identifier('knitkit')
           begin
-            current_user.with_capability(model, capability_type, capability_resource) do
+            current_user.with_capability(capability_type, capability_resource) do
               result = {}
               upload_path = params[:directory]
               name = params[:name]
@@ -61,7 +61,7 @@ module Knitkit
           begin
             result = false
             nodes_to_delete.each do |path|
-              current_user.with_capability(model, capability_type, capability_resource) do
+              current_user.with_capability(capability_type, capability_resource) do
                 path = "#{path}/" if params[:leaf] == 'false' and path.match(/\/$/).nil?
                 begin
                   name = File.basename(path)

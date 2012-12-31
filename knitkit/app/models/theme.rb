@@ -10,6 +10,7 @@ class Theme < ActiveRecord::Base
   @knitkit_website_stylesheets_path = "#{Knitkit::Engine.root.to_s}/public/stylesheets/knitkit"
   @knitkit_website_images_path = "#{Knitkit::Engine.root.to_s}/public/images/knitkit"
 
+  protected_with_capabilities
   has_file_assets
 
   class << self
@@ -59,7 +60,7 @@ class Theme < ActiveRecord::Base
   end
 
   validates :name, :presence => {:message => 'Name cannot be blank'}
-  validates_uniqueness_of :theme_id, :scope => :website_id
+  validates_uniqueness_of :theme_id, :scope => :website_id, :case_sensitive => false
 
   before_destroy :delete_theme_files!
 

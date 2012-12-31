@@ -5,9 +5,8 @@ module Knitkit
         before_filter :set_website_section, :only => [:detach_article, :update, :update_security, :add_layout, :get_layout, :save_layout]
 
         def new
-          model = DesktopApplication.find_by_internal_identifier('knitkit')
           begin
-            current_user.with_capability(model, 'create', 'Section') do
+            current_user.with_capability('create', 'WebsiteSection') do
               website = Website.find(params[:website_id])
               website_section = nil
 
@@ -55,9 +54,8 @@ module Knitkit
         end
 
         def delete
-          model = DesktopApplication.find_by_internal_identifier('knitkit')
           begin
-            current_user.with_capability(model, 'delete', 'Section') do
+            current_user.with_capability('delete', 'WebsiteSection') do
               render :json => WebsiteSection.destroy(params[:id]) ? {:success => true} : {:success => false}
             end
           rescue ErpTechSvcs::Utils::CompassAccessNegotiator::Errors::UserDoesNotHaveCapability=>ex
@@ -71,13 +69,17 @@ module Knitkit
         end
 
         def update_security
-          model = DesktopApplication.find_by_internal_identifier('knitkit')
-          if current_user.has_capability?(model, 'secure', 'Section') or current_user.has_capability?(model, 'unsecure', 'Section')
-            website = Website.find(params[:site_id])
-            if(params[:secure] == "true")
-              @website_section.add_role(website.role)
+          if current_user.has_capability?('secure', 'WebsiteSection') or current_user.has_capability?('unsecure', 'WebsiteSection')
+
+            if params[:secure] == 'true'
+              c = @website_section.add_capability(:view)
+              roles = ['admin', 'website_author', @website_section.website.website_role_iid]
+              roles.each do |r|
+                role = SecurityRole.find_by_internal_identifier(r)
+                role.add_capability(c)
+              end
             else
-              @website_section.remove_role(website.role)
+              @website_section.remove_capability(:view)
             end
 
             render :json => {:success => true}
@@ -87,9 +89,8 @@ module Knitkit
         end
 
         def update
-          model = DesktopApplication.find_by_internal_identifier('knitkit')
           begin
-            current_user.with_capability(model, 'edit', 'Section') do
+            current_user.with_capability('edit', 'WebsiteSection') do
               @website_section.in_menu = params[:in_menu] == 'yes'
               @website_section.title = params[:title]
               @website_section.render_base_layout = params[:render_with_base_layout] == 'yes'
@@ -110,9 +111,8 @@ module Knitkit
         end
 
         def add_layout
-          model = DesktopApplication.find_by_internal_identifier('knitkit')
           begin
-            current_user.with_capability(model, 'create', 'Layout') do
+            current_user.with_capability('create', 'WebsiteSectionLayout') do
               @website_section.create_layout
               render :json => {:success => true}
             end
@@ -122,9 +122,8 @@ module Knitkit
         end
 
         def get_layout
-          model = DesktopApplication.find_by_internal_identifier('knitkit')
           begin
-            current_user.with_capability(model, 'edit', 'Layout') do
+            current_user.with_capability('edit', 'WebsiteSectionLayout') do
               render :text => @website_section.layout
             end
           rescue ErpTechSvcs::Utils::CompassAccessNegotiator::Errors::UserDoesNotHaveCapability=>ex
@@ -133,9 +132,8 @@ module Knitkit
         end
   
         def save_layout
-          model = DesktopApplication.find_by_internal_identifier('knitkit')
           begin
-            current_user.with_capability(model, 'edit', 'Layout') do
+            current_user.with_capability('edit', 'WebsiteSectionLayout') do
 		          result = Knitkit::SyntaxValidator.validate_content(:erb, params[:content])
               unless result
                 website = @website_section.website

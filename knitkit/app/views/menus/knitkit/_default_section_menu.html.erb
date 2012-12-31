@@ -4,11 +4,11 @@
 %>
   <% unless @website_sections.nil? %>
     <ul id="menu">
-      <% @website_sections.each do |section| %>
-        <%if section.in_menu %>
-          <%if section.has_access?(@current_user)%>
-            <% if (!@website_section.nil? && section.id == @website_section.id) or (!selected_section_parent.nil? and selected_section_parent.id == section.id) %>
-              <li class="selected">
+      <% @website_sections.each do |section|
+          if section.in_menu
+            if @current_user.has_capability?(:view, section)
+              if (!@website_section.nil? && section.id == @website_section.id) or (!selected_section_parent.nil? and selected_section_parent.id == section.id) %>
+                <li class="selected">
                 <%
                 selected_section_parent = section
               else

@@ -5,13 +5,13 @@ class DynamicForm < ActiveRecord::Base
   belongs_to :created_by, :class_name => "User"
   belongs_to :updated_by, :class_name => "User"
 
-  validates_uniqueness_of :internal_identifier, :scope => :model_name
-
   extend FriendlyId
   friendly_id :description, :use => [:slugged], :slug_column => :internal_identifier
   def should_generate_new_friendly_id?
     new_record?
   end
+
+  validates_uniqueness_of :internal_identifier, :scope => :model_name, :case_sensitive => false
   
   def self.class_exists?(class_name)
   	result = nil

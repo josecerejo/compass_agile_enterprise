@@ -3,7 +3,7 @@ class AttributeType < ActiveRecord::Base
 
   has_many :attribute_values, :dependent => :destroy
 
-  validates_uniqueness_of :internal_identifier
+  validates_uniqueness_of :internal_identifier, :case_sensitive => false
   validates :description, :presence => true
 
   before_save :update_iid

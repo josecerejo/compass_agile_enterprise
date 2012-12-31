@@ -93,7 +93,7 @@ module ErpTechSvcs
               #attempt set security if this file is a file_asset model
               file = files.find{|file| file.directory == parent[:id].gsub(root,'') and file.name == item[:text]}
               unless file.nil?
-                child_hash[:isSecured] = file.has_capabilities?
+                child_hash[:isSecured] = file.is_secured?
                 child_hash[:iconCls] = 'icon-document_lock' if child_hash[:isSecured]
                 child_hash[:size] = file.data_file_size
                 child_hash[:width] = file.width

@@ -31,10 +31,12 @@ module Knitkit
     def set_section
       unless params[:section_id].nil?
         @website_section = WebsiteSection.find(params[:section_id])
-        if (current_user === false and !@website_section.has_access?(current_user)) and @website_section.path != @login_path
-          redirect_to @login_path
-        elsif !@website_section.has_access?(current_user)
-          redirect_to Rails.application.config.knitkit.unauthorized_url
+        if @website_section.protected_with_capability?(:view)
+          if !current_user and @website_section.path != @login_path
+            redirect_to @login_path
+          elsif current_user and !current_user.has_capability?(:view, @website_section)
+            redirect_to Knitkit::Config.unauthorized_url
+          end
         end
       else
         raise "No Id set"

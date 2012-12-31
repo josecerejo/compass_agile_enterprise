@@ -3,9 +3,8 @@ module Knitkit
     module Desktop
       class WebsiteNavController < Knitkit::ErpApp::Desktop::AppController
         def new
-          model = DesktopApplication.find_by_internal_identifier('knitkit')
           begin
-            current_user.with_capability(model, 'create', 'Menu') do
+            current_user.with_capability('create', 'WebsiteNavItem') do
               result = {}
               website = Website.find(params[:website_id])
               website_nav = WebsiteNav.new(:name => params[:name])
@@ -33,9 +32,8 @@ module Knitkit
         end
 
         def update
-          model = DesktopApplication.find_by_internal_identifier('knitkit')
           begin
-            current_user.with_capability(model, 'edit', 'Menu') do
+            current_user.with_capability('edit', 'WebsiteNavItem') do
               website_nav = WebsiteNav.find(params[:website_nav_id])
               website_nav.name = params[:name]
 
@@ -47,9 +45,8 @@ module Knitkit
         end
 
         def delete
-          model = DesktopApplication.find_by_internal_identifier('knitkit')
           begin
-            current_user.with_capability(model, 'delete', 'Menu') do
+            current_user.with_capability('delete', 'WebsiteNavItem') do
               render :json => (WebsiteNav.destroy(params[:id]) ? {:success => true} : {:success => false})
             end
           rescue ErpTechSvcs::Utils::CompassAccessNegotiator::Errors::UserDoesNotHaveCapability=>ex
@@ -58,9 +55,8 @@ module Knitkit
         end
 
         def add_menu_item
-          model = DesktopApplication.find_by_internal_identifier('knitkit')
           begin
-            current_user.with_capability(model, 'create', 'MenuItem') do
+            current_user.with_capability('create', 'WebsiteNavItem') do
               result = {}
               klass = params[:klass].constantize
               parent = klass.find(params[:id])
@@ -115,9 +111,8 @@ module Knitkit
         end
 
         def update_menu_item
-          model = DesktopApplication.find_by_internal_identifier('knitkit')
           begin
-            current_user.with_capability(model, 'edit', 'MenuItem') do
+            current_user.with_capability('edit', 'WebsiteNavItem') do
               result = {}
               website_nav_item = WebsiteNavItem.find(params[:website_nav_item_id])
               website_nav_item.title = params[:title]
@@ -157,14 +152,18 @@ module Knitkit
         end
 
         def update_security
-          model = DesktopApplication.find_by_internal_identifier('knitkit')
-          if current_user.has_capability?(model, 'secure', 'MenuItem') or current_user.has_capability?(model, 'unsecure', 'MenuItem')
+          if current_user.has_capability?('secure', 'WebsiteNavItem') or current_user.has_capability?('unsecure', 'WebsiteNavItem')
             website_nav_item = WebsiteNavItem.find(params[:id])
-            website = Website.find(params[:site_id])
-            if(params[:secure] == "true")
-              website_nav_item.add_role(website.role)
+
+            if params[:secure] == 'true'
+              c = website_nav_item.add_capability(:view)
+              roles = ['admin', 'website_author', website_nav_item.website_nav.website.website_role_iid]
+              roles.each do |r|
+                role = SecurityRole.find_by_internal_identifier(r)
+                role.add_capability(c)
+              end
             else
-              website_nav_item.remove_role(website.role)
+              website_nav_item.remove_capability(:view)
             end
 
             render :json => {:success => true}
@@ -174,9 +173,8 @@ module Knitkit
         end
 
         def delete_menu_item
-          model = DesktopApplication.find_by_internal_identifier('knitkit')
           begin
-            current_user.with_capability(model, 'delete', 'MenuItem') do
+            current_user.with_capability('delete', 'WebsiteNavItem') do
               render :json => (WebsiteNavItem.destroy(params[:id]) ? {:success => true} : {:success => false})
             end
           rescue ErpTechSvcs::Utils::CompassAccessNegotiator::Errors::UserDoesNotHaveCapability=>ex

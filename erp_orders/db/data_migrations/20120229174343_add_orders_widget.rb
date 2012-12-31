@@ -6,19 +6,17 @@ class AddOrdersWidget
       app = Application.find_by_internal_identifier('crm')
 
       orders = Widget.create(
-          :description => 'Order Managament',
-          :internal_identifier => 'order_management',
-          :icon => 'icon-grid',
-          :xtype => 'partyorderstab'
-        )
+        :description => 'Order Managament',
+        :internal_identifier => 'order_management',
+        :icon => 'icon-grid',
+        :xtype => 'partyorderstab'
+      )
 
       unless app.nil?
         app.widgets << orders
         app.save
       end
       
-      orders.roles << Role.find_by_internal_identifier('admin')
-      orders.save      
     end
   end
   

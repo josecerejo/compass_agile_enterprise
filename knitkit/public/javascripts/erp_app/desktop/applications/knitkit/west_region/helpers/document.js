@@ -1,8 +1,5 @@
 Compass.ErpApp.Desktop.Applications.Knitkit.addDocumentOptions = function (self, items, record) {
-    if (currentUser.hasApplicationCapability('knitkit', {
-        capability_type_iid:'create',
-        resource:'Section'
-    })) {
+    if (currentUser.hasCapability('create','WebsiteSection')) {
         items.push({
             text:'Add Document',
             iconCls:'icon-add',
@@ -39,7 +36,7 @@ Compass.ErpApp.Desktop.Applications.Knitkit.addDocumentOptions = function (self,
                                     xtype:'combo',
                                     forceSelection:true,
                                     store:[
-                                        ['OnlineDocumentSection', 'Online Document Section'],
+                                        ['OnlineDocumentSection', 'Online Document Section']
                                     ],
                                     value:'OnlineDocumentSection',
                                     fieldLabel:'Type',
@@ -140,10 +137,7 @@ Compass.ErpApp.Desktop.Applications.Knitkit.addDocumentOptions = function (self,
         });
     }
 
-    if (currentUser.hasApplicationCapability('knitkit', {
-        capability_type_iid:'edit',
-        resource:'Section'
-    })) {
+    if (currentUser.hasCapability('edit','WebsiteSection')) {
         items.push({
             text:'Update Document',
             iconCls:'icon-edit',
@@ -246,10 +240,7 @@ Compass.ErpApp.Desktop.Applications.Knitkit.addDocumentOptions = function (self,
         });
     }
 
-    if (currentUser.hasApplicationCapability('knitkit', {
-        capability_type_iid:'delete',
-        resource:'Section'
-    })) {
+    if (currentUser.hasCapability('delete','WebsiteSection')) {
         items.push({
             text:'Delete Document Section',
             iconCls:'icon-delete',
@@ -262,4 +253,4 @@ Compass.ErpApp.Desktop.Applications.Knitkit.addDocumentOptions = function (self,
     }
 
     return items;
-}
+};

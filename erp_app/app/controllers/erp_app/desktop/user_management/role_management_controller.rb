@@ -5,7 +5,7 @@ module ErpApp
 
 			  def available_roles
           user_id = params[:user_id]
-          roles = Role.all
+          roles = SecurityRole.order('description ASC').all
 
           unless user_id.empty?
             current_role_ids = User.find(user_id).roles.collect{|r| r.id}
@@ -20,7 +20,7 @@ module ErpApp
           roles = []
 
           unless user_id.empty?
-            roles = User.find(user_id).roles
+            roles = User.find(user_id).roles.order('description ASC')
           end
 
           render :json => roles.map{|role| {:text => role.description, :iconCls => 'icon-user', :leaf => true, :role_id => role.id}}
@@ -31,12 +31,12 @@ module ErpApp
           user_id  = params[:user_id]
 
           user = User.find(user_id)
-          user.remove_all_roles
+          user.party.remove_all_roles
           unless role_ids.blank?
-            roles = Role.where("id in (#{role_ids.join(',')})").all
-            user.add_roles(roles)
+            roles = SecurityRole.where("id in (#{role_ids.join(',')})").all
+            user.party.add_roles(roles)
           end
-          user.save
+          user.party.save
 
           render :json => {:success => true, :message => 'Roles Saved'}
 			  end
