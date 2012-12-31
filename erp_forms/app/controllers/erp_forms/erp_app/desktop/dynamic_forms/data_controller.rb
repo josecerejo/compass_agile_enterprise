@@ -129,7 +129,8 @@ module ErpForms::ErpApp::Desktop::DynamicForms
         form_data[:created_by] = current_user unless current_user.nil?
         form_data[:created_with_form_id] = params[:dynamic_form_id] if params[:dynamic_form_id]
         @record = @record.save_all_attributes(form_data, ErpForms::ErpApp::Desktop::DynamicForms::BaseController::IGNORED_PARAMS)
-        save_file_asset(form_data) unless params[:file].nil?
+        is_secure = (@record.file_security_default == 'private')
+        save_file_asset(form_data, is_secure) unless params[:file].nil?
 
         data = @record.data.sorted_dynamic_attributes
         result_hash = {
@@ -168,7 +169,7 @@ module ErpForms::ErpApp::Desktop::DynamicForms
         form_data[:updated_by] = current_user unless current_user.nil?
         form_data[:updated_with_form_id] = params[:dynamic_form_id] if params[:dynamic_form_id]      
         @record = @record.save_all_attributes(form_data, ErpForms::ErpApp::Desktop::DynamicForms::BaseController::IGNORED_PARAMS)
-        save_file_asset(form_data) unless params[:file].nil?
+        save_file_asset(form_data, nil) unless params[:file].nil?
 
         data = @record.data.sorted_dynamic_attributes
         result_hash = {
@@ -231,8 +232,8 @@ module ErpForms::ErpApp::Desktop::DynamicForms
         set_root_node(params)
         file = @record.add_file(data, File.join(@file_support.root,base_path,name))
 
-        roles = ['admin', @record.role_iid]
-        (@record.file_security_default == 'private') ? file.add_capability(:download, 'FileAsset', roles) : file.remove_all_capabilities
+        is_secure = (@record.file_security_default == 'private')
+        set_file_security(file, is_secure)
 
         result = {:success => true}
       rescue Exception => e
@@ -253,12 +254,8 @@ module ErpForms::ErpApp::Desktop::DynamicForms
         @record = DynamicFormModel.get_constant(params[:model_name]).find(params[:id])
         file = @record.files.find(:first, :conditions => ['name = ? and directory = ?', ::File.basename(path), ::File.dirname(path)])
 
-        roles = ['admin', @record.role_iid]
-        (secure == 'true') ? file.add_capability(:download, 'FileAsset', roles) : file.remove_all_capabilities
+        set_file_security(file, (secure == 'true'))
 
-        # if we're using S3, set file permissions to private or public_read   
-        @file_support.set_permissions(path, ((secure == 'true') ? :private : :public_read)) if ErpTechSvcs::Config.file_storage == :s3
-        
         render :json =>  {:success => true}
       rescue Exception => e
         Rails.logger.error e.message
@@ -339,7 +336,7 @@ module ErpForms::ErpApp::Desktop::DynamicForms
       end
     end
 
-    def save_file_asset(form_data)
+    def save_file_asset(form_data, is_secure)
       result = {}
       name = params[:file].original_filename
       data = params[:file].tempfile
@@ -348,8 +345,7 @@ module ErpForms::ErpApp::Desktop::DynamicForms
         set_root_node(form_data)
         file = @record.add_file(data, File.join(@file_support.root, base_path, name))
 
-        roles = ['admin', @record.role_iid]
-        (@record.file_security_default == 'private') ? file.add_capability(:download, 'FileAsset', roles) : file.remove_all_capabilities
+        set_file_security(file, is_secure)
 
         return {:success => true}
       rescue Exception => e
@@ -358,6 +354,26 @@ module ErpForms::ErpApp::Desktop::DynamicForms
         raise "Error uploading file. #{e.message}"
       end
     end      
+
+    def set_file_security(file, is_secure)
+      unless is_secure.nil?
+        is_secure = (is_secure == 'true' ? true : false) if is_secure.is_a?(String)
+
+        if is_secure
+          c = file.add_capability(:download)
+          roles = ['admin', @record.role_iid]
+          roles.each do |r|
+            role = SecurityRole.find_by_internal_identifier(r)
+            role.add_capability(c)
+          end
+        else
+          file.remove_capability(:download)
+        end
+
+        # if we're using S3, set file permissions to private or public_read   
+        @file_support.set_permissions(path, ((secure == 'true') ? :private : :public_read)) if ErpTechSvcs::Config.file_storage == :s3
+      end
+    end
 
     def set_root_node(form_data)
       @root_node = File.join(ErpTechSvcs::Config.file_assets_location, form_data[:model_name], @record.id.to_s)

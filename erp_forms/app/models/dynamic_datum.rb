@@ -26,7 +26,15 @@ class DynamicDatum < ActiveRecord::Base
     related_fields.each do |r|
       data.each do |k,v|
         if k == r[key]
-          data[k] = DynamicDatum.related_data_value(r[:extraParams]['model'], v, r[:displayField])
+          if r[:xtype] == 'related_combobox'
+            d = r[:displayField]
+            t = nil
+          else
+            #related_searchbox
+            d = r[:display_fields].split(',')
+            t = r[:display_template]
+          end
+          data[k] = DynamicDatum.related_data_value(r[:extraParams]['model'], v, d, t)
         end
       end
     end
@@ -34,8 +42,18 @@ class DynamicDatum < ActiveRecord::Base
     data
   end
 
-  def self.related_data_value(model, id, column)
-    model.camelize.constantize.find(id).send(column) rescue nil
+  #column can be a string or array of strings
+  def self.related_data_value(model, id, column, template=nil)
+    if column.is_a?(String)
+      return model.camelize.constantize.find(id).send(column) rescue nil
+    else
+      final_display = template
+      column.each do |c|
+        value = model.camelize.constantize.find(id).send(c) rescue nil
+        final_display = final_display.gsub(c, value)
+      end
+      return final_display.gsub('{','').gsub('}','')
+    end
   end
 
   # we cannot assume that dynamic attributes are stored in order in the database as this is often not the case

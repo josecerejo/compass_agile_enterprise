@@ -147,12 +147,6 @@ Ext.define("Compass.ErpApp.Desktop.Applications.Knitkit.ImageAssetsPanel",{
             }
           }
         },
-       'allowdelete':function(){
-          return currentUser.hasCapability('delete','SiteImageAsset');
-        },
-        'allowupload':function(){
-          return currentUser.hasCapability('upload','SiteImageAsset');
-        },
         'fileDeleted':function(fileTreePanel, node){
           self.websiteImageAssetsDataView.getStore().load({
             params:{
