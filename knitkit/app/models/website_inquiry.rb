@@ -7,7 +7,6 @@ class WebsiteInquiry < ActiveRecord::Base
   acts_as_dynamic_form_model
   has_dynamic_forms
 	has_dynamic_data
-  has_dynamic_solr_search if $USE_SOLR_FOR_DYNAMIC_FORM_MODELS
 
   def send_email(subject='')
     begin

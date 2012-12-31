@@ -7,7 +7,6 @@ class DynamicFormDocument < ActiveRecord::Base
   has_file_assets
   has_dynamic_forms
 	has_dynamic_data
-  has_dynamic_solr_search if $USE_SOLR_FOR_DYNAMIC_FORM_MODELS
 
   # declare a subclass
   # pass in name of subclass
