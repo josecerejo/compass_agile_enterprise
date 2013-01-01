@@ -155,12 +155,12 @@ Compass.ErpApp.Organizer.Applications.Crm.Base = function(config){
     }
 
     var panelSouthItems = [];
-
-    var xtypes = currentUser.validWidgets('crm',
-    {
-      partygrid : true,
-      shared_notes_grid:true
-    });
+    var xtypes = {partygrid : true, shared_notes_grid: true};
+//    var xtypes = currentUser.validWidgets('crm',
+ //   {
+ //     partygrid : true,
+  //    shared_notes_grid:true
+  //  });
 
     if (party_type == 'Individual'){
       for (i = 0; i < xtypes.length; i += 1) {
@@ -704,11 +704,12 @@ Compass.ErpApp.Organizer.Applications.Crm.Base = function(config){
     }
   };
 
-  var xtypes = currentUser.validWidgets('crm',
-    {
-      partygrid : true,
-      shared_notes_grid:true
-    });
+  var xtypes = {partygrid : true, shared_notes_grid: true};
+ //var xtypes = currentUser.validWidgets('crm',
+ //#   {
+// #     partygrid : true,
+// #     shared_notes_grid:true
+// #   });
 
   var individualsPanel = {
     xtype:'contactslayout',

@@ -61,6 +61,8 @@ class Invoice < ActiveRecord::Base
       case self.calculate_balance_strategy_type.internal_identifier
         when 'invoice_items_and_payments'
           (self.items.all.sum(&:total_amount) - self.total_payments)
+        when 'payable_balances_and_payments'
+           (self.payable_balances.all.sum(&:balance).amount - self.total_payments)
         when 'payments'
           (self.balance - self.total_payments)
         else
