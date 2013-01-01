@@ -155,9 +155,9 @@ Compass.ErpApp.Organizer.Applications.Crm.Base = function(config){
     }
 
     var panelSouthItems = [];
-    var xtypes = {partygrid : true, shared_notes_grid: true}
+    var xtypes = {partygrid : true, shared_notes_grid: true};
 //    var xtypes = currentUser.validWidgets('crm',
-    {
+ //   {
  //     partygrid : true,
   //    shared_notes_grid:true
   //  });
@@ -704,7 +704,7 @@ Compass.ErpApp.Organizer.Applications.Crm.Base = function(config){
     }
   };
 
-  var xtypes = {partygrid : true, shared_notes_grid: true}
+  var xtypes = {partygrid : true, shared_notes_grid: true};
  //var xtypes = currentUser.validWidgets('crm',
  //#   {
 // #     partygrid : true,
