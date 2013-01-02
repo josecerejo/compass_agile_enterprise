@@ -1,12 +1,12 @@
 require 'spec_helper'
 
-describe ErpTechSvcs::Extensions::ActiveRecord::HasRoles do
+describe ErpTechSvcs::Extensions::ActiveRecord::HasSecurityRoles do
   before(:all) do
     @user = FactoryGirl.create(:user)
     @user_2 = FactoryGirl.create(:user)
-    @admin_role = SecurityRole.create(:internal_identifier => 'admin')
-    @employee_role = SecurityRole.create(:internal_identifier => 'employee')
-    @manager_role = SecurityRole.create(:internal_identifier => 'manager')
+    @admin_role = SecurityRole.create(:description => 'Admin', :internal_identifier => 'admin')
+    @employee_role = SecurityRole.create(:description => 'Employee', :internal_identifier => 'employee')
+    @manager_role = SecurityRole.create(:description => 'Manager', :internal_identifier => 'manager')
   end
   
   it "should allow you to add a role" do

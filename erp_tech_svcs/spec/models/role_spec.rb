@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Role do
+describe SecurityRole do
 
   before(:all) do
     @role = SecurityRole.create(:internal_identifier => 'employee')
