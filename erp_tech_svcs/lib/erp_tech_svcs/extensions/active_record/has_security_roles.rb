@@ -29,7 +29,7 @@ module ErpTechSvcs
           end
 
           def roles_not
-            SecurityRole.joins("LEFT JOIN #{join_parties_security_roles}").where("parties_security_roles.id IS NULL")
+            SecurityRole.joins("LEFT JOIN #{join_parties_security_roles}").where("parties_security_roles.party_id IS NULL")
           end
 
 				  def roles
