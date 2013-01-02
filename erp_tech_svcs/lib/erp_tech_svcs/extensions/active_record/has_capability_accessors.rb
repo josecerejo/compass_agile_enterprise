@@ -114,7 +114,11 @@ module ErpTechSvcs
 
           private
           def convert_capability_type(type)
-            CapabilityType.find_or_create_by_internal_identifier(type.to_s) if (type.is_a?(String) || type.is_a?(Symbol))
+            return type if type.is_a?(CapabilityType)
+            return nil unless (type.is_a?(String) || type.is_a?(Symbol))
+            ct = CapabilityType.find_by_internal_identifier(type.to_s)
+            return ct unless ct.nil?
+            CapabilityType.create(:internal_identifier => type.to_s, :description => type.to_s.titleize)
           end
         end
       end
