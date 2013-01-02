@@ -2,8 +2,10 @@ class UpgradeRemoveSystemMgmtApp
   
   def self.up
     #insert data here
-    Widget.find_by_xtype('systemmanagement_applicationrolemanagment').destroy
-    Application.find_by_internal_identifier('system_management').destroy
+    widget = Widget.find_by_xtype('systemmanagement_applicationrolemanagment')
+    widget.destroy unless widget.nil?
+    app = Application.find_by_internal_identifier('system_management')
+    app.destroy unless app.nil?
   end
   
   def self.down

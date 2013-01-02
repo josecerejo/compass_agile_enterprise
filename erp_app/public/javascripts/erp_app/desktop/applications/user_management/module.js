@@ -116,13 +116,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.UserManagement.UsersGrid",{
           businessParty:response.businessParty,
           userInfo:response.userInfo,
           entityType:response.entityType
-        });
-
-        self.initialConfig.tabPanel.add(
-        {
-          xtype:'usermanagement_rolemanagementpanel',
-          userId:userId
-        });
+        });        
 
         self.initialConfig.tabPanel.add(
         {
