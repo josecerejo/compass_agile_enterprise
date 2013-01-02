@@ -30,7 +30,7 @@ class SecurityRole < ActiveRecord::Base
 
   # users without this role
   def users_not
-    User.joins(:party).joins("LEFT JOIN #{join_parties_security_roles}").where("parties_security_roles.id IS NULL")
+    User.joins(:party).joins("LEFT JOIN #{join_parties_security_roles}").where("parties_security_roles.security_role_id IS NULL")
   end
 
   # groups with this role
@@ -40,7 +40,7 @@ class SecurityRole < ActiveRecord::Base
 
   # groups without this role
   def groups_not
-    Group.joins(:party).joins("LEFT JOIN #{join_parties_security_roles}").where("parties_security_roles.id IS NULL")
+    Group.joins(:party).joins("LEFT JOIN #{join_parties_security_roles}").where("parties_security_roles.security_role_id IS NULL")
   end
 
 end
