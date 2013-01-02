@@ -6,14 +6,12 @@ module ErpApp
         def available_setup
           begin
             columns = []
-            columns << DynamicGridColumn.build_column({ :fieldLabel => "First Name", :name => 'first_name', :xtype => 'textfield', :width => 100 })
-            columns << DynamicGridColumn.build_column({ :fieldLabel => "Last Name", :name => 'last_name', :xtype => 'textfield', :width => 100 })
+            columns << DynamicGridColumn.build_column({ :fieldLabel => "Party Description", :name => 'party_description', :xtype => 'textfield', :width => 200 })
             columns << DynamicGridColumn.build_column({ :fieldLabel => "Username", :name => 'username', :xtype => 'textfield', :width => 95 })
             columns << DynamicGridColumn.build_column({ :fieldLabel => "Email", :name => 'email', :xtype => 'textfield', :width => 100 })
 
             definition = []
-            definition << DynamicFormField.textfield({ :fieldLabel => "First Name", :name => 'first_name' })
-            definition << DynamicFormField.textfield({ :fieldLabel => "Last Name", :name => 'last_name' })
+            definition << DynamicFormField.textfield({ :fieldLabel => "Party Description", :name => 'party_description' })
             definition << DynamicFormField.textfield({ :fieldLabel => "Username", :name => 'username' })
             definition << DynamicFormField.textfield({ :fieldLabel => "Email", :name => 'email' })
             definition << DynamicFormField.hidden({ :fieldLabel => "ID", :name => 'id' })
@@ -48,7 +46,7 @@ module ErpApp
           ar = params[:query_filter].blank? ? ar : ar.where("UPPER(username) LIKE UPPER('%#{query_filter}%') OR UPPER(email) LIKE UPPER('%#{query_filter}%') ")
           available = ar.paginate(:page => page, :per_page => per_page, :order => "#{sort} #{dir}")
 
-          render :json => {:total => ar.count, :data => available.map{|x| {:username => x.username, :email => x.email, :first_name => x.party.business_party.current_first_name, :last_name => x.party.business_party.current_last_name, :id => x.id}}}
+          render :json => {:total => ar.count, :data => available.map{|x| {:username => x.username, :email => x.email, :party_description => x.party.description, :id => x.id}}}
         end
 
         def selected
@@ -62,7 +60,7 @@ module ErpApp
           ar = (params[:query_filter].blank? ? ar : ar.where("UPPER(username) LIKE UPPER('%#{query_filter}%') OR UPPER(email) LIKE UPPER('%#{query_filter}%') "))
           selected = ar.paginate(:page => page, :per_page => per_page, :order => "#{sort} #{dir}")
 
-          render :json => {:total => ar.count, :data => selected.map{|x| {:username => x.username, :email => x.email, :first_name => x.party.business_party.current_first_name, :last_name => x.party.business_party.current_last_name, :id => x.id}}}
+          render :json => {:total => ar.count, :data => selected.map{|x| {:username => x.username, :email => x.email, :party_description => x.party.description, :id => x.id}}}
         end
 
         def add
