@@ -188,7 +188,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.Knitkit.SectionArticlesGridPanel
   },
 
   initComponent: function() {
-    Compass.ErpApp.Desktop.Applications.Knitkit.SectionArticlesGridPanel.superclass.initComponent.call(this, arguments);
+    this.callParent([arguments]);
     this.getStore().load();
   },
   
@@ -604,16 +604,13 @@ Ext.define("Compass.ErpApp.Desktop.Applications.Knitkit.SectionArticlesGridPanel
       })
     }, config);
   
-    Compass.ErpApp.Desktop.Applications.Knitkit.SectionArticlesGridPanel.superclass.constructor.call(this, config);
+    this.callParent([config]);
   }
 });
 
 Ext.define("Compass.ErpApp.Desktop.Applications.Knitkit.PageArticlesGridPanel",{
   extend:"Compass.ErpApp.Desktop.Applications.Knitkit.SectionArticlesGridPanel",
   alias:'widget.knitkit_pagearticlesgridpanel',
-  initComponent: function() {
-    Compass.ErpApp.Desktop.Applications.Knitkit.PageArticlesGridPanel.superclass.initComponent.call(this, arguments);
-  },
 
   constructor : function(config) {
     config['contentType'] = 'article';
@@ -662,16 +659,13 @@ Ext.define("Compass.ErpApp.Desktop.Applications.Knitkit.PageArticlesGridPanel",{
       ]
     }, config);
 
-    Compass.ErpApp.Desktop.Applications.Knitkit.PageArticlesGridPanel.superclass.constructor.call(this, config);
+    this.callParent([config]);
   }
 });
 
 Ext.define("Compass.ErpApp.Desktop.Applications.Knitkit.BlogArticlesGridPanel",{
   extend:"Compass.ErpApp.Desktop.Applications.Knitkit.SectionArticlesGridPanel",
   alias:'widget.knitkit_blogarticlesgridpanel',
-  initComponent: function() {
-    Compass.ErpApp.Desktop.Applications.Knitkit.BlogArticlesGridPanel.superclass.initComponent.call(this, arguments);
-  },
 
   constructor : function(config) {
     var self = this;
@@ -724,6 +718,6 @@ Ext.define("Compass.ErpApp.Desktop.Applications.Knitkit.BlogArticlesGridPanel",{
       }]
     }, config);
 
-    Compass.ErpApp.Desktop.Applications.Knitkit.BlogArticlesGridPanel.superclass.constructor.call(this, config);
+    this.callParent([config]);
   }
 });
