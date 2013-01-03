@@ -1,9 +1,6 @@
 Ext.define("Compass.ErpApp.Desktop.Applications.ThemesTreePanel",{
   extend:"Compass.ErpApp.Shared.FileManagerTree",
   alias:'widget.knitkit_themestreepanel',
-  initComponent: function() {
-    this.callParent(arguments);
-  },
 
   updateThemeActiveStatus : function(themeId, siteId, active){
     var self = this;

@@ -9,14 +9,14 @@ Ext.define("Compass.ErpApp.Desktop.Applications.Knitkit.EastRegion",{
         this.items = [];
 
         if (currentUser.hasCapability('view','GlobalImageAsset') || currentUser.hasCapability('view','SiteImageAsset')){
-            this.items.push(this.imageAssetsPanel.layout);
+            this.items.push(this.imageAssetsPanel);
         }
 
         if (currentUser.hasCapability('view','GlobalFileAsset') || currentUser.hasCapability('view','SiteFileAsset')){
-            this.items.push(this.fileAssetsPanel.layout);
+            this.items.push(this.fileAssetsPanel);
         }
         
-        this.items.push(this.widgetsPanel.layout);
+        this.items.push(this.widgetsPanel);
 
         config = Ext.apply({
             deferredRender:false,
