@@ -16,11 +16,22 @@ module ErpTechSvcs
             has_many :capabilities, :as => :capability_resource
 
             # get records filtered via query scope capabilities
-            # by default Compass AE treat query scopes as user restrictions
+            # by default Compass AE treats query scopes as restrictions
             # a user will see all records unless the user has a capability accessor with a query scope
-            scope :with_query_security, lambda{|user|
+            scope :with_query_security, lambda{|*args|
+              raise ArgumentError if args.empty? || args.size > 2
+              user = args.first
+              capability_type_iids = args.second || []
+              capability_type_iids = [capability_type_iids] if capability_type_iids.is_a?(String)
+
               scope_type = ScopeType.find_by_internal_identifier('query')
               granted_capabilities = user.all_capabilities.collect{|c| c if c.scope_type_id == scope_type.id and c.capability_resource_type == self.name }.compact
+
+              unless capability_type_iids.empty?
+                capability_type_ids = capability_type_iids.collect{|type| convert_capability_type(type).id }
+                granted_capabilities = granted_capabilities.collect{|c| c if capability_type_ids.include?(c.capability_type_id)}.compact
+              end
+
               query = nil
               granted_capabilities.each do |scope_capability|
                 query = query.nil? ? where(scope_capability.scope_query) : query.where(scope_capability.scope_query)
@@ -28,7 +39,7 @@ module ErpTechSvcs
               query
             }
 
-            # get records for this model without capabilities or that are not in a list of denied roles
+            # get records for this model without capabilities or that are not in a list of denied capabilities
             scope :with_instance_security, lambda{|denied_capabilities|
                                     query = joins("LEFT JOIN capabilities AS c ON c.capability_resource_id = #{self.table_name}.id AND c.capability_resource_type = '#{self.name}'").
                                             group(columns.collect{|c| "#{self.table_name}.#{c.name}" })
@@ -55,7 +66,7 @@ module ErpTechSvcs
                 granted_capabilities = granted_capabilities.collect{|c| c if capability_type_ids.include?(c.capability_type_id)}.compact
               end
               
-              with_query_security(user).with_instance_security(instance_capabilities - granted_capabilities) 
+              with_query_security(*args).with_instance_security(instance_capabilities - granted_capabilities) 
             }
 				  end
 				end
