@@ -70,7 +70,7 @@ class BillingAccount < ActiveRecord::Base
           self.balance == 0 ? 0 : self.balance.round(2)
       end
     else
-      14#self.balance == 0 ? 0 : self.balance.round(2)
+      self.balance == 0 ? 0 : self.balance.round(2)
     end
   end
 
