@@ -41,6 +41,10 @@ module ErpTechSvcs
             scope_capabilities_not('class')
           end
 
+          def query_capabilities_not
+            scope_capabilities_not('query')
+          end
+
           def capabilities
             Capability.joins(:capability_type).joins(:capability_accessors).
                       where(:capability_accessors => { :capability_accessor_record_type => self.class.name, :capability_accessor_record_id => self.id })
