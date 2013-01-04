@@ -14,6 +14,7 @@ class UpgradeSecurity < ActiveRecord::Migration
     end
 
     unless columns(:capabilities).collect {|c| c.name}.include?('scope_query')
+      add_column :capabilities, :description, :string
       add_column :capabilities, :capability_resource_type, :string
       add_column :capabilities, :capability_resource_id, :integer
       add_column :capabilities, :scope_type_id, :integer

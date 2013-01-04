@@ -206,6 +206,7 @@ class BaseTechServices < ActiveRecord::Migration
     unless table_exists?(:capabilities)
       # create the roles table
       create_table :capabilities do |t|
+        t.string :description
         t.references :capability_type
         t.string :capability_resource_type
         t.integer :capability_resource_id

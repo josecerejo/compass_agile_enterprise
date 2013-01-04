@@ -8,6 +8,22 @@ class Capability < ActiveRecord::Base
 
   alias :type :capability_type
 
+  after_create :update_description
+
+  def update_description
+    if description.blank?
+      desc = "#{capability_type.description} #{capability_resource_type}"
+      case scope_type 
+      when ScopeType.find_by_internal_identifier('class')
+        self.description = "#{desc}"
+      when ScopeType.find_by_internal_identifier('instance')
+        self.description = "#{desc} Instance"
+      when ScopeType.find_by_internal_identifier('query')
+        self.description = "#{desc} Scope"
+      end
+      self.save
+    end
+  end
 
   def roles_not
     SecurityRole.joins("LEFT JOIN capability_accessors ON capability_accessors.capability_id = #{self.id}

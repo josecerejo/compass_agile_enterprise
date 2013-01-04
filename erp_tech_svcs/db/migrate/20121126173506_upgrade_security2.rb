@@ -251,6 +251,11 @@ class UpgradeSecurity2 < ActiveRecord::Migration
       admin.add_capability('drag_item', 'WebsiteTree')
       website_author.add_capability('drag_item', 'WebsiteTree')
 
+      # update capability descriptions
+      Capability.all.each do |c|
+        c.update_description
+      end
+
       drop_table :capable_models
       drop_table :capabilities_capable_models
       drop_table :secured_models

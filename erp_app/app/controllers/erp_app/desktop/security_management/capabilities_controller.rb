@@ -38,11 +38,13 @@ module ErpApp
           dir   = (params[:dir] || 'asc').downcase
           query_filter = params[:query_filter].strip rescue nil
 
-          ar = assign_to_id.blank? ? Capability.joins(:capability_type) : assign_to.constantize.find(assign_to_id).class_capabilities_not
-          ar = (params[:query_filter].blank? ? ar : ar.where("(UPPER(capability_types.description) LIKE UPPER('%#{query_filter}%')) OR (UPPER(capability_resource_type) LIKE UPPER('%#{query_filter}%'))"))
+          scope_type_ids = [ScopeType.find_by_internal_identifier('class').id, ScopeType.find_by_internal_identifier('query').id]
+
+          ar = assign_to_id.blank? ? Capability.joins(:capability_type) : assign_to.constantize.find(assign_to_id).capabilities_not.where("scope_type_id IN (#{scope_type_ids.join(',')})")
+          ar = (params[:query_filter].blank? ? ar : ar.where("(UPPER(capabilities.description) LIKE UPPER('%#{query_filter}%'))"))
           available = ar.paginate(:page => page, :per_page => per_page, :order => "#{sort} #{dir}")
 
-          render :json => {:total => ar.count, :data => available.map{|x| {:description => "#{x.capability_type.description} #{x.capability_resource_type}", :id => x.id}}}
+          render :json => {:total => ar.count, :data => available.map{|x| {:description => x.description, :id => x.id}}}
         end
 
         def selected
@@ -52,32 +54,14 @@ module ErpApp
           dir   = (params[:dir] || 'asc').downcase
           query_filter = params[:query_filter].strip rescue nil
 
-          ar = assign_to_id.blank? ? Capability.joins(:capability_type) : assign_to.constantize.find(assign_to_id).class_capabilities
-          ar = (params[:query_filter].blank? ? ar : ar.where("(UPPER(capability_types.description) LIKE UPPER('%#{query_filter}%')) OR (UPPER(capability_resource_type) LIKE UPPER('%#{query_filter}%'))"))
+          scope_type_ids = [ScopeType.find_by_internal_identifier('class').id, ScopeType.find_by_internal_identifier('query').id]
+
+          ar = assign_to_id.blank? ? Capability.joins(:capability_type) : assign_to.constantize.find(assign_to_id).capabilities.where("scope_type_id IN (#{scope_type_ids.join(',')})")
+          ar = (params[:query_filter].blank? ? ar : ar.where("(UPPER(capabilities.description) LIKE UPPER('%#{query_filter}%'))"))
           selected = ar.paginate(:page => page, :per_page => per_page, :order => "#{sort} #{dir}")
 
-          render :json => {:total => ar.count, :data => selected.map{|x| {:total => ar.count, :description => "#{x.capability_type.description} #{x.capability_resource_type}", :id => x.id}}}
+          render :json => {:total => ar.count, :data => selected.map{|x| {:total => ar.count, :description => x.description, :id => x.id}}}
         end
-
-        # def create
-        #   begin
-        #     description = params[:description].strip
-
-        #     unless description.blank?
-        #       Capability.create(:description => params[:description]) 
-        #       render :json => {:success => true, :message => 'Security Role created'}
-        #     else
-        #       raise "Role name blank"
-        #     end
-        #   rescue Exception => e
-        #     Rails.logger.error e.message
-        #     Rails.logger.error e.backtrace.join("\n")
-        #     render :inline => {
-        #       :success => false,
-        #       :message => e.message
-        #     }.to_json             
-        #   end
-        # end
 
         def add
           begin
