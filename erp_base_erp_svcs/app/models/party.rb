@@ -10,8 +10,6 @@ class Party < ActiveRecord::Base
   has_many   :party_roles, :dependent => :destroy #role_types
 	has_many   :role_types, :through => :party_roles
 
-  has_and_belongs_to_many :security_roles
-
   after_destroy :destroy_business_party
 
 	attr_reader :relationships
