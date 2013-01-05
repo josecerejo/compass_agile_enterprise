@@ -21,7 +21,6 @@ class OnlineDocumentSection < WebsiteSection
       :has_layout => false,
       :type => self.class.to_s,
       :in_menu => self.in_menu,
-      :roles => self.roles.collect{|role| role.internal_identifier},
       :path => self.path,
       :permalink => self.permalink,
       :internal_identifier => self.internal_identifier,
