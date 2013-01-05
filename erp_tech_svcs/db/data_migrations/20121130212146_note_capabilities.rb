@@ -2,8 +2,8 @@ class NoteCapabilities
   
   def self.up
     #insert data here
-    admin = SecurityRole.find_by_internal_identifier('admin')
-    employee = SecurityRole.find_by_internal_identifier('employee')
+    admin = SecurityRole.find_or_create_by_description_and_internal_identifier(:description => 'Admin', :internal_identifier => 'admin')
+    employee = SecurityRole.find_or_create_by_description_and_internal_identifier(:description => 'Employee', :internal_identifier => 'employee')
 
     admin.add_capability('create', 'Note')
     admin.add_capability('delete', 'Note')
