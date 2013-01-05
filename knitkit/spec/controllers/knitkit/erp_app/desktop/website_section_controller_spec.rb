@@ -82,7 +82,8 @@ describe Knitkit::ErpApp::Desktop::WebsiteSectionController do
 
       @website_section_double = double("WebsiteSection")
       WebsiteSection.should_receive(:find).and_return(@website_section_double)
-      @website_section_double.should_receive(:add_role)
+      @website_section_double.should_receive(:add_capability)
+      @website_section_double.should_receive(:website)
 
       post :update_security, {:use_route => :knitkit,
                      :action => "update_security",
@@ -94,7 +95,7 @@ describe Knitkit::ErpApp::Desktop::WebsiteSectionController do
     it "should unsecure the section given secure = false" do
       @website_section_double = double("WebsiteSection")
       WebsiteSection.should_receive(:find).and_return(@website_section_double)
-      @website_section_double.should_receive(:remove_role)
+      @website_section_double.should_receive(:remove_capability)
       
       post :update_security, {:use_route => :knitkit,
                      :action => "update_security",

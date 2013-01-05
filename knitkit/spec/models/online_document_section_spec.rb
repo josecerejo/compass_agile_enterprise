@@ -18,11 +18,11 @@ describe OnlineDocumentSection, "#build_section_hash" do
                                             
   before do
     root_section.update_path!
-    @root_section_hash = {  :name=>"Parent", :has_layout=>false, :type=>"OnlineDocumentSection", :in_menu=>true, :roles=>[], 
+    @root_section_hash = {  :name=>"Parent", :has_layout=>false, :type=>"OnlineDocumentSection", :in_menu=>true, 
                             :path=>"/parent", :permalink=>"parent", :internal_identifier=>"parent", :position=>0,
                             :online_document_sections=>[{
                               :name=>"Child", :has_layout=>false, :type=>"OnlineDocumentSection", :in_menu=>true, 
-                              :roles=>[], :path=>"/parent/child", :permalink=>"child", :internal_identifier=>"child", :position=>0, :online_document_sections=>[], :articles=>[],
+                              :path=>"/parent/child", :permalink=>"child", :internal_identifier=>"child", :position=>0, :online_document_sections=>[], :articles=>[],
                               :documented_item=>{
                                 :name=>"Child", :display_title=>nil, :internal_identifier=>"child"
                               }

@@ -99,8 +99,8 @@ describe Website do
   describe "role" do
     it "should return a Role active record object with internal_identifier = website_websitename_access" do
       @website_role = @website.role
-      @website_role.should be_a(Role)
-      @website_role.internal_identifier.should eq("website_#{@website.name.downcase}_access")
+      @website_role.should be_a(SecurityRole)
+      @website_role.internal_identifier.should eq("website_#{@website.iid}_access")
     end
   end
 

@@ -209,10 +209,11 @@ describe Knitkit::ErpApp::Desktop::WebsiteNavController do
       @website_nav.items << @website_nav_item
     end
     
-    it "should call add_role on website_nav_item and return success:true given :secure => true" do
+    it "should call add_capability on website_nav_item and return success:true given :secure => true" do
       @website_nav_item_double = double("WebsiteNavItem")
       WebsiteNavItem.should_receive(:find).and_return(@website_nav_item_double)
-      @website_nav_item_double.should_receive(:add_role)
+      @website_nav_item_double.should_receive(:add_capability)
+      @website_nav_item_double.should_receive(:website_nav)
       
       post :update_security, {:use_route => :knitkit,
                  :action => "update_security",
@@ -224,10 +225,10 @@ describe Knitkit::ErpApp::Desktop::WebsiteNavController do
       parsed_body["success"].should eq(true)
     end
 
-    it "should call remove_role on wbsite_nav_item and return success:true given :secure => false" do
+    it "should call remove_capability on wbsite_nav_item and return success:true given :secure => false" do
       @website_nav_item_double = double("WebsiteNavItem")
       WebsiteNavItem.should_receive(:find).and_return(@website_nav_item_double)
-      @website_nav_item_double.should_receive(:remove_role)
+      @website_nav_item_double.should_receive(:remove_capability)
 
       post :update_security, {:use_route => :knitkit,
                  :action => "update_security",
