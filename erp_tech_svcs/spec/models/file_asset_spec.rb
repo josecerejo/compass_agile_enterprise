@@ -70,6 +70,14 @@ describe FileAsset do
       FileUtils.rm_rf(new_path)
     end
 
+    it "should allow you to secure a file with capabilities" do
+      @file_asset.protected_with_capability?('download').should eq false
+      @file_asset.add_capability('download')
+      @file_asset.protected_with_capability?('download').should eq true
+      @file_asset.remove_capability('download')
+      @file_asset.protected_with_capability?('download').should eq false
+    end
+
     after(:all) do
       @file_asset.destroy
     end
