@@ -18,6 +18,8 @@ Spork.prefork do
 
   #We have to execute the migratiapp:compass_ae:install:data_migrationsons from dummy app directory
   Dir.chdir DUMMY_APP_ROOT
+  `rake compass_ae:clear:migrations RAILS_ENV=spec`
+  `rake compass_ae:clear:data_migrations RAILS_ENV=spec`
   `rake compass_ae:install:migrations RAILS_ENV=spec`
   `rake compass_ae:install:data_migrations RAILS_ENV=spec`
   `rake db:migrate RAILS_ENV=spec`

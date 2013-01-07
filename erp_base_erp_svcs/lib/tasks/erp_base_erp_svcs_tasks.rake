@@ -1,3 +1,5 @@
+require 'fileutils'
+
 namespace :db do
   namespace :migrate do
 
@@ -16,29 +18,44 @@ namespace :compass_ae do
   namespace :install do
     desc "Install all CompassAE migrations"
     task :migrations => :environment do
-      Rails.application.config.erp_base_erp_svcs.compass_ae_engines.each do |e|
-        if e.has_migrations?
-          puts "Coping migrations from #{e.name}"
-          task = "#{e.name.split("::").first.underscore}:install:migrations"
-          Rake::Task["railties:install:migrations"].reenable
-          Rake::Task[task].invoke
-        end
-      end
-    end
+      compass_ae_railties = Rails.application.config.erp_base_erp_svcs.compass_ae_engines.collect{|e| "#{e.name.split("::").first.underscore}"}.join(',')
+      task = "railties:install:migrations"
+      ENV['FROM'] = compass_ae_railties
+      Rake::Task[task].invoke
+    end #migrations
     
     desc "Install all CompassAE data migrations"
     task :data_migrations => :environment do
+      compass_ae_railties = Rails.application.config.erp_base_erp_svcs.compass_ae_engines.collect{|e| "#{e.name.split("::").first.underscore}"}.join(',')
+      task = "railties:install:data_migrations"
+      ENV['FROM'] = compass_ae_railties
+      Rake::Task[task].invoke
+    end #data_migrations
+  end #install
+  
+  namespace :clear do
+    task :migrations => :environment do
+      migrations = ActiveRecord::Migrator.migrations(ActiveRecord::Migrator.migrations_paths)
       Rails.application.config.erp_base_erp_svcs.compass_ae_engines.each do |e|
-        if e.has_data_migrations?
-          puts "Coping data migrations from #{e.name}"
-          task = "#{e.name.split("::").first.underscore}:install:data_migrations"
-          Rake::Task["railties:install:data_migrations"].reenable
-          Rake::Task[task].invoke
-        end
-      end
-    end
+        if e.has_migrations?
+          migrations.select{|migration| migration.scope == e.name.split("::").first.underscore}.each do |engine_migration|
+            FileUtils.rm engine_migration[:filename]
+          end #remove only scoped migrations
+        end #make sure this engine has migrations
+      end #Loop through CompassAE engines
+    end #migrations
     
-  end
+    task :data_migrations => :environment do
+      migrations = RussellEdge::DataMigrator.migrations(RussellEdge::DataMigrator.migrations_path)
+      Rails.application.config.erp_base_erp_svcs.compass_ae_engines.each do |e|
+        if e.has_migrations?
+          migrations.select{|migration| migration[:scope] == e.name.split("::").first.underscore}.each do |engine_migration|
+            FileUtils.rm engine_migration[:filename]
+          end #remove only scoped migrations
+        end #make sure this engine has migrations
+      end #Loop through CompassAE engines
+    end #data_migrations
+  end #clear
 
   desc "Upgrade you installation of Compass AE"
   task :upgrade => :environment do
@@ -61,6 +78,6 @@ namespace :compass_ae do
 
       puts ex.inspect
       puts ex.backtrace
-    end
-  end #install
+    end #handle exceptions
+  end #upgrade
 end #compass_ae
