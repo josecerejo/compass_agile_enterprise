@@ -210,11 +210,6 @@ describe Knitkit::ErpApp::Desktop::WebsiteNavController do
     end
     
     it "should call add_capability on website_nav_item and return success:true given :secure => true" do
-      @website_nav_item_double = double("WebsiteNavItem")
-      WebsiteNavItem.should_receive(:find).and_return(@website_nav_item_double)
-      @website_nav_item_double.should_receive(:add_capability)
-      @website_nav_item_double.should_receive(:website_nav)
-      
       post :update_security, {:use_route => :knitkit,
                  :action => "update_security",
                  :id => @website_nav_item.id,

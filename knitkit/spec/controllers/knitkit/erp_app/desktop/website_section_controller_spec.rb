@@ -79,12 +79,6 @@ describe Knitkit::ErpApp::Desktop::WebsiteSectionController do
     end
     
     it "should secure the section given secure = true" do
-
-      @website_section_double = double("WebsiteSection")
-      WebsiteSection.should_receive(:find).and_return(@website_section_double)
-      @website_section_double.should_receive(:add_capability)
-      @website_section_double.should_receive(:website)
-
       post :update_security, {:use_route => :knitkit,
                      :action => "update_security",
                      :id => @website_section.id,
