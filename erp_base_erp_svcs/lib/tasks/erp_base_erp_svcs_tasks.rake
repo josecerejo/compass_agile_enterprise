@@ -32,30 +32,6 @@ namespace :compass_ae do
       Rake::Task[task].invoke
     end #data_migrations
   end #install
-  
-  namespace :clear do
-    task :migrations => :environment do
-      migrations = ActiveRecord::Migrator.migrations(ActiveRecord::Migrator.migrations_paths)
-      Rails.application.config.erp_base_erp_svcs.compass_ae_engines.each do |e|
-        if e.has_migrations?
-          migrations.select{|migration| migration.scope == e.name.split("::").first.underscore}.each do |engine_migration|
-            FileUtils.rm engine_migration[:filename]
-          end #remove only scoped migrations
-        end #make sure this engine has migrations
-      end #Loop through CompassAE engines
-    end #migrations
-    
-    task :data_migrations => :environment do
-      migrations = RussellEdge::DataMigrator.migrations(RussellEdge::DataMigrator.migrations_path)
-      Rails.application.config.erp_base_erp_svcs.compass_ae_engines.each do |e|
-        if e.has_migrations?
-          migrations.select{|migration| migration[:scope] == e.name.split("::").first.underscore}.each do |engine_migration|
-            FileUtils.rm engine_migration[:filename]
-          end #remove only scoped migrations
-        end #make sure this engine has migrations
-      end #Loop through CompassAE engines
-    end #data_migrations
-  end #clear
 
   desc "Upgrade you installation of Compass AE"
   task :upgrade => :environment do
