@@ -146,9 +146,10 @@ Ext.define("Compass.ErpApp.Desktop.Applications.SecurityManagement.GroupsPanel",
                   fieldLabel:'Group Name',
                   allowBlank:false,
                   name:'description',
+                  value: selection.get('description'),
                   listeners:{
                     afterrender:function(field){
-                        field.focus(false, 200);
+                        field.focus(true, 200);
                     },
                     specialkey: function(field, e){
                       if (e.getKey() == e.ENTER) {
