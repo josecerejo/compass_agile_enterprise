@@ -8,6 +8,7 @@ class Group < ActiveRecord::Base
   
   has_one :party, :as => :business_party
 
+  attr_accessible :description
   validates_uniqueness_of :description, :case_sensitive => false
 
   def self.add(description)
@@ -26,7 +27,7 @@ class Group < ActiveRecord::Base
 
   def has_role?(role)
     role = role.is_a?(SecurityRole) ? role : SecurityRole.find_by_internal_identifier(role.to_s)
-    all_roles.include?(role)
+    roles.include?(role)
   end
 
   def add_role(role)
