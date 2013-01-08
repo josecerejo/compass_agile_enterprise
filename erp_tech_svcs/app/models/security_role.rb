@@ -20,12 +20,12 @@ class SecurityRole < ActiveRecord::Base
   end
 
   def join_parties_security_roles
-    "parties_security_roles ON parties_security_roles.party_id=parties.id"
+    "parties_security_roles ON parties_security_roles.party_id=parties.id AND parties_security_roles.security_role_id=#{self.id}"
   end
 
   # users with this role
   def users
-    User.joins(:party).joins("JOIN #{join_parties_security_roles}").where("parties_security_roles.security_role_id = #{self.id}")
+    User.joins(:party).joins("JOIN #{join_parties_security_roles}")
   end
 
   # users without this role
@@ -35,7 +35,7 @@ class SecurityRole < ActiveRecord::Base
 
   # groups with this role
   def groups
-    Group.joins(:party).joins("JOIN #{join_parties_security_roles}").where("parties_security_roles.security_role_id = #{self.id}")
+    Group.joins(:party).joins("JOIN #{join_parties_security_roles}")
   end
 
   # groups without this role
