@@ -77,11 +77,13 @@ class User < ActiveRecord::Base
 
   # user lives on FROM side of relationship
   def group_relationships
-    PartyRelationship.where(:party_id_from => self.party.id)
+    role_type = RoleType.find_by_internal_identifier('group_member')
+    PartyRelationship.where(:party_id_from => self.party.id, :role_type_id_from => role_type.id)
   end
 
   def join_party_relationships
-    "party_relationships ON party_id_from = #{self.party.id} AND party_id_to = parties.id"
+    role_type = RoleType.find_by_internal_identifier('group_member')
+    "party_relationships ON party_id_from = #{self.party.id} AND party_id_to = parties.id AND role_type_id_from=#{role_type.id}"
   end
 
   # party records for the groups this user belongs to
