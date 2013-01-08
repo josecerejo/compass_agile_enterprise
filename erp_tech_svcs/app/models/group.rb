@@ -71,7 +71,8 @@ class Group < ActiveRecord::Base
   end
 
   def join_party_relationships
-    "party_relationships ON party_id_to = #{self.party.id} AND party_id_from = parties.id"
+    role_type = RoleType.find_by_internal_identifier('group')
+    "party_relationships ON party_id_to = #{self.party.id} AND party_id_from = parties.id AND role_type_id_to=#{role_type.id}"
   end
 
   def members
@@ -99,7 +100,8 @@ class Group < ActiveRecord::Base
   end
 
   def get_relationship(a_party)
-    PartyRelationship.where(:party_id_to => self.party.id, :party_id_from => a_party.id)
+    role_type = RoleType.find_by_internal_identifier('group')
+    PartyRelationship.where(:party_id_to => self.party.id, :party_id_from => a_party.id, :role_type_id_to => role_type.id)
   end
 
   # add party to group
