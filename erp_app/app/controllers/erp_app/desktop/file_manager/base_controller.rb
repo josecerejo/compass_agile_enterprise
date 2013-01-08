@@ -53,12 +53,13 @@ module ErpApp
             nodes_to_move.each do |node|
               path            = node
               new_parent_path = (params[:parent_node] == ROOT_NODE) ? base_path : params[:parent_node]
+              new_parent_path = new_parent_path.gsub(base_path,'') # target path must be relative
               result, message = @file_support.save_move(path, new_parent_path)
               messages << message
             end
-            render :json => {:success => true, :error => messages.join(',')}
+            render :json => {:success => true, :msg => messages.join(',')}
           rescue Exception => e
-            render :json => {:success => false, :message => ex.message}
+            render :json => {:success => false, :error => ex.message}
           end
         end
 
@@ -80,15 +81,14 @@ module ErpApp
               result, message = @file_support.delete_file(path)
               messages << message
             end
-            render :json => {:success => true, :error => messages.join(',')}
+            render :json => {:success => true, :msg => messages.join(',')}
           rescue Exception => e
-            render :json => {:success => false, :message => ex.message}
+            render :json => {:success => false, :error => ex.message}
           end
         end
 
         def expand_directory
           path = (params[:node] == ROOT_NODE) ? base_path : params[:node]
-
           render :json => @file_support.build_tree(path)
         end
 

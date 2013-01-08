@@ -15,7 +15,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.FileManager",{
       iconCls:'icon-folders',
       handler : this.createWindow,
       scope: this
-    }
+    };
   },
   createWindow : function(){
     var self = this;
@@ -29,7 +29,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.FileManager",{
         frame:false,
         border:false,
         region:'center'
-      })
+      });
 			
       var fileTreePanel = new Compass.ErpApp.Shared.FileManagerTree({
         allowDownload:true,
