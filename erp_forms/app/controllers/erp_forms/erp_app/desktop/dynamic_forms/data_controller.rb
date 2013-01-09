@@ -370,8 +370,8 @@ module ErpForms::ErpApp::Desktop::DynamicForms
           file.remove_capability(:download)
         end
 
-        # if we're using S3, set file permissions to private or public_read   
-        @file_support.set_permissions(path, ((secure == 'true') ? :private : :public_read)) if ErpTechSvcs::Config.file_storage == :s3
+        # if we're using S3, set file permissions to private or public_read
+        @file_support.set_permissions(File.join(file.directory,file.name).sub(%r{^/},''), ((is_secure == 'true') ? :private : :public_read)) if ErpTechSvcs::Config.file_storage == :s3
       end
     end
 
