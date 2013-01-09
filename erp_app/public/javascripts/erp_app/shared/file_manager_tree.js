@@ -312,6 +312,7 @@ Ext.define("Compass.ErpApp.Shared.FileManagerTree",{
                             var responseObj =  Ext.decode(response.responseText);
                             
                             if(responseObj.success){
+                              delete self.extraPostData.node;
                               store.load({
                                 node:record.parentNode,
                                 params:self.extraPostData
