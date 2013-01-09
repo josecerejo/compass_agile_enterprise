@@ -143,7 +143,7 @@ class FileAsset < ActiveRecord::Base
     if ErpTechSvcs::Config.file_storage == :s3
       file_path = File.join(self.directory,self.name).sub(%r{^/},'')
       options = {}
-      options[:expires] = ErpTechSvcs::Config.s3_url_expires_in_seconds if self.has_capabilities?
+      options[:expires] = ErpTechSvcs::Config.s3_url_expires_in_seconds if self.is_secured?
       return file_support.bucket.objects[file_path].url_for(:read, options).to_s
     else
       return File.join(Rails.root, self.directory, self.name)
