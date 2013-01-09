@@ -27,8 +27,8 @@
         <%= select_tag(:gender, options_for_select([['M', 'm'], ['F', 'f']], @individual.gender), {:style => 'width: auto;'})%>
       </p>
       <p style="padding-top: 15px">
-        <input type="reset" class="submit" value="Reset" style="margin: 0 0 0 120px;" />
-        <%=  submit_tag "Submit", :disable_with => "Please wait...", :class => "submit", :style => "margin-left: 0;" %>
+        <%=  submit_tag "Submit", :disable_with => "Please wait...", :class => "submit", :style => "margin: 0 0 0 120px;" %>
+        <input type="reset" class="submit" value="Reset" style="margin-left: 0;" />
       </p>
     </div>
   <% end %>
