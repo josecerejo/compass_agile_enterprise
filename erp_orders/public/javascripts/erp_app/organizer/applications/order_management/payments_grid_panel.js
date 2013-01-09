@@ -20,7 +20,7 @@ Ext.define("Compass.ErpApp.Organizer.Applications.OrderManagement.PaymentsGridPa
             'created_at',
             {
                 name:'amount',
-                type:'decimal'
+                type:'float'
             },
             'currency_display',
             'id',

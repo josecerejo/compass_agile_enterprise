@@ -32,7 +32,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.OrderManager.PaymentsGridPanel",
             'created_at',
             {
                 name:'amount',
-                type:'decimal'
+                type:'float'
             },
             'currency_display',
             'id',
