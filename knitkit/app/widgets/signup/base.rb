@@ -28,9 +28,9 @@ module Widgets
         @user.add_instance_attribute(:domain, primary_host.value)
         begin
           if @user.save
-            @user.roles << @website.role
             individual = Individual.create(:current_first_name => params[:first_name], :current_last_name => params[:last_name])
             @user.party = individual.party
+            @user.add_role(@website.role)
             @user.save
             render :update => {:id => "#{@uuid}_result", :view => :success}
           else

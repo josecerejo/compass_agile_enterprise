@@ -234,7 +234,7 @@ module Widgets
           new_postal_address_args[:city]= params[:new_postal_address][:city]
         end
 
-        if params[:new_postal_address][:state_id] != "default"
+        if !params[:new_postal_address][:state_id].blank? and params[:new_postal_address][:state_id] != "default"
           new_postal_address_args[:geo_zone_id]= params[:new_postal_address][:state_id].to_i
           new_postal_address_args[:state]= GeoZone.find(params[:new_postal_address][:state_id]).zone_name
         end
@@ -243,7 +243,7 @@ module Widgets
           new_postal_address_args[:zip]= params[:new_postal_address][:zip]
         end
 
-        if params[:new_postal_address][:country_id] != "default"
+        if !params[:new_postal_address][:country_id].blank? and params[:new_postal_address][:country_id] != "default"
           new_postal_address_args[:geo_country_id]= params[:new_postal_address][:country_id].to_i
           new_postal_address_args[:country]= GeoCountry.find(params[:new_postal_address][:country_id]).name
         end
