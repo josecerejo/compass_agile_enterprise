@@ -99,7 +99,7 @@ module ErpTechSvcs
 
       def update_file(path, content)
         file = FileAsset.where(:name => ::File.basename(path)).where(:directory => ::File.dirname(path)).first
-        acl = (file.has_capabilities? ? :private : :public_read) unless file.nil?
+        acl = (file.is_secured? ? :private : :public_read) unless file.nil?
         options = (file.nil? ? {} : {:acl => acl, :content_type => file.content_type })
         path = path.sub(%r{^/},'')
         bucket.objects[path].write(content, options)
@@ -127,7 +127,7 @@ module ErpTechSvcs
           message = FILE_DOES_NOT_EXIST
         else
           file = FileAsset.where(:name => ::File.basename(path)).where(:directory => ::File.dirname(path)).first
-          acl = (file.has_capabilities? ? :private : :public_read) unless file.nil?
+          acl = (file.is_secured? ? :private : :public_read) unless file.nil?
           options = (file.nil? ? {} : {:acl => acl})
           name = File.basename(path)
           path = path.sub(%r{^/},'')
@@ -154,7 +154,7 @@ module ErpTechSvcs
         new_path = path_pieces.join('/')
         begin
           file = FileAsset.where(:name => ::File.basename(path)).where(:directory => ::File.dirname(path)).first
-          acl = (file.has_capabilities? ? :private : :public_read) unless file.nil?
+          acl = (file.is_secured? ? :private : :public_read) unless file.nil?
           options = (file.nil? ? {} : {:acl => acl})
           path = path.sub(%r{^/},'')
           new_path = new_path.sub(%r{^/},'')

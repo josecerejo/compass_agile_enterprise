@@ -56,20 +56,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.Knitkit.FileAssetsPanel",{
       standardUploadUrl:'/knitkit/erp_app/desktop/file_assets/shared/upload_file',
       url:'/knitkit/erp_app/desktop/file_assets/shared/expand_directory',
       containerScroll: true,
-      additionalContextMenuItems:[{
-        nodeType:'leaf',
-        text:'View Details',
-        iconCls:'icon-add',
-        listeners:{
-          scope:self,
-          'click':function(){
-            var node = this.sharedFileAssetsTreePanel.selectedNode;
-            Ext.Msg.alert('Details', 'Filename: '+node.data.text +
-                                     '<br /> URL: '+node.data.url +
-                                     '<br /> Size: ' + node.data.size + ' bytes');
-          }
-        }
-      },
+      additionalContextMenuItems:[
       {
         nodeType:'leaf',
         text:'Insert link at cursor',
@@ -166,20 +153,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.Knitkit.FileAssetsPanel",{
       standardUploadUrl:'/knitkit/erp_app/desktop/file_assets/website/upload_file',
       url:'/knitkit/erp_app/desktop/file_assets/website/expand_directory',
       containerScroll: true,
-      additionalContextMenuItems:[{
-        nodeType:'leaf',
-        text:'View Details',
-        iconCls:'icon-add',
-        listeners:{
-          scope:self,
-          'click':function(){
-            var node = this.websiteFileAssetsTreePanel.selectedNode;
-            Ext.Msg.alert('Details', 'Filename: '+node.data.text +
-                                     '<br /> URL: '+node.data.url +
-                                     '<br /> Size: ' + node.data.size + ' bytes');
-          }
-        }
-      },
+      additionalContextMenuItems:[
       {
         nodeType:'leaf',
         text:'Insert link at cursor',
