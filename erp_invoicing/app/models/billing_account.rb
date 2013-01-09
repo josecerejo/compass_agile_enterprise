@@ -151,12 +151,12 @@ class BillingAccount < ActiveRecord::Base
   #override balance_date for today if calculate_balance is set to true
   def balance_date
     if self.calculate_balance_strategy_type.nil?
-      self.balance_date
+      self.financial_txn_account.balance_date
     else
       if self.calculate_balance_strategy_type.iid == 'invoices_and_payments' and self.invoices.empty?
         current_invoice.invoice_date
       else
-        self.balance_date
+        self.financial_txn_account.balance_date
       end
     end
   end
