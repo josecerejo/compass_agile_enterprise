@@ -3,7 +3,7 @@
   <ul id="side_menu">
     <%
     menu_items.each do |menu_item| 
-      if @current_user.has_capability?(:view, menu_item)
+      if menu_item.allow_access?(@current_user, :view)
         if menu_item_selected(menu_item) %>
           <li class="selected">
         <% selected_menu_item = menu_item
@@ -17,7 +17,7 @@
           <% unless selected_menu_item.positioned_children.nil? %>
             <ul class="side_menu_children">
             <% selected_menu_item.positioned_children.each do |child_menu_item|
-              if @current_user.has_capability?(:view, child_menu_item)
+              if child_menu_item.allow_access?(@current_user, :view)
                 if menu_item_selected(child_menu_item) %>
                   <li class="selected">
                 <% else %>
