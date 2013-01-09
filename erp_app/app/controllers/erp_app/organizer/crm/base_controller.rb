@@ -70,7 +70,7 @@ module ErpApp
 			  def update_party
           enterprise_identifier = params[:enterprise_identifier]
           party_type = params[:party_type]
-          businesss_party_id = params[:business_party_id]
+          business_party_id = params[:business_party_id]
           business_party_data = params
           business_party_data.delete(:id)
           business_party_data.delete(:business_party_id)
@@ -114,7 +114,6 @@ module ErpApp
 
         def get_party_details
           @party = Party.find(params[:id]) rescue nil
-          
         end
 
         def get_user

@@ -131,6 +131,7 @@ class Party < ActiveRecord::Base
     contact_purposes = [contact_purposes] if !contact_purposes.kind_of?(Array) # gracefully handle a single purpose not in an array
     contact = find_contact(contact_mechanism_class, contact_mechanism_args, contact_purposes)
     if contact.nil?
+      contact_mechanism_args.delete_if{|k,v| ['created_at','updated_at'].include? k.to_s}
       contact_mechanism = contact_mechanism_class.new(contact_mechanism_args)
       contact_mechanism.contact.party = self
       contact_mechanism.contact.contact_purposes = contact_purposes

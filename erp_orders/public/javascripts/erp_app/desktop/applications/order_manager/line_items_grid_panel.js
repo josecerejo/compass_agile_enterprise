@@ -34,7 +34,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.OrderManager.OrderLineItemsGridP
             'sku',
             {
                 name:'price',
-                type:'decimal'
+                type:'float'
             },
             'currency_display',
             'id'

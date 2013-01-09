@@ -147,7 +147,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.ProductManager.ProductPricingPan
         },
         fields:[{
           name:'price',
-          type:'decimal'
+          type:'float'
         }, 'currency', 'currency_display', 'from_date', 'thru_date', 'description','comments','pricing_plan_id']
       })
     });
