@@ -37,7 +37,6 @@ Ext.define("Compass.ErpApp.Desktop.Applications.InvoiceManagement.BillingAccount
 
     config = Ext.apply({
       layout:'border',
-      autoScroll:true,
       items:[
       {
         xtype:'shared-billingaccountsgridpanel',
