@@ -17,6 +17,9 @@ module ErpTechSvcs
               raw "<script type='text/javascript'>ErpTechSvcs.Config.file_upload_types = \"#{ErpTechSvcs::Config.file_upload_types}\";</script>"
             end
             
+            def set_erp_tech_config_vars
+              raw "#{set_max_file_upload} #{set_email_regex} #{set_file_upload_types}"
+            end
           end
         end
       end
