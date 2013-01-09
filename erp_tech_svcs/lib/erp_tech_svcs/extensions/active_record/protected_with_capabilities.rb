@@ -168,6 +168,14 @@ module ErpTechSvcs
             !get_capability(capability_type_iid).nil?
           end
 
+          def allow_access?(user, capability_type_iid)
+            if !self.protected_with_capability?(capability_type_iid.to_s) or (user and user.has_capability?(capability_type_iid.to_s, self))
+              return true
+            else
+              return false
+            end
+          end
+
           def remove_capability(capability_type_iid)
             capability = get_capability(capability_type_iid)
             capability.destroy unless capability.nil?

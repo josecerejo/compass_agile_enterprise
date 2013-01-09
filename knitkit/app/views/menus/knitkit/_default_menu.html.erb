@@ -2,7 +2,7 @@
   <ul id="menu">
    <% selected_menu_item = nil
       menu_items.each do |menu_item| 
-        if @current_user.has_capability?(:view, menu_item)
+        if menu_item.allow_access?(@current_user, :view)
         if menu_item_selected(menu_item)
           selected_menu_item = menu_item %>
         <li class="selected">

@@ -7,7 +7,7 @@
 	       <ul id="side_menu">
         <% section.positioned_children.each  do |child_section|
           if child_section.in_menu
-            if @current_user.has_capability?(:view, child_section)
+            if child_section.allow_access?(@current_user, :view)
               if (!@website_section.nil? && child_section.id == @website_section.id) or (!selected_section_parent.nil? and selected_section_parent.id == child_section.id) %>
                 <li class="selected">
                 <% selected_section = child_section
