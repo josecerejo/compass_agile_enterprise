@@ -36,30 +36,11 @@ Ext.define("Compass.ErpApp.Shared.PreferenceForm",{
     }],
 
     setWindowStatus : function(status){
-        if(this.findParentByType('statuswindow')){
-            this.findParentByType('statuswindow').setStatus(status);
-        }
-        else{
-            this.wait = Ext.MessageBox.show({
-                msg: 'Processing your request, please wait...',
-                progressText: 'Working...',
-                width:300,
-                wait:true,
-                waitConfig: {
-                    interval:200
-                },
-                iconCls:'icon-gear'
-            });
-        }
+        this.wait = Ext.Msg.wait(status, "Working...");
     },
 
     clearWindowStatus : function(){
-        if(this.findParentByType('statuswindow')){
-            this.findParentByType('statuswindow').clearStatus();
-        }
-        else{
-            this.wait.hide();
-        }
+        this.wait.hide();
     },
 
     setup: function(){

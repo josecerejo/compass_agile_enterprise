@@ -21,7 +21,6 @@ Ext.define("Compass.ErpApp.Desktop.Applications.UserManagement",{
         title:'User Management',
         width:1100,
         height:550,
-        maximized: true,
         iconCls: 'icon-user',
         shim:false,
         animCollapse:false,
