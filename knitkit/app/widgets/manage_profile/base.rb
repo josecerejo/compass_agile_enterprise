@@ -1,20 +1,8 @@
-
 module Widgets
   module ManageProfile
     class Base < ErpApp::Widgets::Base
-      def contact_purpose_in_use?(contacts, purpose)
-        result = false
-        contacts.each do |e|
-          if e.contact.contact_purposes[0].internal_identifier == purpose
-            result = true
-          else
-            result = false
-          end
-        end
-        result
-      end
 
-      def index
+      def load_profile_data
         @user = User.find(current_user)
         @individual = @user.party.business_party
         @email_addresses = @user.party.find_all_contacts_by_contact_mechanism(EmailAddress)
@@ -22,24 +10,28 @@ module Widgets
         @postal_addresses = @user.party.find_all_contacts_by_contact_mechanism(PostalAddress)
 
         contact_purposes = ContactPurpose.all
-        @purpose_hash={"Type" => "type"}
+        @purpose_hash={}
         contact_purposes.each do |p|
           @purpose_hash[p.description]=p.internal_identifier
         end
 
-      	countries= GeoCountry.all
+        countries= GeoCountry.all
         @countries_id=[]
         @countries_id << ["Country", "default"]
-      	countries.each do |c|
-      	  @countries_id << [c.name, c.id]
-      	end
+        countries.each do |c|
+          @countries_id << [c.name, c.id]
+        end
 
-      	states= GeoZone.all
-      	@states_id=[]
-      	@states_id << ["State", "default"]
-      	states.each do |s|
-      	  @states_id << [s.zone_name, s.id]
-      	end
+        states= GeoZone.all
+        @states_id=[]
+        @states_id << ["State", "default"]
+        states.each do |s|
+          @states_id << [s.zone_name, s.id]
+        end
+      end
+
+      def index
+        load_profile_data
 
         render
       end
@@ -77,12 +69,16 @@ module Widgets
           if @user.valid? && @individual.valid?
             @user.save
             @individual.save
-            render :update => {:id => "#{@uuid}_result", :view => :success}
+            @message = "User Information Updated"
+            load_profile_data
+            render :update => {:id => "#{@uuid}_result", :view => :index}
           else
-            render :update => {:id => "#{@uuid}_result", :view => :error}
+            @message_cls = 'sexyerror'
+            @message = "Error Updating User Information"
+            render :update => {:id => "#{@uuid}_result", :view => :index}
           end
         else
-          render :update => {:id => "#{@uuid}_result", :view => :success}
+          render :update => {:id => "#{@uuid}_result", :view => :index}
         end
 
       end
@@ -95,19 +91,27 @@ module Widgets
             @user.password_confirmation= params[:password_confirmation]
 
             if @user.change_password!(params[:new_password])
-              render :update => {:id => "#{@uuid}_result", :view => :password_success}
+              @message = "Password Updated"
+              load_profile_data
+              render :update => {:id => "#{@uuid}_result", :view => :index}
             else
+              @message = "Error Updating Password"
+              @message_cls = 'sexyerror'
               #### validation failed ####
-              render :update => {:id => "#{@uuid}_result", :view => :error}
+              render :update => {:id => "#{@uuid}_result", :view => :index}
             end
 
           else
             #### password and password confirmation cant be blank or unequal ####
-            render :update => {:id => "#{@uuid}_result", :view => :password_blank}
+            @message = "Password Confirmation Must Match Password"
+            @message_cls = 'sexyerror'
+            render :update => {:id => "#{@uuid}_result", :view => :index}
           end
         else
           #### old password wrong ####
-          render :update => {:id => "#{@uuid}_result", :view => :password_invalid}
+          @message = "Invalid Old Password"
+          @message_cls = 'sexyerror'
+          render :update => {:id => "#{@uuid}_result", :view => :index}
         end
 
       end
@@ -117,31 +121,25 @@ module Widgets
         @email_addresses= @user.party.find_all_contacts_by_contact_mechanism(EmailAddress)
         @phone_numbers= @user.party.find_all_contacts_by_contact_mechanism(PhoneNumber)
         @postal_addresses= @user.party.find_all_contacts_by_contact_mechanism(PostalAddress)
-        something_changed=false
         contact_type_in_use=false
-        default_type_error=false
 
         #### Updates email records ####
         @email_addresses.each_with_index do |e, i|
-          email_address_args={}
           if e.email_address != params[:email_addresses][i.to_s]
             email_address_args={:email_address => params[:email_addresses][i.to_s]}
             @user.party.update_or_add_contact_with_purpose(EmailAddress,
-              ContactPurpose.find_by_internal_identifier(params[:email_address_contact_purposes][i.to_s]),
-              email_address_args)
-            something_changed=true
+                                                           ContactPurpose.find_by_internal_identifier(params[:email_address_contact_purposes][i.to_s]),
+                                                           email_address_args)
           end
         end
 
         #### Updates Phone Numbers ####
         @phone_numbers.each_with_index do |p, i|
-          phone_number_args={}
           if p.phone_number != params[:phone_numbers][i.to_s]
             phone_number_args={:phone_number => params[:phone_numbers][i.to_s]}
             @user.party.update_or_add_contact_with_purpose(PhoneNumber,
-              ContactPurpose.find_by_internal_identifier(params[:phone_number_contact_purposes][i.to_s]),
-              phone_number_args)
-            something_changed=true
+                                                           ContactPurpose.find_by_internal_identifier(params[:phone_number_contact_purposes][i.to_s]),
+                                                           phone_number_args)
           end
         end
 
@@ -177,45 +175,30 @@ module Widgets
 
           if !postal_address_args.empty?
             @user.party.update_or_add_contact_with_purpose(PostalAddress,
-              ContactPurpose.find_by_internal_identifier(params[:postal_address_contact_purposes][i.to_s]),
-              postal_address_args)
-            something_changed=true
+                                                           ContactPurpose.find_by_internal_identifier(params[:postal_address_contact_purposes][i.to_s]),
+                                                           postal_address_args)
           end
         end
 
         #### Adds new email address ####
         if params[:new_email_address] != nil && params[:new_email_address] != ""
-          if params[:new_email_address_contact_purpose] != "type"
-            if !contact_purpose_in_use?(@email_addresses, params[:new_email_address_contact_purpose])
-              @user.party.update_or_add_contact_with_purpose(EmailAddress,
-              	ContactPurpose.find_by_internal_identifier(params[:new_email_address_contact_purpose]),
-              	:email_address => params[:new_email_address])
-              something_changed=true
-            else
-              contact_type_in_use=true
-              #render :view => :contact_type_in_use
-            end
+          if !contact_purpose_in_use?(@email_addresses, params[:new_email_address_contact_purpose])
+            @user.party.update_or_add_contact_with_purpose(EmailAddress,
+                                                           ContactPurpose.find_by_internal_identifier(params[:new_email_address_contact_purpose]),
+                                                           :email_address => params[:new_email_address])
           else
-            default_type_error=true
-            #render :view => :default_type_error
+            contact_type_in_use=true
           end
         end
 
         #### Adds new phone number ####
         if params[:new_phone_number] != nil && params[:new_phone_number] != ""
-          if params[:new_phone_number_contact_purpose] != "type"
-            if !contact_purpose_in_use?(@phone_numbers, params[:new_phone_number_contact_purpose])
-              @user.party.update_or_add_contact_with_purpose(PhoneNumber,
-              	ContactPurpose.find_by_internal_identifier(params[:new_phone_number_contact_purpose]),
-              	:phone_number => params[:new_phone_number])
-              something_changed=true
-            else
-              contact_type_in_use=true
-              #render :view => :contact_type_in_use
-            end
+          if !contact_purpose_in_use?(@phone_numbers, params[:new_phone_number_contact_purpose])
+            @user.party.update_or_add_contact_with_purpose(PhoneNumber,
+                                                           ContactPurpose.find_by_internal_identifier(params[:new_phone_number_contact_purpose]),
+                                                           :phone_number => params[:new_phone_number])
           else
-            default_type_error=true
-            #render :view => :default_type_error
+            contact_type_in_use=true
           end
         end
 
@@ -249,31 +232,38 @@ module Widgets
         end
 
         if !new_postal_address_args.empty?
-          if params[:new_postal_address_contact_purpose] != "type"
-            if !contact_purpose_in_use?(@postal_addresses, params[:new_postal_address_contact_purpose])
-              @user.party.update_or_add_contact_with_purpose(PostalAddress,
-              	ContactPurpose.find_by_internal_identifier(params[:new_postal_address_contact_purpose]),
-              	new_postal_address_args)
-              something_changed=true
-            else
-              contact_type_in_use=true
-              #render :view => :contact_type_in_use
-            end
+          if !contact_purpose_in_use?(@postal_addresses, params[:new_postal_address_contact_purpose])
+            @user.party.update_or_add_contact_with_purpose(PostalAddress,
+                                                           ContactPurpose.find_by_internal_identifier(params[:new_postal_address_contact_purpose]),
+                                                           new_postal_address_args)
           else
-            default_type_error=true
-            #render :view => :default_type_error
+            contact_type_in_use=true
           end
         end
 
+        load_profile_data
+
         #### Renders proper error or success message ####
-        if default_type_error
-          render :update => {:id => "#{@uuid}_result", :view => :default_type_error}
-        elsif contact_type_in_use
-          render :update => {:id => "#{@uuid}_result", :view => :contact_type_in_use}
+        if contact_type_in_use
+          @message = "New contacts cannot have the same contact type as old contacts"
+          @message_cls = 'sexyerror'
+          render :update => {:id => "#{@uuid}_result", :view => :index}
         else
-          render :update => {:id => "#{@uuid}_result", :view => :success}
+          @message = "Your Contact Information Was Updated"
+          render :update => {:id => "#{@uuid}_result", :view => :index}
         end
 
+      end
+
+      def contact_purpose_in_use?(contacts, purpose)
+        result = false
+        contacts.each do |e|
+          if e.contact.contact_purposes[0].internal_identifier == purpose
+            result = true
+            break
+          end
+        end
+        result
       end
 
       #should not be modified
@@ -293,7 +283,7 @@ module Widgets
 
         def base_layout
           begin
-            file = File.join(File.dirname(__FILE__),"/views/layouts/base.html.erb")
+            file = File.join(File.dirname(__FILE__), "/views/layouts/base.html.erb")
             IO.read(file)
           rescue
             return nil
