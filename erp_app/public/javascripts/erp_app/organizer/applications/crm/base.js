@@ -102,7 +102,12 @@ Compass.ErpApp.Organizer.Applications.Crm.Base = function (config) {
      * load details of party
      */
     loadPartyDetails = function (partyId) {
-        widget_xtypes = individualsPanel.widget_xtypes;
+        var widget_xtypes = [
+            'phonenumbergrid',
+            'emailaddressgrid',
+            'postaladdressgrid',
+            'shared_notesgrid'
+        ];
 
         if (partyId == null) {
             Ext.Msg.alert('Error', 'Member partyId not set');
@@ -110,18 +115,14 @@ Compass.ErpApp.Organizer.Applications.Crm.Base = function (config) {
         else {
             var tabPanel = Ext.getCmp('panelSouthItems_' + partyId);
             updatePartyDetails(partyId);
+            Ext.getCmp('panelSouthItems_' + partyId).setActiveTab(0);
 
             for (i = 0; i < widget_xtypes.length; i += 1) {
-                var widget = tabPanel.query(widget_xtypes[i]);
-                if (widget.length > 0) {
-                    widget[0].setParams({
-                        partyId:partyId
-                    });
-                    widget[0].store.load();
+                var widget = tabPanel.down(widget_xtypes[i]);
+                if(!Ext.isEmpty(widget)){
+                    widget.store.load();
                 }
             }
-
-            Ext.getCmp('panelSouthItems_' + partyId).setActiveTab(0);
         }
     };
 
