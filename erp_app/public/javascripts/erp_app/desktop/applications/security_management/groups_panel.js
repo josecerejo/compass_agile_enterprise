@@ -25,6 +25,26 @@ Ext.define("Compass.ErpApp.Desktop.Applications.SecurityManagement.GroupsPanel",
     security_management_groupseffectivesecurity.assign_to_description = assign_to_description;    
   },
 
+  unsetGroup : function(){
+    var security_management_rolespanel = this;
+
+    var security_management_userswidget = security_management_rolespanel.down('security_management_userswidget');
+    delete security_management_userswidget.assign_to_id;
+    delete security_management_userswidget.assign_to_description;
+
+    var security_management_roleswidget = security_management_rolespanel.down('security_management_roleswidget');
+    delete security_management_roleswidget.assign_to_id;
+    delete security_management_roleswidget.assign_to_description;
+
+    var security_management_capabilitieswidget = security_management_rolespanel.down('security_management_capabilitieswidget');
+    delete security_management_capabilitieswidget.assign_to_id;
+    delete security_management_capabilitieswidget.assign_to_description;
+
+    var security_management_groupseffectivesecurity = security_management_rolespanel.down('security_management_groupseffectivesecurity');
+    delete security_management_groupseffectivesecurity.assign_to_id;
+    delete security_management_groupseffectivesecurity.assign_to_description;    
+  },
+
   constructor : function(config) {
     var self = this;
 
@@ -225,6 +245,8 @@ Ext.define("Compass.ErpApp.Desktop.Applications.SecurityManagement.GroupsPanel",
                       success: function(response) {
                         var json_response = Ext.decode(response.responseText);
                         if (json_response.success){
+                          self.unsetGroup();
+                          self.down('tabpanel').getActiveTab().refreshWidget();
                           all_groups.getStore().load();
                         }else{
                           Ext.Msg.alert('Error', Ext.decode(response.responseText).message);

@@ -11,23 +11,26 @@ Ext.define("Compass.ErpApp.Desktop.Applications.SecurityManagement.RolesWidget",
   refreshWidget : function(tab){
     if (tab === undefined) tab = this;
 
-    if (tab.assign_to_id){
-      //need a delay to allow for rendering of shared_dynamiceditablegrid
-      setTimeout( function() { 
+    //need a delay to allow for rendering of shared_dynamiceditablegrid
+    setTimeout( function() { 
+      var available_grid = tab.down('#available').down('shared_dynamiceditablegrid');
+      var selected_grid = tab.down('#selected').down('shared_dynamiceditablegrid');
+      if (tab.assign_to_id){
         var extraParams = {
           assign_to: tab.assign_to,
           id: tab.assign_to_id
         };
 
-        var available_grid = tab.down('#available').down('shared_dynamiceditablegrid');
         available_grid.getStore().getProxy().extraParams = extraParams;
         available_grid.getStore().load();
 
-        var selected_grid = tab.down('#selected').down('shared_dynamiceditablegrid');
         selected_grid.getStore().getProxy().extraParams = extraParams;
         selected_grid.getStore().load();
-      }, 500 );
-    }
+      }else{
+        available_grid.getStore().getProxy().extraParams = {};
+        selected_grid.getStore().getProxy().extraParams = {};
+      }
+    }, 500 );
   },
 
   constructor : function(config) {
@@ -167,7 +170,7 @@ Ext.define('Compass.ErpApp.Desktop.Applications.SecurityManagement.AddRoleButton
           var available_grid = security_management_roleswidget.query('#available').first().down('shared_dynamiceditablegrid');
           var selected_grid = security_management_roleswidget.query('#selected').first().down('shared_dynamiceditablegrid');
           var selection = available_grid.getSelectionModel().getSelection();
-          if (selection.length > 0){
+          if (security_management_roleswidget.assign_to_id && selection.length > 0){
             var selected = [];
             Ext.each(selection, function(s){
               selected.push(s.data.id);
@@ -215,7 +218,7 @@ Ext.define('Compass.ErpApp.Desktop.Applications.SecurityManagement.AddRoleButton
           var available_grid = security_management_roleswidget.query('#available').first().down('shared_dynamiceditablegrid');
           var selected_grid = security_management_roleswidget.query('#selected').first().down('shared_dynamiceditablegrid');
           var selection = selected_grid.getSelectionModel().getSelection();
-          if (selection.length > 0){
+          if (security_management_roleswidget.assign_to_id && selection.length > 0){
             var selected = [];
             Ext.each(selection, function(s){
               selected.push(s.data.id);
