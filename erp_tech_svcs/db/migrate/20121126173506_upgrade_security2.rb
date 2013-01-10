@@ -138,6 +138,11 @@ class UpgradeSecurity2 < ActiveRecord::Migration
         end
       end
 
+      # adding user mgmt capabilities to admin role
+      admin.add_capability('create', 'User')
+      admin.add_capability('delete', 'User')
+      admin.add_capability('edit', 'User')
+
       # add knitkit class capabilities to roles
       admin.add_capability('create', 'WebsiteNav')
       admin.add_capability('delete', 'WebsiteNav')
