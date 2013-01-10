@@ -17,7 +17,7 @@ Gem::Specification.new do |s|
   
   s.homepage    = 'http://development.compassagile.com'
   
-  s.add_dependency('compass_ae_starter_kit', '~> 2.1')
+  s.add_dependency('compass_ae_starter_kit', '~> 3.0')
   s.add_dependency('erp_base_erp_svcs',      '~> 3.1')
   s.add_dependency('erp_tech_svcs',          '~> 3.1')
   s.add_dependency('erp_app',                '~> 3.1')
