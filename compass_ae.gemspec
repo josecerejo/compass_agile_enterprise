@@ -21,6 +21,7 @@ Gem::Specification.new do |s|
   s.add_dependency('erp_base_erp_svcs',      '~> 3.1')
   s.add_dependency('erp_tech_svcs',          '~> 3.1')
   s.add_dependency('erp_app',                '~> 3.1')
+  s.add_dependency('compass_ae_console',     '~> 2.0')
   s.add_dependency('erp_forms',              '~> 2.1')
   s.add_dependency('knitkit',                '~> 2.1')
   s.add_dependency('rails_db_admin',         '~> 2.1')
