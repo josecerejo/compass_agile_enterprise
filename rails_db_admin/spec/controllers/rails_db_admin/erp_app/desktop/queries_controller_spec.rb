@@ -13,19 +13,17 @@ describe RailsDbAdmin::ErpApp::Desktop::QueriesController do
       FactoryGirl.create(:role_type, :internal_identifier => "execute_query_test_role")
     end
 
-    # relationship_types table is not empty so I am commenting this test out for now
-    # an empty result set should technically return true, success should really only be false if an exception is caught
+    # an empty result set should probably return true, and only false if an exception is caught
     # if success is used for UI purposes, a count on the data should probably be used instead
-    # OR at least an erp_base table that is guaranteed to be empty should be used for this test.
-    it "returns unsuccessful because of an empty result set" #do
-    #   post :execute_query, {:use_route => :rails_db_admin,
-    #                         :cursor_pos => "0",
-    #                         :sql => "SELECT * FROM relationship_types;"}
+    it "returns unsuccessful because of an empty result set" do
+      post :execute_query, {:use_route => :rails_db_admin,
+                            :cursor_pos => "0",
+                            :sql => "SELECT * FROM relationship_types WHERE id < 0;"}
 
-    #   parsed_body = JSON.parse(response.body)
-    #   parsed_body["success"].should eq(false)
-    #   parsed_body["exception"].should eq("Empty result set")
-    # end
+      parsed_body = JSON.parse(response.body)
+      parsed_body["success"].should eq(false)
+      parsed_body["exception"].should eq("Empty result set")
+    end
 
     it "should not throw exception if there is 1 statement and no semi-colon" do
 
