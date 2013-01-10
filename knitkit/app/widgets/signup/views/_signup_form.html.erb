@@ -1,12 +1,12 @@
 <%= form_remote_tag build_widget_url(:new), :success => "call_success" do %>
     <div class="form_settings">
       <p>
-        <span> <%= label_tag :first_name,'First Name', params[:first_name] %> </span>
-        <%= text_field_tag :first_name, nil %>
+        <span> <%= label_tag :first_name,'First Name' %> </span>
+        <%= text_field_tag :first_name, params[:first_name] %>
       </p>
       <p>
-        <span> <%= label_tag :last_name, 'Last Name', params[:last_name] %> </span>
-        <%= text_field_tag :last_name, nil%>
+        <span> <%= label_tag :last_name, 'Last Name' %> </span>
+        <%= text_field_tag :last_name, params[:last_name] %>
       </p>
       <p>
         <span> <%= label_tag :email, 'Email' %>  </span>

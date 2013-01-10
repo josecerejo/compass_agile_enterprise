@@ -31,7 +31,7 @@ Ext.define("Compass.ErpApp.Organizer.Applications.Crm.ContactMechanismGrid",{
         type: 'rest',
         url:config['url'] || '/erp_app/organizer/crm/contact_mechanism',
         extraParams:{
-          party_id:null,
+          party_id:config['partyId'],
           contact_type:config['contactMechanism']
         },
         reader: {
@@ -61,9 +61,6 @@ Ext.define("Compass.ErpApp.Organizer.Applications.Crm.ContactMechanismGrid",{
     });
         
     this.store = store;
-    this.setParams = function(params) {
-      this.store.proxy.extraParams.party_id = params.partyId;
-    };
 
     this.bbar = Ext.create("Ext.PagingToolbar",{
       pageSize: 30,
