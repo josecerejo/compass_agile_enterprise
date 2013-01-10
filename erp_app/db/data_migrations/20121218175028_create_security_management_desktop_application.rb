@@ -16,8 +16,10 @@ class CreateSecurityManagementDesktopApplication
     pt2.save
     
     admin_user = User.find_by_username('admin')
-    admin_user.desktop.applications << app
-    admin_user.desktop.save
+    if admin_user
+      admin_user.desktop.applications << app
+      admin_user.desktop.save
+    end
   end
 
   def self.down
