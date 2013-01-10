@@ -5,7 +5,7 @@ Ext.define("Compass.ErpApp.Organizer.Applications.Crm.Layout", {
     partyId:null,
 
     constructor:function (config) {
-config = Ext.apply({
+        config = Ext.apply({
             layout:'border',
             frame:false,
             autoScroll:true,
@@ -119,7 +119,7 @@ Compass.ErpApp.Organizer.Applications.Crm.Base = function (config) {
 
             for (i = 0; i < widget_xtypes.length; i += 1) {
                 var widget = tabPanel.down(widget_xtypes[i]);
-                if(!Ext.isEmpty(widget)){
+                if (!Ext.isEmpty(widget)) {
                     widget.store.load();
                 }
             }
