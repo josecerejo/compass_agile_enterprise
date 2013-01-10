@@ -159,7 +159,8 @@ class DynamicFormField
         :width =>options[:width],
         :height => options[:height],
         :labelWidth => options[:labelWidth],
-        :display_in_grid => options[:display_in_grid]
+        :display_in_grid => options[:display_in_grid],
+        :searchable => options[:display_in_grid]
     }
 
     field[:buttonText] = options[:buttonText] unless options[:buttonText].blank?
