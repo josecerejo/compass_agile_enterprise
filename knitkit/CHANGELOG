@@ -40,5 +40,5 @@ Version 2.0.9 - 10-12-2012
 - Removed "New File" option from Knitkit Shared & Website file trees using showNewFileMenuItem: false
 Version 2.0.10 - 10-19-2012
 - When creating a new section explicitly set position null, MS SQL doesn't always honor column default
-Version 2.0.11 -
+Version 2.0.11 - 01-10-2013
 - New Security Implementation
