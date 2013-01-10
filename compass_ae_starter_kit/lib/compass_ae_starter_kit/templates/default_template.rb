@@ -26,13 +26,13 @@ CompassAeStarterKit::FileSupport.patch_file 'config/environments/production.rb',
 
 CompassAeStarterKit::FileSupport.append_file 'Gemfile',
 "
-gem 'erp_base_erp_svcs', '~> 3.0.5'
-gem 'erp_tech_svcs', '~> 3.0.10'
-gem 'erp_app', '~> 3.0.13'
-gem 'erp_forms', '~> 2.0.5'
-gem 'knitkit', '~> 2.0.10'
-gem 'rails_db_admin', '~> 2.0.3'
-gem 'compass_ae_console', '~> 1.0.2'
+gem 'erp_base_erp_svcs', '~> 3.0.6'
+gem 'erp_tech_svcs', '~> 3.0.11'
+gem 'erp_app', '~> 3.0.14'
+gem 'erp_forms', '~> 2.0.6'
+gem 'knitkit', '~> 2.0.11'
+gem 'rails_db_admin', '~> 2.0.4'
+gem 'compass_ae_console', '~> 1.0.4'
 "
 
 puts <<-end
