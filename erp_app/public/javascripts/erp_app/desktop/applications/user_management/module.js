@@ -392,8 +392,10 @@ Ext.define("Compass.ErpApp.Desktop.Applications.UserManagement.UsersGrid",{
           addUserWindow.show();
         }
       });
+
+      toolBarItems.push('|');
     }
-    toolBarItems.push('|');
+
     toolBarItems.push({
       xtype:'textfield',
       hideLabel:true,
