@@ -11,7 +11,10 @@ class CreateDesktopAppAuditLogViewer
     app.preference_types << PreferenceType.iid('desktop_shortcut')
     app.preference_types << PreferenceType.iid('autoload_application')
     app.save
-
+    
+    admin_user = User.find_by_username('admin')
+    admin_user.desktop.applications << app
+    admin_user.desktop.save
   end
 
   def self.down
