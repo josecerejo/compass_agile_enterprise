@@ -1,9 +1,5 @@
 Compass.ErpApp.Desktop.Applications.Knitkit.addWebsiteNavItemOptions = function (self, items, record) {
-if (currentUser.hasApplicationCapability('knitkit', {
-    capability_type_iid:'edit',
-    resource:'MenuItem'
-}))
-
+if (currentUser.hasCapability('edit','WebsiteNavItem'))
 {
     items.push({
         text:'Update Menu Item',
@@ -156,7 +152,7 @@ if (currentUser.hasApplicationCapability('knitkit', {
                                 },
                                 failure:function(form, action){
                                     self.clearWindowStatus();
-                                    if(action.response == null){
+                                    if(action.response === null){
                                         Ext.Msg.alert("Error", 'Could not create menu item');
                                     }
                                     else{
@@ -181,11 +177,7 @@ if (currentUser.hasApplicationCapability('knitkit', {
 }
 
 if(record.data.isSecured){
-    if (currentUser.hasApplicationCapability('knitkit', {
-        capability_type_iid:'unsecure',
-        resource:'MenuItem'
-    }))
-
+    if (currentUser.hasCapability('unsecure','WebsiteNavItem'))
     {
         items.push({
             text:'Unsecure',
@@ -199,11 +191,7 @@ if(record.data.isSecured){
     }
 }
 else{
-    if (currentUser.hasApplicationCapability('knitkit', {
-        capability_type_iid:'secure',
-        resource:'MenuItem'
-    }))
-
+    if (currentUser.hasCapability('secure','WebsiteNavItem'))
     {
         items.push({
             text:'Secure',
@@ -217,11 +205,7 @@ else{
     }
 }
 
-if (currentUser.hasApplicationCapability('knitkit', {
-    capability_type_iid:'delete',
-    resource:'MenuItem'
-}))
-
+if (currentUser.hasCapability('delete','WebsiteNavItem'))
 {
     items.push({
         text:'Delete',
@@ -263,4 +247,4 @@ if (currentUser.hasApplicationCapability('knitkit', {
 }
 
 return items;
-}
+};

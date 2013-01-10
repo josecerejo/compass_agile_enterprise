@@ -28,7 +28,7 @@ module ErpApp
           response = {}
           application = DesktopApplication.find_by_internal_identifier('user_management')
           begin
-            current_user.with_capability(application, :create, 'User') do
+            current_user.with_capability(:create, 'User') do
             
               user = User.new(
                 :email => params[:email],
@@ -76,7 +76,7 @@ module ErpApp
 
         def delete
           application = DesktopApplication.find_by_internal_identifier('user_management')
-          if current_user.has_capability?(application, 'create', 'User')
+          if current_user.has_capability?('create', 'User')
             unless @user.party.nil?
               @user.party.destroy
             else

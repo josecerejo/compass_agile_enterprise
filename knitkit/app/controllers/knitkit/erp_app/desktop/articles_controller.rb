@@ -7,7 +7,7 @@ module Knitkit
         def new
           model = DesktopApplication.find_by_internal_identifier('knitkit')
           begin
-            current_user.with_capability(model, 'create', 'Article') do
+            current_user.with_capability('create', 'Content') do
               result = {}
               website_section_id = params[:section_id]
               article = Article.new
@@ -40,7 +40,7 @@ module Knitkit
         def update
           model = DesktopApplication.find_by_internal_identifier('knitkit')
           begin
-            current_user.with_capability(model, 'edit', 'Article') do
+            current_user.with_capability('edit', 'Content') do
               result = {}
               website_section_id = params[:section_id]
               article = Article.find(params[:id])
@@ -72,7 +72,7 @@ module Knitkit
         def delete
           model = DesktopApplication.find_by_internal_identifier('knitkit')
           begin
-            current_user.with_capability(model, 'delete', 'Article') do
+            current_user.with_capability('delete', 'Content') do
               render :json => Article.destroy(params[:id]) ? {:success => true} : {:success => false}
             end
           rescue ErpTechSvcs::Utils::CompassAccessNegotiator::Errors::UserDoesNotHaveCapability=>ex
@@ -83,7 +83,7 @@ module Knitkit
         def add_existing
           model = DesktopApplication.find_by_internal_identifier('knitkit')
           begin
-            current_user.with_capability(model, 'add_existing', 'Article') do
+            current_user.with_capability('add_existing', 'Content') do
               website_section = WebsiteSection.find(params[:section_id])
               website_section.contents << Article.find(params[:article_id])
 

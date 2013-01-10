@@ -6,7 +6,7 @@ module Knitkit
         def update
           model = DesktopApplication.find_by_internal_identifier('knitkit')
           begin
-            current_user.with_capability(model, 'drag_item', 'WebsiteTree') do
+            current_user.with_capability('drag_item', 'WebsiteTree') do
 
               params[:position_array].each do |position|
                 model = position['klass'].constantize.find(position['id'])

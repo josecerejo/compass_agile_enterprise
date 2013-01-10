@@ -43,7 +43,7 @@ class FileAsset < ActiveRecord::Base
   belongs_to :file_asset_holder, :polymorphic => true
   instantiates_with_sti
 
-  has_capabilities
+  protected_with_capabilities
   
   #paperclip
   has_attached_file :data,
@@ -64,7 +64,7 @@ class FileAsset < ActiveRecord::Base
   validates_attachment_size :data, :less_than => ErpTechSvcs::Config.max_file_size_in_mb.megabytes
 
   validates :name, :presence => {:message => 'Name can not be blank'}
-  validates_uniqueness_of :name, :scope => [:directory]
+  validates_uniqueness_of :name, :scope => [:directory], :case_sensitive => false
   validates_each :directory, :name do |record, attr, value|
     record.errors.add attr, 'may not contain consequtive dots' if value =~ /\.\./
   end
@@ -108,7 +108,7 @@ class FileAsset < ActiveRecord::Base
     end
   end
 
-  def initialize(attributes = {}, options)
+  def initialize(attributes = {}, options={})
     attributes ||= {}
 
     base_path = attributes.delete(:base_path)
@@ -127,6 +127,10 @@ class FileAsset < ActiveRecord::Base
     super attributes.merge(:directory => directory, :name => name, :data => data)
   end
 
+  def is_secured?
+    self.protected_with_capability?('download')
+  end
+
   # compass file download url
   def url
     "/download/#{self.name}?#{self.directory}"
@@ -139,7 +143,7 @@ class FileAsset < ActiveRecord::Base
     if ErpTechSvcs::Config.file_storage == :s3
       file_path = File.join(self.directory,self.name).sub(%r{^/},'')
       options = {}
-      options[:expires] = ErpTechSvcs::Config.s3_url_expires_in_seconds if self.has_capabilities?
+      options[:expires] = ErpTechSvcs::Config.s3_url_expires_in_seconds if self.is_secured?
       return file_support.bucket.objects[file_path].url_for(:read, options).to_s
     else
       return File.join(Rails.root, self.directory, self.name)

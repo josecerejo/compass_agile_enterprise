@@ -4,9 +4,9 @@ describe ErpTechSvcs::Extensions::ActiveRecord::HasRoles do
   before(:all) do
     @user = Factory(:user)
     @user_2 = Factory(:user)
-    @admin_role = Role.create(:internal_identifier => 'admin')
-    @employee_role = Role.create(:internal_identifier => 'employee')
-    @manager_role = Role.create(:internal_identifier => 'manager')
+    @admin_role = SecurityRole.create(:internal_identifier => 'admin')
+    @employee_role = SecurityRole.create(:internal_identifier => 'employee')
+    @manager_role = SecurityRole.create(:internal_identifier => 'manager')
   end
   
   it "should allow you to add a role" do
@@ -54,14 +54,13 @@ describe ErpTechSvcs::Extensions::ActiveRecord::HasRoles do
   it "should allow you to check access for user on model" do
     @user.add_roles(@admin_role)
     @user_2.add_roles(@admin_role)
-    @user_2.has_access?(@user).should eq true
     @user.remove_all_roles
     @user_2.remove_all_roles
   end
 
   after(:all) do
     User.destroy_all
-    Role.destroy_all
+    SecurityRole.destroy_all
   end
 
   

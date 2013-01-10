@@ -2,6 +2,7 @@ class Website < ActiveRecord::Base
   after_destroy :remove_sites_directory, :remove_website_role
   after_create  :setup_website
 
+  protected_with_capabilities
   has_file_assets
   has_permalink :name, :internal_identifier, :update => false
 
@@ -40,7 +41,7 @@ class Website < ActiveRecord::Base
     end
   end
 
-  validates_uniqueness_of :internal_identifier
+  validates_uniqueness_of :internal_identifier, :case_sensitive => false
 
   alias :sections :website_sections
   alias :hosts :website_hosts
@@ -61,7 +62,6 @@ class Website < ActiveRecord::Base
 
   def all_section_paths
     WebsiteSection.select(:path).where(:website_id => self.id).collect{|row| row['path']}
-    #ActiveRecord::Base.connection.execute("select path from website_sections where website_id = #{self.id}").collect{|row| row['path']}
   end
 
   def config_value(config_item_type_iid)
@@ -123,12 +123,12 @@ class Website < ActiveRecord::Base
   end
 
   def role
-    Role.iid(website_role_iid)
+    SecurityRole.iid(website_role_iid)
   end
 
   def setup_website
     PublishedWebsite.create(:website => self, :version => 0, :active => true, :comment => 'New Site Created')
-    Role.create(:description => "Website #{self.title}", :internal_identifier => website_role_iid) if self.role.nil?
+    SecurityRole.create(:description => "Website #{self.title}", :internal_identifier => website_role_iid) if self.role.nil?
     configuration = ::Configuration.find_template('default_website_configuration').clone(true)
     configuration.description = "Website #{self.name} Configuration"
     configuration.internal_identifier = configuration.description.underscore
@@ -161,18 +161,21 @@ class Website < ActiveRecord::Base
       ::Widgets::Signup::Base,
       ::Widgets::ResetPassword::Base
     ]
+    profile_page = nil
     widget_classes.each do |widget_class|
       website_section = WebsiteSection.new
       website_section.title = widget_class.title
       website_section.in_menu = true unless ["Login", "Sign Up", "Reset Password"].include?(widget_class.title)
       website_section.layout = widget_class.base_layout
       website_section.save
-      #make manage profile secured
-      website_section.add_role(self.role) if widget_class.title == 'Manage Profile'
+
+      profile_page = website_section if widget_class.title == 'Manage Profile'
+
       self.website_sections << website_section
     end
     self.save
     self.website_sections.update_paths!
+    profile_page.secure unless profile_page.nil?
   end
 
   def export_setup
@@ -443,7 +446,7 @@ class Website < ActiveRecord::Base
       end
       unless hash[:roles].empty?
         hash[:roles].each do |role|
-          website_item.add_role(Role.find_by_internal_identifier(role)) rescue nil #do nothing if the role does not exist
+          website_item.add_role(SecurityRole.find_by_internal_identifier(role)) rescue nil #do nothing if the role does not exist
         end
       end
       website_item
@@ -504,7 +507,7 @@ class Website < ActiveRecord::Base
       end
       unless hash[:roles].empty?
         hash[:roles].each do |role|
-          section.add_role(Role.find_by_internal_identifier(role)) rescue nil #do nothing if the role does not exist
+          section.add_role(SecurityRole.find_by_internal_identifier(role)) rescue nil #do nothing if the role does not exist
         end
       end
       section
@@ -513,7 +516,7 @@ class Website < ActiveRecord::Base
   end
 
   def website_role_iid
-    "website_#{self.name.underscore.gsub("'","").gsub(",","")}_access"
+    "website_#{self.iid}_access"
   end
 
   private
@@ -522,7 +525,7 @@ class Website < ActiveRecord::Base
     {
       :title => menu_item.title,
       :url => menu_item.url,
-      :roles => menu_item.roles.collect{|role| role.internal_identifier},
+      :is_secured => menu_item.is_secured?,
       :linked_to_item_type => menu_item.linked_to_item_type,
       :linked_to_item_path => menu_item.linked_to_item.nil? ? nil : menu_item.linked_to_item.path,
       :position => menu_item.position,

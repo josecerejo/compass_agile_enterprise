@@ -155,7 +155,6 @@ Ext.define("Compass.ErpApp.Shared.FileManagerTree",{
 
             var msg = Ext.Msg.wait("Saving", "Saving move...");
             Ext.apply(self.extraPostData, {
-              node:node.data.id,
               parent_node:newParent.data.id,
               selected_nodes:Ext.JSON.encode(Ext.Array.map(selectedNodes, function(node, i) {
                 return node.data.id;
@@ -313,6 +312,7 @@ Ext.define("Compass.ErpApp.Shared.FileManagerTree",{
                             var responseObj =  Ext.decode(response.responseText);
                             
                             if(responseObj.success){
+                              delete self.extraPostData.node;
                               store.load({
                                 node:record.parentNode,
                                 params:self.extraPostData
@@ -386,7 +386,6 @@ Ext.define("Compass.ErpApp.Shared.FileManagerTree",{
                   }
                   else if(btn == 'yes'){
                     Ext.apply(self.extraPostData, {
-                      node:record.data.id,
                       leaf:record.data.leaf,
                       selected_nodes:Ext.JSON.encode(Ext.Array.map(selectedNodes, function(node, i) {
                         return node.data.id;

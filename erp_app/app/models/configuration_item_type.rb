@@ -1,5 +1,5 @@
 class ConfigurationItemType < ActiveRecord::Base
-  validates :internal_identifier, :uniqueness => true
+  validates :internal_identifier, :uniqueness => {:case_sensitive => false}
 
   has_and_belongs_to_many :configuration_options, :uniq => true do
     def default

@@ -8,3 +8,5 @@ Version 3.0.12 - 10-12-2012
 - Fixed gemspec
 Version 3.0.13 - 10-26-2012
 - Updated codemirror to 2.35
+Version 3.0.14 - 01-10-2013
+- New Security Implementation

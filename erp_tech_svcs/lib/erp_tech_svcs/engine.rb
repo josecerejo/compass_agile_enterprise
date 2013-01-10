@@ -7,9 +7,10 @@ module ErpTechSvcs
     Mime::Type.register "application/pdf", :pdf
 
 	  ActiveSupport.on_load(:active_record) do
-      include ErpTechSvcs::Extensions::ActiveRecord::HasRoles
+      include ErpTechSvcs::Extensions::ActiveRecord::HasSecurityRoles
       include ErpTechSvcs::Extensions::ActiveRecord::HasFileAssets
-      include ErpTechSvcs::Extensions::ActiveRecord::HasCapabilities
+      include ErpTechSvcs::Extensions::ActiveRecord::ProtectedByCapabilities
+      include ErpTechSvcs::Extensions::ActiveRecord::HasCapabilityAccessors
       include ErpTechSvcs::Extensions::ActiveRecord::HasRelationalDynamicAttributes
     end
 

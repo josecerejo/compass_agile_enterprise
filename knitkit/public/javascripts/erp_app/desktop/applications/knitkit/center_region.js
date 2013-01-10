@@ -269,10 +269,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.Knitkit.CenterRegion", {
                 closable:true,
                 items:items,
                 save:function (comp) {
-                    if (currentUser.hasApplicationCapability('knitkit', {
-                        capability_type_iid:'edit_html',
-                        resource:'Article'
-                    })) {
+                    if (currentUser.hasCapability('edit_html', 'Content')) {
                         var content = comp.down('ckeditor').getValue();
                         self.saveExcerpt(id, content, siteId);
                         contentGridStore.load();
@@ -442,10 +439,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.Knitkit.CenterRegion", {
                 closable:true,
                 items:items,
                 save:function (comp) {
-                    if (currentUser.hasApplicationCapability('knitkit', {
-                        capability_type_iid:'edit_html',
-                        resource:'Article'
-                    })) {
+                    if (currentUser.hasCapability('edit_html','Content')) {
                         var content = comp.down('ckeditor').getValue();
                         self.saveContent(id, content, contentType, siteId);
                         if (contentGridStore) {

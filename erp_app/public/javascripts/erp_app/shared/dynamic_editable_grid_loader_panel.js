@@ -34,7 +34,7 @@ Ext.define("Compass.ErpApp.Shared.DynamicEditableGridLoaderPanel",{
                         timeout: (config.timeout || 30000),
                         showEditorToolbar: (config.showEditorToolbar === false ? false : true)
                     });
-                    self.down('shared_dynamiceditablegrid').getStore().load();
+                    if (config.autoLoad !== false) self.down('shared_dynamiceditablegrid').getStore().load();
                 }
                 else{
                     var message = response.message;

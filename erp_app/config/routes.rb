@@ -50,9 +50,12 @@ ErpApp::Engine.routes.draw do
   match '/desktop/user_management/role_management/:action' => "desktop/user_management/role_management"
   match '/desktop/user_management/application_management/:action' => "desktop/user_management/application_management"
 
-  #system_management
-  match '/desktop/system_management/:action' => "desktop/system_management/base#index"
-  match '/desktop/system_management/application_role_management/:action' => "desktop/system_management/application_role_management"
+  #security_management
+  match '/desktop/security_management/groups(/:action(/:assign_to(/:id)))' => "desktop/security_management/groups"
+  match '/desktop/security_management/users(/:action(/:assign_to(/:id)))' => "desktop/security_management/users"
+  match '/desktop/security_management/roles(/:action(/:assign_to(/:id)))' => "desktop/security_management/roles"
+  match '/desktop/security_management/capabilities(/:action(/:assign_to(/:id)))' => "desktop/security_management/capabilities"
+  match '/desktop/security_management/(/:action)' => "desktop/security_management/base"
 
   #control_panel
   match '/desktop/control_panel/application_management/:action(/:id)' => "desktop/control_panel/application_management"
