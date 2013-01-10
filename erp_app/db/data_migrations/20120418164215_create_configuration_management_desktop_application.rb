@@ -14,6 +14,10 @@ class CreateConfigurationManagementDesktopApplication
     pt2 = PreferenceType.iid('autoload_application')
     pt2.preferenced_records << app
     pt2.save
+    
+    admin_user = User.find_by_username('admin')
+    admin_user.desktop.applications << app
+    admin_user.desktop.save
   end
 
   def self.down
