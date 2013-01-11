@@ -68,7 +68,7 @@ Ext.define("Compass.ErpApp.Shared.ProfileManagementPanel", {
             buttonAlign:'left',
             url:'/users/update_password',
             defaults:{
-                width:225
+                width:300
             },
             items:[
                 {

@@ -84,7 +84,7 @@ module ErpApp
           business_party_data[:current_passport_expire_date] = Date.strptime(business_party_data[:current_passport_expire_date], @@date_format) unless business_party_data[:current_passport_expire_date].blank?
 
           klass = party_type.constantize
-          business_party = klass.find(businesss_party_id)
+          business_party = klass.find(business_party_id)
 
           business_party_data.each do |key,value|
             key = key.gsub("business_party.", "")
