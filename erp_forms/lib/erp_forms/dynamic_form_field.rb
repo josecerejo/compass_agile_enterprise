@@ -1,8 +1,5 @@
 class DynamicFormField
-=begin
-  Field Options TODO  
-  searchable
-
+=begin  
   Field Types TODO
   special:
   codemirror
@@ -11,7 +8,6 @@ class DynamicFormField
   complex (for future implementation):
   concatenated
   calculated
-  related with search ahead for relations with huge datasets
 =end
 
 #  options = {
