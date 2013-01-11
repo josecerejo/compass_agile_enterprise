@@ -28,7 +28,7 @@ CompassAeStarterKit::FileSupport.append_file 'Gemfile',
 "
 gem 'erp_base_erp_svcs', '3.1.0'
 gem 'erp_tech_svcs', '3.1.0'
-gem 'erp_app', '3.1.0'
+gem 'erp_app', '3.1.1'
 gem 'erp_forms', '2.1.0'
 gem 'knitkit', '2.1.0'
 gem 'rails_db_admin', '2.1.0'
