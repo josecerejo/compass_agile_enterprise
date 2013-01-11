@@ -8,7 +8,7 @@ ErpApp::Engine.routes.draw do
   #ErpApp general routes
   ##########################
   match '/application/:action' => "application"
-  match '/login(/:action)' => "login"
+  match '/login(/:application)' => "login#index"
   match '/public/:action' => "public"
 
   #############################
