@@ -78,14 +78,13 @@ Using the Knitkit DynamicForms widget
 
 
 == TODO
-
-Dynamic Form Builder
-Search Dynamic Attributes via SOLR
+Redefine search fields on the fly 
+  when a form changes solr definition must reload on the fly
+  currently passenger must be restarted when a form changes for solr to be updated
+  https://groups.google.com/forum/?fromgroups=#!topic/ruby-sunspot/0oewzoys_vg
 Code Mirror form field
-file attachments w/ has_file_assets and plupload
 concatenated field
 calculated field
-related field with search ahead for relations with huge datasets
 
 ============================================================
 Copyright (c) 2011 Adam Hull
