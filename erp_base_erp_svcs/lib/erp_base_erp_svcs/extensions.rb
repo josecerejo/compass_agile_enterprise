@@ -13,4 +13,5 @@ require 'erp_base_erp_svcs/extensions/active_record/is_describable'
 require 'erp_base_erp_svcs/extensions/active_record/has_contact'
 require 'erp_base_erp_svcs/extensions/active_record/sti_instantiation'
 require 'erp_base_erp_svcs/extensions/active_record/to_hash'
+require 'erp_base_erp_svcs/extensions/active_record/migration'
 
