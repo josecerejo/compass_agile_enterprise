@@ -9,7 +9,9 @@ namespace :railties do
     task :migrations => :'db:load_config' do
       to_load = ENV['FROM'].blank? ? :all : ENV['FROM'].split(",").map {|n| n.strip }
       #added to allow developer to perserve timestamps
-      perserve_timestamp = ENV['PERSERVE_TIMESTAMP'].blank? ? false : (ENV['PERSERVE_TIMESTAMP'].to_s.downcase == "true")
+      preserve_timestamp = ENV['PRESERVE_TIMESTAMPS'].blank? ? false : (ENV['PRESERVE_TIMESTAMPS'].to_s.downcase == "true")
+      #refresh will replace migrations from engines
+      refresh = ENV['REFRESH'].blank? ? false : (ENV['REFRESH'].to_s.downcase == "true")
       railties = ActiveSupport::OrderedHash.new
       Rails.application.railties.all do |railtie|
         next unless to_load == :all || to_load.include?(railtie.railtie_name)
@@ -28,7 +30,7 @@ namespace :railties do
       end
 
       ActiveRecord::Migration.copy(ActiveRecord::Migrator.migrations_paths.first, railties,
-                                    :on_skip => on_skip, :on_copy => on_copy, :perserve_timestamp => perserve_timestamp)
+                                    :on_skip => on_skip, :on_copy => on_copy, :preserve_timestamp => preserve_timestamp, :refresh => refresh)
     end
   end
 end
@@ -57,28 +59,10 @@ namespace :compass_ae do
       Rake::Task[task].invoke
     end #migrations
     
-    desc "Install all CompassAE schema migrations perserving timestamps"
-    task :migrations_perserve_timestamps => :environment do
-      compass_ae_railties = Rails.application.config.erp_base_erp_svcs.compass_ae_engines.collect{|e| "#{e.name.split("::").first.underscore}"}.join(',')
-      task = "railties:install:migrations"
-      ENV['PERSERVE_TIMESTAMP'] = 'true'
-      ENV['FROM'] = compass_ae_railties
-      Rake::Task[task].invoke
-    end #migrations
-    
     desc "Install all CompassAE data migrations"
     task :data_migrations => :environment do
       compass_ae_railties = Rails.application.config.erp_base_erp_svcs.compass_ae_engines.collect{|e| "#{e.name.split("::").first.underscore}"}.join(',')
       task = "railties:install:data_migrations"
-      ENV['FROM'] = compass_ae_railties
-      Rake::Task[task].invoke
-    end #data_migrations
-    
-    desc "Install all CompassAE data migrations perserving timestamps"
-    task :data_migrations_perserve_timestamps => :environment do
-      compass_ae_railties = Rails.application.config.erp_base_erp_svcs.compass_ae_engines.collect{|e| "#{e.name.split("::").first.underscore}"}.join(',')
-      task = "railties:install:data_migrations"
-      ENV['PERSERVE_TIMESTAMP'] = 'true'
       ENV['FROM'] = compass_ae_railties
       Rake::Task[task].invoke
     end #data_migrations
