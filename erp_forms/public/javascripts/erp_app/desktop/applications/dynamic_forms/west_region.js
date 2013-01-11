@@ -24,15 +24,15 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.WestRegion",{
             url: '/erp_forms/erp_app/desktop/dynamic_forms/models/delete',
             method: 'POST',
             params:{
-              id:node.data.modelId
+              id:node.data.formModelId
             },
             success: function(response) {
               self.clearWindowStatus();
               var obj =  Ext.decode(response.responseText);
               if(obj.success){
                 //node.remove(true); // remove node causing a reload of entire tree with error, so we are going to simply reload tree for now
-                self.sitesTree.getStore().load({
-                  node: self.sitesTree.getRootNode()
+                self.formsTree.getStore().load({
+                  node: self.formsTree.getRootNode()
                 });
               }
               else{
@@ -68,7 +68,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.WestRegion",{
             self.clearWindowStatus();
             var obj =  Ext.decode(response.responseText);
             if(obj.success){
-              node.remove(true);
+              node.remove(false);
             }
             else{
               Ext.Msg.alert('Error', 'Error deleting form');
@@ -91,17 +91,17 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.WestRegion",{
       method: 'POST',
       params:{
         id:node.data.formId,
-        model_name:node.data.modelName
+        model_name:node.data.formModelName
       },
       success: function(response) {
         self.clearWindowStatus();
         var obj =  Ext.decode(response.responseText);
         if(obj.success){
           //reload model tree node
-          self.sitesTree.getStore().load({
+          self.formsTree.getStore().load({
             //                        node:node.parentNode
             });
-          node.parentNode.expand();
+          //node.parentNode.expand();
         }
         else{
           Ext.Msg.alert('Error', 'Error setting default form');
@@ -114,40 +114,215 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.WestRegion",{
     });
   },
 
+  addDynamicForm : function(record){
+    var self = this;
+
+    var newFormWindow = Ext.create("Ext.window.Window",{
+              layout:'fit',
+              width:375,
+              title:'New Dynamic Form',
+              height:100,
+              plain: true,
+              buttonAlign:'center',
+              items: Ext.create("Ext.form.Panel",{
+                labelWidth: 110,
+                frame:false,
+                bodyStyle:'padding:5px 5px 0',
+                defaults: {
+                  width: 225
+                },
+                items: [
+                {
+                  xtype:'textfield',
+                  fieldLabel:'Form Title',
+                  allowBlank:false,
+                  name:'form_name',
+                  listeners:{
+                    afterrender:function(field){
+                        field.focus(false, 200);
+                    },
+                    'specialkey': function(field, e){
+                      if (e.getKey() == e.ENTER) {
+                        var button = field.findParentByType('window').query('#submitButton').first();
+                        button.fireEvent('click', button);
+                      }
+                    }
+                  }
+                }
+                ]
+              }),
+              buttons: [{
+                itemId: 'submitButton',
+                text:'Submit',
+                listeners:{
+                  'click':function(button){
+                    var window = button.findParentByType('window');
+                    var formPanel = window.query('form')[0];
+                    var form_name = formPanel.getForm().findField('form_name').getValue();
+
+                    var form_tab = Ext.getCmp('formBuilder_'+form_name);
+                    if (form_tab){
+                      this.centerRegion.workArea.setActiveTab(form_tab);
+                      return;
+                    }
+
+                    var formBuilder = Ext.create('Compass.ErpApp.Desktop.Applications.DynamicForms.FormBuilder', {
+                      title: form_name,
+                      model_name: record.get('text')
+                    });
+                    self.centerRegion.workArea.add(formBuilder);
+                    self.centerRegion.workArea.setActiveTab(self.centerRegion.workArea.items.length - 1);
+
+                    var form_props = formBuilder.query('#form_props').first().getForm();
+                    form_props.findField('description').setValue(form_name);
+                    form_props.findField('widget_action').setValue('save');
+                    form_props.findField('submit_button_label').setValue('Submit');
+                    form_props.findField('cancel_button_label').setValue('Cancel');
+                    Ext.getCmp('dynamic_forms_westregion').setActiveTab('field_types');
+                    var east_tabs = formBuilder.query('#east_tabs').first();
+                    east_tabs.setActiveTab('form_props');
+
+                    newFormWindow.close();
+                  }
+                }
+              },
+              {
+                text: 'Close',
+                handler: function(){
+                  newFormWindow.close();
+                }
+              }]
+            });
+            newFormWindow.show();
+  },
+
+  configureFormModel : function(record){
+    var self = this;
+
+    var configureModelWindow = Ext.create("Ext.window.Window",{
+      layout:'fit',
+      width:375,
+      title:'Configure Dynamic Form Model',
+      plain: true,
+      buttonAlign:'center',
+      items: Ext.create("Ext.form.Panel",{
+        itemId:'configureModelForm',
+        labelWidth: 110,
+        frame:false,
+        bodyStyle:'padding:5px 5px 0',
+        url:'/erp_forms/erp_app/desktop/dynamic_forms/models/update',
+        defaults: {
+          width: 225
+        },
+        items: [
+        {
+            xtype: 'checkbox',
+            fieldLabel: 'Allow Comments',
+            name: 'allow_comments',
+            inputValue: true,
+            uncheckedValue:false,
+            plugins: [new helpQtip("Do you want to allow comments on this model's records?")]
+        },
+        {
+            xtype: 'checkbox',
+            fieldLabel: 'Allow Files',
+            name: 'allow_files',
+            inputValue: true,
+            uncheckedValue:false,
+            plugins: [new helpQtip("Do you want to allow files to be attached to this model's records?")]
+        },
+        {
+          xtype:'combobox',
+          fieldLabel:'File Security Default',
+          name:'file_security_default',
+          allowBlank:false,
+          editable: false,
+          forceSelection:true,
+          store:[
+            ['private','Private'],
+            ['public','Public']
+          ],
+          plugins: [new helpQtip("Should attached files be automatically secured? If so, select Private. If not, select Public.")]
+        }]
+      }),
+      buttons: [{
+        text:'Submit',
+        listeners:{
+          'click':function(button){
+            var formPanel = button.findParentByType('window').query('form').first();
+            self.setWindowStatus('Updating dynamic form model ...');
+            var form = formPanel.getForm();
+            if (form.isValid()){
+              form.submit({
+                params:{
+                  id: record.get("formModelId")
+                },
+                success:function(form, action){
+                  self.clearWindowStatus();
+                  var obj =  Ext.decode(action.response.responseText);
+                  if(obj.success){
+                    self.formsTree.getStore().load({
+                      node: self.formsTree.getRootNode()
+                    });
+                    configureModelWindow.close();
+                  }else{
+                    Ext.Msg.alert("Error", obj.message);
+                  }
+                },
+                failure:function(form, action){
+                  self.clearWindowStatus();
+                  var obj =  Ext.decode(action.response.responseText);
+                  if(obj !== null){
+                    Ext.Msg.alert("Error", obj.message);
+                  }else{
+                    Ext.Msg.alert("Error", "Error updating form model");
+                  }
+                }
+              });              
+            }
+          }
+        }
+      },{
+        text: 'Close',
+        handler: function(){
+          configureModelWindow.close();
+        }
+      }]
+    });
+    configureModelWindow.query('#configureModelForm').first().loadRecord(record);
+    configureModelWindow.show();
+  },
+
+  openFormTab : function(record){
+    var formBuilder = Ext.create('Compass.ErpApp.Desktop.Applications.DynamicForms.FormBuilder', {
+      title: record.get('description'),
+      model_name: record.get('model_name'),
+      form_id: record.get('id'),
+      form_definition: Ext.decode(record.get('definition')),
+      msg_target: record.get('msg_target')
+    });
+    this.centerRegion.workArea.add(formBuilder);
+    this.centerRegion.workArea.setActiveTab(this.centerRegion.workArea.items.length - 1);
+
+    var form_props = formBuilder.query('#form_props').first().getForm();
+    form_props.loadRecord(record);
+    Ext.getCmp('dynamic_forms_westregion').setActiveTab('field_types');
+    var east_tabs = formBuilder.query('#east_tabs').first();
+    east_tabs.setActiveTab('form_props');
+  },
+
   getDynamicForm : function(record){
     var self = this;
-    self.setWindowStatus('Loading dynamic form...');
-    Ext.Ajax.request({
-      url: '/erp_forms/erp_app/desktop/dynamic_forms/forms/get',
-      method: 'POST',
-      params:{
-        id:record.get('formId')
-      },
-      success: function(response) {
-        self.initialConfig['centerRegion'].editSectionLayout(
-          sectionName,
-          websiteId,
-          sectionId,
-          response.responseText,
-          [{
-            text: 'Insert Content Area1',
-            handler: function(btn){
-              var codeMirror = btn.findParentByType('codemirror');
-              Ext.MessageBox.prompt('New File', 'Please enter content area name:', function(btn, text){
-                if(btn == 'ok'){
-                  codeMirror.insertContent('<%=render_content_area(:'+text+')%>');
-                }
+    form_tab = Ext.getCmp('formBuilder_'+record.get('text'));
 
-              });
-            }
-          }]);
-        self.clearWindowStatus();
-      },
-      failure: function(response) {
-        self.clearWindowStatus();
-        Ext.Msg.alert('Error', 'Error loading dynamic form.');
-      }
-    });
+    if (form_tab){
+      this.centerRegion.workArea.setActiveTab(form_tab);
+      return;
+    }
+
+    self.setWindowStatus('Loading dynamic form...');
+    Ext.getStore('dynamicFormStore').load({ params:{ id:record.get('formId') }});
+    self.clearWindowStatus();
   },
 
   getDynamicData : function(record, title){
@@ -192,18 +367,31 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.WestRegion",{
               success: function(response) {
                 self.clearWindowStatus();
                 form_definition = Ext.decode(response.responseText);
-                if (form_definition.success == false){
+                if (form_definition.success === false){
                     Ext.Msg.alert('Error', form_definition.error);
                 }else{
-                  var newRecordWindow = Ext.create("Ext.window.Window",{
-                    layout:'fit',
-                    title:'New Record',
-                    y: 100, // this fixes chrome and safari rendering the window at the bottom of the screen
-                    plain: true,
-                    buttonAlign:'center',
-                    items: form_definition
+                  var newRecordPanel = Ext.create('Ext.panel.Panel',{
+                      itemId: record.get("text")+'-new',
+                      layout: 'border',
+                      title: 'New '+record.get("text"),
+                      closable: true,
+                      autoScroll: true,
+                      items: [form_definition],
+                      listeners:{
+                        'afterrender':function(panel){
+                            panel.query('dynamic_form_panel').first().addListener('aftercreate', function(args){
+                              // close and reopen tab
+                              var tabPanel = panel.findParentByType('tabpanel');
+                              tabPanel.remove(panel);
+                              Ext.getCmp(record.data.text).editRecord(args.record);
+                              // reload grid
+                              tabPanel.query('#'+record.get("text")).first().query('shared_dynamiceditablegrid').first().getStore().load({});
+                            });
+                        }                        
+                    }
                   });
-                  newRecordWindow.show();
+                  self.centerRegion.workArea.add(newRecordPanel);
+                  self.centerRegion.workArea.setActiveTab(self.centerRegion.workArea.items.length - 1);
                 }
               },
               failure: function(response) {
@@ -212,6 +400,65 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.WestRegion",{
               }
             });
           }
+        },
+        {
+          text: "Edit Selected Record",
+          iconCls:'icon-edit',
+          handler:function(btn){
+            var rec = Ext.getCmp(record.data.text).query('shared_dynamiceditablegrid').first().getSelectionModel().getSelection().first();
+            if (rec) {
+              Ext.getCmp(record.data.text).editRecord(rec);
+            }else{
+              Ext.Msg.alert('Error', 'No record selected.');
+            }
+          }
+        },
+        {
+          text: "Delete Selected Record",
+          iconCls:'icon-delete',
+          handler:function(btn){
+            var rec = Ext.getCmp(record.data.text).query('shared_dynamiceditablegrid').first().getSelectionModel().getSelection().first();
+            if (rec){
+              var messageBox = Ext.MessageBox.confirm('Confirm', 'Are you sure?', function(btn){
+                if (btn == 'yes') Ext.getCmp(record.data.text).deleteRecord(rec, record.data.text);
+              });              
+            }else{
+              Ext.Msg.alert('Error', 'No record selected.');
+            }
+          }
+        },
+        {xtype: 'tbspacer', width: 10},
+        {
+            fieldLabel: '<span data-qtitle="Search" data-qwidth="200" data-qtip="">Search</span>',
+            labelWidth : 40,
+            itemId: 'dynamicDataSearchValue',
+            xtype: 'textfield',
+            width: 180,
+            value: '',
+            listeners:{
+              specialkey: function(field, e){
+                if (e.getKey() == e.ENTER) {
+                  var grid = field.findParentByType('tabpanel').query('#centerRegionLayout_'+record.data.text).first();
+                  var button = grid.query('#searchButton').first();
+                  button.fireEvent('click', button);
+                }
+              }              
+            }
+        },
+        {xtype: 'tbspacer', width: 1},
+        {
+            xtype: 'button',
+            itemId: 'searchButton',
+            iconCls: 'x-btn-icon icon-search',
+            listeners:{
+              click: function(button) {
+                var grid = button.findParentByType('tabpanel').query('#centerRegionLayout_'+record.data.text).first();
+                var value = grid.query('#dynamicDataSearchValue').first().getValue();
+                grid.query('shared_dynamiceditablegrid').first().getStore().load({
+                  params: {query_filter: value}                
+                });              
+              }              
+            }
         }
         ]
       }
@@ -222,95 +469,186 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.WestRegion",{
   },
     
   initComponent: function() {
+    this.callParent(arguments);
+  },
+
+  constructor : function(config) {
     var self = this;
-        
+
+    Ext.define('FormsTreeNode', {
+        extend: 'Ext.data.Model',
+        fields: [
+            {name: 'id', type: 'string'},
+            {name: 'text', type: 'string'},
+            {name: 'iconCls', type: 'string'},
+            {name: 'isFormModel', type: 'boolean'},
+            {name: 'allow_comments', type: 'boolean'},
+            {name: 'allow_files', type: 'boolean'},
+            {name: 'file_security_default', type: 'string'},
+            {name: 'show_in_multitask', type: 'boolean'},
+            {name: 'formModelName', type: 'string'},
+            {name: 'isDefaultForm', type: 'boolean'},
+            {name: 'isForm', type: 'boolean'},
+            {name: 'formModelId', type: 'int'},
+            {name: 'formId', type: 'int'},
+            {name: 'leaf', type: 'boolean'}
+        ]
+    });
+    
     var store = Ext.create('Ext.data.TreeStore', {
+      storeId: 'formsTreeStore',
+      model: 'FormsTreeNode',
+      folderSort: true,
+      autoLoad: false,
+      sorters: [{
+        property:'text',
+        direction: 'ASC'
+      }],
       proxy:{
         type: 'ajax',
         url: '/erp_forms/erp_app/desktop/dynamic_forms/forms/get_tree'
-      },
+      },      
       root: {
         text: 'Dynamic Forms',
         expanded: true
-      },
-      fields:[
-      {
-        name:'id'
-      },
-      {
-        name:'iconCls'
-      },
-      {
-        name:'text',
-        sortDir: 'ASC'
-      },
-      {
-        name:'isModel'
-      },
-      {
-        name:'modelName'
-      },
-      {
-        name:'isDefault'
-      },
-      {
-        name:'isForm'
-      },
-      {
-        name:'modelId'
-      },
-      {
-        name:'formId'
-      },
-      {
-        name:'leaf'
-      },
-      {
-        name:'children'
-      }
-      ],
-      listeners:{
-        // these listeners are a workaround for a extjs 4.0.7 bug
-        // reference: http://www.sencha.com/forum/showthread.php?151211-Reloading-TreeStore-adds-all-records-to-store-getRemovedRecords&p=661157#post661157
-        'beforeload': function()
-        {
-          this.clearOnLoad = false;
-          this.getRootNode().removeAll();
-        },
-        'afterload': function()
-        {
-          this.removed = [];
-        }
       }
     });
 
-    this.sitesTree = new Ext.tree.TreePanel({
+    this.formsTree = Ext.create("Ext.tree.Panel",{
+      title: 'Models & Forms',
       store:store,
-      dataUrl: '/erp_forms/erp_app/desktop/dynamic_forms/forms/get_tree',
-      region: 'center',
       rootVisible:false,
-      enableDD :false,
+      autoScroll: true,
+      tbar:{
+        items:[
+        {
+          text:'New Form Model',
+          iconCls:'icon-add',
+          handler:function(btn){
+            var newModelWindow = Ext.create("Ext.window.Window",{
+              layout:'fit',
+              width:375,
+              title:'New Dynamic Form Model',
+              //height:100,
+              plain: true,
+              buttonAlign:'center',
+              items: Ext.create("Ext.form.Panel",{
+                labelWidth: 110,
+                frame:false,
+                bodyStyle:'padding:5px 5px 0',
+                url:'/erp_forms/erp_app/desktop/dynamic_forms/models/create',
+                defaults: {
+                  width: 225
+                },
+                items: [{
+                  xtype:'textfield',
+                  fieldLabel:'Model Name',
+                  allowBlank:false,
+                  name:'model_name',
+                  plugins: [new helpQtip('This should be a camel case class name.<br /> Example: WebsiteInquiry')],
+                  vtype: 'alphanum',
+                  listeners:{
+                    afterrender:function(field){
+                        field.focus(false, 200);
+                    },
+                    'specialkey': function(field, e){
+                      if (e.getKey() == e.ENTER) {
+                        var button = field.findParentByType('window').query('#submitButton').first();
+                        button.fireEvent('click', button);
+                      }
+                    }
+                  }
+                },
+                {
+                    xtype: 'checkbox',
+                    fieldLabel: 'Allow Comments',
+                    name: 'allow_comments',
+                    inputValue: true,
+                    uncheckedValue:false,
+                    plugins: [new helpQtip("Do you want to allow comments on this model's records?")]
+                },
+                {
+                    xtype: 'checkbox',
+                    fieldLabel: 'Allow Files',
+                    name: 'allow_files',
+                    inputValue: true,
+                    uncheckedValue:false,
+                    plugins: [new helpQtip("Do you want to allow files to be attached to this model's records?")]
+                },
+                {
+                  xtype:'combobox',
+                  fieldLabel:'File Security Default',
+                  allowBlank:false,
+                  name:'file_security_default',
+                  value: 'private',
+                  store:[
+                    ['private','Private'],
+                    ['public','Public']
+                  ]
+                }]
+              }),
+              buttons: [{
+                text:'Submit',
+                listeners:{
+                  'click':function(button){
+                    var formPanel = button.findParentByType('window').query('form').first();
+                    self.setWindowStatus('Adding new dynamic form model ...');
+                    if (formPanel.getForm().isValid()){
+                      formPanel.getForm().submit({
+                        success:function(form, action){
+                          self.clearWindowStatus();
+                          var obj =  Ext.decode(action.response.responseText);
+                          if(obj.success){
+                            self.formsTree.getStore().load({
+                              node: self.formsTree.getRootNode()
+                            });
+                            newModelWindow.close();
+                          }else{
+                            Ext.Msg.alert("Error", obj.message);
+                          }
+                        },
+                        failure:function(form, action){
+                          self.clearWindowStatus();
+                          var obj =  Ext.decode(action.response.responseText);
+                          if(obj !== null){
+                            Ext.Msg.alert("Error", obj.message);
+                          }else{
+                            Ext.Msg.alert("Error", "Error adding form model");
+                          }
+                        }
+                      });
+                    }
+                  }
+                }
+              },{
+                text: 'Close',
+                handler: function(){
+                  newModelWindow.close();
+                }
+              }]
+            });
+            newModelWindow.show();
+          }
+        }
+        ]
+      },
       listeners:{
-        'load':function(){
-          self.sitesTree.getStore().sort('text', 'ASC');
-        },
         'itemclick':function(view, record, item, index, e){
           e.stopEvent();
-          if(record.data['isModel']){
+          if(record.data['isFormModel']){
             if (record.data['children'].length > 0){
               self.getDynamicData(record);
             }
           }
           else if(record.data['isForm']){
-            //self.getDynamicForm(record);
-            Ext.Msg.alert('Info', 'Form Builder not yet implemented');
+            self.getDynamicForm(record);
           }
         },
         'itemcontextmenu':function(view, record, htmlItem, index, e){
           e.stopEvent();
           var items = [];
 
-          if(record.data['isModel']){
+          if(record.data['isFormModel']){
                       
             // can only display data if there is a form to provide a definition
             if (record.data['children'].length > 0){
@@ -326,19 +664,28 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.WestRegion",{
             }
 
             items.push({
-              text:'Add Dynamic Form',
+              text:'New Dynamic Form',
               iconCls:'icon-add',
               listeners:{
                 'click':function(){
-                  //self.addDynamicForm(record);
-                  Ext.Msg.alert('Info', 'Form Builder not yet implemented');
+                  self.addDynamicForm(record);
+                }
+              }
+            });
+
+            items.push({
+              text:'Configure',
+              iconCls:'icon-add',
+              listeners:{
+                'click':function(){
+                  self.configureFormModel(record);
                 }
               }
             });
                         
             if(record.data['text'] != 'DynamicFormDocument'){
               items.push({
-                text:'Delete Model',
+                text:'Delete Form Model',
                 iconCls:'icon-delete',
                 listeners:{
                   'click':function(){
@@ -355,31 +702,28 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.WestRegion",{
               iconCls:'icon-edit',
               listeners:{
                 'click':function(){
-                  //self.getDynamicForm(record);
-                  Ext.Msg.alert('Info', 'Form Builder not yet implemented');
+                  self.getDynamicForm(record);
                 }
               }
             });
-            if(!record.data['isDefault']){
+            if(!record.data['isDefaultForm']){
               items.push({
-                text:'Set As Default',
+                text:'Set As Default Form',
                 iconCls:'icon-edit',
                 listeners:{
                   'click':function(){
-                    //self.setDefaultForm(record);
-                    Ext.Msg.alert('Info', 'Form Builder not yet implemented');
+                    self.setDefaultForm(record);
                   }
                 }
               });
             }
 
             items.push({
-              text:'Delete',
+              text:'Delete Dynamic Form',
               iconCls:'icon-delete',
               listeners:{
                 'click':function(){
-                  //self.deleteForm(record);
-                  Ext.Msg.alert('Info', 'Form Builder not yet implemented');
+                  self.deleteForm(record);
                 }
               }
             });
@@ -393,102 +737,41 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.WestRegion",{
       }
     });
 
-    var layout = new Ext.Panel({
-      layout: 'border',
-      autoDestroy:true,
-      title:'Dynamic Models & Forms',
-      items: [this.sitesTree],
-      tbar:{
-        items:[
-        {
-          text:'New Dynamic Form Model',
-          iconCls:'icon-add',
-          handler:function(btn){
-            var newModelWindow = Ext.create("Ext.window.Window",{
-              layout:'fit',
-              width:375,
-              title:'New Dynamic Form Model',
-              height:100,
-              plain: true,
-              buttonAlign:'center',
-              items: new Ext.FormPanel({
-                labelWidth: 110,
-                frame:false,
-                fileUpload: true,
-                bodyStyle:'padding:5px 5px 0',
-                url:'/erp_forms/erp_app/desktop/dynamic_forms/models/create',
-                defaults: {
-                  width: 225
-                },
-                items: [
-                {
-                  xtype:'textfield',
-                  fieldLabel:'Model Name',
-                  allowBlank:false,
-                  name:'model_name'
-                }
-                ]
-              }),
-              buttons: [{
-                text:'Submit',
-                listeners:{
-                  'click':function(button){
-                    var window = button.findParentByType('window');
-                    var formPanel = window.query('form')[0];
-                    self.setWindowStatus('Adding new dynamic form model ...');
-                    formPanel.getForm().submit({
-                      success:function(form, action){
-                        self.clearWindowStatus();
-                        var obj =  Ext.decode(action.response.responseText);
-                        if(obj.success){
-                          self.sitesTree.getStore().load({
-                            node: self.sitesTree.getRootNode()
-                          });
-                          newModelWindow.close();
-                        }
-                        else{
-                          Ext.Msg.alert("Error", obj.message);
-                        }
-                      },
-                      failure:function(form, action){
-                        self.clearWindowStatus();
-                        var obj =  Ext.decode(action.response.responseText);
-                        if(obj != null){
-                          Ext.Msg.alert("Error", obj.message);
-                        }
-                        else{
-                          Ext.Msg.alert("Error", "Error importing website");
-                        }
-                      }
-                    });
-                  }
-                }
-              },{
-                text: 'Close',
-                handler: function(){
-                  newModelWindow.close();
-                }
-              }]
-            });
-            newModelWindow.show();
+    this.fieldTypes = {
+        xtype: 'treepanel',
+        viewConfig: {
+            plugins: {
+                ptype: 'treeviewdragdrop',
+                ddGroup: 'fieldsDDGroup',
+                enableDrop: false
+            }
+        },                            
+        itemId: 'field_types',
+        title: 'Field Types',
+        root: fieldTreeRootNode,
+        rootVisible: true,
+        autoScroll: true,
+        listeners:{
+          beforerender:function(){
+            // we have to set this qtip this way so that we have access to ErpTechSvcs.Config
+            var filefield = fieldTreeRootNode.findChild('field_xtype','filefield');
+            var valid_types = ErpTechSvcs.Config.file_upload_types.replace(/,/g,', ');
+            filefield.data.qtip = 'Model must be enabled with has_file_assets. Use limited to one upload field per form. Compass AE is currently configured with a max file upload size of '+ErpTechSvcs.Config.max_file_size_in_mb+'MB and limited to file types '+valid_types+". Be sure to configure your web and/or mail servers accordingly.";
           }
         }
-        ]
-      }
-    });
+    };
 
-    this.items = [layout];
-    this.callParent(arguments);
-    this.setActiveTab(0);
-  },
-
-  constructor : function(config) {
     config = Ext.apply({
-      id: 'westregionPanel',
+      id: 'dynamic_forms_westregion',
       region:'west',
       split:true,
-      width:175,
-      collapsible:false
+      width:235,
+      header: false,
+      hideCollapseTool: true,
+      collapsible: true,
+      collapseMode: 'mini',
+      items: [this.formsTree, this.fieldTypes],
+      activeTab: 0
     }, config);
 
     this.callParent([config]);

@@ -14,6 +14,8 @@ module ErpTechSvcs
 
 				module ClassMethods
 				  def has_security_roles
+            has_and_belongs_to_many :security_roles
+
 				    extend HasSecurityRoles::SingletonMethods
     				include HasSecurityRoles::InstanceMethods
 				  end

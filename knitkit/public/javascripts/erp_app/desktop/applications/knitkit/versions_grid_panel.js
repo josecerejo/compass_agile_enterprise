@@ -178,7 +178,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.Knitkit.VersionsArticleGridPanel
         if (currentUser.hasCapability('publish','Content')) {
             var self = this;
 
-            var publishWindow = new Ext.create('Compass.ErpApp.Desktop.Applications.Knitkit.PublishWindow',{
+            var publishWindow = Ext.create('Compass.ErpApp.Desktop.Applications.Knitkit.PublishWindow',{
                 baseParams:{
                     id:rec.get('id'),
                     site_id:self.initialConfig.siteId,

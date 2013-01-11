@@ -1,4 +1,7 @@
 class Report < ActiveRecord::Base
+  attr_protected :created_at, :updated_at
+  attr_accessible :name, :internal_identifier
+  
   validates :name, :internal_identifier, :uniqueness => true
 
   before_create :set_default_template

@@ -8,6 +8,8 @@ class SecurityRole < ActiveRecord::Base
   validates_uniqueness_of :internal_identifier, :case_sensitive => false
   validates_length_of     :internal_identifier, :within => 3..100
 
+  attr_accessible :description, :internal_identifier
+
 	def to_xml(options = {})
 		default_only = []
   	options[:only] = (options[:only] || []) + default_only

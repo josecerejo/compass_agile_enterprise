@@ -41,13 +41,30 @@ class User < ActiveRecord::Base
     party.security_roles
   end
 
-  def has_role?(role)
-    role = role.is_a?(SecurityRole) ? role : SecurityRole.find_by_internal_identifier(role.to_s)
-    all_roles.include?(role)
+  def has_role?(*passed_roles)
+    result = false
+    passed_roles.flatten!
+    passed_roles.each do |role|
+      role_iid = role.is_a?(SecurityRole) ?  role.internal_identifier : role.to_s
+      all_roles.each do |this_role|
+        result = true if (this_role.internal_identifier == role_iid)
+        break if result
+      end
+      break if result
+    end
+    result
   end
 
   def add_role(role)
     party.add_role(role)
+  end
+
+  def add_roles(*passed_roles)
+    party.add_roles(*passed_roles)
+  end
+
+  def remove_roles(*passed_roles)
+    party.remove_roles(*passed_roles)
   end
 
   def remove_role(role)

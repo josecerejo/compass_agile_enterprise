@@ -3,15 +3,25 @@ require 'spec_helper'
 describe User do
 
   before(:all) do
-    @user = Factory(:user)
+    @user = FactoryGirl.create(:user)
   end
 
   it "should allow you to add and remove roles" do
-    role = SecurityRole.create(:internal_identifier => 'employee')
+    role = SecurityRole.create(:description => "Test Role", :internal_identifier => 'test role')
+    @user.has_role?(role).should eq false
     @user.add_role(role)
     @user.has_role?(role).should eq true
     @user.remove_role(role)
     @user.has_role?(role).should eq false
+  end
+
+  it "should allow you to add and remove capabilities" do
+    c = FileAsset.add_capability('upload')
+    @user.has_capability?('upload','FileAsset').should eq false
+    @user.add_capability(c)
+    @user.has_capability?('upload','FileAsset').should eq true
+    @user.remove_capability(c)
+    @user.has_capability?('upload','FileAsset').should eq false
   end
 
   it "should allow you to add instance attributes" do

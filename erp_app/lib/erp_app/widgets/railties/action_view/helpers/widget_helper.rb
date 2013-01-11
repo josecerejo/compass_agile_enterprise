@@ -7,11 +7,22 @@ module ErpApp
             
             def render_widget(name, opts={})
               action = opts[:action] || :index
-              params = opts[:params].nil? ? '{}' : opts[:params].to_json
+              params = opts[:params].nil? ? {} : opts[:params]
 
               uuid = Digest::SHA1.hexdigest(Time.now.to_s + rand(10000).to_s)
-
-              raw "<div id=\"#{uuid}\" class='compass_ae-widget'>Loading ...<script type=\"text/javascript\">Compass.ErpApp.Widgets.setup('#{uuid}', '#{name}', '#{action}', #{params}, true);</script></div>"
+              
+              #render widget
+              widget_obj = "::Widgets::#{name.to_s.camelize}::Base".constantize.new(self.controller, name.to_s, action.to_s, uuid, params, nil)
+              result = widget_obj.process(action.to_s)
+              
+              html = "<div id=\"#{uuid}\" class='compass_ae-widget'>"
+              html << result
+              html << "</div>" 
+              html << "<script type='text/javascript'>"
+              html << "Compass.ErpApp.Widgets.LoadedWidgets.push({id:'#{uuid}',name:'#{name.to_s}',action:'#{action.to_s}',params:#{params.to_json}});"
+              html << "</script>"
+              
+              raw html
             end
 
             def build_widget_url(action,id=nil,params={})

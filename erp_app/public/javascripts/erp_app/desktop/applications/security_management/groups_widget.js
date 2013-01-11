@@ -2,10 +2,6 @@ Ext.define("Compass.ErpApp.Desktop.Applications.SecurityManagement.GroupsWidget"
   extend:"Ext.panel.Panel",
   alias:'widget.security_management_groupswidget',
 
-  initComponent: function() {
-    Compass.ErpApp.Desktop.Applications.SecurityManagement.GroupsWidget.superclass.initComponent.call(this, arguments);
-  },
-
   updateTitle : function(){
     if (this.assign_to_description){
       this.down('#assignment').setTitle('Assign Groups to '+this.assign_to+' '+this.assign_to_description);
@@ -15,23 +11,26 @@ Ext.define("Compass.ErpApp.Desktop.Applications.SecurityManagement.GroupsWidget"
   refreshWidget : function(tab){
     if (tab === undefined) tab = this;
 
-    if (tab.assign_to_id){
-      //need a delay to allow for rendering of shared_dynamiceditablegrid
-      setTimeout( function() { 
+    //need a delay to allow for rendering of shared_dynamiceditablegrid
+    setTimeout( function() { 
+      var available_grid = tab.down('#available').down('shared_dynamiceditablegrid');
+      var selected_grid = tab.down('#selected').down('shared_dynamiceditablegrid');
+      if (tab.assign_to_id){
         var extraParams = {
           assign_to: tab.assign_to,
           id: tab.assign_to_id
         };
 
-        var available_grid = tab.down('#available').down('shared_dynamiceditablegrid');
         available_grid.getStore().getProxy().extraParams = extraParams;
         available_grid.getStore().load();
 
-        var selected_grid = tab.down('#selected').down('shared_dynamiceditablegrid');
         selected_grid.getStore().getProxy().extraParams = extraParams;
         selected_grid.getStore().load();
-      }, 500 );
-    }
+      }else{
+        available_grid.getStore().getProxy().extraParams = {};
+        selected_grid.getStore().getProxy().extraParams = {};
+      }
+    }, 500 );
   },
 
   constructor : function(config) {
@@ -99,7 +98,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.SecurityManagement.GroupsWidget"
 
     }, config);
 
-    Compass.ErpApp.Desktop.Applications.SecurityManagement.GroupsWidget.superclass.constructor.call(this, config);
+    this.callParent([config]);
   }
 });
 
@@ -171,7 +170,7 @@ Ext.define('Compass.ErpApp.Desktop.Applications.SecurityManagement.AddGroupButto
           var available_grid = security_management_groupswidget.query('#available').first().down('shared_dynamiceditablegrid');
           var selected_grid = security_management_groupswidget.query('#selected').first().down('shared_dynamiceditablegrid');
           var selection = available_grid.getSelectionModel().getSelection();
-          if (selection.length > 0){
+          if (security_management_groupswidget.assign_to_id && selection.length > 0){
             var selected_groups = [];
             Ext.each(selection, function(s){
               selected_groups.push(s.data.id);
@@ -219,7 +218,7 @@ Ext.define('Compass.ErpApp.Desktop.Applications.SecurityManagement.AddGroupButto
           var available_grid = security_management_groupswidget.query('#available').first().down('shared_dynamiceditablegrid');
           var selected_grid = security_management_groupswidget.query('#selected').first().down('shared_dynamiceditablegrid');
           var selection = selected_grid.getSelectionModel().getSelection();
-          if (selection.length > 0){
+          if (security_management_groupswidget.assign_to_id && selection.length > 0){
             var selected_groups = [];
             Ext.each(selection, function(s){
               selected_groups.push(s.data.id);

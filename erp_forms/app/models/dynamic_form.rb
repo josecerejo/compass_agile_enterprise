@@ -1,5 +1,15 @@
 class DynamicForm < ActiveRecord::Base
+  attr_protected :created_at, :updated_at
+
   belongs_to :dynamic_form_model
+  belongs_to :created_by, :class_name => "User"
+  belongs_to :updated_by, :class_name => "User"
+
+  extend FriendlyId
+  friendly_id :description, :use => [:slugged], :slug_column => :internal_identifier
+  def should_generate_new_friendly_id?
+    new_record?
+  end
 
   validates_uniqueness_of :internal_identifier, :scope => :model_name, :case_sensitive => false
   
@@ -7,7 +17,7 @@ class DynamicForm < ActiveRecord::Base
   	result = nil
   	begin
   	  klass = Module.const_get(class_name)
-        result = klass.is_a?(Class) ? ((klass.superclass == ActiveRecord::Base or klass.superclass == DynamicModel) ? true : nil) : nil
+      result = (klass.is_a?(Class) ? ((klass.superclass == ActiveRecord::Base or klass.superclass == DynamicModel) ? true : nil) : nil)
   	rescue NameError
   	  result = nil
   	end
@@ -15,12 +25,9 @@ class DynamicForm < ActiveRecord::Base
   end
   
   def self.get_form(klass_name, internal_identifier='')
-    result = nil
-  	unless internal_identifier.blank?
-  	  result = DynamicForm.find_by_model_name_and_internal_identifier(klass_name, internal_identifier)
-  	else
-  	  result = DynamicForm.find_by_model_name_and_default(klass_name, true)
-  	end
+    result = nil  	
+	  result = DynamicForm.find_by_model_name_and_internal_identifier(klass_name, internal_identifier) unless internal_identifier.blank?
+	  result = DynamicForm.find_by_model_name_and_default(klass_name, true) if result.nil?
   	result
   end
   
@@ -38,12 +45,20 @@ class DynamicForm < ActiveRecord::Base
   end
   
   def add_validation(def_object)
-    def_object.each do |item|      
-      if item[:validator_function] and item[:validator_function] != ""
-        item[:validator] = NonEscapeJsonString.new("function(v){ regex = this.initialConfig.validation_regex; return #{item[:validator_function]}; }")
-      elsif item[:validation_regex] and item[:validation_regex] != ""
-        item[:validator] = NonEscapeJsonString.new("function(v){ return validate_regex(v, this.initialConfig.validation_regex); }")
+    def_object.each do |item|
+      if !item[:validation_regex].blank?
+        item[:regex] = NonEscapeJsonString.new(item[:validation_regex].match('^\/') ? item[:validation_regex] : '/'+item[:validation_regex]+'/')
+      elsif !item[:validator_function].blank?
+        item[:validator] = NonEscapeJsonString.new("function(v){ return #{item[:validator_function]}; }")
       end
+    end
+    
+    def_object
+  end
+
+  def add_help_qtip(def_object)
+    def_object.each do |item|
+      item[:plugins] = NonEscapeJsonString.new('[new helpQtip("'+item[:help_qtip].gsub(/\"/,'\"')+'")]') unless item[:help_qtip].blank?
     end
     
     def_object
@@ -53,7 +68,7 @@ class DynamicForm < ActiveRecord::Base
   def related_fields
     related_fields = []
     definition_object.each do |f|
-      related_fields << f if f[:xtype] == 'related_combobox'
+      related_fields << f if ['related_combobox','related_searchbox'].include?(f[:xtype])
     end
 
     related_fields
@@ -74,53 +89,98 @@ class DynamicForm < ActiveRecord::Base
     array_of_fields.to_json
   end
   
-  def to_extjs_formpanel(options={})    
+  def focus_first_field_js
+    if self.focus_first_field
+      return "form.getComponent(0).focus(true, 200);"
+    else
+      return ''
+    end
+  end
+
+  def submit_empty_text_js
+    if self.submit_empty_text
+      return "submitEmptyText: true,"
+    else
+      return ''
+    end
+  end
+
+  def to_extjs_formpanel(options={})   
     form_hash = {
-      :xtype => 'form',
-      :id => "dynamic_form_panel_#{model_name}",
+      :xtype => 'dynamic_form_panel',
       :url => options[:url],
       :title => self.description,
       :frame => true,
-      :bodyStyle => 'padding: 5px 5px 0;'
+      :bodyStyle => 'padding: 5px 5px 0;',
+      :baseParams => {
+        :dynamic_form_id => self.id,
+        :dynamic_form_model_id => self.dynamic_form_model_id,
+        :model_name => self.model_name
+      },
+      :defaults => {},
+      :items => add_help_qtip(definition_with_validation)
     }
-    
+    form_hash[:defaults][:msgTarget] = self.msg_target unless self.msg_target.blank?
     form_hash[:width] = options[:width] if options[:width]
-    form_hash[:baseParams] = {}
     form_hash[:baseParams][:id] = options[:record_id] if options[:record_id]
-    form_hash[:baseParams][:dynamic_form_id] = self.id
-    form_hash[:baseParams][:dynamic_form_model_id] = self.dynamic_form_model_id
-    form_hash[:baseParams][:model_name] = self.model_name
     form_hash[:listeners] = {
-      :afterrender => NonEscapeJsonString.new("function(form) {Ext.getCmp('dynamic_form_panel_#{model_name}').getComponent(0).focus(false);}")
+      :afterrender => NonEscapeJsonString.new("function(form) { #{focus_first_field_js} }")
     }
-    form_hash[:items] = definition_with_validation
     form_hash[:buttons] = []
-    form_hash[:buttons][0] = {
-      :text => 'Submit',
+    form_hash[:buttons] << {
+      :text => self.submit_button_label,
       :listeners => NonEscapeJsonString.new("{
-          \"click\":function(button){
-              var formPanel = Ext.getCmp('dynamic_form_panel_#{model_name}');
-              formPanel.getForm().submit({
-                  reset:true,
-                  success:function(form, action){
-                      Ext.getCmp('dynamic_form_panel_#{model_name}').findParentByType('window').close();
-
-                      if (Ext.getCmp('#{model_name}')){
-                          Ext.getCmp('#{model_name}').query('shared_dynamiceditablegrid')[0].store.load();                                                                      
-                      }
-                  },
-                  failure:function(form, action){
-                    Ext.Msg.alert(action.response.responseText);                                
-                  }
+          click:function(button){
+              var form = button.findParentByType('form').getForm();
+              //jsonSubmit option only works when there is no filefield so we have to do it ourselves
+              //JSON is important to preserve data types (ie. we want integers to save as integers not strings)
+              var form_data = {};
+              Ext.each(form.getFields().items, function(field) {
+                if (Ext.Array.indexOf(['filefield','fileuploadfield'], field.xtype) < 0){
+                  form_data[field.name] = field.getValue();
+                } 
               });
+              if (form.isValid()){
+                form.submit({
+                    #{submit_empty_text_js}
+                    reset:false,
+                    params:{
+                      form_data_json: Ext.encode(form_data)
+                    },
+                    success:function(form, action){
+                        var obj = Ext.decode(action.response.responseText);
+                        if(obj.success){
+                          if (form.getRecord()){
+                            form.owner.fireEvent('afterupdate');
+                          }else{
+                            form.owner.fireEvent('aftercreate', {
+                              record: obj
+                            });
+                          }
+                        }else{
+                          Ext.Msg.alert('Error', obj.message);
+                        }
+                    },
+                    failure:function(form, action){
+                      Ext.Msg.alert('Error', action.response.responseText);
+                    }
+                });
+              }else{
+                Ext.Msg.alert('Error','Please complete form.');
+              }
           }
       }")
     }
-    form_hash[:buttons][1] = {
-      :text => 'Cancel',
+    form_hash[:buttons] << {
+      :text => self.cancel_button_label,
       :listeners => NonEscapeJsonString.new("{
           \"click\":function(button){
-              Ext.getCmp('dynamic_form_panel_#{model_name}').findParentByType('window').close();
+            var form = button.findParentByType('form');
+            if (form.close_selector){
+              form.up(form.close_selector).close();
+            }else{
+              form.up('window').close();
+            }
           }
       }")
     }
@@ -136,62 +196,76 @@ class DynamicForm < ActiveRecord::Base
   # :widget_result_id => 
   # :width =>
   def to_extjs_widget(options={})
-    options[:width] = "'auto'" if options[:width].nil?
-
-    #NOTE: The random nbsp; forces IE to eval this javascript!
-    javascript = "Ext.QuickTips.init();
-
-          Ext.create('Ext.form.Panel',{
-              id: 'dynamic_form_panel_#{model_name}',
-              url:'#{options[:url]}',
-              title: '#{self.description}',"
-
-    javascript += "\"width\": #{options[:width]}," if options[:width]
-
-    javascript += "frame: true,
-              bodyStyle:'padding: 5px 5px 0;',
-              renderTo: 'dynamic_form_target',
-              baseParams: {
-                dynamic_form_id: #{self.id},
-                dynamic_form_model_id: #{self.dynamic_form_model_id},
-                model_name: '#{self.model_name}'
-              },
-              items: #{definition_with_validation.to_json},
-              listeners: {
-                  afterrender: function(form) {
-                      Ext.getCmp('dynamic_form_panel_#{model_name}').getComponent(0).focus(false);
+    javascript = "Ext.QuickTips.init(); Ext.create('Ext.form.Panel',"
+    
+    config_hash = {
+      :url => "#{options[:url]}",
+      :title => "#{self.description}",
+      :frame => true,
+      :bodyStyle => 'padding: 5px 5px 0;',
+      :renderTo => 'dynamic_form_target',
+      :baseParams => {
+        :dynamic_form_id => self.id,
+        :dynamic_form_model_id => self.dynamic_form_model_id,
+        :model_name => self.model_name
+      },
+      :items => add_help_qtip(definition_with_validation),
+      :defaults => {},
+      :listeners => {
+        :afterrender => NonEscapeJsonString.new("function(form) { #{focus_first_field_js} }")
+      }
+    }
+    config_hash[:defaults][:msgTarget] = self.msg_target unless self.msg_target.blank?
+    config_hash[:width] = options[:width] if options[:width]
+    config_hash[:buttons] = []
+    config_hash[:buttons] << {
+      :text => self.submit_button_label,
+      :listeners => NonEscapeJsonString.new("{
+          \"click\":function(button){
+              var form = button.findParentByType('form').getForm();
+              //jsonSubmit option only works when there is no filefield so we have to do it ourselves
+              //JSON is important to preserve data types (ie. we want integers to save as integers not strings)
+              var form_data = {};
+              Ext.each(form.getFields().items, function(field) {
+                if (Ext.Array.indexOf(['filefield','fileuploadfield'], field.xtype) < 0){
+                  form_data[field.name] = field.getValue();
+                } 
+              });
+              form.submit({
+                  #{submit_empty_text_js}
+                  reset:true,
+                  params:{
+                    form_data_json: Ext.encode(form_data)
+                  },
+                  success:function(form, action){
+                      json_hash = Ext.decode(action.response.responseText);
+                      Ext.get('#{options[:widget_result_id]}').dom.innerHTML = json_hash.response;
+                      var scriptTags = Ext.get('#{options[:widget_result_id]}').dom.getElementsByTagName('script');
+                      Ext.each(scriptTags, function(scriptTag){
+                            eval(scriptTag.text);
+                      });
+                  },
+                  failure:function(form, action){
+                    if (action.response){
+                      json_hash = Ext.decode(action.response.responseText);
+                      Ext.get('#{options[:widget_result_id]}').dom.innerHTML = json_hash.response;
+                    }
                   }
-              },
-              buttons: [{
-                  text: 'Submit',
-                  listeners:{
-                      'click':function(button){
-                          var formPanel = Ext.getCmp('dynamic_form_panel_#{model_name}');
-                          formPanel.getForm().submit({
-                              reset:true,
-                              success:function(form, action){
-                                  json_hash = Ext.decode(action.response.responseText);
-                                  Ext.get('#{options[:widget_result_id]}').dom.innerHTML = json_hash.response;
-                                  var scriptTags = Ext.get('#{options[:widget_result_id]}').dom.getElementsByTagName('script');
-                                  Ext.each(scriptTags, function(scriptTag){
-                                        eval(scriptTag.text);
-                                  });
-                              },
-                              failure:function(form, action){
-                                if (action.response){
-                                  json_hash = Ext.decode(action.response.responseText);
-                                  Ext.get('#{options[:widget_result_id]}').dom.innerHTML = json_hash.response;
-                                }
-                              }
-                          });
-                      }
-                  }
-                  
-              },{
-                  text: 'Cancel'
-              }]
-          });"
-      #logger.info javascript
+              });
+          }
+      }")
+    }
+    config_hash[:buttons] << {
+      :text => 'Reset',
+      :listeners => NonEscapeJsonString.new("{
+          \"click\":function(button){
+              button.findParentByType('form').getForm().reset();
+          }
+      }")
+    }
+
+    javascript += "#{config_hash.to_json});"
+    #logger.info javascript
     javascript
   end
   

@@ -1,4 +1,5 @@
 class Money < ActiveRecord::Base
+  attr_protected :created_at, :updated_at
   
   belongs_to :currency
   before_save :parse_currency_code

@@ -6,6 +6,6 @@ describe Application do
   end
 
   it "can be saved successfully" do
-    Application.create().should be_persisted
+    Application.create(:javascript_class_name => 'test', :internal_identifier => 'test').should be_persisted
   end
 end

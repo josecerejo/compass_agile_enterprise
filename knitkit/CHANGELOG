@@ -16,8 +16,8 @@ Version 2.0.6 - 09-24-2012
 - File size, image height and width added to view details, img size added to img tag on insert image at cursor
 - Bugfix: prevent double loading of website images and files trees
 - Website images and files show website name on root node
-- Check websiteId to prevent website asset trees loading without website selected
 - Improved article search and advanced search
+- Check websiteId to prevent website asset trees loading without website selected
 - Menu item "delete" no longer shown on root_node
 - Delete multiple files at once via Images, Files, Themes or File Manager
 - Move multiple files at once via Images, Files, Themes or File Manager

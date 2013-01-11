@@ -1,4 +1,6 @@
 class BankAccount < ActiveRecord::Base
+  attr_protected :created_at, :updated_at
+
   require 'attr_encrypted'
 
   acts_as_biz_txn_account

@@ -2,6 +2,8 @@ require 'yaml'
 require 'fileutils'
 
 class Theme < ActiveRecord::Base
+  attr_protected :created_at, :updated_at
+
   THEME_STRUCTURE = ['stylesheets', 'javascripts', 'images', 'templates']
   class << self; attr_accessor :base_layouts_views_path, :knitkit_website_stylesheets_path, :knitkit_website_images_path  end
   @base_layouts_views_path = "#{Knitkit::Engine.root.to_s}/app/views"
@@ -51,8 +53,11 @@ class Theme < ActiveRecord::Base
 
   belongs_to :website
 
-  has_permalink :name, :theme_id, :scope => :website_id,
-    :only_when_blank => false, :sync_url => true
+  extend FriendlyId
+  friendly_id :name, :use => [:slugged, :scoped], :slug_column => :theme_id, :scope => [:website_id]
+  def should_generate_new_friendly_id?
+    new_record?
+  end
 
   validates :name, :presence => {:message => 'Name cannot be blank'}
   validates_uniqueness_of :theme_id, :scope => :website_id, :case_sensitive => false

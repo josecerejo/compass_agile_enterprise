@@ -2,10 +2,6 @@ Ext.define("Compass.ErpApp.Desktop.Applications.SecurityManagement.RolesPanel",{
   extend:"Ext.panel.Panel",
   alias:'widget.security_management_rolespanel',
 
-  initComponent: function() {
-    Compass.ErpApp.Desktop.Applications.SecurityManagement.RolesPanel.superclass.initComponent.call(this, arguments);
-  },
-
   setRole : function(record){
     var assign_to_id = record.get('id');
     var assign_to_description = record.get('description');
@@ -23,6 +19,22 @@ Ext.define("Compass.ErpApp.Desktop.Applications.SecurityManagement.RolesPanel",{
     var security_management_capabilitieswidget = security_management_rolespanel.down('security_management_capabilitieswidget');
     security_management_capabilitieswidget.assign_to_id = assign_to_id;
     security_management_capabilitieswidget.assign_to_description = assign_to_description;
+  },
+
+  unsetRole : function(){
+    var security_management_rolespanel = this;
+
+    var security_management_userswidget = security_management_rolespanel.down('security_management_userswidget');
+    delete security_management_userswidget.assign_to_id;
+    delete security_management_userswidget.assign_to_description;
+
+    var security_management_groupswidget = security_management_rolespanel.down('security_management_groupswidget');
+    delete security_management_groupswidget.assign_to_id;
+    delete security_management_groupswidget.assign_to_description;
+
+    var security_management_capabilitieswidget = security_management_rolespanel.down('security_management_capabilitieswidget');
+    delete security_management_capabilitieswidget.assign_to_id;
+    delete security_management_capabilitieswidget.assign_to_description;
   },
 
   constructor : function(config) {
@@ -236,6 +248,8 @@ Ext.define("Compass.ErpApp.Desktop.Applications.SecurityManagement.RolesPanel",{
                       success: function(response) {
                         var json_response = Ext.decode(response.responseText);
                         if (json_response.success){
+                          self.unsetRole();
+                          self.down('tabpanel').getActiveTab().refreshWidget();
                           all_roles.getStore().load();
                         }else{
                           Ext.Msg.alert('Error', Ext.decode(response.responseText).message);
@@ -292,7 +306,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.SecurityManagement.RolesPanel",{
 
     }, config);
 
-    Compass.ErpApp.Desktop.Applications.SecurityManagement.RolesPanel.superclass.constructor.call(this, config);
+    this.callParent([config]);
   }
 
 });

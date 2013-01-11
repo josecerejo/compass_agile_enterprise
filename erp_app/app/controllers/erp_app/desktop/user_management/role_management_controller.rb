@@ -31,9 +31,11 @@ module ErpApp
           user_id  = params[:user_id]
 
           user = User.find(user_id)
-          roles = SecurityRole.where("id in (#{role_ids.join(',')})").all
           user.party.remove_all_roles
-          user.party.add_roles(roles)
+          unless role_ids.blank?
+            roles = SecurityRole.where("id in (#{role_ids.join(',')})").all
+            user.party.add_roles(roles)
+          end
           user.party.save
 
           render :json => {:success => true, :message => 'Roles Saved'}

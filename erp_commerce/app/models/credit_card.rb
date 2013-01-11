@@ -1,5 +1,6 @@
 class CreditCard < ActiveRecord::Base
-  
+  attr_protected :created_at, :updated_at
+
   require 'attr_encrypted'
   
   belongs_to  :postal_address

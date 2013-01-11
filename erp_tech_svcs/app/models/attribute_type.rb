@@ -1,4 +1,6 @@
 class AttributeType < ActiveRecord::Base
+  attr_protected :created_at, :updated_at
+
   has_many :attribute_values, :dependent => :destroy
 
   validates_uniqueness_of :internal_identifier, :case_sensitive => false

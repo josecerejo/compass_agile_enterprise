@@ -1,4 +1,5 @@
 class PricingPlanComponent < ActiveRecord::Base
+  attr_protected :created_at, :updated_at
 
   #these relationships essentially mean that pricing plan components can
   #be shared across pricing plan. This is accomplished by using a cross-reference

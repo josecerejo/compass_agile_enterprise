@@ -1,13 +1,14 @@
 /**
-  * @class Ext.menu.*
-  */
+ * Creates the base structure of a Menu
+ * @member Ext.menu.Menu
+ */
 @mixin extjs-menu {
     .#{$prefix}menu-body {
         @include no-select;
         background: $menu-background-color !important;
         padding: $menu-padding;
     }
-    
+
     .#{$prefix}menu-item .#{$prefix}form-text {
         user-select: text;
         -webkit-user-select: text;
@@ -25,7 +26,6 @@
         border-left: solid 1px $menu-separator-border-color;
         background-color: $menu-separator-background-color;
         width: 2px;
-        height: 100%!important;
         overflow: hidden;
     }
 
@@ -62,7 +62,7 @@
         line-height: 16px;
         cursor: default;
     }
-    
+
     @if $include-opera {
         .#{$prefix}opera {
             // Opera 10.5 absolute positioning of submenu arrow has issues
@@ -82,13 +82,28 @@
         background: no-repeat center center;
     }
 
+    // For when an icon needs to be used in the right position where a submenu arrow usually goes.
+    // eg: When a CheckItem needs an icon. The left icon position is a checkbox, so the icon is moved to the right.
+    .#{$prefix}menu-item-icon-right {
+        width: 16px;
+        height: 16px;
+        position: absolute;
+        top: 6px;
+        right: 2px;
+        background: no-repeat center center;
+    }
+
     .#{$prefix}menu-item-text {
         font-size: ceil($font-size * .9);
         color: $menu-text-color;
     }
 
+    .#{$prefix}right-check-item-text {
+        padding-right: 22px;
+    }
+
     .#{$prefix}menu-item-checked {
-        .#{$prefix}menu-item-icon {
+        .#{$prefix}menu-item-icon, .#{$prefix}menu-item-icon-right {
             background-image: theme-background-image($theme-name, $menu-icon-checked);
         }
         .#{$prefix}menu-group-icon {
@@ -97,7 +112,7 @@
     }
 
     .#{$prefix}menu-item-unchecked {
-        .#{$prefix}menu-item-icon {
+        .#{$prefix}menu-item-icon, .#{$prefix}menu-item-icon-right {
             background-image: theme-background-image($theme-name, $menu-icon-unchecked);
         }
         .#{$prefix}menu-group-icon {
@@ -155,18 +170,18 @@
                     background-color: transparent;
                 }
             }
-            
-            .#{$prefix}strict & {
+
+            .#{$prefix}strict .#{$prefix}ie7m & {
                 .#{$prefix}menu-icon-separator {
                     width: 1px;
                 }
-                
+
                 .#{$prefix}menu-item-separator {
                     height: 1px;
                 }
             }
         }
-        
+
         .#{$prefix}ie6,
         .#{$prefix}ie7,
         .#{$prefix}quirks .#{$prefix}ie8 {
@@ -184,8 +199,18 @@
             }
         }
     }
-    
+
     .#{$prefix}menu-date-item {
         border-color: #99BBE8;
+    }
+
+    // When Fields are added to Menus...
+    .#{$prefix}menu-item .#{$prefix}field-label-cell {
+        vertical-align: middle;
+    }
+    .#{$prefix}menu-item .#{$prefix}form-item-label {
+        font-size: ceil($font-size * .9);
+        color: $menu-text-color;
+        padding-left: 34px;
     }
 }

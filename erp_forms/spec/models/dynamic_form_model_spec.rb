@@ -6,6 +6,6 @@ describe DynamicFormModel do
   end
 
   it "can be saved successfully" do
-    DynamicFormModel.create().should be_persisted
+    DynamicFormModel.create(:model_name => 'Test').should be_persisted
   end
 end

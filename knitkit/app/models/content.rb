@@ -1,7 +1,16 @@
 require 'will_paginate/array'
 
 class Content < ActiveRecord::Base
+  attr_protected :created_at, :updated_at
+
+  extend FriendlyId
+  friendly_id :title, :use => [:slugged], :slug_column => :permalink
+  def should_generate_new_friendly_id?
+    new_record?
+  end
+
   protected_with_capabilities
+
   acts_as_taggable
   acts_as_commentable
   acts_as_versioned  :table_name => :content_versions

@@ -258,9 +258,9 @@ class BaseTechServices < ActiveRecord::Migration
     # check that each table exists before trying to delete it.
     [ :groups,
       :audit_logs, :sessions, :simple_captcha_data,
-      :capable_models, :capability_types, :capabilities,:capabilities_capable_models,
-      :roles_users, :roles, :audit_log_items, :audit_log_item_types,
-      :users, :secured_models, :roles_secured_models, :file_assets, :delayed_jobs
+      :capability_accessors, :capability_types, :capabilities,:scope_types,
+      :parties_security_roles, :roles, :audit_log_items, :audit_log_item_types,
+      :users, :file_assets, :delayed_jobs
     ].each do |tbl|
       if table_exists?(tbl)
         drop_table tbl

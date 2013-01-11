@@ -1,4 +1,6 @@
 class Organization < ActiveRecord::Base
+  attr_protected :created_at, :updated_at
+	
 	after_create  :create_party
 	after_save    :save_party
 	after_destroy :destroy_party

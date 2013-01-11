@@ -3,14 +3,13 @@ Ext.define("Compass.ErpApp.Shared.FileManagerTree",{
   alias:'widget.compassshared_filemanager',
   extraPostData:{},
   /*
-	addtional config options
+    addtional config options
 
-	additionalContextMenuItems : any additional context menus you want to add
-	allowDownload		   : if the user can download the file
+    additionalContextMenuItems : any additional context menus you want to add
+    allowDownload : if the user can download the file
 
-
-        window.file_manager_context_menu_node
-        the above variable will be set when the context menu is shown.
+    window.file_manager_context_menu_node
+    the above variable will be set when the context menu is shown.
    */
 
   initComponent: function() {
@@ -106,7 +105,8 @@ Ext.define("Compass.ErpApp.Shared.FileManagerTree",{
       proxy: {
         method: 'GET',
         type: 'ajax',
-        url:config['url'] || '/erp_app/desktop/file_manager/base/expand_directory'
+        url:config['url'] || '/erp_app/desktop/file_manager/base/expand_directory',
+        timeout: 60000
       },
       root:rootConfig,
       fields:config['fields'] || [{
@@ -189,7 +189,7 @@ Ext.define("Compass.ErpApp.Shared.FileManagerTree",{
       'itemclick':function(view, record, item, index, e){
         e.stopEvent();
 
-        if (!(self.initialConfig.enableViewContents === false)){
+        if (self.initialConfig.enableViewContents !== false){
           if(record.get('leaf')){
             if(!self.fireEvent('allowviewcontents', this)){
               currentUser.showInvalidAccess();
@@ -233,36 +233,36 @@ Ext.define("Compass.ErpApp.Shared.FileManagerTree",{
         self.selectedNode = record;
         var menuItems = [];
 		
-		//if this is a leaf (file) allow user to view details
+		//if this is a leaf (file) allow user to view Properties
 		if(record.data['leaf']){
 			menuItems.push({
-		      nodeType:'leaf',
-		      text:'View Details',
-		      iconCls:'icon-add',
-		      listeners:{
-		        scope:self,
-		        'click':function(){
-		          var details = 'Filename: '+record.data.text;
+          nodeType:'leaf',
+          text:'Properties',
+          iconCls:'icon-add',
+          listeners:{
+            scope:self,
+            'click':function(){
+              var details = 'Filename: '+record.data.text;
 
-			      if(record.data.url){
-				    details += '<br /> URL: '+record.data.url 	
-				  }
-				  if(record.data.size){
-				    details += '<br /> Size: '+record.data.size + ' bytes' 	
-				  }
-				  if(record.data.width){
-				    details += '<br /> Width: '+record.data.width + ' px' 	
-				  }
-				  if(record.data.height){
-				    details += '<br /> Height: '+record.data.height + ' px' 	
-				  }
-				  Ext.Msg.alert('Details',details);
-		        }
-		      }
-		    });
-		}
+              if(record.data.url){
+                details += '<br /> URL: '+record.data.url;
+              }
+              if(record.data.size){
+                details += '<br /> Size: '+record.data.size + ' bytes';	
+              }
+              if(record.data.width){
+                details += '<br /> Width: '+record.data.width + ' px';	
+              }
+              if(record.data.height){
+                details += '<br /> Height: '+record.data.height + ' px';
+              }
+              Ext.Msg.alert('Properties', details);
+            }
+          }
+      });
+    }
         // if root node don't show rename menu item
-        if(record.data['id'] != 'root_node' && !(self.initialConfig.showRenameMenuItem === false)){
+        if(record.data['id'] != 'root_node' && self.initialConfig.showRenameMenuItem !== false){
           menuItems.push({
             text:'Rename',
             iconCls:'icon-edit',
@@ -318,7 +318,7 @@ Ext.define("Compass.ErpApp.Shared.FileManagerTree",{
                                 params:self.extraPostData
                               });
                               var window = renameForm.findParentByType('window');
-                              window.close()
+                              window.close();
                             }
                             else{
                               Ext.Msg.alert("Error", responseObj.error);
@@ -344,10 +344,10 @@ Ext.define("Compass.ErpApp.Shared.FileManagerTree",{
 
                 var type = '';
                 if(record.data["leaf"]){
-                  type = 'file'
+                  type = 'file';
                 }
                 else{
-                  type = 'directory'
+                  type = 'directory';
                 }
 
                 var renameWindow = Ext.create('Ext.window.Window', {
@@ -425,7 +425,7 @@ Ext.define("Compass.ErpApp.Shared.FileManagerTree",{
 
         //add additional menu items if they are passed in the config
         //check to see where the should show, folders, leafs, or all
-        if(!Compass.ErpApp.Utility.isBlank(self.initialConfig['additionalContextMenuItems']))
+        if(!Ext.isEmpty(self.initialConfig['additionalContextMenuItems']))
         {
           Ext.each(self.initialConfig['additionalContextMenuItems'], function(item){
             if(item.nodeType == 'folder' && !record.data['leaf']){
@@ -504,7 +504,7 @@ Ext.define("Compass.ErpApp.Shared.FileManagerTree",{
           });
 
           /*new file*/
-          if (!(self.initialConfig.showNewFileMenuItem === false)){
+          if (self.initialConfig.showNewFileMenuItem !== false){
             menuItems.push({
               text:'New File',
               iconCls:'icon-document',
@@ -546,7 +546,7 @@ Ext.define("Compass.ErpApp.Shared.FileManagerTree",{
           }
 
           /*new folder menu item*/
-          if (!(self.initialConfig.showNewFolderMenuItem === false)){
+          if (self.initialConfig.showNewFolderMenuItem !== false){
             menuItems.push({
               text:'New Folder',
               iconCls:'icon-content',

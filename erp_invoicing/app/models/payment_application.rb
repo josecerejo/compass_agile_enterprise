@@ -1,4 +1,5 @@
 class PaymentApplication < ActiveRecord::Base
+  attr_protected :created_at, :updated_at
 
   belongs_to :financial_txn
   belongs_to :payment_applied_to, :polymorphic => true
@@ -7,7 +8,7 @@ class PaymentApplication < ActiveRecord::Base
   before_destroy :unapply_payment
 
   def is_pending?
-    (self.financial_txn.is_scheduled? or self.financial_txn.is_pending?) unless self.financial_txn.nil?
+    self.financial_txn.nil? or (self.financial_txn.is_scheduled? or self.financial_txn.is_pending?) 
   end
 
   def apply_payment

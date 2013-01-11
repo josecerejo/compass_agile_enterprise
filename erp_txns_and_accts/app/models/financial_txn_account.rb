@@ -1,4 +1,6 @@
 class FinancialTxnAccount < ActiveRecord::Base
+  attr_protected :created_at, :updated_at
+
   acts_as_biz_txn_account
 
   scope :accounts_for_agreements, lambda { |agreement_ids| where("agreement_id in (?)", agreement_ids).order('due_date ASC')}

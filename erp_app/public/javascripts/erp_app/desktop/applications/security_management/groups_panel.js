@@ -2,10 +2,6 @@ Ext.define("Compass.ErpApp.Desktop.Applications.SecurityManagement.GroupsPanel",
   extend:"Ext.panel.Panel",
   alias:'widget.security_management_groupspanel',
 
-  initComponent: function() {
-    Compass.ErpApp.Desktop.Applications.SecurityManagement.GroupsPanel.superclass.initComponent.call(this, arguments);
-  },
-
   setGroup : function(record){
     var assign_to_id = record.get('id');
     var assign_to_description = record.get('description');
@@ -27,6 +23,26 @@ Ext.define("Compass.ErpApp.Desktop.Applications.SecurityManagement.GroupsPanel",
     var security_management_groupseffectivesecurity = security_management_groupspanel.down('security_management_groupseffectivesecurity');
     security_management_groupseffectivesecurity.assign_to_id = assign_to_id;
     security_management_groupseffectivesecurity.assign_to_description = assign_to_description;    
+  },
+
+  unsetGroup : function(){
+    var security_management_rolespanel = this;
+
+    var security_management_userswidget = security_management_rolespanel.down('security_management_userswidget');
+    delete security_management_userswidget.assign_to_id;
+    delete security_management_userswidget.assign_to_description;
+
+    var security_management_roleswidget = security_management_rolespanel.down('security_management_roleswidget');
+    delete security_management_roleswidget.assign_to_id;
+    delete security_management_roleswidget.assign_to_description;
+
+    var security_management_capabilitieswidget = security_management_rolespanel.down('security_management_capabilitieswidget');
+    delete security_management_capabilitieswidget.assign_to_id;
+    delete security_management_capabilitieswidget.assign_to_description;
+
+    var security_management_groupseffectivesecurity = security_management_rolespanel.down('security_management_groupseffectivesecurity');
+    delete security_management_groupseffectivesecurity.assign_to_id;
+    delete security_management_groupseffectivesecurity.assign_to_description;    
   },
 
   constructor : function(config) {
@@ -229,6 +245,8 @@ Ext.define("Compass.ErpApp.Desktop.Applications.SecurityManagement.GroupsPanel",
                       success: function(response) {
                         var json_response = Ext.decode(response.responseText);
                         if (json_response.success){
+                          self.unsetGroup();
+                          self.down('tabpanel').getActiveTab().refreshWidget();
                           all_groups.getStore().load();
                         }else{
                           Ext.Msg.alert('Error', Ext.decode(response.responseText).message);
@@ -289,7 +307,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.SecurityManagement.GroupsPanel",
 
     }, config);
 
-    Compass.ErpApp.Desktop.Applications.SecurityManagement.GroupsPanel.superclass.constructor.call(this, config);
+    this.callParent([config]);
   }
 
 });

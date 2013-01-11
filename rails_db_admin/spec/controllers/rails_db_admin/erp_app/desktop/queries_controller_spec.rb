@@ -10,14 +10,15 @@ describe RailsDbAdmin::ErpApp::Desktop::QueriesController do
   describe "POST execute_query" do
 
     before(:all) do 
-      Factory.create(:role_type, :internal_identifier => "execute_query_test_role")
+      FactoryGirl.create(:role_type, :internal_identifier => "execute_query_test_role")
     end
 
+    # an empty result set should probably return true, and only false if an exception is caught
+    # if success is used for UI purposes, a count on the data should probably be used instead
     it "returns unsuccessful because of an empty result set" do
-
       post :execute_query, {:use_route => :rails_db_admin,
                             :cursor_pos => "0",
-                            :sql => "SELECT * FROM relationship_types;"}
+                            :sql => "SELECT * FROM relationship_types WHERE id < 0;"}
 
       parsed_body = JSON.parse(response.body)
       parsed_body["success"].should eq(false)

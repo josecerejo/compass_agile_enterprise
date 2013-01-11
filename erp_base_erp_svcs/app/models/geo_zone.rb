@@ -1,4 +1,6 @@
 class GeoZone < ActiveRecord::Base
+  attr_accessible :geo_country_id, :zone_code, :zone_name
+  
   belongs_to :geo_country
   has_many :postal_addresses
 

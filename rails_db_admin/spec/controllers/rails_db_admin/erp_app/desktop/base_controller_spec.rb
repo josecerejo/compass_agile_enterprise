@@ -8,8 +8,8 @@ describe RailsDbAdmin::ErpApp::Desktop::BaseController do
   end
 
   before(:all) do 
-    Factory.create(:role_type, :internal_identifier => "execute_query_test_role")
-    Factory.create(:role_type, :internal_identifier => "execute_query_test_role_2")
+    FactoryGirl.create(:role_type, :internal_identifier => "execute_query_test_role")
+    FactoryGirl.create(:role_type, :internal_identifier => "execute_query_test_role_2")
   end
 
   describe "POST setup_table_grid" do
@@ -58,7 +58,7 @@ describe RailsDbAdmin::ErpApp::Desktop::BaseController do
           "dataIndex"=>"preference_type_id",
           "width"=>150,
           "editor"=>{"xtype"=>"textfield"}})
-      parsed_body["columns"][4].should include(
+      parsed_body["columns"][2].should include(
           {"header"=>"fake_id", "type"=>"number", "dataIndex"=>"fake_id", "hidden"=>true}
       )
       parsed_body["fields"].should include(
@@ -94,7 +94,7 @@ describe RailsDbAdmin::ErpApp::Desktop::BaseController do
                         :table => "role_types"}
 
       parsed_body = JSON.parse(response.body)
-      parsed_body["total"].should eq(2)
+      parsed_body["total"].should eq(RoleType.count)
     end
 
     it "should return 1 row because start is increased by 1, but total should remain 2" do
@@ -104,8 +104,8 @@ describe RailsDbAdmin::ErpApp::Desktop::BaseController do
                         :start => "1"}
 
       parsed_body = JSON.parse(response.body)
-      parsed_body["total"].should eq(2)
-      parsed_body["data"].length.should eq(1)
+      parsed_body["total"].should eq(RoleType.count)
+      parsed_body["data"].length.should eq(RoleType.count-1)
     end
 
     it "should return 1 row because limit is set to 1, but total should remain 2" do
@@ -115,7 +115,7 @@ describe RailsDbAdmin::ErpApp::Desktop::BaseController do
                         :limit => "1"}
 
       parsed_body = JSON.parse(response.body)
-      parsed_body["total"].should eq(2)
+      parsed_body["total"].should eq(RoleType.count)
       parsed_body["data"].length.should eq(1)
     end
 
@@ -126,7 +126,7 @@ describe RailsDbAdmin::ErpApp::Desktop::BaseController do
                         :table => 'preference_options_preference_types'}
 
       parsed_body = JSON.parse(response.body)
-      parsed_body["total"].should eq(13)
+      parsed_body["total"].should eq(14)
     end
   end
 

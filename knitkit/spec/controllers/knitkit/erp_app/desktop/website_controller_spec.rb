@@ -5,25 +5,24 @@ describe Knitkit::ErpApp::Desktop::WebsiteController do
   before(:each) do
     basic_user_auth_with_admin
     @user = User.first
-    @website = Factory.create(:website, :name => "Some name")
-    @website.hosts << Factory.create(:website_host)
+    @website = FactoryGirl.create(:website, :name => "Some name")
+    @website.hosts << FactoryGirl.create(:website_host)
   end
 
   describe "Get index" do
     it "should return :sites => Website.all" do
-      get :foo, {:use_route => :knitkit,
-                 :action => "index"}
+      get :index, {:use_route => :knitkit,
+                   :action => "index"}
 
       parsed_body = JSON.parse(response.body)
       parsed_body["sites"][0].should include(
-        {"auto_activate_publication"=>nil, "email"=>nil, "email_inquiries"=>nil,
-         "id"=>1, "name"=>"Some name", "subtitle"=>nil, "title"=>"Some Title!"})
+        { "id"=>1, "name"=>"Some name", "subtitle"=>nil, "title"=>"Some Title!"})
     end
   end
 
   describe "Get website_publications" do
     it "should return the correct info with session[:website_version] blank" do
-      get :foo, {:use_route => :knitkit,
+      get :website_publications, {:use_route => :knitkit,
                  :action => "website_publications",
                  :id => @website.id}
 
@@ -42,7 +41,7 @@ describe Knitkit::ErpApp::Desktop::WebsiteController do
 
     it "should return the correct info with session[:website_version] not blank" do
       session[:website_version] = [{:website_id => @website.id, :version => "1.0"}]
-      get :foo, {:use_route => :knitkit,
+      get :website_publications, {:use_route => :knitkit,
                  :action => "website_publications",
                  :id => @website.id}
 
@@ -62,13 +61,12 @@ describe Knitkit::ErpApp::Desktop::WebsiteController do
 
   describe "Post activate_publication" do
     it "should call set_publication_version with version number on website and return success:true" do
-      @website.published_websites << Factory.create(:published_website, :version => 1, :comment => "published_website test", :published_by_id => 1)
-      @website_double = double("Website")
-      Website.should_receive(:find).and_return(@website_double)
-      @website_double.should_receive(:id).and_return(1)
-      @website_double.should_receive(:set_publication_version).with(1.0, @user)
+      @website.published_websites << FactoryGirl.create(:published_website, :version => 1, :comment => "published_website test", :published_by_id => 1)
+      Website.should_receive(:find).and_return(@website)
+      @website.should_receive(:id).and_return(1)
+      @website.should_receive(:set_publication_version).with(1.0, @user)
 
-      post :foo, {:use_route => :knitkit,
+      post :activate_publication, {:use_route => :knitkit,
                  :action => "activate_publication",
                  :id => @website.id,
                  :version => "1.0"}
@@ -80,7 +78,7 @@ describe Knitkit::ErpApp::Desktop::WebsiteController do
 
   describe "Post set_viewing_version" do
     it "should set session[:website_version] properly when session[:website_version] is blank" do
-      post :foo, {:use_route => :knitkit,
+      post :set_viewing_version, {:use_route => :knitkit,
                  :action => "set_viewing_version",
                  :id => @website.id,
                  :version => "1.0"}
@@ -92,7 +90,7 @@ describe Knitkit::ErpApp::Desktop::WebsiteController do
       session[:website_version]=[]
       session[:website_version] << {:website_id => @website.id, :version => "2.0"}
       
-      post :foo, {:use_route => :knitkit,
+      post :set_viewing_version, {:use_route => :knitkit,
                  :action => "set_viewing_version",
                  :id => @website.id,
                  :version => "1.0"}
@@ -101,7 +99,7 @@ describe Knitkit::ErpApp::Desktop::WebsiteController do
     end
 
     it "should return success:true" do
-      post :foo, {:use_route => :knitkit,
+      post :set_viewing_version, {:use_route => :knitkit,
                  :action => "set_viewing_version",
                  :id => @website.id,
                  :version => "1.0"}
@@ -117,7 +115,7 @@ describe Knitkit::ErpApp::Desktop::WebsiteController do
       Website.should_receive(:find).and_return(@website_double)
       @website_double.should_receive(:publish)
 
-      post :foo, {:use_route => :knitkit,
+      post :publish, {:use_route => :knitkit,
                  :action => "publish",
                  :id => @website.id,
                  :comment => "some comment"}
@@ -129,11 +127,8 @@ describe Knitkit::ErpApp::Desktop::WebsiteController do
 
   describe "Post new" do
     it "should create a new Website with name some name and set each param for that Website" do
-      post :foo, {:use_route => :knitkit,
+      post :new, {:use_route => :knitkit,
                   :action => "new",
-                  :auto_activate_publication => "no",
-                  :email => "some@email.com",
-                  :email_inquiries => "no",
                   :host => "some_host",
                   :subtitle =>  "some sub title",
                   :title => "some title",
@@ -141,15 +136,12 @@ describe Knitkit::ErpApp::Desktop::WebsiteController do
                   }
 
       @new_website = Website.find_by_name("some name")
-      @new_website.subtitle.should                  eq("some sub title")
-      @new_website.title.should                     eq("some title")
-      @new_website.email.should                     eq("some@email.com")
-      @new_website.email_inquiries.should            eq(false)
-      @new_website.auto_activate_publication.should eq(false)
+      @new_website.subtitle.should  eq("some sub title")
+      @new_website.title.should  eq("some title")
     end
 
     it "should create a WebsiteSection named home and link it to website" do
-      post :foo, {:use_route => :knitkit,
+      post :new, {:use_route => :knitkit,
                   :action => "new",
                   :auto_activate_publication => "no",
                   :email => "some@email.com",
@@ -170,7 +162,7 @@ describe Knitkit::ErpApp::Desktop::WebsiteController do
     end
 
     it "should setup_default_pages on website" do
-      post :foo, {:use_route => :knitkit,
+      post :new, {:use_route => :knitkit,
                   :action => "new",
                   :auto_activate_publication => "no",
                   :email => "some@email.com",
@@ -203,7 +195,7 @@ describe Knitkit::ErpApp::Desktop::WebsiteController do
     end
 
     it "should create a host and assign it to website.hosts" do
-      post :foo, {:use_route => :knitkit,
+      post :new, {:use_route => :knitkit,
                   :action => "new",
                   :auto_activate_publication => "no",
                   :email => "some@email.com",
@@ -221,7 +213,7 @@ describe Knitkit::ErpApp::Desktop::WebsiteController do
     end
 
     it "should publish website" do
-      post :foo, {:use_route => :knitkit,
+      post :new, {:use_route => :knitkit,
                   :action => "new",
                   :auto_activate_publication => "no",
                   :email => "some@email.com",
@@ -237,7 +229,7 @@ describe Knitkit::ErpApp::Desktop::WebsiteController do
     end
 
     it "should activate the new publication" do
-      post :foo, {:use_route => :knitkit,
+      post :new, {:use_route => :knitkit,
                   :action => "new",
                   :auto_activate_publication => "no",
                   :email => "some@email.com",
@@ -254,7 +246,7 @@ describe Knitkit::ErpApp::Desktop::WebsiteController do
     end
 
     it "should return success:true" do
-      post :foo, {:use_route => :knitkit,
+      post :new, {:use_route => :knitkit,
                   :action => "new",
                   :auto_activate_publication => "no",
                   :email => "some@email.com",
@@ -275,15 +267,12 @@ describe Knitkit::ErpApp::Desktop::WebsiteController do
     it "should set new params and return true" do
       @test_website = Website.new(:name => "some name",
                                   :title => "some title",
-                                  :subtitle => "some sub title",
-                                  :email_inquiries => "no",
-                                  :email => "some@email.com",
-                                  :auto_activate_publication => "no")
+                                  :subtitle => "some sub title")
       @test_website.save
 
       Website.should_receive(:find).and_return(@test_website)
 
-      post :foo, {:use_route => :knitkit,
+      post :update, {:use_route => :knitkit,
                   :action => "update",
                   :id => @test_website.id,
                   :auto_activate_publication => "yes",
@@ -300,9 +289,6 @@ describe Knitkit::ErpApp::Desktop::WebsiteController do
       @test_website.name.should eq("some new name")
       @test_website.title.should eq("some new title")
       @test_website.subtitle.should eq("some new sub title")
-      @test_website.email_inquiries.should eq(true)
-      @test_website.auto_activate_publication.should eq(true)
-      @test_website.email.should eq("somenew@email.com")
     end
   end
 
@@ -312,13 +298,13 @@ describe Knitkit::ErpApp::Desktop::WebsiteController do
       Website.should_receive(:find).and_return(@website_double)
       @website_double.should_receive(:destroy)
 
-      post :foo, {:use_route => :knitkit,
+      post :delete, {:use_route => :knitkit,
                  :action => "delete",
                  :id => @website.id}
     end
 
     it "should return success:true" do
-      post :foo, {:use_route => :knitkit,
+      post :delete, {:use_route => :knitkit,
                  :action => "delete",
                  :id => @website.id}
                
@@ -329,9 +315,9 @@ describe Knitkit::ErpApp::Desktop::WebsiteController do
 
   describe "Post add_host" do
     it "should return success:true and node" do
-      @website_host = Factory.create(:website_host, :host => "localhost:3000")
+      @website_host = FactoryGirl.create(:website_host, :host => "localhost:3000")
       WebsiteHost.should_receive(:create).and_return(@website_host)
-      post :foo, {:use_route => :knitkit,
+      post :add_host, {:use_route => :knitkit,
                  :action => "add_host",
                  :id => @website.id,
                  :host => "localhost:3000"}
@@ -352,11 +338,11 @@ describe Knitkit::ErpApp::Desktop::WebsiteController do
 
   describe "Post update_host" do
     it "should set host and save" do
-      @website_host = Factory.create(:website_host, :host => "some host")
+      @website_host = FactoryGirl.create(:website_host, :host => "some host")
       WebsiteHost.should_receive(:find).and_return(@website_host)
       @website_host.should_receive(:save)
       
-      post :foo, {:use_route => :knitkit,
+      post :update_host, {:use_route => :knitkit,
                  :action => "update_host",
                  :id => @website.id,
                  :host => "localhost:3000"}
@@ -365,7 +351,7 @@ describe Knitkit::ErpApp::Desktop::WebsiteController do
     end
 
     it "should return success:true" do
-      post :foo, {:use_route => :knitkit,
+      post :update_host, {:use_route => :knitkit,
                  :action => "update_host",
                  :id => @website.id,
                  :host => "localhost:3000"}
@@ -379,13 +365,13 @@ describe Knitkit::ErpApp::Desktop::WebsiteController do
     it "should call destroy on WebsiteHost with params[:id]" do
       WebsiteHost.should_receive(:destroy).with("1")
       
-      post :foo, {:use_route => :knitkit,
+      post :delete_host, {:use_route => :knitkit,
                  :action => "delete_host",
                  :id => "1"}
     end
 
     it "should return success:true" do
-      post :foo, {:use_route => :knitkit,
+      post :delete_host, {:use_route => :knitkit,
                  :action => "delete_host",
                  :id => "1"}
 

@@ -76,7 +76,9 @@
    <!-- end application resources -->
    <%=include_compass_ae_instance_about%>
    <%=set_max_file_upload%>
-   
+   <%=set_file_upload_types %>
+   <%=set_email_regex %>
+
    <!--stylesheets-->
    <%= static_stylesheet_link_tag('erp_app/desktop/base.css') %>
    <!-- shared application resources -->
@@ -127,11 +129,11 @@
                 iconCls:"icon-control_panel",
                 scope:b
               }],
-            shortcuts:Ext.create("Ext.data.Store",{
-              model:"Ext.ux.desktop.ShortcutModel",
-              data:[
-                {applicationId:0,name:"Control Panel",iconCls:"control-panel-win-shortcut",module:"control-panel-win",autoLoad:'na'},
-                {applicationId:0,name:"Web Navigator",iconCls:"web-navigator-win-shortcut",module:"web-navigator-win",autoLoad:'na'}<%=(@desktop.shortcuts.count > 0) ? ',' : '' %>
+            shortcuts: Ext.create("Ext.data.Store",{
+              model: "Ext.ux.desktop.ShortcutModel",
+              data: [
+                {name:"Control Panel",iconCls:"control-panel-win-shortcut",module:"control-panel-win"},
+                {name:"Web Navigator",iconCls:"web-navigator-win-shortcut",module:"web-navigator-win"}<%=(@desktop.shortcuts.count > 0) ? ',' : '' %>
 				        <%=raw @desktop.shortcuts.collect{|app| "{name:'#{app.description}',iconCls:'#{app.shortcut_id}-shortcut',module:'#{app.shortcut_id}'}"}.join(",")%>
               ]
             }),
@@ -215,13 +217,6 @@
         }
       });
 
-      Ext.Loader.setPath({
-        'Ext.ux.desktop': 'js',
-        MyDesktop: ''
-      });
-
-      Ext.require('MyDesktop.App');
-
       var compassDesktop;
       Ext.onReady(function () {
         compassDesktop = new MyDesktop.App();
@@ -229,13 +224,9 @@
         setTimeout(function(){
           Ext.get('loading').remove();
           Ext.get('loading-mask').fadeOut({remove:true});
-          <%
-            @desktop.autoloads.each do |application|
-          %>
+          <% @desktop.autoloads.each do |application| %>
             compassDesktop.getModule('<%=application.shortcut_id%>').createWindow();
-          <%
-            end
-          %>
+          <% end %>
         }, 250);
       });
 

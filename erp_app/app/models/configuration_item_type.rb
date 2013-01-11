@@ -1,7 +1,10 @@
 class ConfigurationItemType < ActiveRecord::Base
+  attr_protected :created_at, :updated_at
+  
   validates :internal_identifier, :uniqueness => {:case_sensitive => false}
 
-  has_and_belongs_to_many :configuration_options, :uniq => true do
+  has_many :configuration_item_type_configuration_options
+  has_many :configuration_options, :through => :configuration_item_type_configuration_options, :uniq => true do
     def default
       where('is_default = ?', true)
     end

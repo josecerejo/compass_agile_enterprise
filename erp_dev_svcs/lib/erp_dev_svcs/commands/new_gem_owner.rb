@@ -15,8 +15,10 @@ module ErpDevSvcs
         gem_names = ErpDevSvcs::Commands::Helper.compass_gem_names
 
         opt_parser = OptionParser.new do |opt|
-          opt.banner = "Usage: compass-util new_gem_owner --emails LISTOFEMAILS"
+          opt.banner = "Usage: compass_ae-dev new_gem_owner --emails LISTOFEMAILS"
 
+          opt.on('-r', '--remove', String, "remove user from gem owner"){|r| options[:remove] = "-r"}
+          
           opt.on("-e", "--emails LISTOFEMAILS", Array,
                  "comma seperated list of email addresses of the users "\
                  "you want to own the compass gems") {|emails| options[:emails] = emails}
@@ -32,9 +34,10 @@ module ErpDevSvcs
         puts opt_parser; exit if options[:emails].nil?
 
         ErpDevSvcs::Commands::Helper.exec_in_engines do |engine_name|
+          command = options[:remove] || "-a" 
+          
           options[:emails].each do |email|
-            puts "Adding #{email} as an owner on #{engine_name}"
-            result = %x[gem owner #{engine_name} -a #{email}]
+            result = %x[gem owner #{engine_name} #{command} #{email}]
             puts result
           end
         end

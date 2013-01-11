@@ -1,5 +1,4 @@
 class Article < Content
-  has_permalink :title
 
   before_save :check_internal_indentifier
 

@@ -38,27 +38,27 @@
 
 .icon-apartment {
     background-image: url(/images/icons/apartment/apartment_16x16.png) !important;
-	filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='/images/icons/apartment/apartment_16x16.png', sizingMethod='crop');
+    filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='/images/icons/apartment/apartment_16x16.png', sizingMethod='crop');
 }
 
 .icon-accept {
     background-image: url(/images/icons/accept/accept_16x16.png) !important;
-	filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='/images/icons/accept/accept_16x16.png', sizingMethod='crop');
+    filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='/images/icons/accept/accept_16x16.png', sizingMethod='crop');
 }
 
 .icon-mail {
     background-image: url(/images/icons/mail/mail_16x16.png) !important;
-	filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='/images/icons/mail/mail_16x16.png', sizingMethod='crop');
+    filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='/images/icons/mail/mail_16x16.png', sizingMethod='crop');
 }
 
 .icon-note {
     background-image: url(/images/icons/note/note_16x16.png) !important;
-	filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='/images/icons/note/note_16x16.png', sizingMethod='crop');
+    filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='/images/icons/note/note_16x16.png', sizingMethod='crop');
 }
 
 .icon-console {
     background-image: url(/images/icons/console/console_16x16.png) !important;
-	filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='/images/icons/console/console_16x16.png', sizingMethod='crop');
+    filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='/images/icons/console/console_16x16.png', sizingMethod='crop');
 }
 
 .icon-creditcards {
@@ -269,7 +269,7 @@
 
 .icon-document_ok {
     background-image:url( /images/icons/document_ok/document_ok_16x16.png ) !important;
-    filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='/images/icons/document_ok/document_ok_16x16.png', sizingMethod='crop');	
+    filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='/images/icons/document_ok/document_ok_16x16.png', sizingMethod='crop');
 }
 
 .icon-document_lock {
@@ -388,18 +388,17 @@
     filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='/images/icons/arrow_down_blue/arrow_down_blue_16x16.png', sizingMethod='crop');
 }
 
+.icon-arrow-up-blue {
+    background-image:url( /images/icons/arrow_up_blue/arrow_up_blue_16x16.png ) !important;
+    filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='/images/icons/arrow_down_blue/arrow_up_blue_16x16.png', sizingMethod='crop');
+}
+
 .icon-eye {
-   background-image:url( /images/icons/eye/eye_16x16.png ) !important;
-   filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='/images/icons/eye/eye_16x16.png', sizingMethod='crop');
+    background-image:url( /images/icons/eye/eye_16x16.png ) !important;
+    filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='/images/icons/eye/eye_16x16.png', sizingMethod='crop');
 }
 
 .icon-zoom-out {
-   background-image:url( /images/icons/zoom_out/zoom_out_16x16.png ) !important;
-   filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='/images/icons/zoom_out/zoom_out_16x16.png', sizingMethod='crop');
+    background-image:url( /images/icons/zoom_out/zoom_out_16x16.png ) !important;
+    filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='/images/icons/zoom_out/zoom_out_16x16.png', sizingMethod='crop');
 }
-
-
-
-
-
-

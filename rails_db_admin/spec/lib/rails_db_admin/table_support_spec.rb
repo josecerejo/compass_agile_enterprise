@@ -277,7 +277,7 @@ describe RailsDbAdmin::TableSupport do
     describe "clean_nulls" do
 
       before(:each) do
-        @connection_class = RailsDbAdmin::ConnectionHandler.create_connection_class("spec")
+        @connection_class = RailsDbAdmin::ConnectionHandler.create_connection_class ''
         @instance = RailsDbAdmin::TableSupport.new(@connection_class)
         @data_hash = {"description" => "",
                       "parent_id" => 0,

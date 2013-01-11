@@ -16,7 +16,6 @@ module Knitkit
           module ActMacro
             def acts_as_themed_controller(options = {})
               before_filter :add_theme_view_paths
-              write_inheritable_attribute :current_themes, options[:current_themes] || []
 
               return if acts_as_themed_controller?
               include InstanceMethods
@@ -29,14 +28,13 @@ module Knitkit
 
           module InstanceMethods
             def current_themes
-              @current_themes ||= case accessor = self.class.read_inheritable_attribute(:current_themes)
-                                    when Symbol then
-                                      accessor == :current_themes ? raise("screwed") : send(accessor)
-                                    when Proc then
-                                      accessor.call(self)
-                                    else
-                                      accessor
-                                  end
+              # the lambda broke in rails 3.2, changing this to an instance variable
+              @current_themes ||= self.website.themes.collect{|t| t if t.active } rescue []
+              # @current_themes ||= case accessor = self.class.read_inheritable_attribute(:current_themes)
+              # when Symbol then accessor == :current_themes ? raise("screwed") : send(accessor)
+              # when Proc   then accessor.call(self)
+              # else accessor
+              # end
             end
 
             def add_theme_view_paths

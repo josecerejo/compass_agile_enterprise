@@ -1,5 +1,5 @@
 class CompassAeInstance < ActiveRecord::Base
-  has_file_assets
+  attr_protected :created_at, :updated_at
   
   def installed_engines
     Rails.application.config.erp_base_erp_svcs.compass_ae_engines.map do |compass_ae_engine|

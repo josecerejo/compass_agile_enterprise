@@ -1,4 +1,6 @@
 class Configuration < ActiveRecord::Base
+  attr_protected :created_at, :updated_at
+  
   scope :templates, where('is_template = ?', true)
 
   validates :internal_identifier, :presence => true, :uniqueness =>  {:scope => [:id, :is_template]}

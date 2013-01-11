@@ -16,7 +16,7 @@ describe AgreementRelationship do
       @seller_role_type = AgreementRoleType.create(:description => 'seller', :internal_identifier => 'seller')
       @buyer_role_type = AgreementRoleType.create(:description => 'buyer', :internal_identifier => 'buyer')
 
-      @agreement_reln_type = Factory(:agreement_reln_type,
+      @agreement_reln_type = FactoryGirl.create(:agreement_reln_type,
         :description => 'Buyer Seller',
         :internal_identifier => 'buyer_seller',
         :valid_from_role => @seller_role_type,

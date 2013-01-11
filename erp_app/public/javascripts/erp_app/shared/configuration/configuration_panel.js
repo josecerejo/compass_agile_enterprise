@@ -43,30 +43,30 @@ Ext.define("Compass.ErpApp.Shared.ConfigurationPanel",{
         'itemclick':function(view, record, item, index, e){
           e.stopEvent();
           if(!record.isRoot()){
-			var sharedConfigurationPanel = view.up('sharedconfigurationpanel');
-	          var tabPanel = sharedConfigurationPanel.query('#configurationFormsTabPanel').first();
-	          var itemId = 'configurationForm-'+record.get('categoryId');
-	          var configurationForm = tabPanel.query('#'+itemId).first();
+            var sharedConfigurationPanel = view.up('sharedconfigurationpanel');
+            var tabPanel = sharedConfigurationPanel.down('#configurationFormsTabPanel');
+            var itemId = 'configurationForm-'+record.get('categoryId');
+            var configurationForm = tabPanel.down('#'+itemId);
 
-	          if(Ext.isEmpty(configurationForm)){
-	            configurationForm = {
-	              closable:true,
-	              xtype:'sharedconfigurationform',
-	              itemId:itemId,
-	              title:record.get('text'),
-	              configurationId:sharedConfigurationPanel.initialConfig.configurationId,
-	              categoryId:record.get('categoryId'),
-	              listeners:{
-	                activate:function(form){
-	                  form.setup();
-	                }
-	              }
-	            };
-	            tabPanel.add(configurationForm);
-	            configurationForm = tabPanel.query('#'+itemId).first();
-	          }
-	          tabPanel.setActiveTab(configurationForm);
-			}
+            if(Ext.isEmpty(configurationForm)){
+              configurationForm = {
+                closable:true,
+                xtype:'sharedconfigurationform',
+                itemId:itemId,
+                title:record.get('text'),
+                configurationId:sharedConfigurationPanel.initialConfig.configurationId,
+                categoryId:record.get('categoryId'),
+                listeners:{
+                  afterrender:function(form){
+                    form.setup();
+                  }
+                }
+              };
+              tabPanel.add(configurationForm);
+              configurationForm = tabPanel.down('#'+itemId);
+            }
+            tabPanel.setActiveTab(configurationForm);
+          }
         }
       }
     };
@@ -99,7 +99,7 @@ Ext.define("Compass.ErpApp.Shared.ConfigurationPanel",{
         }
       }),
       width:400
-    }
+    };
 
     config = Ext.apply({
       layout:'border',

@@ -4,13 +4,13 @@ require "erp_dev_svcs"
 describe Knitkit::ErpApp::Desktop::WebsiteNavController do
   before(:each) do
     basic_user_auth_with_admin
-    @website = Factory.create(:website, :name => "Some name")
-    @website.hosts << Factory.create(:website_host)
+    @website = FactoryGirl.create(:website, :name => "Some name")
+    @website.hosts << FactoryGirl.create(:website_host)
   end
 
   describe "Post new" do
     it "should return success:true" do
-      post :foo, {:use_route => :knitkit,
+      post :new, {:use_route => :knitkit,
                  :action => "new",
                  :website_id =>  @website.id,
                  :name => "new_nav_name"}
@@ -20,7 +20,7 @@ describe Knitkit::ErpApp::Desktop::WebsiteNavController do
     end
 
     it "should return node" do
-      post :foo, {:use_route => :knitkit,
+      post :new, {:use_route => :knitkit,
                  :action => "new",
                  :website_id => @website.id,
                  :name => "new_nav_name"}
@@ -35,12 +35,12 @@ describe Knitkit::ErpApp::Desktop::WebsiteNavController do
 
   describe "Post update" do
     before do
-      @website_nav = Factory.create(:website_nav, :name => "Some Name")
+      @website_nav = FactoryGirl.create(:website_nav, :name => "Some Name")
       @website.website_navs << @website_nav
     end
 
     it "should return success:true" do
-      post :foo, {:use_route => :knitkit,
+      post :update, {:use_route => :knitkit,
                  :action => "update",
                  :website_nav_id => @website_nav.id,
                  :name => "newer_name"}
@@ -52,12 +52,12 @@ describe Knitkit::ErpApp::Desktop::WebsiteNavController do
 
   describe "Post delete" do
     before do
-      @website_nav = Factory.create(:website_nav, :name => "Some Name")
+      @website_nav = FactoryGirl.create(:website_nav, :name => "Some Name")
       @website.website_navs << @website_nav
     end
 
     it "should return success:true" do
-      post :foo, {:use_route => :knitkit,
+      post :delete, {:use_route => :knitkit,
                  :action => "delete",
                  :id => @website_nav.id}
                
@@ -68,14 +68,14 @@ describe Knitkit::ErpApp::Desktop::WebsiteNavController do
 
   describe "Post add_menu_item" do
     before do
-      @website_nav = Factory.create(:website_nav, :name => "Some Name")
+      @website_nav = FactoryGirl.create(:website_nav, :name => "Some Name")
       @website.website_navs << @website_nav
-      @website_nav_item = Factory.create(:website_nav_item)
+      @website_nav_item = FactoryGirl.create(:website_nav_item)
       @website_nav.items << @website_nav_item
     end
     
     it "should return success:true and node given :klass => WebsiteNav and :link_to => url" do
-      post :foo, {:use_route => :knitkit,
+      post :add_menu_item, {:use_route => :knitkit,
                  :action => "add_menu_item",
                  :klass => "WebsiteNav",
                  :id => @website_nav.id,
@@ -94,10 +94,10 @@ describe Knitkit::ErpApp::Desktop::WebsiteNavController do
     end
 
     it "should return success:true and node given :klass => WebsiteNav and :link_to => website_section" do
-      @website_section = Factory.create(:website_section)
+      @website_section = FactoryGirl.create(:website_section)
       @website.website_sections << @website_section
 
-      post :foo, {:use_route => :knitkit,
+      post :add_menu_item, {:use_route => :knitkit,
                  :action => "add_menu_item",
                  :klass => "WebsiteNav",
                  :id => @website_nav.id,
@@ -116,7 +116,7 @@ describe Knitkit::ErpApp::Desktop::WebsiteNavController do
     end
 
     it "should return success:true and node given :klass => WebsiteNavItem and :link_to => url" do
-      post :foo, {:use_route => :knitkit,
+      post :add_menu_item, {:use_route => :knitkit,
                  :action => "add_menu_item",
                  :klass => "WebsiteNavItem",
                  :id => @website_nav_item.id,
@@ -135,10 +135,10 @@ describe Knitkit::ErpApp::Desktop::WebsiteNavController do
     end
 
     it "should return success:true and node given :klass => WebsiteNavItem and :link_to => website_section" do
-      @website_section = Factory.create(:website_section)
+      @website_section = FactoryGirl.create(:website_section)
       @website.website_sections << @website_section
 
-      post :foo, {:use_route => :knitkit,
+      post :add_menu_item, {:use_route => :knitkit,
                  :action => "add_menu_item",
                  :klass => "WebsiteNavItem",
                  :id => @website_nav_item.id,
@@ -159,14 +159,14 @@ describe Knitkit::ErpApp::Desktop::WebsiteNavController do
 
   describe "Post update_menu_item" do
     before do
-      @website_nav = Factory.create(:website_nav, :name => "Some Name")
+      @website_nav = FactoryGirl.create(:website_nav, :name => "Some Name")
       @website.website_navs << @website_nav
-      @website_nav_item = Factory.create(:website_nav_item)
+      @website_nav_item = FactoryGirl.create(:website_nav_item)
       @website_nav.items << @website_nav_item
     end
 
     it "should return success:true title linkedToId linkToType and url given link_to => url" do
-      post :foo, {:use_route => :knitkit,
+      post :update_menu_item, {:use_route => :knitkit,
                  :action => "update_menu_item",
                  :website_nav_item_id => @website_nav_item.id,
                  :title => "some title",
@@ -182,10 +182,10 @@ describe Knitkit::ErpApp::Desktop::WebsiteNavController do
     end
 
     it "should return success:true title linkedToId linkToType and url given link_to => website_section" do
-      @website_section = Factory.create(:website_section)
+      @website_section = FactoryGirl.create(:website_section)
       @website.website_sections << @website_section
 
-      post :foo, {:use_route => :knitkit,
+      post :update_menu_item, {:use_route => :knitkit,
                  :action => "update_menu_item",
                  :website_nav_item_id => @website_nav_item.id,
                  :title => "some title",
@@ -203,18 +203,14 @@ describe Knitkit::ErpApp::Desktop::WebsiteNavController do
 
   describe "Post update_security" do
     before do
-      @website_nav = Factory.create(:website_nav, :name => "Some Name")
+      @website_nav = FactoryGirl.create(:website_nav, :name => "Some Name")
       @website.website_navs << @website_nav
-      @website_nav_item = Factory.create(:website_nav_item)
+      @website_nav_item = FactoryGirl.create(:website_nav_item)
       @website_nav.items << @website_nav_item
     end
     
-    it "should call add_role on website_nav_item and return success:true given :secure => true" do
-      @website_nav_item_double = double("WebsiteNavItem")
-      WebsiteNavItem.should_receive(:find).and_return(@website_nav_item_double)
-      @website_nav_item_double.should_receive(:add_role)
-      
-      post :foo, {:use_route => :knitkit,
+    it "should call add_capability on website_nav_item and return success:true given :secure => true" do
+      post :update_security, {:use_route => :knitkit,
                  :action => "update_security",
                  :id => @website_nav_item.id,
                  :site_id => @website.id,
@@ -224,12 +220,12 @@ describe Knitkit::ErpApp::Desktop::WebsiteNavController do
       parsed_body["success"].should eq(true)
     end
 
-    it "should call remove_role on wbsite_nav_item and return success:true given :secure => false" do
+    it "should call remove_capability on wbsite_nav_item and return success:true given :secure => false" do
       @website_nav_item_double = double("WebsiteNavItem")
       WebsiteNavItem.should_receive(:find).and_return(@website_nav_item_double)
-      @website_nav_item_double.should_receive(:remove_role)
+      @website_nav_item_double.should_receive(:remove_capability)
 
-      post :foo, {:use_route => :knitkit,
+      post :update_security, {:use_route => :knitkit,
                  :action => "update_security",
                  :id => @website_nav_item.id,
                  :site_id => @website.id,
@@ -242,16 +238,16 @@ describe Knitkit::ErpApp::Desktop::WebsiteNavController do
 
   describe "Post delete_menu_item" do
     before do
-      @website_nav = Factory.create(:website_nav, :name => "Some Name")
+      @website_nav = FactoryGirl.create(:website_nav, :name => "Some Name")
       @website.website_navs << @website_nav
-      @website_nav_item = Factory.create(:website_nav_item)
+      @website_nav_item = FactoryGirl.create(:website_nav_item)
       @website_nav.items << @website_nav_item
     end
     
     it "should call destroy on WebsiteNavId with website_nav_item.id" do
       WebsiteNavItem.should_receive(:destroy).with(@website_nav_item.id.to_s)
 
-      post :foo, {:use_route => :knitkit,
+      post :delete_menu_item, {:use_route => :knitkit,
                  :action => "delete_menu_item",
                  :id => @website_nav_item.id.to_s}
 

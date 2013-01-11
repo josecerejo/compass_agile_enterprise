@@ -1,4 +1,5 @@
 class ProdTypeReln < ActiveRecord::Base
+  attr_protected :created_at, :updated_at
 
   belongs_to :prod_type_from, :class_name => "ProductType", :foreign_key => "prod_type_id_from"
   belongs_to :prod_type_to, :class_name => "ProductType", :foreign_key => "prod_type_id_to"

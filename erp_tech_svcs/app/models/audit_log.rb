@@ -1,4 +1,7 @@
 class AuditLog < ActiveRecord::Base
+  attr_protected :created_at, :updated_at
+
+  attr_protected :created_at, :updated_at
 
   validates :party_id, :presence => {:message => 'cannot be blank'}
   validates :description, :presence => {:message => 'cannot be blank'}
@@ -18,7 +21,7 @@ class AuditLog < ActiveRecord::Base
   end
 
   #allow items to be looked up by method calls
-  def respond_to?(m)
+  def respond_to?(m, include_private_methods = false)
     (super ? true : get_item_by_item_type_internal_identifier(m.to_s)) rescue super
   end
 

@@ -1,4 +1,6 @@
 class FinancialTxn < ActiveRecord::Base
+  attr_protected :created_at, :updated_at
+
   acts_as_biz_txn_event
   has_many   :charge_line_payment_txns, :as => :payment_txn,  :dependent => :destroy
   has_many   :charge_lines, :through => :charge_line_payment_txns

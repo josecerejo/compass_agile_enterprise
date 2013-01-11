@@ -65,6 +65,7 @@ describe ErpTechSvcs::FileSupport::S3Manager do
     @file_support.exists?('test_rename.txt').should eq true
 
     result, message, is_directory = @file_support.delete_file('test_rename.txt')
+    result.should eq true
     @file_support.exists?('test_rename.txt').should eq false
 
     result, message = @file_support.rename_file('not_real.txt', 'test_rename.txt')

@@ -64,8 +64,6 @@ class CommunicationEventsServices < ActiveRecord::Migration
       create_table :comm_evt_purposes, :id => false do |t|
         t.integer  :communication_event_id
         t.integer  :comm_evt_purpose_type_id
-        
-        t.timestamps
       end
 
       add_index :comm_evt_purposes, :communication_event_id

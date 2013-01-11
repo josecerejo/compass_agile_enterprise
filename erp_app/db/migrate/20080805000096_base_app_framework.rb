@@ -38,8 +38,6 @@ class BaseAppFramework < ActiveRecord::Migration
       create_table :preference_options_preference_types, {:id => false} do |t|
         t.references :preference_type
         t.references :preference_option
-
-        t.timestamps
       end
 
       add_index :preference_options_preference_types, :preference_type_id, :name => 'pref_opt_pref_type_pref_type_id_idx'
@@ -83,13 +81,13 @@ class BaseAppFramework < ActiveRecord::Migration
 
     unless table_exists?(:applications)
       create_table :applications do |t|
-        t.column :description,           :string
-        t.column :icon,                  :string
-        t.column :internal_identifier,   :string
+        t.column :description, :string
+        t.column :icon, :string
+        t.column :internal_identifier, :string
         t.column :javascript_class_name, :string
-        t.column :shortcut_id,           :string
-        t.column :base_url,              :string
-        t.column :type,                  :string
+        t.column :shortcut_id, :string
+        t.column :base_url, :string
+        t.column :type, :string
 
         t.timestamps
       end
@@ -98,9 +96,7 @@ class BaseAppFramework < ActiveRecord::Migration
     unless table_exists?(:app_containers_applications)
       create_table :app_containers_applications, {:id => false} do |t|
         t.column :app_container_id, :integer
-        t.column :application_id,   :integer
-
-        t.timestamps
+        t.column :application_id, :integer
       end
 
       add_index :app_containers_applications, :application_id
@@ -109,10 +105,10 @@ class BaseAppFramework < ActiveRecord::Migration
 
     unless table_exists?(:widgets)
       create_table :widgets do |t|
-        t.column :description,           :string
-        t.column :internal_identifier,   :string
-        t.column :icon,                  :string
-        t.column :xtype,                 :string
+        t.column :description, :string
+        t.column :internal_identifier, :string
+        t.column :icon, :string
+        t.column :xtype, :string
 
         t.timestamps
       end
@@ -121,9 +117,7 @@ class BaseAppFramework < ActiveRecord::Migration
     unless table_exists?(:applications_widgets)
       create_table :applications_widgets, {:id => false} do |t|
         t.column :application_id, :integer
-        t.column :widget_id,      :integer
-
-        t.timestamps
+        t.column :widget_id, :integer
       end
       add_index :applications_widgets, :application_id
       add_index :applications_widgets, :widget_id
@@ -131,16 +125,16 @@ class BaseAppFramework < ActiveRecord::Migration
 
     unless table_exists?(:tree_menu_node_defs)
       create_table :tree_menu_node_defs do |t|
-        t.string  :node_type
+        t.string :node_type
         t.integer :parent_id
         t.integer :lft
         t.integer :rgt
-        t.string 	:menu_short_name
-        t.string 	:menu_description
-        t.string  :text
-        t.string  :icon_url
-        t.string  :target_url
-        t.string  :resource_class
+        t.string :menu_short_name
+        t.string :menu_description
+        t.string :text
+        t.string :icon_url
+        t.string :target_url
+        t.string :resource_class
         t.timestamps
       end
       add_index :tree_menu_node_defs, :parent_id
@@ -149,12 +143,15 @@ class BaseAppFramework < ActiveRecord::Migration
     unless table_exists? :configurations
       create_table :configurations do |t|
         #custom columns go here
-        t.string  :description
-        t.string  :internal_identifier
+        t.string :description
+        t.string :internal_identifier
         t.boolean :active
+        t.boolean :is_template, :default => false
 
         t.timestamps
       end
+      
+      add_index :configurations, :is_template
     end
 
     unless table_exists? :valid_configurations
@@ -193,10 +190,10 @@ class BaseAppFramework < ActiveRecord::Migration
         t.integer :rgt
 
         #custom columns go here
-        t.string     :description
-        t.string     :internal_identifier
-        t.boolean    :allow_user_defined_options, :default => false
-        t.boolean    :is_multi_optional, :default => false
+        t.string :description
+        t.string :internal_identifier
+        t.boolean :allow_user_defined_options, :default => false
+        t.boolean :is_multi_optional, :default => false
 
         t.timestamps
       end
@@ -216,10 +213,10 @@ class BaseAppFramework < ActiveRecord::Migration
     unless table_exists? :configuration_options
       create_table :configuration_options do |t|
         #custom columns go here
-        t.string  :description
-        t.string  :internal_identifier
-        t.string  :value
-        t.text    :comment
+        t.string :description
+        t.string :internal_identifier
+        t.string :value
+        t.text :comment
         t.boolean :user_defined, :default => false
 
         t.timestamps
@@ -257,18 +254,17 @@ class BaseAppFramework < ActiveRecord::Migration
 
   def self.down
     [
-      :preferences,:preference_types,
-      :preference_options,:preference_options_preference_types,
-      :valid_preference_types,:user_preferences,
-      :app_containers,:app_containers_applications,
-      :applications_widgets,
-      :applications,:applications_desktops,
-      :desktops,:widgets,:tree_menu_node_defs,
-      :configurations,:configuration_items,
-      :configuration_item_types,:configuration_options,
-      :configuration_item_types_configuration_options,
-      :configuration_items_configuration_options,:configured_items,
-      :configuration_item_types_configurations
+        :preferences, :preference_types,
+        :preference_options, :preference_options_preference_types,
+        :valid_preference_types, :user_preferences,
+        :app_containers, :app_containers_applications,
+        :applications_widgets,  :widgets, :tree_menu_node_defs,
+        :applications, :applications_desktops,
+        :configurations, :configuration_items,
+        :configuration_item_types, :configuration_options,
+        :configuration_item_types_configuration_options,
+        :configuration_items_configuration_options, :configured_items,
+        :configuration_item_types_configurations
     ].each do |tbl|
       if table_exists?(tbl)
         drop_table(tbl)

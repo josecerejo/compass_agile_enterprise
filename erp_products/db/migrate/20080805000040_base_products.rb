@@ -19,6 +19,7 @@ class BaseProducts < ActiveRecord::Migration
         t.column  :product_type_record_id,      :integer
         t.column  :product_type_record_type,    :string
         t.column 	:external_identifier, 	      :string
+        t.column  :internal_identifier,         :string
         t.column 	:external_id_source, 	        :string
         t.column  :default_image_url,           :string
         t.column  :list_view_image_id,          :integer

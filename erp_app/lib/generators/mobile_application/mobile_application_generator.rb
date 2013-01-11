@@ -5,7 +5,7 @@ class MobileApplicationGenerator < Rails::Generators::NamedBase
 
   def generate_mobile_application
     #Controller
-    template "controllers/controller_template.rb", "app/controllers/erp_app/mobile/#{file_name}/base_controller.rb"
+    template "controllers/controller_template.erb", "app/controllers/erp_app/mobile/#{file_name}/base_controller.rb"
 
     #make javascript
     template "public/app.js.erb", "public/javascripts/erp_app/mobile/applications/#{file_name}/app.js"
@@ -22,6 +22,6 @@ class MobileApplicationGenerator < Rails::Generators::NamedBase
     route "match '/erp_app/mobile/#{file_name}(/:action)' => \"erp_app/mobile/#{file_name}/base\""
     
     #migration
-    template "migrate/migration_template.rb", "db/data_migrations/#{RussellEdge::DataMigrator.next_migration_number}_create_#{file_name}_mobile_application.rb"
+    template "migrate/migration_template.erb", "db/data_migrations/#{RussellEdge::DataMigrator.next_migration_number}_create_#{file_name}_mobile_application.rb"
   end
 end

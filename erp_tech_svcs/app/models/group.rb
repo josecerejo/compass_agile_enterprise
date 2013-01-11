@@ -8,6 +8,7 @@ class Group < ActiveRecord::Base
   
   has_one :party, :as => :business_party
 
+  attr_accessible :description
   validates_uniqueness_of :description, :case_sensitive => false
 
   def self.add(description)
@@ -26,7 +27,7 @@ class Group < ActiveRecord::Base
 
   def has_role?(role)
     role = role.is_a?(SecurityRole) ? role : SecurityRole.find_by_internal_identifier(role.to_s)
-    all_roles.include?(role)
+    roles.include?(role)
   end
 
   def add_role(role)
@@ -138,8 +139,16 @@ class Group < ActiveRecord::Base
     end
   end
 
+  def role_class_capabilities
+    roles.collect{|r| r.class_capabilities }.flatten.uniq.compact
+  end
+
+  def all_class_capabilities
+    (role_class_capabilities + class_capabilities).uniq
+  end
+
   def class_capabilities_to_hash
-    class_capabilities.map {|capability| 
+    all_class_capabilities.map {|capability| 
       { :capability_type_iid => capability.capability_type.internal_identifier, 
         :capability_resource_type => capability.capability_resource_type 
       }

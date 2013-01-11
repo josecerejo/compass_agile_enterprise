@@ -1,7 +1,7 @@
 class SetupCompassAeInstance
   
   def self.up
-    CompassAeInstance.create(version: 3.0)
+    CompassAeInstance.create(version: 3.1)
   end
   
   def self.down

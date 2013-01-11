@@ -1,4 +1,6 @@
 class AppContainer < ActiveRecord::Base
+  attr_protected :created_at, :updated_at
+
   has_user_preferences
 
   belongs_to :user

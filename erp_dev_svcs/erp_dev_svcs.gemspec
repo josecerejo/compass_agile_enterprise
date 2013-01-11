@@ -19,17 +19,8 @@ Gem::Specification.new do |s|
   s.test_files = Dir["spec/**/*"]
 
   s.bindir        = 'bin'
-  s.executables   = ['compass-util']
+  s.executables   = ['compass_ae-dev']
 
   #compass dependencies
-  s.add_dependency 'erp_base_erp_svcs', '~> 3.0'
-
-  s.add_dependency "cucumber-rails", "~> 1.1.1"
-  s.add_dependency "database_cleaner"
-  s.add_dependency "factory_girl_rails", "~> 1.3.0"
-  s.add_dependency "rspec-rails", "~> 2.7"
-  s.add_dependency "simplecov", "~> 0.5"
-  s.add_dependency "spork", "~> 0.9.0.rc"
-  s.add_dependency "sqlite3", "~> 1.3.4"
-  s.add_dependency "watchr"
+  s.add_dependency 'erp_base_erp_svcs', '~> 3.1'
 end

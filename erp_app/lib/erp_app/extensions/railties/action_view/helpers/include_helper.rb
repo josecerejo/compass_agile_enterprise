@@ -13,10 +13,6 @@ module ErpApp
               raw srcs.flatten.map{|src| "<link rel=\"stylesheet\" type=\"text/css\" href=\"/stylesheets/#{src}\" />"}.join("")
             end
       
-            def set_max_file_upload
-              raw "<script type='text/javascript'>Ext.ns('ErpApp.FileUpload'); ErpApp.FileUpload.maxSize = #{Rails.application.config.erp_tech_svcs.max_file_size_in_mb};</script>"
-            end
-
             def include_extjs(opt={})
               resources = ''
 
@@ -26,19 +22,26 @@ module ErpApp
                 resources << static_javascript_include_tag("extjs/ext-all.js")
               end
 
+              resources << static_javascript_include_tag("extjs/helpQtip.js")
               resources << static_javascript_include_tag("extjs/ext_ux_tab_close_menu.js")
               resources << static_javascript_include_tag("extjs/Ext.ux.form.MultiSelect.js")
 
               if opt[:theme] === false
                 #do nothing not theme loaded.
               elsif opt[:theme]
-                resources << static_stylesheet_link_tag("extjs/resources/css/#{opt[:theme]}")
+                  theme = opt[:theme].split(':')[0]
+                  sub_theme = opt[:theme].split(':')[1]
+                  resources << static_stylesheet_link_tag("#{theme}/resources/css/#{sub_theme}.css") 
               else
-                resources << static_stylesheet_link_tag("extjs/resources/css/ext-all.css")
+                #this file will effectively be used as the default stylesheet if no theme is selected
+                resources << static_stylesheet_link_tag("clifton/resources/css/clifton.css")
               end
 
               resources << add_authenticity_token_to_extjs
         
+              # this requirement is new in ExtJS 4.1
+              resources << "<script type=\"text/javascript\">Ext.Loader.setConfig({ enabled: true, disableCaching: false });</script>"
+
               raw resources
             end
 

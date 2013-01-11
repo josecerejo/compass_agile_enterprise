@@ -1,5 +1,6 @@
 class Capability < ActiveRecord::Base
-
+  attr_protected :created_at, :updated_at
+  
   belongs_to :scope_type
   belongs_to :capability_type
   belongs_to :capability_resource, :polymorphic => true

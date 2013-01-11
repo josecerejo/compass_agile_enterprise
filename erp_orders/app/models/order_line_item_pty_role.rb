@@ -1,13 +1,14 @@
 class OrderLineItemPtyRole < ActiveRecord::Base
+  attr_protected :created_at, :updated_at
 
 #***************************************************************************
 # Who's booking? Who's staying? Who's paying? These role types can be
 # played by different people by implementing this structure
 #***************************************************************************
 
-  belongs_to  :order_line_item
-  belongs_to  :party
-  belongs_to  :line_item_role_type
+  belongs_to :order_line_item
+  belongs_to :party
+  belongs_to :line_item_role_type
 
 #***************************************************************************
 # The association of a transaction to an account happens in the context of
@@ -20,16 +21,16 @@ class OrderLineItemPtyRole < ActiveRecord::Base
 # In this case, we have an optional account reference here so that orders
 # can be split across accounts.
 #***************************************************************************  
-  
-  belongs_to  :bix_txn_acct_root
+
+  belongs_to :bix_txn_acct_root
 
   def to_label
     "#{party.description}"
   end
-  
+
   def description
     "#{party.description}"
   end
-	
+
 
 end

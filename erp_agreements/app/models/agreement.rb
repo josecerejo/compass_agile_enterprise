@@ -1,6 +1,7 @@
 class Agreement < ActiveRecord::Base
+  attr_protected :created_at, :updated_at
 
-	belongs_to :agreement_type
+  belongs_to :agreement_type
 	has_many 	 :agreement_items
 	has_many 	 :agreement_party_roles
 	has_many	 :parties, :through => :agreement_party_roles
@@ -30,7 +31,7 @@ class Agreement < ActiveRecord::Base
                            agreement_items.agreement_item_type_id").where("agreement_item_types.internal_identifier = '#{item_type_internal_identifier}'").first
   end
   
-  def respond_to?(m)
+  def respond_to?(m, include_private_methods = false)
     ((get_item_by_item_type_internal_identifier(m.to_s).nil? ? false : true)) unless super
   end
   

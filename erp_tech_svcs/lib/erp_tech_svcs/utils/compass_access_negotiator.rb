@@ -50,7 +50,7 @@ module ErpTechSvcs
           end
         end
 
-        class CapabilityAlreadytExists < StandardError
+        class CapabilityAlreadyExists < StandardError
           def to_s
             "Capability already exists."
           end

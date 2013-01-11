@@ -1,42 +1,66 @@
 class DynamicFormModel < ActiveRecord::Base
+  attr_protected :created_at, :updated_at
+  
   has_many :dynamic_form_documents
   has_many :dynamic_forms, :dependent => :destroy
+  after_create  :create_role
+
+  validates_uniqueness_of :model_name
+
+  def create_role
+    SecurityRole.create(:description => self.model_name.titleize.pluralize, :internal_identifier => role_iid) if self.role.nil?
+  end
+
+  def role_iid
+    "dynamic_form_model_#{self.model_name}"
+  end
+
+  def role
+    SecurityRole.iid(role_iid)
+  end
+
+  def self.sunspot_setup_all
+    DynamicFormModel.all.each do |m|
+      next if m.model_name == 'DynamicFormDocument'
+      next unless ActiveRecord::Base.connection.table_exists? m.get_constant.table_name
+      m.get_constant.sunspot_setup unless DynamicFormModel.class_exists?(m.model_name)
+    end
+  end
 
   def self.get_constant(klass_name)
-	result = nil
-	begin
+  	result = nil
+  	begin
       result = klass_name.constantize
     rescue
       DynamicFormDocument.declare(klass_name)
       result = klass_name.constantize
     end
-	result
+  	result
+  end
+
+  # checks to see if class name exists as a static model or has already been declared
+  # used with sunspot_setup_all
+  def self.class_exists?(class_name)
+    result = nil
+    begin
+      klass = Module.const_get(class_name)
+      result = (klass.is_a?(Class) ? ((klass.superclass == ActiveRecord::Base or klass.superclass == DynamicFormModel) ? true : nil) : nil)
+    rescue NameError
+      result = nil
+    end
+    result
   end
 
   def self.get_instance(klass_name)
     DynamicFormModel.get_constant(klass_name).new
   end
 
-  # handles both static and dynamic attributes
-  def self.save_all_attributes(dynamicObject, params, ignored_params=[])
-    
-    params.each do |k,v|
-      unless ignored_params.include?(k.to_s) or k == '' or k == '_'
-        if dynamicObject.attributes.include?(k)
-          dynamicObject.send(k + '=', v) 
-        else
-          if ['created_by','updated_by','created_at','updated_at','created_with_form_id','updated_with_form_id'].include?(k)
-            key = k + '='
-          else
-            key = DynamicDatum::DYNAMIC_ATTRIBUTE_PREFIX + k + '='
-          end
-          
-          dynamicObject.data.send(key, v) 
-        end
-      end
-    end
+  def get_constant
+    DynamicFormModel.get_constant(self.model_name)
+  end
 
-    (dynamicObject.valid? and dynamicObject.save) ? dynamicObject : nil
+  def get_instance
+    DynamicFormModel.get_instance(self.model_name)
   end
 
 end

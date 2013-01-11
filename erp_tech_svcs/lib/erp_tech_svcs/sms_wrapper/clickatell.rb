@@ -20,6 +20,6 @@ module ErpTechSvcs
         result
       end
 
-    end
-  end
-end
+    end #Clickatell
+  end #SmsWrapper
+end #ErpTechSvcs

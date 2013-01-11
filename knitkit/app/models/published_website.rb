@@ -1,4 +1,6 @@
 class PublishedWebsite < ActiveRecord::Base
+  attr_protected :created_at, :updated_at
+
   belongs_to :website
   belongs_to :published_by, :class_name => "User"
   has_many   :published_elements, :dependent => :destroy

@@ -2,8 +2,8 @@ require 'spec_helper'
 
 describe Party do
   before(:each) do
-    @party = Factory.create(:individual_party)
-    @party_relationship = Factory.create(:party_relationship, :from_party => @party)
+    @party = FactoryGirl.create(:individual_party)
+    @party_relationship = FactoryGirl.create(:party_relationship, :from_party => @party)
   end
 
   it "relationships count should be 1" do
@@ -12,16 +12,16 @@ describe Party do
   end
 
   it "Create a new relationship, and count of relationships should be 2" do
-    @party2 = Factory.create(:individual_party)
+    @party2 = FactoryGirl.create(:individual_party)
     @party.create_relationship("Created a new relationship for a test", @party2.id)
     @party.relationships.count.should eq 2
   end
 
   it "Should find relationships by type and get an array with 1 relationship" do
-    @relationship_type = Factory.create(:relationship_type,
+    @relationship_type = FactoryGirl.create(:relationship_type,
                                         :internal_identifier => "Test Relationship Type")
 
-    @relationship1 = Factory.create(:party_relationship,
+    @relationship1 = FactoryGirl.create(:party_relationship,
                                     :from_party => @party,
                                     :relationship_type => @relationship_type
                                    )

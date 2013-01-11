@@ -1,4 +1,6 @@
 class PreferenceType < ActiveRecord::Base
+  attr_protected :created_at, :updated_at
+  
   has_many_polymorphic :preferenced_records,
                :through => :valid_preference_types,
                :models => [:app_containers, :desktops, :organizers, :applications]

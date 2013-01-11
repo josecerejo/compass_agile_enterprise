@@ -39,6 +39,8 @@ module Dummy
 
     # Enable the asset pipeline
     config.assets.enabled = true
+
+    config.active_record.whitelist_attributes = true    
   end
 end
 

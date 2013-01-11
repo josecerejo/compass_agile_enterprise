@@ -1,5 +1,6 @@
 class Price < ActiveRecord::Base
-  
+  attr_protected :created_at, :updated_at
+
   belongs_to  :pricing_plan
   belongs_to  :priced_item, :polymorphic => true
   has_many    :price_components, :dependent => :destroy

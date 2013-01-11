@@ -1,4 +1,6 @@
 class Comment < ActiveRecord::Base
+  attr_protected :created_at, :updated_at
+
   belongs_to :commented_record, :polymorphic => true
   belongs_to :user
 

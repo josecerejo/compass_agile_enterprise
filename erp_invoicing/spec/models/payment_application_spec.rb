@@ -7,7 +7,7 @@ describe PaymentApplication do
   end
 
   it "should have to check to see if it is pending" do
-    @payment_application.is_pending?.should eq false
+    @payment_application.is_pending?.should eq true
   end
 
   after(:all) do

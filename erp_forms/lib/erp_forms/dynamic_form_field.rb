@@ -6,7 +6,6 @@ class DynamicFormField
   Field Types TODO
   special:
   codemirror
-  file upload - use has_file_assets and plupload
   test password field
   
   complex (for future implementation):
@@ -23,14 +22,13 @@ class DynamicFormField
 #    :readOnly => disabled true or false
 #    :maxLength => maxLength integer
 #    :width => size integer
-#    :validation_regex => regex string
 #  }
 
   ##################
   # SPECIAL FIELDS #
   ##################
   def self.email(options={})
-    options[:validation_regex] = "^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$"
+    options[:validator_function] = 'validateEmail(v)'
     DynamicFormField.basic_field('textfield', options)
   end
 
@@ -70,8 +68,6 @@ class DynamicFormField
       { :name => 'id' },
       { :name => displayField }
     ]
-
-    options[:url] = '/erp_forms/erp_app/desktop/dynamic_forms/forms/related_field' if options[:url].blank?
 
     DynamicFormField.basic_field('related_combobox', options)
   end
@@ -137,10 +133,19 @@ class DynamicFormField
     DynamicFormField.basic_field('checkbox', options)
   end
 
-  def self.hidden(options={})
-    DynamicFormField.basic_field('hidden', options)
+  def self.filefield(options={})
+    DynamicFormField.basic_field('filefield', options)
   end
-  
+
+  def self.hiddenfield(options={})
+    DynamicFormField.basic_field('hiddenfield', options)
+  end
+
+  # alias
+  def self.hidden(options={})
+    DynamicFormField.hiddenfield(options={})
+  end
+
   def self.basic_field(xtype, options={}, selections=[])
     options = DynamicFormField.set_default_field_options(options)
 
@@ -154,53 +159,51 @@ class DynamicFormField
         :width =>options[:width],
         :height => options[:height],
         :labelWidth => options[:labelWidth],
-        :display_in_grid => options[:display_in_grid]
+        :display_in_grid => options[:display_in_grid],
+        :searchable => options[:display_in_grid]
     }
 
+    field[:buttonText] = options[:buttonText] unless options[:buttonText].blank?
     field[:displayField] = options[:displayField] unless options[:displayField].blank?
+    field[:disabled] = options[:disabled] unless options[:disabled].nil?
+    field[:editable] = options[:editable] unless options[:editable].nil?
+    field[:emptyText] = options[:emptyText] unless options[:emptyText].blank?
     field[:extraParams] = options[:extraParams] unless options[:extraParams].blank?
-    field[:url] = options[:url] unless options[:url].blank?
     field[:fields] = options[:fields] unless options[:fields].blank?
+    field[:forceSelection] = options[:forceSelection] unless options[:forceSelection].nil?
+    field[:hidden] = options[:hidden] unless options[:hidden].nil?
+    field[:hideTrigger] = options[:hideTrigger] unless options[:hideTrigger].nil?
+    field[:hideMode] = options[:hideMode] unless options[:hideMode].blank?
+    field[:labelAlign] = options[:labelAlign] unless options[:labelAlign].blank?
     field[:mapping] = options[:mapping] unless options[:mapping].blank?
     field[:minLength] = options[:minLength] unless options[:minLength].nil?
     field[:maxLength] = options[:maxLength] unless options[:maxLength].nil?
     field[:minValue] = options[:minValue] unless options[:minValue].nil?
     field[:maxValue] = options[:maxValue] unless options[:maxValue].nil?
-    field[:hideTrigger] = options[:hideTrigger] unless options[:hideTrigger].nil?
+    field[:msgTarget] = options[:msgTarget] unless options[:msgTarget].blank?
+    field[:regexText] = options[:regexText] unless options[:regexText].blank?
+    field[:url] = options[:url] unless options[:url].blank?
+    field[:vtype] = options[:vtype] unless options[:vtype].blank?
+    field[:validation_regex] = options[:validation_regex] unless options[:validation_regex].blank?
+    field[:validator_function] = options[:validator_function] unless options[:validator_function].blank?
 
-    if selections and selections != []
-      field[:store] = selections
-    end
-
-    if !options[:validation_regex].blank? or !options[:validator_function].blank?
-      field[:validateOnBlur] = true
-    end
-    
-    if options[:validation_regex] and options[:validation_regex] != ''
-      field[:validation_regex] = options[:validation_regex]
-    end
-
-    if options[:validator_function] and options[:validator_function] != ''
-      field[:validator_function] = options[:validator_function]
-    end
+    field[:store] = selections if selections and selections != []    
     
     field
   end
   
   def self.set_default_field_options(options={})
-        
     options[:fieldLabel] = '' if options[:fieldLabel].nil?
     options[:name] = '' if options[:name].nil?
     options[:allowBlank] = true if options[:allowBlank].nil?
-    options[:value] = '' if options[:value].nil?
     options[:readOnly] = false if options[:readOnly].nil?
     options[:minLength] = nil if options[:minLength].nil?
     options[:maxLength] = nil if options[:maxLength].nil?
     options[:width] = 200 if options[:width].nil?
     options[:height] = nil if options[:height].nil?
-    options[:validation_regex] = '' if options[:validation_regex].nil?
     options[:labelWidth] = 75 if options[:labelWidth].nil?
     options[:display_in_grid] = true if options[:display_in_grid].nil?
+    options[:searchable] = true if options[:searchable].nil?
     
     options
   end

@@ -4,19 +4,20 @@
     <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
     <title>Compass AE Login</title>
 
-    <%= include_extjs :debug => (Rails.env != 'production') %>
     <%= static_stylesheet_link_tag('erp_app/shared/compass-ext-all.css','erp_app/login/main.css') %>
+    <%= include_extjs(:theme => 'extjs:ext-all', :debug => (Rails.env != 'production') ) %>
+
     <%= static_javascript_include_tag("erp_app/utility.js","erp_app/login/window.js")%>
     <%= add_authenticity_token_to_extjs%>
   </head>
-  <body style="background-color:#336699;">
-    <div style="text-align:center;width:100%; padding-top: 5%;">
-      <img alt="Compass Agile Enterprise" src="/images/art/truenorth-compass-combined-timeshare-navy-5.png" />
+  <body style="background-color:#000;">
+    <div style="text-align:center;width:100%; padding-top: 4%;">
+      <img alt="Compass Agile Enterprise" src="/images/art/compass-ae-logo-reverse-1.png" />
    </div>
     <script type="text/javascript">
       Ext.onReady(function(){
-          var appContainers = [['/erp_app/desktop/','Compass Desktop'],['/erp_app/organizer/','Compass Organizer']];
-          var loginWindow = Ext.create('Compass.ErpApp.Login.Window',{appContainers:appContainers, selectedAppContainerValue:'/erp_app/desktop/',redirectTo:'/erp_app/desktop/', logoutTo:'/erp_app/login', message:'<%=flash[:notice]%>', authenticity_token:'<%=form_authenticity_token%>'});
+          var appContainers = [['/erp_app/desktop/','CompassAE Desktop'],['/erp_app/organizer/','CompassAE CSR']];
+          var loginWindow = Ext.create('Compass.ErpApp.Login.Window',{appContainers:appContainers, selectedAppContainerValue:'<%= @app_container %>',redirectTo:'/erp_app/desktop/', logoutTo:'/erp_app/login', message:'<%=flash[:notice]%>', authenticity_token:'<%=form_authenticity_token%>'});
           loginWindow.show();
       });
     </script>

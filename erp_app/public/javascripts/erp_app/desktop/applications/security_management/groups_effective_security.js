@@ -2,10 +2,6 @@ Ext.define("Compass.ErpApp.Desktop.Applications.SecurityManagement.GroupsEffecti
   extend:"Ext.panel.Panel",
   alias:'widget.security_management_groupseffectivesecurity',
 
-  initComponent: function() {
-    Compass.ErpApp.Desktop.Applications.SecurityManagement.GroupsEffectiveSecurity.superclass.initComponent.call(this, arguments);
-  },
-
   updateTitle : function(){
     if (this.assign_to_description){
       this.down('#effective').setTitle('Effective Security for Group '+this.assign_to_description);
@@ -93,6 +89,6 @@ Ext.define("Compass.ErpApp.Desktop.Applications.SecurityManagement.GroupsEffecti
 
     }, config);
 
-    Compass.ErpApp.Desktop.Applications.SecurityManagement.GroupsEffectiveSecurity.superclass.constructor.call(this, config);
+    this.callParent([config]);
   }
 });

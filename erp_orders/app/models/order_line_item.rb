@@ -1,4 +1,5 @@
 class OrderLineItem < ActiveRecord::Base
+  attr_protected :created_at, :updated_at
 
 	belongs_to :order_txn, :class_name => 'OrderTxn'
 	belongs_to :order_line_item_type

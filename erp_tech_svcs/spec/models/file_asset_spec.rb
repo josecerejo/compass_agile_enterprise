@@ -24,11 +24,13 @@ describe FileAsset do
   describe "class methods" do
 
     it "should have method to get valid extensions based on subclass" do
-      TextFile.valid_extensions.should eq %w(.txt .text)
+      TextFile.valid_extensions.should eq %w(.txt .TXT .text)
     end
 
     it "should have method to get all valid extensions for all subclasses" do
-      FileAsset.all_valid_extensions.should eq [".jpg", ".jpeg", ".gif", ".png", ".ico", ".PNG", ".JPEG", ".JPG", ".txt", ".text", ".js", ".css", ".erb", ".haml", ".liquid", ".builder", ".html", ".pdf", ".swf"]
+      FileAsset.all_valid_extensions.should eq [".jpg", ".JPG", ".jpeg", ".JPEG", ".gif", ".GIF", ".png", ".PNG", ".ico", ".ICO", 
+                                                ".bmp", ".BMP", ".tif", ".tiff", ".TIF", ".TIFF", ".txt", ".TXT", ".text", ".swf", ".SWF", 
+                                                ".js", ".JS", ".css", ".CSS", ".erb", ".haml", ".liquid", ".builder", ".html", ".HTML", ".xml", ".XML", ".pdf", ".PDF"]
     end
 
     it "should be able to lookup subclass based on extension" do
@@ -57,16 +59,23 @@ describe FileAsset do
     end
 
     it "should allow you to move a file" do
-      new_path = File.join(Rails.root.to_s, 'move_test_tmp')
+      new_path = File.join('move_test_tmp')
 
       File.exists?(@base_path).should eq true
-
       result, message = @file_asset.move(new_path)
       result.should eq true
       File.exists?(@base_path).should eq false
-      File.exists?(File.join(new_path,@name)).should eq true
+      File.exists?(File.join(Rails.root,new_path,@name)).should eq true
 
       FileUtils.rm_rf(new_path)
+    end
+
+    it "should allow you to secure a file with capabilities" do
+      @file_asset.protected_with_capability?('download').should eq false
+      @file_asset.add_capability('download')
+      @file_asset.protected_with_capability?('download').should eq true
+      @file_asset.remove_capability('download')
+      @file_asset.protected_with_capability?('download').should eq false
     end
 
     after(:all) do

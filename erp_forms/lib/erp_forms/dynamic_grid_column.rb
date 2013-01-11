@@ -14,8 +14,8 @@ class DynamicGridColumn
       :dataIndex => data_index,
       :sortable => sortable
     }
-   
-    col[:width] = field_hash[:width] if field_hash[:width]
+
+    col[:width] = field_hash[:width] unless field_hash[:width].nil?
     col[:renderer] = renderer unless renderer.blank?
 
     if field_hash[:editor]

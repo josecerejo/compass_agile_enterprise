@@ -118,7 +118,7 @@ Ext.define("Compass.ErpApp.Shared.InvoicesGridPanel",{
     var self = this;
     
     var store = Ext.create('Ext.data.Store', {
-      fields:['billed_to_party', 'billed_from_party', 'invoice_number','description', 'message', 'invoice_date', 'due_date', 'payment_due', 'id', 'billing_account'],
+      fields:['billed_to_party', 'billed_from_party', 'invoice_number','description', 'message', 'invoice_date', 'due_date', {name:'payment_due',type:'float'}, 'id', 'billing_account'],
       autoLoad: Compass.ErpApp.Utility.isBlank(config['autoLoad']) ? true : config['autoLoad'],
       autoSync: true,
       proxy: {

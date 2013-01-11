@@ -1,4 +1,5 @@
 class CommunicationEvent < ActiveRecord::Base
+  attr_protected :created_at, :updated_at
 
   belongs_to :from_party, :class_name => 'Party', :foreign_key => 'party_id_from'
   belongs_to :to_party ,  :class_name => 'Party', :foreign_key => 'party_id_to'

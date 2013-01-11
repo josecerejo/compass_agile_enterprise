@@ -1,4 +1,6 @@
 class Party < ActiveRecord::Base
+  attr_protected :created_at, :updated_at
+
   has_notes
     
   has_many   :contacts, :dependent => :destroy
@@ -7,8 +9,6 @@ class Party < ActiveRecord::Base
 
   has_many   :party_roles, :dependent => :destroy #role_types
 	has_many   :role_types, :through => :party_roles
-
-  has_and_belongs_to_many :security_roles
 
   after_destroy :destroy_business_party
 
@@ -131,6 +131,7 @@ class Party < ActiveRecord::Base
     contact_purposes = [contact_purposes] if !contact_purposes.kind_of?(Array) # gracefully handle a single purpose not in an array
     contact = find_contact(contact_mechanism_class, contact_mechanism_args, contact_purposes)
     if contact.nil?
+      contact_mechanism_args.delete_if{|k,v| ['created_at','updated_at'].include? k.to_s}
       contact_mechanism = contact_mechanism_class.new(contact_mechanism_args)
       contact_mechanism.contact.party = self
       contact_mechanism.contact.contact_purposes = contact_purposes
@@ -187,7 +188,7 @@ class Party < ActiveRecord::Base
     end
   end
 
-  def respond_to?(m)
+  def respond_to?(m, include_private_methods = false)
     (super ? true : get_contact_by_method(m.to_s)) rescue super
   end
   

@@ -28,6 +28,8 @@ Paperclip.interpolates(:file_url){|data, style|
 }
 
 class FileAsset < ActiveRecord::Base
+  attr_protected :created_at, :updated_at
+
   if respond_to?(:class_attribute)
     class_attribute :file_type
     class_attribute :valid_extensions
@@ -272,7 +274,7 @@ class Pdf < TextFile
   self.valid_extensions = %w(.pdf .PDF)
 end
 
-class Swf < TextFile
+class Swf < FileAsset
   self.file_type = :swf
   self.content_type = 'application/x-shockwave-flash'
   self.valid_extensions = %w(.swf .SWF)

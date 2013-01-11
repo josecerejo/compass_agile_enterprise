@@ -1,4 +1,5 @@
 class EnvironmentTxnContext < ActiveRecord::Base
+  attr_protected :created_at, :updated_at
 
   has_one :base_txn_context, :as => :txn_context_record
 

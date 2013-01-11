@@ -188,7 +188,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.Knitkit.SectionArticlesGridPanel
   },
 
   initComponent: function() {
-    Compass.ErpApp.Desktop.Applications.Knitkit.SectionArticlesGridPanel.superclass.initComponent.call(this, arguments);
+    this.callParent([arguments]);
     this.getStore().load();
   },
   
@@ -468,7 +468,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.Knitkit.SectionArticlesGridPanel
                                         'load':function(store){
                                             available_articles_filter_combobox = Ext.ComponentQuery.query('#available_articles_filter_combobox')[0];
                                             available_articles_filter_combobox.select(0);
-                                            //available_articles_filter_combobox.fireEvent('select');
+                                            available_articles_filter_combobox.fireEvent('select');
                                         }
                                     }
                                 }),
@@ -488,7 +488,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.Knitkit.SectionArticlesGridPanel
                                         available_articles_combobox.getStore().load({
                                             params:{
                                                 section_id: self.initialConfig['sectionId'],
-                                                website_id: combo.getValue()
+                                                website_id: Ext.ComponentQuery.query('#available_articles_filter_combobox')[0].getValue()
                                             }
                                         });
                                     }
@@ -533,12 +533,11 @@ Ext.define("Compass.ErpApp.Desktop.Applications.Knitkit.SectionArticlesGridPanel
                                             Ext.apply(store.getProxy().extraParams, {
                                                 website_id: Ext.ComponentQuery.query('#available_articles_filter_combobox')[0].getValue()
                                             });
-                                        }
-                                        // ,
-                                        // 'load':function(store, records){
-                                        //     available_articles_combobox = Ext.ComponentQuery.query('#available_articles_combobox')[0];
-                                        //     available_articles_combobox.setValue(store.getAt(0).data.id);
-                                        // }                                                                                                                    
+                                        },
+                                        'load':function(store, records){
+                                            available_articles_combobox = Ext.ComponentQuery.query('#available_articles_combobox')[0];
+                                            available_articles_combobox.setValue(store.getAt(0).data.id);
+                                        }                                                                                                                    
                                     }
                                 }),
                                 queryMode: 'local',
@@ -605,16 +604,13 @@ Ext.define("Compass.ErpApp.Desktop.Applications.Knitkit.SectionArticlesGridPanel
       })
     }, config);
   
-    Compass.ErpApp.Desktop.Applications.Knitkit.SectionArticlesGridPanel.superclass.constructor.call(this, config);
+    this.callParent([config]);
   }
 });
 
 Ext.define("Compass.ErpApp.Desktop.Applications.Knitkit.PageArticlesGridPanel",{
   extend:"Compass.ErpApp.Desktop.Applications.Knitkit.SectionArticlesGridPanel",
   alias:'widget.knitkit_pagearticlesgridpanel',
-  initComponent: function() {
-    Compass.ErpApp.Desktop.Applications.Knitkit.PageArticlesGridPanel.superclass.initComponent.call(this, arguments);
-  },
 
   constructor : function(config) {
     config['contentType'] = 'article';
@@ -663,16 +659,13 @@ Ext.define("Compass.ErpApp.Desktop.Applications.Knitkit.PageArticlesGridPanel",{
       ]
     }, config);
 
-    Compass.ErpApp.Desktop.Applications.Knitkit.PageArticlesGridPanel.superclass.constructor.call(this, config);
+    this.callParent([config]);
   }
 });
 
 Ext.define("Compass.ErpApp.Desktop.Applications.Knitkit.BlogArticlesGridPanel",{
   extend:"Compass.ErpApp.Desktop.Applications.Knitkit.SectionArticlesGridPanel",
   alias:'widget.knitkit_blogarticlesgridpanel',
-  initComponent: function() {
-    Compass.ErpApp.Desktop.Applications.Knitkit.BlogArticlesGridPanel.superclass.initComponent.call(this, arguments);
-  },
 
   constructor : function(config) {
     var self = this;
@@ -725,6 +718,6 @@ Ext.define("Compass.ErpApp.Desktop.Applications.Knitkit.BlogArticlesGridPanel",{
       }]
     }, config);
 
-    Compass.ErpApp.Desktop.Applications.Knitkit.BlogArticlesGridPanel.superclass.constructor.call(this, config);
+    this.callParent([config]);
   }
 });

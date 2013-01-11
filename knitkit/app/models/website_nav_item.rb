@@ -1,4 +1,6 @@
 class WebsiteNavItem < ActiveRecord::Base
+  attr_protected :created_at, :updated_at
+
   belongs_to :website_nav
   belongs_to :linked_to_item, :polymorphic => true
   

@@ -3,6 +3,10 @@ class DynamicForms < ActiveRecord::Migration
     unless table_exists?(:dynamic_form_models)
       create_table :dynamic_form_models do |t|
         t.string :model_name
+        t.boolean :show_in_multitask, :default => false 
+        t.boolean :allow_comments, :default => true 
+        t.boolean :allow_files, :default => true 
+        t.string :file_security_default, :default => 'private'
 
         t.timestamps
       end
@@ -28,6 +32,14 @@ class DynamicForms < ActiveRecord::Migration
         t.string :model_name
         t.string :internal_identifier
         t.boolean :default
+        t.string :widget_action, :default => 'save' 
+        t.string :widget_email_recipients 
+        t.boolean :focus_first_field, :default => true 
+        t.boolean :submit_empty_text, :default => false 
+        t.string :msg_target, :default => 'qtip'
+        t.string :submit_button_label, :default => 'Submit'
+        t.string :cancel_button_label, :default => 'Cancel'
+        t.text :comment
 
         t.integer :created_by_id
         t.integer :updated_by_id

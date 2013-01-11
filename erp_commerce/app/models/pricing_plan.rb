@@ -1,4 +1,5 @@
 class PricingPlan < ActiveRecord::Base
+  attr_protected :created_at, :updated_at
 
   has_many   :valid_price_plan_components
   has_many   :pricing_plan_components, :through => :valid_price_plan_components

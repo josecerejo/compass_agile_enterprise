@@ -1,0 +1,80 @@
+@mixin extjs-form-checkboxgroup {
+
+    .#{$prefix}form-checkboxgroup-body {
+        padding: 1px 4px 1px 4px;
+
+        table {
+            border-collapse: separate;
+        }
+    }
+    /*
+    .#{$prefix}form-invalid table tr:first-child td:first-child {
+        -moz-border-radius-top-left:4px;
+        -webkit-border-top-left-radius:4px;
+        border-top-left-radius:4px;
+        border: 1px solid #C30;
+        background-color: lighten($form-field-invalid-border-color, 90%);
+        border-color: $form-field-invalid-border-color;
+        box-shadow: 0px 0px 3px $form-field-invalid-border-color;
+        //padding: 0 0 0 3px;
+        border-right-width: 0;
+    }
+
+
+    .#{$prefix}form-invalid table tr:first-child td:last-child {
+        -moz-border-radius-top-right:4px;
+        -webkit-border-top-right-radius:4px;
+        border-top-right-radius:4px;
+        border: 1px solid #C30;
+        background-color: lighten($form-field-invalid-border-color, 90%);
+        border-color: $form-field-invalid-border-color;
+        box-shadow: 0px 0px 3px $form-field-invalid-border-color;
+        //padding: 0 3px 0 0;
+        border-left-width: 0;
+    }
+
+    .#{$prefix}form-invalid table tr:last-child td:first-child {
+        -moz-border-radius-bottom-left:4px;
+        -webkit-border-bottom-left-radius:4px;
+        border-bottom-left-radius:4px;
+        border: 1px solid #C30;
+        background-color: lighten($form-field-invalid-border-color, 90%);
+        border-color: $form-field-invalid-border-color;
+        box-shadow: 0px 0px 3px $form-field-invalid-border-color;
+        //padding: 0 0 0 3px;
+        border-right-width: 0;
+    }
+
+    .#{$prefix}form-invalid  table tr:last-child td:last-child {
+        -moz-border-radius-bottom-right:4px;
+        -webkit-border-bottom-right-radius:4px;
+        border-bottom-right-radius:4px;
+        border: 1px solid #C30;
+        background-color: lighten($form-field-invalid-border-color, 90%);
+        border-color: $form-field-invalid-border-color;
+        box-shadow: 0px 0px 3px $form-field-invalid-border-color;
+        padding: 0 3px 0 0;
+        border-left-width: 0;
+    }
+
+    .#{$prefix}form-check-group table td {
+            border: none !important;
+            box-shadow: none !important;
+    }*/
+
+    .#{$prefix}check-group-alt {
+        background: adjust-color($base-color, $hue: 2.667deg, $saturation: -7.168%, $lightness: 3.725%);
+
+        border-top:1px dotted adjust-color($base-color, $hue: 17.193deg, $saturation: -40.827%, $lightness: -9.412%);
+        border-bottom:1px dotted adjust-color($base-color, $hue: 17.193deg, $saturation: -40.827%, $lightness: -9.412%);
+    }
+
+    .#{$prefix}form-check-group-label {
+        color: #333;
+
+        border-bottom: 1px solid #333;
+
+        margin: 0 30px 5px 0;
+        padding: 2px;
+    }
+}
