@@ -179,13 +179,20 @@ class Party < ActiveRecord::Base
       purpose = method_name[0]
       klass = method_name[1] + '_' + method_name[2]
     end
-    
-    contact_purpose = ContactPurpose.find_by_internal_identifier(purpose)
-    if contact_purpose.nil? or !Object.const_defined?(klass.camelize)
+
+    #constantize klass to make sure it exists and is loaded
+    begin
+      klass_const = klass.camelize.constantize
+      contact_purpose = ContactPurpose.find_by_internal_identifier(purpose)
+      if contact_purpose.nil?
+        return nil
+      else
+        find_contact_mechanism_with_purpose(klass_const, contact_purpose)
+      end
+    rescue NameError
       return nil
-    else
-      find_contact_mechanism_with_purpose(klass.camelize.constantize, contact_purpose)
     end
+
   end
 
   def respond_to?(m, include_private_methods = false)
