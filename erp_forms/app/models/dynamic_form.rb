@@ -175,9 +175,9 @@ class DynamicForm < ActiveRecord::Base
       :text => self.cancel_button_label,
       :listeners => NonEscapeJsonString.new("{
           \"click\":function(button){
-            var form = button.findParentByType('form');
-            if (form.close_selector){
-              form.up(form.close_selector).close();
+            var form = button.findParentByType('dynamic_form_panel');
+            if (form.up('tabpanel')){
+              form.up('tabpanel').remove(form.up('panel'));
             }else{
               form.up('window').close();
             }
