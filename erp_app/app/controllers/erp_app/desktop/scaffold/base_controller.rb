@@ -6,7 +6,13 @@ module ErpApp
 		module Scaffold
 			class BaseController < ErpApp::Desktop::BaseController
 
-			  def create_model
+			  def get_models
+          names = ActiveRecord::Base.all_subclasses.collect{|klass| {:name => klass.name}}.uniq
+
+          render :json => {:success => true, :names => names}
+        end
+
+        def create_model
           name = params[:name].underscore
 
           result = create_scaffold_check(name)
