@@ -10,6 +10,9 @@ module ErpApp
           names = ActiveRecord::Base.all_subclasses.collect{|klass| klass.name}.delete_if{|item| item =~ /::/}.uniq.sort{|a,b| a <=> b}
 
           respond_to do |format|
+            format.json do
+              render :json => {:success => true, :names => names.collect{|name| {:name => name}}}
+            end
             format.tree do
               if params[:node].blank? || params[:node] == "root"
                 render :json => {:success => true, :names => names.collect{|model| {:text => model, :id => model.underscore, :model => model, :iconCls => 'icon-grid', :leaf => false}}}
@@ -19,9 +22,6 @@ module ErpApp
 
                 render :json => {:success => true, :names => non_excluded_columns.collect{|column| {:text => column, :iconCls => 'icon-gear', :leaf => true}}}
               end
-            end
-            format.json do
-              render :json => {:success => true, :names => names.collect{|name| {:name => name}}}
             end
           end
         end

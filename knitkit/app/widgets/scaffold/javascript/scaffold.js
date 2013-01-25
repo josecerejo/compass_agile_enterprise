@@ -26,11 +26,11 @@ Compass.ErpApp.Widgets.Scaffold = {
                                 reader:{
                                     type:'json',
                                     root:'names'
-                                },
-                                fields:[
-                                    {name:'name', type:'string'}
-                                ]
-                            }
+                                }
+                            },
+                            fields:[
+                                {name:'name', type:'string'}
+                            ]
                         },
                         displayField:'name',
                         valueField:'name',
