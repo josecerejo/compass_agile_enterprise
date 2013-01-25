@@ -29,7 +29,7 @@ module ErpApp
               output += raw "Compass.ErpApp.Utility.JsLoader.load([
                     '/javascripts/erp_app/shared/dynamic_editable_grid.js',
                     '/javascripts/erp_app/shared/dynamic_editable_grid_loader_panel.js'],
-                    function(){
+                     function(){
                       var task = Ext.create('Ext.util.DelayedTask', function () {
                                     Ext.create('Compass.ErpApp.Shared.DynamicEditableGridLoaderPanel', #{options.to_json} );
                                  });

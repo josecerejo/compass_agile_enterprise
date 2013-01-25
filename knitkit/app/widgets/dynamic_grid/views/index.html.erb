@@ -1,0 +1,14 @@
+<div id="dynamicGrid_<%=@uuid%>"></div>
+
+<%=
+    dynamic_extjs_grid(:renderTo => "dynamicGrid_#{@uuid}",
+                       :title => @title,
+                       :setupUrl => build_widget_url('setup', nil, {:model_name => @model_name}),
+                       :dataUrl => build_widget_url('data', nil, {:model_name => @model_name}),
+                       :width => @width,
+                       :height => @height,
+                       :page => @page,
+                       :pageSize => @page_size,
+                       :displayMsg => @display_msg,
+                       :emptyMsg => @empty_msg)
+%>

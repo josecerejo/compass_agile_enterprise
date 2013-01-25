@@ -60,6 +60,29 @@ module ActiveExt
       @options
     end
 
+    def non_excluded_columns
+      columns = []
+
+      #add id column if showing it
+      if self.options[:show_id]
+        columns << core.columns[:id]
+      end
+
+      #build ext columns
+      self.columns.each do |column|
+        next if column.name.to_s =~ /(^id|created_at|updated_at)$/ || self.columns.exclude_column?(column.name)
+        columns << column
+      end
+
+      #add timestamp columns if showing them
+      if self.options[:show_timestamps]
+        columns << self.columns[:created_at]
+        columns << self.columns[:updated_at]
+      end
+
+      columns
+    end
+
     private
 
     def set_column_options

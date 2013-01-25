@@ -16,7 +16,6 @@ module ErpForms
     end
 
     ErpBaseErpSvcs.register_as_compass_ae_engine(config, self)
-    ::ErpApp::Widgets::Loader.load_compass_ae_widgets(config, self)
 
     config.to_prepare do
       #dynamic_attributes patch

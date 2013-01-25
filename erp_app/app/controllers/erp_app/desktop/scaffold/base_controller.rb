@@ -7,9 +7,17 @@ module ErpApp
 			class BaseController < ErpApp::Desktop::BaseController
 
 			  def get_models
-          names = ActiveRecord::Base.all_subclasses.collect{|klass| {:name => klass.name}}.uniq
+          names = ActiveRecord::Base.all_subclasses.collect{|klass| {:name => klass.name}}.uniq.sort{|a,b| a[:name] <=> b[:name]}
 
           render :json => {:success => true, :names => names}
+        end
+
+        def get_columns
+          active_ext_core = ActiveExt::Core.new(params[:model], :ignore_associations => true, :include_timestamps => false)
+
+          non_excluded_columns = active_ext_core.non_excluded_columns.collect{|column| {:name => column.name}}
+
+          render :json => {:success => true, :columns => non_excluded_columns.sort{|a,b| a[:name] <=> b[:name]}}
         end
 
         def create_model
