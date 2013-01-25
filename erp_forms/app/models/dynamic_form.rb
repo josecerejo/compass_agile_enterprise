@@ -5,6 +5,8 @@ class DynamicForm < ActiveRecord::Base
   belongs_to :created_by, :class_name => "User"
   belongs_to :updated_by, :class_name => "User"
 
+  after_create :default_form_check
+
   extend FriendlyId
   friendly_id :description, :use => [:slugged], :slug_column => :internal_identifier
   def should_generate_new_friendly_id?
@@ -12,7 +14,14 @@ class DynamicForm < ActiveRecord::Base
   end
 
   validates_uniqueness_of :internal_identifier, :scope => :model_name, :case_sensitive => false
-  
+
+  def default_form_check
+    # count how many forms this model has, if one, set as default
+    if dynamic_form_model.dynamic_forms.count == 1
+      DynamicFormModel.get_constant(self.model_name).set_default(self.id)
+    end
+  end
+
   def self.class_exists?(class_name)
   	result = nil
   	begin

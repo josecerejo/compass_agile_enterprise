@@ -141,10 +141,10 @@ class ErpForms::ErpApp::Desktop::DynamicForms::FormsController < ErpForms::ErpAp
     dform = assign_form_attributes(dform)
     dform.updated_by_id = current_user.id
 
-    # update solr config for model (doesn't work yet)
-    # DynamicFormModel.get_constant(dform.model_name).sunspot_setup if $USE_SOLR_FOR_DYNAMIC_FORM_MODELS
-
     if dform.save
+      # update solr config for model 
+      DynamicFormModel.get_constant(dform.model_name).sunspot_setup if ErpForms.use_solr?
+
       render :json => {:success => true}
     else
       render :json => {:success => false}
@@ -159,7 +159,11 @@ class ErpForms::ErpApp::Desktop::DynamicForms::FormsController < ErpForms::ErpAp
       dform.dynamic_form_model_id = DynamicFormModel.find_by_model_name(params[:model_name]).id
       dform.default = false
       dform.created_by_id = current_user.id
+
       if dform.save
+        # update solr config for model 
+        DynamicFormModel.get_constant(dform.model_name).sunspot_setup if ErpForms.use_solr?
+
         render :json => {:success => true, :id => dform.id}
       else
         render :json => {:success => false}
