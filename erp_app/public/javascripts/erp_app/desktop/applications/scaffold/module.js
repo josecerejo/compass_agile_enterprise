@@ -1,59 +1,60 @@
-Ext.define("Compass.ErpApp.Desktop.Applications.Scaffold",{
+Ext.define("Compass.ErpApp.Desktop.Applications.Scaffold", {
     extend:"Ext.ux.desktop.Module",
     id:'scaffold-win',
-    loadModel : function(modelName){
-        //check if we are already showing this model
-        var tab = null;
-        var items = this.modelsTabPanel.items;
-        Ext.each(items.items, function(item){
-            if(item.xtype == modelName + '_activeextgrid'){
-                tab = item;
-            }
-        });
-
-        if(!Compass.ErpApp.Utility.isBlank(tab)){
-            this.modelsTabPanel.setActiveTab(tab);
-        }
-        else{
-            this.modelsTabPanel.add({
-                xtype:modelName + '_activeextgrid',
-                closable:true
+    loadModel:function (modelName) {
+        var dynamicGrid = this.modelsTabPanel.down('#'+modelName);
+        if(Ext.isEmpty(dynamicGrid)){
+            dynamicGrid = Ext.create('Compass.ErpApp.Shared.DynamicEditableGridLoaderPanel', {
+                closable:true,
+                itemId:modelName,
+                editable:true,
+                title:modelName,
+                setupUrl:'/erp_app/desktop/scaffold/setup/' + modelName,
+                dataUrl:'/erp_app/desktop/scaffold/data/' + modelName,
+                page:true,
+                pageSize:30,
+                displayMsg:'Displaying {0} - {1} of {2}',
+                emptyMsg:'Empty'
             });
-            this.modelsTabPanel.setActiveTab(this.modelsTabPanel.items.length - 1);
+            this.modelsTabPanel.add(dynamicGrid);
+        }
+
+        this.modelsTabPanel.setActiveTab(dynamicGrid);
+    },
+
+    init:function () {
+        this.launcher = {
+            text:'Scaffold',
+            iconCls:'icon-data',
+            handler:this.createWindow,
+            scope:this
         }
     },
 
-    init : function(){
-        this.launcher = {
-            text: 'Scaffold',
-            iconCls:'icon-data',
-            handler : this.createWindow,
-            scope: this
-        }
-    },
-    
-    createWindow : function(){
+    createWindow:function () {
         var desktop = this.app.getDesktop();
         var win = desktop.getWindow('scaffold');
-        if(!win){
-            this.modelsTabPanel = new Ext.TabPanel({
-                region:'center'
-            });
+        if (!win) {
+
+            this.modelsTabPanel = Ext.create('Ext.tab.Panel',{region:'center',items:[]});
 
             win = desktop.createWindow({
-                id: 'scaffold',
+                id:'scaffold',
                 title:'Scaffold',
                 width:1000,
                 height:550,
-                iconCls: 'icon-data',
+                iconCls:'icon-data',
                 shim:false,
                 animCollapse:false,
                 constrainHeader:true,
-                layout: 'border',
-                items:[{
-                    xtype:'scaffold_modelstreepanel',
-                    scaffold:this
-                },this.modelsTabPanel]
+                layout:'border',
+                items:[
+                    {
+                        xtype:'scaffold_modelstreepanel',
+                        scaffold:this
+                    },
+                    this.modelsTabPanel
+                ]
             });
         }
         win.show();

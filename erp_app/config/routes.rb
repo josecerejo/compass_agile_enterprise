@@ -42,7 +42,7 @@ ErpApp::Engine.routes.draw do
 
   #Desktop Applications
   #scaffold
-  match '/desktop/scaffold/:action' => "desktop/scaffold/base"
+  match '/desktop/scaffold/:action((/:model_name)(.:format))' => "desktop/scaffold/base"
   match '/desktop/scaffold/role/:action(/:id)' => "desktop/scaffold/role#index"
   
   #user_management

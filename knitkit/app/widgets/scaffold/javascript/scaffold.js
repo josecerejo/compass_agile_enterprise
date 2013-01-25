@@ -1,21 +1,5 @@
 Compass.ErpApp.Widgets.Scaffold = {
     addScaffoldWidget:function () {
-        Ext.define('ScaffoldModelName', {
-            extend:'Ext.data.Model',
-            fields:[
-                {name:'name', type:'string'}
-            ]
-        });
-
-        Ext.define('ScaffoldColumn', {
-            extend:'Ext.data.Model',
-            fields:[
-                {name:'name', type:'string'},
-                {name:'readonly', type:'boolean', default:false},
-                {name:'required', type:'boolean', default:false}
-            ]
-        });
-
         var sm = Ext.create('Ext.selection.CheckboxModel');
 
         Ext.create("Ext.window.Window", {
@@ -42,7 +26,10 @@ Compass.ErpApp.Widgets.Scaffold = {
                                 reader:{
                                     type:'json',
                                     root:'names'
-                                }
+                                },
+                                fields:[
+                                    {name:'name', type:'string'}
+                                ]
                             }
                         },
                         displayField:'name',
@@ -100,7 +87,12 @@ Compass.ErpApp.Widgets.Scaffold = {
                                             type:'json',
                                             root:'columns'
                                         }
-                                    }
+                                    },
+                                    fields:[
+                                        {name:'name', type:'string'},
+                                        {name:'readonly', type:'boolean', default:false},
+                                        {name:'required', type:'boolean', default:false}
+                                    ]
                                 },
                                 columnLines:true,
                                 height:150,

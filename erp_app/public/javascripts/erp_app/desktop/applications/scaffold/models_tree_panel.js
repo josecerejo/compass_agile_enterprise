@@ -9,59 +9,20 @@ Ext.define("Compass.ErpApp.Desktop.Applications.Scaffold.ModelsTree",{
         this.findParentByType('statuswindow').clearStatus();
     },
 
-    addModel : function(){
-        var self = this;
-        Ext.MessageBox.prompt('Add Model', 'Model name:', function(btn, text){
-            if(btn == 'ok'){
-                self.setWindowStatus('Adding model to scaffold');
-                Ext.Ajax.request({
-                    url:'/erp_app/desktop/scaffold/create_model',
-                    method: 'POST',
-                    params:{
-                        name:text
-                    },
-                    success: function(response) {
-                        self.clearWindowStatus();
-                        var obj =  Ext.decode(response.responseText);
-                        if(obj.success){
-                            Ext.MessageBox.confirm('Confirm', 'Page must reload for changes to take affect. Reload now?', function(btn){
-                                if(btn == 'no'){
-                                    return false;
-                                }
-                                else{
-                                    window.location.reload();
-                                }
-                            });
-                        }
-                        else{
-                            Ext.Msg.alert("Error", obj.msg);
-                        }
-                    },
-                    failure: function(response) {
-                        self.clearWindowStatus();
-                        var obj = Ext.decode(response.responseText);
-                        if(!Compass.ErpApp.Utility.isBlank(obj) && !Compass.ErpApp.Utility.isBlank(obj.msg)){
-                            Ext.Msg.alert("Error", obj.msg);
-                        }
-                        else{
-                            Ext.Msg.alert("Error", "Error adding model");
-                        }
-                    }
-                });
-            }
-        });
-    },
-
     constructor : function(config) {
         var self = this;
 
         var store = Ext.create('Ext.data.TreeStore', {
             proxy: {
                 type: 'ajax',
-                url: '/erp_app/desktop/scaffold/get_active_ext_models'
+                url: '/erp_app/desktop/scaffold/get_models.tree',
+                reader:{
+                    type:'json',
+                    root:'names'
+                }
             },
             root: {
-                text: 'Models',
+                text: 'CompassAE Models',
                 draggable:false
             },
             fields:[
@@ -77,19 +38,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.Scaffold.ModelsTree",{
             animate:false,
             region:'west',
             autoScroll:true,
-            tbar:{
-                items:[
-                {
-                    text:'Add Model',
-                    iconCls:'icon-add',
-                    scope:this,
-                    handler:function(){
-                        this.addModel();
-                    }
-                }
-                ]
-            },
-            enableDD:true,
+            enableDD:false,
             containerScroll: true,
             border: false,
             frame:true,
@@ -97,12 +46,15 @@ Ext.define("Compass.ErpApp.Desktop.Applications.Scaffold.ModelsTree",{
             height: 300,
             listeners:{
                 'itemclick':function(view, record){
-                    if(record.data.leaf){
+                    if(!record.data.leaf){
                         self.initialConfig.scaffold.loadModel(record.data.model);
                     }
                 },
                 'contextmenu':function(node, e){
                     e.stopEvent();
+                },
+                render:function(){
+                    this.getRootNode().expand();
                 }
             }
         }, config);
