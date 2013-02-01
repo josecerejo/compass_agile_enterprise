@@ -18,14 +18,14 @@ module ErpBaseErpSvcs
 
     def register_as_compass_ae_engine(config, engine)
       config.send(ErpBaseErpSvcs.determine_callback) do
-        ErpBaseErpSvcs.load_compass_ae_engine(engine, config)
+        ErpBaseErpSvcs.load_compass_ae_engine(engine)
       end
     end
 
-    def load_compass_ae_engine(engine, config)
+    def load_compass_ae_engine(engine)
       Rails.application.config.erp_base_erp_svcs.compass_ae_engines << engine unless Rails.application.config.erp_base_erp_svcs.compass_ae_engines.include?(engine)
       load_compass_ae_extensions(engine)
-      load_root_compass_ae_framework_extensions(config)
+      load_root_compass_ae_framework_extensions
     end
 
     #forces rails to reload model extensions and framework extensions
@@ -96,13 +96,10 @@ module ErpBaseErpSvcs
       end
     end
 
-    def load_root_compass_ae_framework_extensions(config)
-      config.send(ErpBaseErpSvcs.determine_callback) do
-        Dir.glob(File.join(Rails.root,"lib/extensions/compass_ae/**/*.rb")).each do |file|
-          load file
-        end
+    def load_root_compass_ae_framework_extensions
+      Dir.glob(File.join(Rails.root,"lib/extensions/compass_ae/**/*.rb")).each do |file|
+        load file
       end
-
     end
     
   end
@@ -110,5 +107,3 @@ end
 
 #load the engine after this module is defined
 require "erp_base_erp_svcs/engine"
-
-
