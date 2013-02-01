@@ -20,7 +20,6 @@ module ErpBaseErpSvcs
     end
 
     ErpBaseErpSvcs.register_as_compass_ae_engine(config, self)
-    ErpBaseErpSvcs.load_root_compass_ae_framework_extensions(config)
     
   end
 end
