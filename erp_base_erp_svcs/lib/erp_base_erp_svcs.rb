@@ -6,8 +6,13 @@ require "erp_base_erp_svcs/non_escape_json_string"
 
 module ErpBaseErpSvcs
   class << self
-    def determine_callback
-      (Rails.env == 'development') ?  'to_prepare' : 'after_initialize'
+    def setup_compass_ae_callback(config, engine, &block)
+      config.before_initialize do
+        callback = (Rails.application.config.cache_classes ? 'after_initialize' : 'to_prepare') 
+        config.send(callback) do
+          block.call(engine)
+        end
+      end
     end
 
     def mount_compass_ae_engines(routes)
@@ -17,7 +22,7 @@ module ErpBaseErpSvcs
     end
 
     def register_as_compass_ae_engine(config, engine)
-      config.send(ErpBaseErpSvcs.determine_callback) do
+      setup_compass_ae_callback(config, engine) do |engine|
         ErpBaseErpSvcs.load_compass_ae_engine(engine)
       end
     end
