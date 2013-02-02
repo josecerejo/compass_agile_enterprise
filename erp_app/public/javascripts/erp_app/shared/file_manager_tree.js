@@ -670,7 +670,7 @@ Ext.define("Compass.ErpApp.Shared.FileManagerTree",{
       autoDestroy:true,
       split:true,
       autoScroll:true,
-      margins: '5 0 5 5',
+      //margins: '5 0 5 5',
       viewConfig: {
         loadMask: true,
         plugins: {
