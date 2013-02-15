@@ -111,7 +111,7 @@ module ErpApp
             end
       
             def include_compass_ae_instance_about
-              compass_ae_instance = CompassAeInstance.first
+              compass_ae_instance = CompassAeInstance.find_by_internal_identifier('base')
               json_hash = {
                 :version => compass_ae_instance.version,
                 :installedAt => compass_ae_instance.created_at.strftime("%B %d, %Y at %I:%M%p"),
