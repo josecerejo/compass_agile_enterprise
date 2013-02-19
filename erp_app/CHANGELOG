@@ -10,3 +10,7 @@ Version 3.0.13 - 10-26-2012
 - Updated codemirror to 2.35
 Version 3.0.14 - 01-10-2013
 - New Security Implementation
+Version 3.0.15 - 02-02-2013
+- Fixed extension loading bug
+Version 3.0.16 - 02-19-2013
+- Bugfix for Security Mgmt desktop app

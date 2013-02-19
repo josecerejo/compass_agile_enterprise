@@ -1,2 +1,6 @@
 Version 3.0.11 - 01-10-2013
 - New Security Implementation
+Version 3.0.12 - 02-19-2013
+- Added protect_all_instances model security option
+- Refactored security queries for improved performance
+- Added ability to directly grant instance capability on user
