@@ -35,6 +35,7 @@ module ErpApp
           assign_to = params[:assign_to]
           assign_to_id = params[:id]
           sort  = (params[:sort] || 'description').downcase
+          sort = 'groups.description' if sort == 'description'
           dir   = (params[:dir] || 'asc').downcase
           query_filter = params[:query_filter].strip rescue nil
 
@@ -49,6 +50,7 @@ module ErpApp
           assign_to = params[:assign_to]
           assign_to_id = params[:id]
           sort  = (params[:sort] || 'description').downcase
+          sort = 'groups.description' if sort == 'description'
           dir   = (params[:dir] || 'asc').downcase
           query_filter = params[:query_filter].strip rescue nil
 

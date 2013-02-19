@@ -89,8 +89,12 @@ module ErpTechSvcs
 
           def get_or_create_capability(capability_type_iid, klass)
             capability_type = convert_capability_type(capability_type_iid)
-            scope_type = ScopeType.find_by_internal_identifier('class')
-            Capability.find_or_create_by_capability_resource_type_and_capability_type_id_and_scope_type_id(klass, capability_type.id, scope_type.id)
+            if klass.is_a?(String)
+              scope_type = ScopeType.find_by_internal_identifier('class')
+              Capability.find_or_create_by_capability_resource_type_and_capability_type_id_and_scope_type_id(klass, capability_type.id, scope_type.id)
+            else
+              klass.add_capability(capability_type_iid) # create instance capability
+            end
           end
 
           def get_capability(capability_type_iid, klass)

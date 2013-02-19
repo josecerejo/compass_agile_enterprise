@@ -139,15 +139,29 @@ class Group < ActiveRecord::Base
   end
 
   def role_class_capabilities
-    roles.collect{|r| r.class_capabilities }.flatten.uniq.compact
+    scope_type = ScopeType.find_by_internal_identifier('class')
+    Capability.joins(:capability_type).joins(:capability_accessors).
+          where(:capability_accessors => { :capability_accessor_record_type => "SecurityRole" }).
+          where("capability_accessor_record_id IN (#{roles.select('security_roles.id').to_sql})").
+          where(:scope_type_id => scope_type.id)
   end
 
   def all_class_capabilities
-    (role_class_capabilities + class_capabilities).uniq
+    scope_type = ScopeType.find_by_internal_identifier('class')
+    Capability.joins(:capability_type).joins(:capability_accessors).
+          where("(capability_accessors.capability_accessor_record_type = 'Group' AND
+                  capability_accessor_record_id = (#{self.id})) OR
+                 (capability_accessors.capability_accessor_record_type = 'SecurityRole' AND
+                  capability_accessor_record_id IN (#{roles.select('security_roles.id').to_sql}))").
+          where(:scope_type_id => scope_type.id)
+  end
+
+  def all_uniq_class_capabilities
+    all_class_capabilities.all.uniq
   end
 
   def class_capabilities_to_hash
-    all_class_capabilities.map {|capability| 
+    all_uniq_class_capabilities.map {|capability| 
       { :capability_type_iid => capability.capability_type.internal_identifier, 
         :capability_resource_type => capability.capability_resource_type 
       }

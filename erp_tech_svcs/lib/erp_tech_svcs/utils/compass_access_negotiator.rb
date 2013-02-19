@@ -13,15 +13,17 @@ module ErpTechSvcs
                                   where(:capability_resource_type => klass).
                                   where(:scope_type_id => scope_type.id).
                                   where(:capability_types => {:internal_identifier => capability_type_iid}).first
+          return nil if capability.nil? # capability not found so return nil
         else
           scope_type = ScopeType.find_by_internal_identifier('instance')
           capability = klass.capabilities.joins(:capability_type).
                               where(:scope_type_id => scope_type.id).
                               where(:capability_types => {:internal_identifier => capability_type_iid}).first
-          return true if capability.nil? # object is not secured, so return true
+          # if capability not found, we see if all instances are protected
+          # if all instance are protected, return false, otherwise true
+          return !klass.protect_all_instances if capability.nil?
         end
-        result = all_capabilities.find{|c| c == capability }
-        result.nil? ? false : true
+        all_capabilities.include?(capability)
       end
 
       # pass in (capability_type_iid, class name or any class instance, a block of code)
