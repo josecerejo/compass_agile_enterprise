@@ -35,9 +35,9 @@ module ErpApp
           assign_to = params[:assign_to]
           assign_to_id = params[:id]
           sort  = (params[:sort] || 'description').downcase
+          sort = 'capabilities.description' if sort == 'description'
           dir   = (params[:dir] || 'asc').downcase
           query_filter = params[:query_filter].strip rescue nil
-
           scope_type_ids = [ScopeType.find_by_internal_identifier('class').id, ScopeType.find_by_internal_identifier('query').id]
 
           ar = assign_to_id.blank? ? Capability.joins(:capability_type) : assign_to.constantize.find(assign_to_id).capabilities_not.where("scope_type_id IN (#{scope_type_ids.join(',')})")
@@ -51,6 +51,7 @@ module ErpApp
           assign_to = params[:assign_to]
           assign_to_id = params[:id]
           sort  = (params[:sort] || 'description').downcase
+          sort = 'capabilities.description' if sort == 'description'
           dir   = (params[:dir] || 'asc').downcase
           query_filter = params[:query_filter].strip rescue nil
 
