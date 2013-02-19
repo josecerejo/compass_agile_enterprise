@@ -1,11 +1,12 @@
+# This migration comes from erp_base_erp_svcs (originally 20130211444444)
 class UpgradeCompassAeInstances < ActiveRecord::Migration
   def self.up
     unless columns(:compass_ae_instances).collect {|c| c.name}.include?('type')
-      add_column :description, :string
-      add_column :internal_identifier, :string
-      add_column :type, :string
-      add_column :schema, :string, :default => 'public'
-      add_column :parent_id, :integer
+      add_column :compass_ae_instances, :description, :string
+      add_column :compass_ae_instances, :internal_identifier, :string
+      add_column :compass_ae_instances, :type, :string
+      add_column :compass_ae_instances, :schema, :string, :default => 'public'
+      add_column :compass_ae_instances, :parent_id, :integer
 
       add_index :compass_ae_instances, :internal_identifier, :name => "iid_idx" 
       add_index :compass_ae_instances, :schema, :name => "schema_idx"
