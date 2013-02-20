@@ -6,11 +6,11 @@ module ErpApp
           module IncludeHelper
 
             def static_javascript_include_tag(*srcs)
-              raw srcs.flatten.map{|src| "<script type=\"text/javascript\" src=\"/javascripts/#{src.include?('.js') ? '' : "#{src}.js"}\"></script>"}.join("")
+              raw srcs.flatten.map{|src| "<script type=\"text/javascript\" src=\"/javascripts/#{src.include?('.js') ? src : "#{src}.js"}\"></script>"}.join("")
             end
       
             def static_stylesheet_link_tag(*srcs)
-              raw srcs.flatten.map{|src| "<link rel=\"stylesheet\" type=\"text/css\" href=\"/stylesheets/#{src.include?('.css') ? '' : "#{src}.css"}\" />"}.join("")
+              raw srcs.flatten.map{|src| "<link rel=\"stylesheet\" type=\"text/css\" href=\"/stylesheets/#{src.include?('.css') ? src : "#{src}.css"}\" />"}.join("")
             end
       
             def include_extjs(opt={})
