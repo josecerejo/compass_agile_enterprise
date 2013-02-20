@@ -94,8 +94,13 @@ Ext.define("Compass.ErpApp.Shared.CKeditor",{
     },
 
     setupCkEditor : function(){
+        var me = this;
+
         Ext.applyIf(this.initialConfig.ckEditorConfig,{
             resize_enabled:false,
+            keystrokes:[
+                [CKEDITOR.CTRL + 83 /* S */, 'saveCommand']
+            ],
             base_path:'/javascripts/ckeditor/',
             toolbarStartupExpanded:true,
             enterMode:CKEDITOR.ENTER_BR,            
@@ -104,6 +109,18 @@ Ext.define("Compass.ErpApp.Shared.CKeditor",{
             extraPlugins:'' // removed codemirror plugin as it is unstable
         });
         var editor = CKEDITOR.replace(this.inputEl.id, this.initialConfig.ckEditorConfig);
+
+        editor.addCommand('saveCommand', {
+            exec : function(editor, data) {
+                me.fireEvent('save', me, me.getValue());
+                //event handler
+                return function(e){
+                    e = e || window.event;
+                    e.e_stopPropagation();
+                }
+            }
+        });
+
         editor.extjsPanel = this;
         this.ckEditorInstance = editor;
         this.setValue(this.defaultValue);

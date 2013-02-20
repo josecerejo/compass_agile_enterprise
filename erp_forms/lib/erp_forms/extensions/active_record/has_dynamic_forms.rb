@@ -58,10 +58,10 @@ module ErpForms
       		    DynamicForm.find_all_by_model_name(self.class_name)
             end
 
-            def set_default(internal_identifier)
-              DynamicForm.update_all({:default => false}, "model_name=#{self.class.to_s}")
-              DynamicForm.update_all({:default => true}, "model_name=#{self.class.to_s} AND internal_identifier=#{internal_identifier}")
-            end
+            # def set_default(internal_identifier)
+            #   DynamicForm.update_all({:default => false}, "model_name=#{self.class.to_s}")
+            #   DynamicForm.update_all({:default => true}, "model_name=#{self.class.to_s} AND internal_identifier=#{internal_identifier}")
+            # end
 
       		end	
       end

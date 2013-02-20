@@ -3,7 +3,7 @@ module ErpApp
     class JavascriptLoader
 
       def self.glob_javascript
-        files = Rails.application.config.erp_app.widgets.collect{|widget|Dir.glob(File.join(widget[:path],"javascript/*.js"))}.flatten
+        files = Rails.application.config.erp_app.widgets.collect{|widget|Dir.glob(File.join(widget[:path],"javascript/*.js"))}.flatten.sort{|file| file <=> file}
         
         "<script type='text/javascript'>#{Uglifier.compile(files.collect{|file| IO.read(file)}.join(''))}</script>"
       end

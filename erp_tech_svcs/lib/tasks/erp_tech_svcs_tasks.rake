@@ -8,8 +8,8 @@ namespace :erp_tech_svcs do
 
       #sync shared
       puts "Syncing Shared Assets..."
-      file_support.sync(File.join(file_support.root, '/images'), CompassAeInstance.first)
-      file_support.sync(File.join(file_support.root, '/files'), CompassAeInstance.first)
+      file_support.sync(File.join(file_support.root, '/images'), CompassAeInstance.find_by_internal_identifier('base'))
+      file_support.sync(File.join(file_support.root, '/files'), CompassAeInstance.find_by_internal_identifier('base'))
       puts "Complete"
 
       #sync websites

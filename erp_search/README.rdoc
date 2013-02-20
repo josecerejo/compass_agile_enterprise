@@ -18,11 +18,11 @@ rake sunspot:solr:start
 Index Content:
 rake sunspot:reindex_content
 
+Index DynamicFormModels:
+rake sunspot:reindex_dynamic_form_models
+
 Index Parties:
 rake sunspot:reindex_party_search_facts
-
-Index Roles:
-rake sunspot:reindex_roles
 
 Stop Solr server:
 rake sunspot:solr:stop  

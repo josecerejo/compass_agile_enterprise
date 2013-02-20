@@ -6,11 +6,11 @@ module ErpApp
           module IncludeHelper
 
             def static_javascript_include_tag(*srcs)
-              raw srcs.flatten.map{|src| "<script type=\"text/javascript\" src=\"/javascripts/#{src}\"></script>"}.join("")
+              raw srcs.flatten.map{|src| "<script type=\"text/javascript\" src=\"/javascripts/#{src.include?('.js') ? '' : "#{src}.js"}\"></script>"}.join("")
             end
       
             def static_stylesheet_link_tag(*srcs)
-              raw srcs.flatten.map{|src| "<link rel=\"stylesheet\" type=\"text/css\" href=\"/stylesheets/#{src}\" />"}.join("")
+              raw srcs.flatten.map{|src| "<link rel=\"stylesheet\" type=\"text/css\" href=\"/stylesheets/#{src.include?('.css') ? '' : "#{src}.css"}\" />"}.join("")
             end
       
             def include_extjs(opt={})
@@ -111,7 +111,7 @@ module ErpApp
             end
       
             def include_compass_ae_instance_about
-              compass_ae_instance = CompassAeInstance.first
+              compass_ae_instance = CompassAeInstance.find_by_internal_identifier('base')
               json_hash = {
                 :version => compass_ae_instance.version,
                 :installedAt => compass_ae_instance.created_at.strftime("%B %d, %Y at %I:%M%p"),
@@ -132,7 +132,7 @@ module ErpApp
             def setSessionTimeout(warn_milli_seconds=((ErpApp::Config.session_warn_after*60)*1000),
                                   redirect_milli_seconds=((ErpApp::Config.session_redirect_after*60)*1000),
                                   redirect_to='/session/sign_out')
-              raw "<script type='text/javascript'>Compass.ErpApp.Utility.SessionTimeout.setupSessionTimeout(#{warn_milli_seconds}, #{redirect_milli_seconds}, '#{redirect_to}') </script>" unless current_user === false
+              raw "<script type='text/javascript'>Compass.ErpApp.Utility.SessionTimeout.setupSessionTimeout(#{warn_milli_seconds}, #{redirect_milli_seconds}, '#{redirect_to}') </script>" if current_user
             end
 
             def load_shared_application_resources(resource_type)

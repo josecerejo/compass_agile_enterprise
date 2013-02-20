@@ -1,16 +1,13 @@
-# require 'sunspot'
-# Sunspot::Setup.class_eval do
-#   def self.clear_setup_for_class(klass)
-#     Rails.logger.info "clear_setup_for_class"
-#     Sunspot.searchable.delete!(klass)
-#     Rails.logger.info "searchable #{Sunspot.searchable.inspect}"
-#     #Rails.logger.info "field_factories #{field_factories.inspect}"
-#     Rails.logger.info "setups[klass.name.to_sym] #{setups.keys}"
-#     setups.delete_if{|key, value| key == klass.name.to_sym }
-#     #setups[klass.name.to_sym] = new(clazz)
-#     Rails.logger.info "setups[klass.name.to_sym] #{setups.keys}"
-#   end
-# end
+Sunspot::Setup.class_eval do
+  def self.clear_setup_for_class(klass)
+    #Rails.logger.info "clear_setup_for_class"
+    #Sunspot.searchable.delete!(klass)
+    #Rails.logger.info "searchable #{Sunspot.searchable.inspect}"
+    #Rails.logger.info "setups[klass.name.to_sym] #{setups.keys}"
+    setups.delete_if{|key, value| key == klass.name.to_sym }
+    #Rails.logger.info "setups[klass.name.to_sym] #{setups.keys}"
+  end
+end
 
 # Sunspot::ClassSet.class_eval do
 #   def delete!(klass)
@@ -52,7 +49,7 @@ module ErpSearch
 
           def sunspot_setup(options={})
             klass = DynamicFormModel.get_constant(self.name)
-            #Sunspot::Setup.clear_setup_for_class(klass)
+            Sunspot::Setup.clear_setup_for_class(klass)
             definition = DynamicForm.get_form(self.name).definition_object rescue nil
 
             unless definition.nil?

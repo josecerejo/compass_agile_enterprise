@@ -212,7 +212,7 @@ module Knitkit
 
             render :inline => {:success => false, :error => "No Website Selected"}.to_json if (@assets_model.nil? && params[:action] != "base_path")
           else
-            @assets_model = CompassAeInstance.first
+            @assets_model = CompassAeInstance.find_by_internal_identifier('base')
           end
         end
   

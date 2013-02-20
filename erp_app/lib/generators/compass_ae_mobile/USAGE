@@ -1,0 +1,9 @@
+Description:
+  Used to create a Sencha Mobile application linked to CompassAE for mobile 
+  optimized web application
+
+Example:
+    rails g compass_ae_mobile [application_name] [sencha_touch_sdk_path]
+
+    This will create:
+       1. Sencha Touch application in /public/javascripts/[application_name]

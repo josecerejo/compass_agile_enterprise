@@ -103,40 +103,70 @@ class User < ActiveRecord::Base
 
   # roles assigned to the groups this user belongs to
   def group_roles
-    groups.collect{|g| g.roles }.flatten.uniq
+    SecurityRole.joins(:parties).
+      where(:parties => {:business_party_type => 'Group'}).
+      where("parties.business_party_id IN (#{groups.select('groups.id').to_sql})")
   end
 
   # composite roles for this user
   def all_roles
-    (group_roles + roles).uniq
+    SecurityRole.joins(:parties).joins("LEFT JOIN users ON parties.id=users.party_id").
+      where("(parties.business_party_type='Group' AND 
+              parties.business_party_id IN (#{groups.select('groups.id').to_sql})) OR 
+             (users.id=#{self.id})")
+  end
+
+  def all_uniq_roles
+    all_roles.all.uniq
   end
 
   def group_capabilities
-    groups.collect{|r| r.capabilities }.flatten.uniq.compact
+    Capability.joins(:capability_type).joins(:capability_accessors).
+          where(:capability_accessors => { :capability_accessor_record_type => "Group" }).
+          where("capability_accessor_record_id IN (#{groups.select('groups.id').to_sql})")
   end
 
   def role_capabilities
-    all_roles.collect{|r| r.capabilities }.flatten.compact
+    Capability.joins(:capability_type).joins(:capability_accessors).
+          where(:capability_accessors => { :capability_accessor_record_type => "SecurityRole" }).
+          where("capability_accessor_record_id IN (#{all_roles.select('security_roles.id').to_sql})")
   end
 
   def all_capabilities
-    (role_capabilities + group_capabilities + capabilities).uniq
+    Capability.joins(:capability_type).joins(:capability_accessors).
+          where("(capability_accessors.capability_accessor_record_type = 'Group' AND
+                  capability_accessor_record_id IN (#{groups.select('groups.id').to_sql})) OR
+                 (capability_accessors.capability_accessor_record_type = 'SecurityRole' AND
+                  capability_accessor_record_id IN (#{all_roles.select('security_roles.id').to_sql})) OR
+                 (capability_accessors.capability_accessor_record_type = 'User' AND
+                  capability_accessor_record_id = #{self.id})")
+  end
+
+  def all_uniq_capabilities
+    all_capabilities.all.uniq
   end
 
   def group_class_capabilities
-    groups.collect{|g| g.class_capabilities }.flatten.uniq.compact
+    scope_type = ScopeType.find_by_internal_identifier('class')
+    group_capabilities.where(:scope_type_id => scope_type.id)
   end
 
   def role_class_capabilities
-    all_roles.collect{|r| r.class_capabilities }.flatten.uniq.compact
+    scope_type = ScopeType.find_by_internal_identifier('class')
+    role_capabilities.where(:scope_type_id => scope_type.id)
   end
 
   def all_class_capabilities
-    (role_class_capabilities + group_class_capabilities + class_capabilities).uniq
+    scope_type = ScopeType.find_by_internal_identifier('class')
+    all_capabilities.where(:scope_type_id => scope_type.id)
+  end
+
+  def all_uniq_class_capabilities
+    all_class_capabilities.all.uniq
   end
 
   def class_capabilities_to_hash
-    all_class_capabilities.map {|capability| 
+    all_uniq_class_capabilities.map {|capability| 
       { :capability_type_iid => capability.capability_type.internal_identifier, 
         :capability_resource_type => capability.capability_resource_type 
       }

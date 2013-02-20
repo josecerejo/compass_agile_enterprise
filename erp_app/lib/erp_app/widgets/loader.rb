@@ -3,17 +3,16 @@ module ErpApp
     class Loader
       class << self
         def load_compass_ae_widgets(config, engine)
-          config.send(ErpBaseErpSvcs.determine_callback) do
+          ErpBaseErpSvcs.setup_compass_ae_callback(config, engine) do |engine|
             ::ErpApp::Widgets::Loader.require_widgets_and_helpers(engine.root)
             ::ErpApp::Widgets::Loader.load_widget_extensions(engine)
           end
-
         end
 
         def load_root_widgets(config)
-          config.send(ErpBaseErpSvcs.determine_callback) do
-            ::ErpApp::Widgets::Loader.require_widgets_and_helpers(Rails.root.to_s)
-          end
+           ErpBaseErpSvcs.setup_compass_ae_callback(config, nil) do |engine|
+             ::ErpApp::Widgets::Loader.require_widgets_and_helpers(Rails.root.to_s)
+           end
         end
 
         def require_widgets_and_helpers(path)

@@ -29,7 +29,7 @@ module Knitkit
           module InstanceMethods
             def current_themes
               # the lambda broke in rails 3.2, changing this to an instance variable
-              @current_themes ||= self.website.themes.collect{|t| t if t.active } rescue []
+              @current_themes ||= self.website.themes.collect{|t| t if t.active == 1}.compact rescue []
               # @current_themes ||= case accessor = self.class.read_inheritable_attribute(:current_themes)
               # when Symbol then accessor == :current_themes ? raise("screwed") : send(accessor)
               # when Proc   then accessor.call(self)

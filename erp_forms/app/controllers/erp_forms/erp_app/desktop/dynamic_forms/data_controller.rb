@@ -55,7 +55,7 @@ module ErpForms::ErpApp::Desktop::DynamicForms
 
         myDynamicObject = DynamicFormModel.get_constant(params[:model_name])
 
-        if $USE_SOLR_FOR_DYNAMIC_FORM_MODELS and myDynamicObject.is_searchable?
+        if ErpForms.use_solr? and myDynamicObject.is_searchable?
           solr_search_results = myDynamicObject.search do
             keywords query_filter unless params[:query_filter].blank?
             paginate(:page => page, :per_page => per_page)

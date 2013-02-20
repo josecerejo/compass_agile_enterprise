@@ -1,15 +1,10 @@
-Content.class_eval do
-  after_save :sunspot_commit
-  after_destroy :sunspot_commit
+if ErpSearch::Engine::USE_SOLR_FOR_CONTENT
 
-  if $USE_SOLR_FOR_CONTENT
+  Content.class_eval do
+    after_save :sunspot_commit
+    after_destroy :sunspot_commit
 
     searchable do
-      if $USE_TENANCY
-        string :tenant_id do
-          Thread.current[:tenant_id]
-        end
-      end
       text :title
       text :excerpt_html    
       text :body_html
@@ -54,10 +49,6 @@ Content.class_eval do
           with(:website_section_id, website_section_id)
         end
 
-        if $USE_TENANCY
-          with(:tenant_id, Thread.current[:tenant_id])
-        end
-
         with(:website_id, options[:website_id])
         paginate :page => options[:page], :per_page => options[:per_page]
       end
@@ -78,6 +69,7 @@ Content.class_eval do
     def sunspot_commit
       Sunspot.commit    
     end
+      
   end
-    
+
 end

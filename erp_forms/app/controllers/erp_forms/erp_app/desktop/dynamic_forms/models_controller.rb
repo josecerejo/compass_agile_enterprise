@@ -24,6 +24,9 @@ class ErpForms::ErpApp::Desktop::DynamicForms::ModelsController < ErpForms::ErpA
     myDynamicObject = DynamicFormModel.get_constant(params[:model_name])    
     myDynamicObject.set_default(params[:id])
 	
+    # update solr config for model
+    DynamicFormModel.get_constant(params[:model_name]).sunspot_setup if ErpForms.use_solr?
+
     render :json => {:success => true}
   end
 

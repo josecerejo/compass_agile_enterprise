@@ -93,6 +93,11 @@ Ext.define("Compass.ErpApp.Desktop.Applications.Knitkit.CenterRegion", {
                         title:sectionName + ' - Layout',
                         tbarItems:tbarItems,
                         disableSave:true,
+                        listeners:{
+                            save:function (comp, content) {
+                                self.saveSectionLayout(websiteSectionId, content);
+                            }
+                        },
                         xtype:'codemirror',
                         parser:'erb',
                         region:'center',
@@ -168,6 +173,11 @@ Ext.define("Compass.ErpApp.Desktop.Applications.Knitkit.CenterRegion", {
                         tbarItems:tbarItems,
                         disableSave:true,
                         xtype:'codemirror',
+                        listeners:{
+                            save:function (comp, content) {
+                                self.saveTemplateFile(node.data.id, content);
+                            }
+                        },
                         parser:fileType,
                         sourceCode:content
                     }
@@ -227,6 +237,13 @@ Ext.define("Compass.ErpApp.Desktop.Applications.Knitkit.CenterRegion", {
                 ckEditorConfig:{
                     extraPlugins:'jwplayer',
                     toolbar:self.ckEditorToolbar
+                },
+                listeners:{
+                    save:function (comp, content) {
+                        self.saveExcerpt(id, content, siteId);
+                        if (contentGridStore)
+                            contentGridStore.load();
+                    }
                 }
             });
 
@@ -393,6 +410,13 @@ Ext.define("Compass.ErpApp.Desktop.Applications.Knitkit.CenterRegion", {
                 ckEditorConfig:{
                     extraPlugins:'jwplayer',
                     toolbar:self.ckEditorToolbar
+                },
+                listeners:{
+                    save:function (comp, content) {
+                        self.saveContent(id, content, contentType, siteId);
+                        if (contentGridStore)
+                            contentGridStore.load();
+                    }
                 }
             });
 
@@ -439,7 +463,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.Knitkit.CenterRegion", {
                 closable:true,
                 items:items,
                 save:function (comp) {
-                    if (currentUser.hasCapability('edit_html','Content')) {
+                    if (currentUser.hasCapability('edit_html', 'Content')) {
                         var content = comp.down('ckeditor').getValue();
                         self.saveContent(id, content, contentType, siteId);
                         if (contentGridStore) {

@@ -3,10 +3,35 @@ class BaseErpServices < ActiveRecord::Migration
 
     unless table_exists?(:compass_ae_instances)
       create_table :compass_ae_instances do |t|
+        t.string :description
+        t.string :internal_identifier
         t.decimal :version, :precision => 8, :scale => 3
+        t.string :type
+        t.string :schema, :default => 'public'
+        t.integer :parent_id
         
         t.timestamps
       end
+
+      add_index :compass_ae_instances, :internal_identifier, :name => "iid_idx"
+      add_index :compass_ae_instances, :schema, :name => "schema_idx"
+      add_index :compass_ae_instances, :type, :name => "type_idx"
+      add_index :compass_ae_instances, :parent_id, :name => "parent_id_idx"
+    end
+
+    unless table_exists?(:compass_ae_instance_party_roles)
+      create_table :compass_ae_instance_party_roles do |t|
+        t.string :description
+        t.integer :compass_ae_instance_id
+        t.integer :party_id
+        t.integer :role_type_id
+        
+        t.timestamps
+      end
+
+      add_index :compass_ae_instance_party_roles, :compass_ae_instance_id, :name => "compass_ae_instance_id_idx"
+      add_index :compass_ae_instance_party_roles, :party_id, :name => "party_id_idx"
+      add_index :compass_ae_instance_party_roles, :role_type_id, :name => "role_type_id_idx"
     end
 
     # Create parties table
@@ -17,7 +42,7 @@ class BaseErpServices < ActiveRecord::Migration
         t.column :business_party_type, :string
         t.column :list_view_image_id, :integer
 
-        #This field is here to provide a direct way to map CompassERP
+        #This field is here to provide a direct way to map CompassAE
         #business parties to unified idenfiers in organizations if they
         #have been implemented in an enterprise.
         t.column :enterprise_identifier, :string
@@ -443,7 +468,7 @@ class BaseErpServices < ActiveRecord::Migration
 
   def self.down
     [
-        :currencies, :money,
+        :currencies, :money, :compass_ae_instance_party_roles,
         :party_search_facts, :phone_numbers, :email_addresses,
         :postal_addresses, :contact_purposes, :contact_types,
         :contacts, :individuals, :organizations,

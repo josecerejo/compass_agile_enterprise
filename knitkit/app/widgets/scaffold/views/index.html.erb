@@ -1,0 +1,15 @@
+<div id="scaffoldGrid_<%=@uuid%>"></div>
+
+<%=
+    dynamic_extjs_grid(:renderTo => "scaffoldGrid_#{@uuid}",
+                       :title => @title,
+                       :setupUrl => build_widget_url('setup', nil, {:model => @model}),
+                       :dataUrl => build_widget_url('data', nil, {:model => @model}),
+                       :width => @width,
+                       :height => @height,
+                       :page => @page,
+                       :pageSize => @page_size,
+                       :displayMsg => @display_msg,
+                       :editable => @editable,
+                       :emptyMsg => @empty_msg)
+%>

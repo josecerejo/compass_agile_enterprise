@@ -7,6 +7,7 @@ require 'erp_base_erp_svcs/extensions/core/object'
 #active record extensions
 require 'erp_base_erp_svcs/extensions/active_record/acts_as_category'
 require 'erp_base_erp_svcs/extensions/active_record/acts_as_erp_type'
+require 'erp_base_erp_svcs/extensions/active_record/has_tracked_status'
 require 'erp_base_erp_svcs/extensions/active_record/has_notes'
 require 'erp_base_erp_svcs/extensions/active_record/acts_as_note_type'
 require 'erp_base_erp_svcs/extensions/active_record/is_describable'

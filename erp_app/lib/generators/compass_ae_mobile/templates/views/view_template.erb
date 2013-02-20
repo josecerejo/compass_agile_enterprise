@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns="http://www.w3.org/1999/html">
+<head>
+  <%= csrf_meta_tag %>
+  <title>CLASS_NAME_PLACE_HOLDER</title>
+  <%= include_sencha_touch :theme => false, :debug => (Rails.env != 'production') %>
+
+  <%= static_stylesheet_link_tag('sencha_touch/resources/css/sencha-touch.css') %>
+  <%= static_stylesheet_link_tag('sencha_touch/resources/css/apple.css') %>
+
+  <%= static_javascript_include_tag('erp_app/utility.js') %>
+  <%= static_javascript_include_tag('erp_app/mobile/mobile_base.js') %>
+
+  <%= add_authenticity_token_to_extjs %>
+  
+  <%= static_javascript_include_tag('CLASS_NAME_PLACE_HOLDER/app.js') %>
+</head>
+<body>
+    <div id="appLoadingIndicator">
+      <div></div>
+      <div></div>
+      <div></div>
+    </div>
+</body>
+</html>

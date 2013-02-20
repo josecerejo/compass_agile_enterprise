@@ -7,10 +7,6 @@ ERP Forms adds dynamic forms to Compass using ExtJS.
 https://github.com/portablemind/compass_agile_enterprise/wiki/Dynamic-Forms
 
 == TODO
-Redefine search fields on the fly 
-  When a form definition changes the sunspot class definition should reload on the fly
-  Currently Passenger must be restarted when a form changes for the sunspot class definition to be updated.
-  https://groups.google.com/forum/?fromgroups=#!topic/ruby-sunspot/0oewzoys_vg
 Code Mirror form field
 concatenated field
 calculated field

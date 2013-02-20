@@ -77,7 +77,8 @@ module ErpTechSvcs
 
           # pass in (capability_type_iid, klass) or (capability) object
           def add_capability(*capability)
-            capability = capability.first.is_a?(String) ? get_or_create_capability(capability.first, capability.second) : capability.first
+            capability_type_iid = capability.first.is_a?(Symbol) ? capability.first.to_s : capability.first
+            capability = capability_type_iid.is_a?(String) ? get_or_create_capability(capability_type_iid, capability.second) : capability.first
             ca = CapabilityAccessor.find_or_create_by_capability_accessor_record_type_and_capability_accessor_record_id_and_capability_id(get_superclass, self.id, capability.id)
             self.reload
             ca
@@ -89,8 +90,12 @@ module ErpTechSvcs
 
           def get_or_create_capability(capability_type_iid, klass)
             capability_type = convert_capability_type(capability_type_iid)
-            scope_type = ScopeType.find_by_internal_identifier('class')
-            Capability.find_or_create_by_capability_resource_type_and_capability_type_id_and_scope_type_id(klass, capability_type.id, scope_type.id)
+            if klass.is_a?(String)
+              scope_type = ScopeType.find_by_internal_identifier('class')
+              Capability.find_or_create_by_capability_resource_type_and_capability_type_id_and_scope_type_id(klass, capability_type.id, scope_type.id)
+            else
+              klass.add_capability(capability_type_iid) # create instance capability
+            end
           end
 
           def get_capability(capability_type_iid, klass)
@@ -101,7 +106,8 @@ module ErpTechSvcs
 
           # pass in (capability_type_iid, klass) or (capability) object
           def remove_capability(*capability)
-            capability = capability.first.is_a?(String) ? get_or_create_capability(capability.first, capability.second) : capability.first
+            capability_type_iid = capability.first.is_a?(Symbol) ? capability.first.to_s : capability.first
+            capability = capability_type_iid.is_a?(String) ? get_or_create_capability(capability_type_iid, capability.second) : capability.first
             ca = capability_accessors.where(:capability_accessor_record_type => get_superclass, :capability_accessor_record_id => self.id, :capability_id => capability.id).first
             ca.destroy unless ca.nil?
             self.reload
