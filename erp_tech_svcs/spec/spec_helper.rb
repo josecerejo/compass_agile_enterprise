@@ -20,6 +20,8 @@ Spork.prefork do
   require File.expand_path(DUMMY_APP_ROOT + "/config/environment.rb",  __FILE__)
 
   ActiveRecord::Base.configurations = YAML::load(IO.read(DUMMY_APP_ROOT + "/config/database.yml"))
+  `rake db:drop RAILS_ENV=spec`
+  `rake db:create RAILS_ENV=spec`
   ActiveRecord::Base.establish_connection(ENV["DB"] || "spec")
   ActiveRecord::Migration.verbose = false
 
@@ -43,11 +45,11 @@ Spork.each_run do
   #We have to execute the migrations from dummy app directory
   Dir.chdir DUMMY_APP_ROOT
   `rake db:drop RAILS_ENV=spec`
+  `rake db:create RAILS_ENV=spec`
   Dir.chdir ENGINE_RAILS_ROOT
 
   #We have to execute the migratiapp:compass_ae:install:data_migrationsons from dummy app directory
   Dir.chdir DUMMY_APP_ROOT
-  
   
   `rake compass_ae:install:migrations RAILS_ENV=spec`
   `rake compass_ae:install:data_migrations RAILS_ENV=spec`
