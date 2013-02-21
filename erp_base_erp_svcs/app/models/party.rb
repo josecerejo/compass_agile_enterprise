@@ -109,20 +109,18 @@ class Party < ActiveRecord::Base
   end
 
   def find_contact(contact_mechanism_class, contact_mechanism_args={}, contact_purposes=[])
-    conditions = ''
-
     table_name = contact_mechanism_class.name.tableize
-
+  
+    query = self.contacts.joins("inner join #{table_name} on #{table_name}.id = contact_mechanism_id and contact_mechanism_type = '#{contact_mechanism_class.name}'
+                                   inner join contact_purposes_contacts on contact_purposes_contacts.contact_id = contacts.id
+                                   and contact_purposes_contacts.contact_purpose_id in (#{contact_purposes.collect{|item| item.attributes["id"]}.join(',')})")
+ 
     contact_mechanism_args.each do |key, value|
       next if key == 'updated_at' or key == 'created_at' or key == 'id'
-      conditions += " #{table_name}.#{key} = '#{value}' and" unless value.nil?
+      query = query.where("#{table_name}.#{key} = ?", value) unless value.nil?
     end unless contact_mechanism_args.nil?
 
-    conditions = conditions[0..conditions.length - 5] unless conditions == ''
-    
-    self.contacts.joins("inner join #{table_name} on #{table_name}.id = contact_mechanism_id and contact_mechanism_type = '#{contact_mechanism_class.name}'
-                                   inner join contact_purposes_contacts on contact_purposes_contacts.contact_id = contacts.id
-                                   and contact_purposes_contacts.contact_purpose_id in (#{contact_purposes.collect{|item| item.attributes["id"]}.join(',')})").where(conditions).first
+    query.first
   end
 
   # looks for contacts matching on value and purpose
