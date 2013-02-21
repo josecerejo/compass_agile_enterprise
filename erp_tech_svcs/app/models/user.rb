@@ -46,7 +46,7 @@ class User < ActiveRecord::Base
     passed_roles.flatten!
     passed_roles.each do |role|
       role_iid = role.is_a?(SecurityRole) ?  role.internal_identifier : role.to_s
-      all_roles.each do |this_role|
+      all_uniq_roles.each do |this_role|
         result = true if (this_role.internal_identifier == role_iid)
         break if result
       end

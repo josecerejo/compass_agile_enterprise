@@ -4,17 +4,20 @@ describe ErpTechSvcs::Extensions::ActiveRecord::HasSecurityRoles do
   before(:all) do
     @user = FactoryGirl.create(:user)
     @user_2 = FactoryGirl.create(:user)
-    @admin_role = SecurityRole.create(:description => 'Admin', :internal_identifier => 'admin')
-    @employee_role = SecurityRole.create(:description => 'Employee', :internal_identifier => 'employee')
-    @manager_role = SecurityRole.create(:description => 'Manager', :internal_identifier => 'manager')
+
+    @admin_role = SecurityRole.find_or_create_by_description_and_internal_identifier(:description => 'Admin', :internal_identifier => 'admin')
+    @employee_role = SecurityRole.find_or_create_by_description_and_internal_identifier(:description => 'Employee', :internal_identifier => 'employee')
+    @manager_role = SecurityRole.find_or_create_by_description_and_internal_identifier(:description => 'Manager', :internal_identifier => 'manager')
   end
   
   it "should allow you to add a role" do
     @user.add_role(@admin_role)
+    @user.remove_all_roles
   end
 
   it "should allow you to add multiple roles by Role instance or iid" do
     @user.add_roles(@admin_role, 'manager')
+    @user.remove_all_roles
   end
 
   it "should allow you to add multiple roles by array or arguments" do
@@ -35,11 +38,13 @@ describe ErpTechSvcs::Extensions::ActiveRecord::HasSecurityRoles do
   end
 
   it "should allow you to remove a role" do
+    @user.add_role(@admin_role)
     @user.remove_role(@admin_role)
     @user.has_role?(@admin_role).should eq false
   end
 
   it "should allow you to remove multiple roles by Role instance or iid" do
+    @user.add_roles(@admin_role, 'manager')
     @user.remove_roles(@employee_role, 'manager')
     @user.has_role?(@employee_role).should eq false
     @user.has_role?('manager').should eq false
