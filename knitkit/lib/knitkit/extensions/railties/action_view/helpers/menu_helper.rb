@@ -6,11 +6,10 @@ module Knitkit
           module MenuHelper
 
             def menu_item_selected(menu_item)
-              result = false
-              result = request.path == menu_item.path
+              result = request.env['REQUEST_PATH'] == menu_item.path
               unless result
                 menu_item.descendants.each do |child|
-                  result = request.path == child.path
+                  result = request.env['REQUEST_PATH'] == child.path
                   break if result
                 end
               end
