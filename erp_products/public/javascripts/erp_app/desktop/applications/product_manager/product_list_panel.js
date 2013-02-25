@@ -133,8 +133,8 @@ Ext.define("Compass.ErpApp.Desktop.Applications.ProductManager.ProductsPanel",{
         ]
       }
     }, config);
-
-    Compass.ErpApp.Desktop.Applications.ProductManager.ProductsPanel.superclass.constructor.call(this, config);
+	
+	this.callParent([config]);
   }
 
 });
