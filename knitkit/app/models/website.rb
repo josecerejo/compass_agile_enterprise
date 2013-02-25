@@ -2,13 +2,14 @@ class Website < ActiveRecord::Base
   attr_protected :created_at, :updated_at
 
   after_destroy :remove_sites_directory, :remove_website_role
-  after_create  :setup_website
+  after_create :setup_website
 
   protected_with_capabilities
   has_file_assets
 
   extend FriendlyId
   friendly_id :name, :use => [:slugged], :slug_column => :internal_identifier
+
   def should_generate_new_friendly_id?
     new_record?
   end
@@ -25,7 +26,7 @@ class Website < ActiveRecord::Base
   end
   has_many :website_sections, :dependent => :destroy, :order => :lft do
     def paths
-      collect{|website_section| website_section.paths}.flatten
+      collect { |website_section| website_section.paths }.flatten
     end
 
     #have to do a sort by to override what awesome nested set does for the order by (lft)
@@ -34,7 +35,7 @@ class Website < ActiveRecord::Base
     end
 
     def update_paths!
-      all.each{|section| section.self_and_descendants.each{|_section| _section.update_path!}}
+      all.each { |section| section.self_and_descendants.each { |_section| _section.update_path! } }
     end
   end
 
@@ -68,7 +69,7 @@ class Website < ActiveRecord::Base
   end
 
   def all_section_paths
-    WebsiteSection.select(:path).where(:website_id => self.id).collect{|row| row['path']}
+    WebsiteSection.select(:path).where(:website_id => self.id).collect { |row| row['path'] }
   end
 
   def config_value(config_item_type_iid)
@@ -148,7 +149,7 @@ class Website < ActiveRecord::Base
   def remove_sites_directory
     file_support = ErpTechSvcs::FileSupport::Base.new(:storage => Rails.application.config.erp_tech_svcs.file_storage)
     begin
-      file_support.delete_file(File.join(file_support.root,"sites/#{self.iid}"), :force => true)
+      file_support.delete_file(File.join(file_support.root, "sites/#{self.iid}"), :force => true)
     rescue
       #do nothing it may not exist
     end
@@ -161,12 +162,12 @@ class Website < ActiveRecord::Base
   def setup_default_pages
     # create default sections for each widget using widget layout
     widget_classes = [
-      ::Widgets::ContactUs::Base,
-      ::Widgets::Search::Base,
-      ::Widgets::ManageProfile::Base,
-      ::Widgets::Login::Base,
-      ::Widgets::Signup::Base,
-      ::Widgets::ResetPassword::Base
+        ::Widgets::ContactUs::Base,
+        ::Widgets::Search::Base,
+        ::Widgets::ManageProfile::Base,
+        ::Widgets::Login::Base,
+        ::Widgets::Signup::Base,
+        ::Widgets::ResetPassword::Base
     ]
     profile_page = nil
     widget_classes.each do |widget_class|
@@ -187,15 +188,15 @@ class Website < ActiveRecord::Base
 
   def export_setup
     setup_hash = {
-      :name => name,
-      :hosts => hosts.collect(&:host),
-      :title => title,
-      :subtitle => subtitle,
-      :internal_identifier => internal_identifier,
-      :sections => [],
-      :images => [],
-      :files => [],
-      :website_navs => []
+        :name => name,
+        :hosts => hosts.collect(&:host),
+        :title => title,
+        :subtitle => subtitle,
+        :internal_identifier => internal_identifier,
+        :sections => [],
+        :images => [],
+        :files => [],
+        :website_navs => []
     }
 
     #TODO update to handle configurations
@@ -206,8 +207,8 @@ class Website < ActiveRecord::Base
 
     setup_hash[:website_navs] = website_navs.collect do |website_nav|
       {
-        :name => website_nav.name,
-        :items => website_nav.items.positioned.map{|website_nav_item| build_menu_item_hash(website_nav_item)}
+          :name => website_nav.name,
+          :items => website_nav.items.positioned.map { |website_nav_item| build_menu_item_hash(website_nav_item) }
       }
     end
 
@@ -226,52 +227,52 @@ class Website < ActiveRecord::Base
     tmp_dir = Website.make_tmp_dir
     file_support = ErpTechSvcs::FileSupport::Base.new(:storage => Rails.application.config.erp_tech_svcs.file_storage)
 
-    sections_path = Pathname.new(File.join(tmp_dir,'sections'))
+    sections_path = Pathname.new(File.join(tmp_dir, 'sections'))
     FileUtils.mkdir_p(sections_path) unless sections_path.exist?
 
-    articles_path = Pathname.new(File.join(tmp_dir,'articles'))
+    articles_path = Pathname.new(File.join(tmp_dir, 'articles'))
     FileUtils.mkdir_p(articles_path) unless articles_path.exist?
 
     documented_contents_path = Pathname.new(File.join(tmp_dir, 'documented contents'))
     FileUtils.mkdir_p(documented_contents_path) unless documented_contents_path.exist?
 
-    excerpts_path = Pathname.new(File.join(tmp_dir,'excerpts'))
+    excerpts_path = Pathname.new(File.join(tmp_dir, 'excerpts'))
     FileUtils.mkdir_p(excerpts_path) unless excerpts_path.exist?
 
-    image_assets_path = Pathname.new(File.join(tmp_dir,'images'))
+    image_assets_path = Pathname.new(File.join(tmp_dir, 'images'))
     FileUtils.mkdir_p(image_assets_path) unless image_assets_path.exist?
 
-    file_assets_path = Pathname.new(File.join(tmp_dir,'files'))
+    file_assets_path = Pathname.new(File.join(tmp_dir, 'files'))
     FileUtils.mkdir_p(file_assets_path) unless file_assets_path.exist?
 
     sections.each do |website_section|
       unless website_section.layout.blank?
-        File.open(File.join(sections_path,"#{website_section.internal_identifier}.rhtml"), 'wb+') {|f| f.puts(website_section.layout) }
+        File.open(File.join(sections_path, "#{website_section.internal_identifier}.rhtml"), 'wb+') { |f| f.puts(website_section.layout) }
       end
     end
 
     contents = sections.collect(&:contents).flatten.uniq
     contents.each do |content|
-      File.open(File.join(articles_path,"#{content.internal_identifier}.html"), 'wb+') {|f| f.puts(content.body_html) }
+      File.open(File.join(articles_path, "#{content.internal_identifier}.html"), 'wb+') { |f| f.puts(content.body_html) }
       unless content.excerpt_html.blank?
-        File.open(File.join(excerpts_path,"#{content.internal_identifier}.html"), 'wb+') {|f| f.puts(content.excerpt_html) }
+        File.open(File.join(excerpts_path, "#{content.internal_identifier}.html"), 'wb+') { |f| f.puts(content.excerpt_html) }
       end
     end
 
     online_document_sections.each do |online_documented_section|
-      File.open(File.join(documented_contents_path,"#{online_documented_section.internal_identifier}.html"), 'wb+') {|f| f.puts(online_documented_section.documented_item_published_content_html(active_publication)) }
+      File.open(File.join(documented_contents_path, "#{online_documented_section.internal_identifier}.html"), 'wb+') { |f| f.puts(online_documented_section.documented_item_published_content_html(active_publication)) }
     end
 
     self.files.where("directory like '%/sites/#{self.iid}/images%'").all.each do |image_asset|
-      contents = file_support.get_contents(File.join(file_support.root,image_asset.directory,image_asset.name))
-      FileUtils.mkdir_p(File.join(image_assets_path,image_asset.directory))
-      File.open(File.join(image_assets_path,image_asset.directory,image_asset.name), 'wb+') {|f| f.puts(contents) }
+      contents = file_support.get_contents(File.join(file_support.root, image_asset.directory, image_asset.name))
+      FileUtils.mkdir_p(File.join(image_assets_path, image_asset.directory))
+      File.open(File.join(image_assets_path, image_asset.directory, image_asset.name), 'wb+') { |f| f.puts(contents) }
     end
 
     self.files.where("directory like '%/#{Rails.application.config.erp_tech_svcs.file_assets_location}/sites/#{self.iid}%'").all.each do |file_asset|
-      contents = file_support.get_contents(File.join(file_support.root,file_asset.directory,file_asset.name))
-      FileUtils.mkdir_p(File.join(file_assets_path,file_asset.directory))
-      File.open(File.join(file_assets_path,file_asset.directory,file_asset.name), 'wb+') {|f| f.puts(contents) }
+      contents = file_support.get_contents(File.join(file_support.root, file_asset.directory, file_asset.name))
+      FileUtils.mkdir_p(File.join(file_assets_path, file_asset.directory))
+      File.open(File.join(file_assets_path, file_asset.directory, file_asset.name), 'wb+') { |f| f.puts(contents) }
     end
 
     files = []
@@ -329,14 +330,14 @@ class Website < ActiveRecord::Base
             data = StringIO.new(data) if data.present?
             setup_hash = YAML.load(data)
           else
-            type =  entry.name.split('/')[0]
+            type = entry.name.split('/')[0]
             name = entry.name.split('/').last
             next if name.nil?
 
             if File.exist?(f_path) and !File.directory?(f_path)
               entry_hash = {:type => type, :name => name, :path => entry.name}
               entries << entry_hash unless name == 'sections' || name == 'articles' || name == 'excerpts' || name == 'documented contents'
-              entry_hash[:data] = File.open(f_path,"rb") {|io| io.read}
+              entry_hash[:data] = File.open(f_path, "rb") { |io| io.read }
             end
           end
 
@@ -347,10 +348,10 @@ class Website < ActiveRecord::Base
 
       if Website.find_by_internal_identifier(setup_hash[:internal_identifier]).nil?
         website = Website.new(
-          :name => setup_hash[:name],
-          :title => setup_hash[:title],
-          :subtitle => setup_hash[:subtitle],
-          :internal_identifier => setup_hash[:internal_identifier]
+            :name => setup_hash[:name],
+            :title => setup_hash[:title],
+            :subtitle => setup_hash[:subtitle],
+            :internal_identifier => setup_hash[:internal_identifier]
         )
 
         #TODO update to handle configurations
@@ -374,7 +375,7 @@ class Website < ActiveRecord::Base
           setup_hash[:images].each do |image_asset|
             filename = 'images' + image_asset[:path] + '/' + image_asset[:name]
             #puts "image_asset '#{filename}'"
-            content = entries.find{|entry| entry[:type] == 'images' and entry[:path] == filename }
+            content = entries.find { |entry| entry[:type] == 'images' and entry[:path] == filename }
             unless content.nil?
               website.add_file(content[:data], File.join(file_support.root, image_asset[:path], image_asset[:name]))
             end
@@ -384,7 +385,7 @@ class Website < ActiveRecord::Base
           setup_hash[:files].each do |file_asset|
             filename = 'files' + file_asset[:path] + '/' + file_asset[:name]
             #puts "file_asset '#{filename}'"
-            content = entries.find{|entry| entry[:type] == 'files' and entry[:path] == filename }
+            content = entries.find { |entry| entry[:type] == 'files' and entry[:path] == filename }
             unless content.nil?
               website.add_file(content[:data], File.join(file_support.root, file_asset[:path], file_asset[:name]))
             end
@@ -419,7 +420,7 @@ class Website < ActiveRecord::Base
 
           website.publish("Website Imported", current_user)
 
-        rescue Exception=>ex
+        rescue Exception => ex
           Rails.logger.error "#{ex.inspect} #{ex.backtrace}"
           website.destroy unless website.nil?
           raise ex
@@ -439,9 +440,9 @@ class Website < ActiveRecord::Base
 
     def build_menu_item(hash)
       website_item = WebsiteNavItem.new(
-        :title => hash[:title],
-        :url => hash[:url],
-        :position => hash[:position]
+          :title => hash[:title],
+          :url => hash[:url],
+          :position => hash[:position]
       )
       unless hash[:linked_to_item_type].blank?
         website_item.linked_to_item = WebsiteSection.find_by_path(hash[:linked_to_item_path])
@@ -451,36 +452,34 @@ class Website < ActiveRecord::Base
         child_website_item = build_menu_item(item)
         child_website_item.move_to_child_of(website_item)
       end
-      unless hash[:roles].empty?
-        hash[:roles].each do |role|
-          website_item.add_role(SecurityRole.find_by_internal_identifier(role)) rescue nil #do nothing if the role does not exist
-        end
-      end
+      #add role if is_secured
+      website_item.add_role(website.role) if hash[:is_secured]
+
       website_item
     end
 
     def build_section(hash, entries, website, current_user)
       klass = hash[:type].constantize
       section = klass.new(:title => hash[:name],
-        :in_menu => hash[:in_menu],
-        :render_base_layout => hash[:render_base_layout],
-        :position => hash[:position],
-        :render_base_layout => hash[:render_base_layout])
+                          :in_menu => hash[:in_menu],
+                          :render_base_layout => hash[:render_base_layout],
+                          :position => hash[:position],
+                          :render_base_layout => hash[:render_base_layout])
       section.internal_identifier = hash[:internal_identifier]
       section.permalink = hash[:permalink]
       section.path = hash[:path]
-      content = entries.find{|entry| entry[:type] == 'sections' and entry[:name] == "#{hash[:internal_identifier]}.rhtml"}
-      unless content.nil?
-        section.layout = content[:data]
-      end
+      content = entries.find { |entry| entry[:type] == 'sections' and entry[:name] == "#{hash[:internal_identifier]}.rhtml" }
+
+      section.layout = content[:data] unless content.nil?
+
       hash[:articles].each do |article_hash|
         article = Article.find_by_internal_identifier(article_hash[:internal_identifier])
         if article.nil?
           article = Article.new(:title => article_hash[:name], :display_title => article_hash[:display_title])
           article.created_by = current_user
-          article.tag_list = article_hash[:tag_list].split(',').collect{|t| t.strip() } unless article_hash[:tag_list].blank?
-          article.body_html = entries.find{|entry| entry[:type] == 'articles' and entry[:name] == "#{article_hash[:internal_identifier]}.html"}[:data]
-          content = entries.find{|entry| entry[:type] == 'excerpts' and entry[:name] == "#{article_hash[:internal_identifier]}.html"}
+          article.tag_list = article_hash[:tag_list].split(',').collect { |t| t.strip() } unless article_hash[:tag_list].blank?
+          article.body_html = entries.find { |entry| entry[:type] == 'articles' and entry[:name] == "#{article_hash[:internal_identifier]}.html" }[:data]
+          content = entries.find { |entry| entry[:type] == 'excerpts' and entry[:name] == "#{article_hash[:internal_identifier]}.html" }
           unless content.nil?
             article.excerpt_html = content[:data]
           end
@@ -498,7 +497,7 @@ class Website < ActiveRecord::Base
         end
       end
       if section.is_a? OnlineDocumentSection
-        entry_data = entries.find{|entry| entry[:type] == 'documented contents' and entry[:name] == "#{section.internal_identifier}.html"}[:data]
+        entry_data = entries.find { |entry| entry[:type] == 'documented contents' and entry[:name] == "#{section.internal_identifier}.html" }[:data]
         documented_content = DocumentedContent.create(:title => section.title, :body_html => entry_data)
         DocumentedItem.create(:documented_content_id => documented_content.id, :online_document_section_id => section.id)
       end
@@ -507,16 +506,14 @@ class Website < ActiveRecord::Base
           child_section = build_section(section_hash, entries, website, current_user)
           child_section.move_to_child_of(section)
           # CREATE THE DOCUMENTED CONTENT HERE
-          entry_data = entries.find{|entry| entry[:type] == 'documented contents' and entry[:name] == "#{child_section.internal_identifier}.html"}[:data]
+          entry_data = entries.find { |entry| entry[:type] == 'documented contents' and entry[:name] == "#{child_section.internal_identifier}.html" }[:data]
           documented_content = DocumentedContent.create(:title => child_section.title, :body_html => entry_data)
           DocumentedItem.create(:documented_content_id => documented_content.id, :online_document_section_id => child_section.id)
         end
       end
-      unless hash[:roles].empty?
-        hash[:roles].each do |role|
-          section.add_role(SecurityRole.find_by_internal_identifier(role)) rescue nil #do nothing if the role does not exist
-        end
-      end
+      #add role if is_secured
+      section.add_role(website.role) if hash[:is_secured]
+
       section
     end
 
@@ -530,13 +527,13 @@ class Website < ActiveRecord::Base
 
   def build_menu_item_hash(menu_item)
     {
-      :title => menu_item.title,
-      :url => menu_item.url,
-      :is_secured => menu_item.is_secured?,
-      :linked_to_item_type => menu_item.linked_to_item_type,
-      :linked_to_item_path => menu_item.linked_to_item.nil? ? nil : menu_item.linked_to_item.path,
-      :position => menu_item.position,
-      :items => menu_item.children.collect{|child| build_menu_item_hash(child)}
+        :title => menu_item.title,
+        :url => menu_item.url,
+        :is_secured => menu_item.is_secured?,
+        :linked_to_item_type => menu_item.linked_to_item_type,
+        :linked_to_item_path => menu_item.linked_to_item.nil? ? nil : menu_item.linked_to_item.path,
+        :position => menu_item.position,
+        :items => menu_item.children.collect { |child| build_menu_item_hash(child) }
     }
   end
 
