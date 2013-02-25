@@ -1,2 +1,3 @@
 Version 3.1.1 - 02-25-2013
+- Bug fixes
 - Add indexes to product_instances nested set columns

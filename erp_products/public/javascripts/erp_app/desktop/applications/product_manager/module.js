@@ -284,12 +284,12 @@ Ext.define("Compass.ErpApp.Desktop.Applications.ProductManager.AddProductWindow"
         url:'/erp_products/erp_app/desktop/product_manager/new',
         listeners:{
           saved:function(form, newId){
-            Ext.getCmp('productListPanel').loadProducts();
-            var win = new Compass.ErpApp.Desktop.Applications.ProductManager.UpdateProductWindow({
-              productTypeId:newId
-            });
-            win.show();
             self.close();
+			Ext.getCmp('productListPanel').loadProducts();
+            
+			var win = Ext.create('Compass.ErpApp.Desktop.Applications.ProductManager.UpdateProductWindow',{
+              productTypeId:newId
+            }).show();
           }
         }
       }
