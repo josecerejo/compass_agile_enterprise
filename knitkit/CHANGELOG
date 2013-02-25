@@ -1,3 +1,20 @@
+Version 2.1.1 - 02-25-2013
+- Bug fixes
+Version 2.1.0 - 01-11-2013
+- Upgrade to rails 3.2
+Version 2.0.11 - 01-10-2013
+- New Security Implementation
+Version 2.0.10 - 10-19-2012
+- When creating a new section explicitly set position null, MS SQL doesn't always honor column default
+Version 2.0.9 - 10-12-2012
+- Fixed gemspec
+- Upgraded codemirror to 2.34 (fixes double scrollbar bug)
+- Changed "Unique Name" to "Internal ID"
+- Removed "New File" option from Knitkit Shared & Website file trees using showNewFileMenuItem: false
+Version 2.0.8 - 10-11-2012
+- Fix for render_content helper method
+Version 2.0.7 - 09-26-2012
+- Fixed js validation so that desktop will load in IE7
 Version 2.0.6 - 09-24-2012
 - Drop down Styles in article editor are now defined in Themes -> Websites -> Holiday Inn Club -> Themes -> hicv[hicv] -> stylesheets -> ckeditor_customer.js
 - Drop down Font in article editor has been set to Arial.
@@ -29,16 +46,3 @@ Version 2.0.6 - 09-24-2012
 - Insert image/link at cursor now works with both codemirror and ckeditor
 - Replaced awesome uploader with plupload which improves stability and feature support (i.e. html5 drag & drop)
 - Added filter to Attach Articles to Section feature
-Version 2.0.7 - 09-26-2012
-- Fixed js validation so that desktop will load in IE7
-Version 2.0.8 - 10-11-2012
-- Fix for render_content helper method
-Version 2.0.9 - 10-12-2012
-- Fixed gemspec
-- Upgraded codemirror to 2.34 (fixes double scrollbar bug)
-- Changed "Unique Name" to "Internal ID"
-- Removed "New File" option from Knitkit Shared & Website file trees using showNewFileMenuItem: false
-Version 2.0.10 - 10-19-2012
-- When creating a new section explicitly set position null, MS SQL doesn't always honor column default
-Version 2.0.11 - 01-10-2013
-- New Security Implementation

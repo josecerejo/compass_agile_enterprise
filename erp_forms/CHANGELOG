@@ -1,12 +1,10 @@
+Version 3.0.0 - 01-11-2013
+- Form Builder
+- Bug fixes
+Version 2.0.6 - 01-10-2013
+- Made validation on DynamicForm iid not case sensitive
+Version 2.0.5 - 10-18-2012
+- Added hideTrigger option to form field
 Version 2.0.4 - 10-11-2012
 - Fixed and refactored build_column
 - Added min/max Value option to form field
-Version 2.0.5 - 10-18-2012
-- Added hideTrigger option to form field
-Version 2.0.6 - 01-10-2013
-- Made validation on DynamicForm iid not case sensitive
-Version 2.1.0 - 01-11-2013
-- Form Builder
-Version 3.0.0
-- Redefine search fields on the fly (Sunspot class setup autoreloads)
-- Bug fixes
