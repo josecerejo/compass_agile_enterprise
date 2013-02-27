@@ -4,7 +4,7 @@
   <div id="notice"></div>
   <br/>
 
-  <%= form_tag "/comments/add/#{@website_section.id}/#{@published_content.content.id}", :remote => true, :id => 'add_comment_form' do %>
+  <%= form_tag "/comments/add/", :remote => true, :id => 'add_comment_form' do %>
   <div class="form_settings">
     <div>
       <p>
@@ -15,6 +15,7 @@
       <span>&nbsp;</span>
       <%= submit_tag "Add Comment", :disable_with => "Please wait...", :class => "submit" %>
       </p>
+      <input type="hidden" name="content_id" value="<%=@published_content.content.id%>" />
     </div>
   </div>
   <% end %>

@@ -542,8 +542,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.Knitkit.CenterRegion", {
         var item = this.workArea.query('#' + itemId).first();
 
         if (Compass.ErpApp.Utility.isBlank(item)) {
-            item = {
-                xtype:'panel',
+            item = Ext.create("Ext.panel.Panel", {
                 layout:'border',
                 title:title + " Inquiries",
                 itemId:itemId,
@@ -571,7 +570,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.Knitkit.CenterRegion", {
                         Ext.getCmp('knitkitWestRegion').selectWebsite(websiteId);
                     }
                 }
-            };
+            });
 
             this.workArea.add(item);
         }
@@ -680,13 +679,13 @@ Ext.define("Compass.ErpApp.Desktop.Applications.Knitkit.CenterRegion", {
         }
         return false;
     },
+
     saveCurrent:function () {
         var activeTab = this.workArea.getActiveTab();
         if (!Ext.isEmpty(activeTab) && !Ext.isEmpty(activeTab.initialConfig.save)) {
             activeTab.initialConfig.save(activeTab);
         }
     },
-
 
     saveAll:function () {
         this.workArea.items.each(function (comp) {

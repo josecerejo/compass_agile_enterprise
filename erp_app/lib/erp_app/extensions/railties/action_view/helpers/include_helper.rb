@@ -134,6 +134,8 @@ module ErpApp
                                   redirect_to='/session/sign_out')
               raw "<script type='text/javascript'>Compass.ErpApp.Utility.SessionTimeout.setupSessionTimeout(#{warn_milli_seconds}, #{redirect_milli_seconds}, '#{redirect_to}') </script>" if current_user
             end
+            #need to remove camel case not rubyish
+            alias_method :set_session_timeout, :setSessionTimeout
 
             def load_shared_application_resources(resource_type)
               resource_type = resource_type.to_sym

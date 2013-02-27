@@ -7,7 +7,7 @@ module Knitkit
 
       @comment = content.add_comment({:commentor_name => user.party.description, :email => user.email, :comment => comment})
 
-      render :text => (@comment.valid? ? '<div class="sexysuccess">Comment pending approval.</span>' : '<div class="sexyerror">Error. Comment cannot be blank.</span>')
+      render :text => (@comment.valid? ? '<div class="sexynotice">Comment pending approval.</div>' : '<div class="sexynotice">Error. Comment cannot be blank.</div>')
     end
 
     #no section to set

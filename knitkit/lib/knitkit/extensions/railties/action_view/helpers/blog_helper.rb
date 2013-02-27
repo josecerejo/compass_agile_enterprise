@@ -6,7 +6,7 @@ module Knitkit
           module BlogHelper
 
             def blog_add_comment_form
-              render :partial => 'add_comment' unless current_user.nil?
+              render :partial => 'add_comment' if current_user
             end
 
             def blog_topics(css_class='tag_link')
@@ -23,9 +23,9 @@ module Knitkit
 
             def blog_rss_links(link_title='RSS Feed')
               if params[:action] == 'tag'
-                return link_to link_title, main_app.blog_tag_url(params[:section_id], params[:tag_id], :rss)
+                return link_to link_title, main_app.blog_tag_url(params[:section_id], params[:tag_id], :rss), :target => '_blank'
               else
-                return link_to link_title, main_app.blogs_url(params[:section_id], :rss)
+                return link_to link_title, main_app.blogs_url(params[:section_id], :rss), :target => '_blank'
               end
             end
 

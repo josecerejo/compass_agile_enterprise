@@ -22,7 +22,7 @@ module Knitkit
     def find_root
       @root = OnlineDocumentSection.find(params[:section_id])
       if @root.documented_item_published_content(@active_publication)
-        @root_content = @root.documented_item_published_content(@active_publication).body_html 
+        @root_content = @root.documented_item_published_content(@active_publication).body_html.gsub(/\n/, '<br/>')
       else
         @root_content = ""
       end

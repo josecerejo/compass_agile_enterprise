@@ -34,7 +34,6 @@ module Knitkit
             #section_unique_name
             # - sections permalink to start breadcrumbs at
             def build_crumbs(options={})
-              links = []
               if options[:menu]
                 menu = WebsiteNav.find_by_name(options[:menu])
                 raise "Menu with name #{options[:menu]} does not exist" if menu.nil?
@@ -48,7 +47,6 @@ module Knitkit
               else
                 links = @website_section.self_and_ancestors.collect{|child| {:url => child.path, :title => child.title}}
               end
-              links
 
               render :partial => 'shared/knitkit/bread_crumb', :locals => {:links => links}
             end

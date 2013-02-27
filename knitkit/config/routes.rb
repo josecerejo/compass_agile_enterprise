@@ -8,7 +8,7 @@ Rails.application.routes.draw do
   get 'blogs/:section_id/:id' => 'knitkit/blogs#show', :as => 'blog_article'
   get 'blogs/:section_id/tag/:tag_id(.:format)' => 'knitkit/blogs#tag', :as => 'blog_tag'
   
-  match '/comments/add/:section_id/:content_id' => 'knitkit/comments#add', :as => 'comments'
+  match '/comments/add' => 'knitkit/comments#add', :as => 'comments'
   match '/unauthorized' => 'knitkit/unauthorized#index', :as => 'knitkit/unauthorized'
   match '/view_current_publication' => 'knitkit/base#view_current_publication'
   match '/online_document_sections/build_tree' => 'knitkit/online_document_sections#build_tree'
