@@ -1,6 +1,8 @@
 Compass.ErpApp.Widgets.ResetPassword = {
+    template: new Ext.Template('<%= render_widget :reset_password, :params => {:login_url => "/login"}%>'),
+
     addResetPassword:function(){
-        Ext.getCmp('knitkitCenterRegion').addContentToActiveCodeMirror('<%= render_widget :reset_password, :params => {:login_url => "/login"}%>');
+        Ext.getCmp('knitkitCenterRegion').addContentToActiveCodeMirror(Compass.ErpApp.Widgets.ResetPassword.template.apply());
     }
 }
 

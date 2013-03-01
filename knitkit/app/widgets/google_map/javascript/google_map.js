@@ -6,6 +6,8 @@ Compass.ErpApp.Widgets.GoogleMap = {
         '   :drop_pins=[\n{dropPins}\n',
         "]}%>"),
 
+    dropPinTemplate: new Ext.XTemplate('<tpl for=".">', '{title="{title}", address="{address}"}{[xindex === xcount ? "" : ","]}', '</tpl>'),
+
     addGoogleMap: function () {
 
         // Define our data model
@@ -158,8 +160,7 @@ Compass.ErpApp.Widgets.GoogleMap = {
                                 })
                             });
 
-                            var dropPinTpl = new Ext.XTemplate('<tpl for=".">','{title="{title}", address="{address}"}{[xindex === xcount ? "" : ","]}','</tpl>');
-                            data['dropPins'] = dropPinTpl.apply(dropPins);
+                            data['dropPins'] = Compass.ErpApp.Widgets.GoogleMap.dropPinTemplate.apply(dropPins);
 
                             var content = Compass.ErpApp.Widgets.GoogleMap.template.apply(data);
                             Ext.getCmp('knitkitCenterRegion').addContentToActiveCodeMirror(content);

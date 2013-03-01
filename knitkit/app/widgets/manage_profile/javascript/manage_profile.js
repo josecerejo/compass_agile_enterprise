@@ -1,6 +1,8 @@
 Compass.ErpApp.Widgets.ManageProfile = {
+    template: new Ext.Template('<%= render_widget :manage_profile %>'),
+
     addManageProfile:function(){
-        Ext.getCmp('knitkitCenterRegion').addContentToActiveCodeMirror('<%= render_widget :manage_profile %>'); 
+        Ext.getCmp('knitkitCenterRegion').addContentToActiveCodeMirror(Compass.ErpApp.Widgets.ManageProfile.template.apply());
     }
 }
 
