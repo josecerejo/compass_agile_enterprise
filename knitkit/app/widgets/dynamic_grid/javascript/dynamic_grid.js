@@ -125,15 +125,13 @@ Compass.ErpApp.Widgets.DynamicGrid = {
                     listeners:{
                         'click':function (button) {
                             var tpl = new Ext.XTemplate("<%= render_widget :dynamic_grid, :params => {:model_name => '{model_name}',\n",
-                                    "   :grid => {\n",
-                                    "       :title => '{title}',\n",
-                                    "       :width => {width},\n",
-                                    "       :height => {height},\n",
-                                    "       :page => {page_results:this.toBoolean},\n",
-                                    "       :page_size => {pageSize},\n",
-                                    "       :display_msg => '{displayMsg}',\n",
-                                    "       :empty_msg => '{emptyMsg}'\n",
-                                    "   }\n",
+                                    "   :title => '{title}',\n",
+                                    "   :width => {width},\n",
+                                    "   :height => {height},\n",
+                                    "   :page_results => {page_results:this.toBoolean},\n",
+                                    "   :page_size => {pageSize},\n",
+                                    "   :display_msg => '{displayMsg}',\n",
+                                    "   :empty_msg => '{emptyMsg}'\n",
                                     "} %>",
                                     {
                                         toBoolean:function (value) {

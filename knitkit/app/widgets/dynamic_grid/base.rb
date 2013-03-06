@@ -7,7 +7,7 @@ module Widgets
         @title = params[:title] || params[:model_name]
         @width = params[:width] || '100%'
         @height = params[:height] || 500
-        @page = params[:page] || true
+        @page_results = params[:page_results] || true
         @page_size = params[:page_size] || 10
         @display_msg = params[:display_msg] || 'Displaying {0} - {1} of {2}'
         @empty_msg = params[:empty_msg] || 'Empty'
