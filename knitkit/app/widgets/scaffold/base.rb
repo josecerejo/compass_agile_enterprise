@@ -2,7 +2,7 @@ module Widgets
   module Scaffold
     class Base < ErpApp::Widgets::Base
       def index
-        @model = params[:model]
+        @model_name = params[:model_name]
         @title = params[:grid][:title] || params[:model].pluralize
         @width = params[:grid][:width] || '100%'
         @height = params[:grid][:height] || 500
@@ -10,7 +10,7 @@ module Widgets
         @page_size = params[:grid][:page_size] || 10
         @display_msg = params[:grid][:display_msg] || 'Displaying {0} - {1} of {2}'
         @empty_msg = params[:grid][:empty_msg] || 'Empty'
-        @editable = params[:grid][:editable] || false
+        @editable = params[:editable] || false
 
         render :view => :index
       end
@@ -50,7 +50,7 @@ module Widgets
 
       def setup_active_ext_core
         model_id = session[:widgets][self.uuid][:model].pluralize.singularize
-        default_options = {
+        options = {
             :inline_edit => true,
             :use_ext_forms => false,
             :ignore_associations => true,
@@ -59,7 +59,11 @@ module Widgets
             :only => nil
         }
 
-        options = default_options.merge(session[:widgets][self.uuid][:scaffold])
+        #merge in passed widget options
+        options.each do |key, value|
+          options[key] = session[:widgets][self.uuid][key] unless session[:widgets][self.uuid][key].blank?
+        end
+
         ActiveExt::Core.new(model_id,options)
       end
   

@@ -35,6 +35,7 @@ Compass.ErpApp.Widgets.DynamicGrid = {
                 items: [
                     {
                         xtype: 'combo',
+                        width:300,
                         value: '',
                         loadingText: 'Retrieving Dynamic Form Models ...',
                         store: Ext.create('Ext.data.Store', {
@@ -142,9 +143,9 @@ Compass.ErpApp.Widgets.DynamicGrid = {
             }),
             buttons: [
                 {
-                    text: 'Submit',
-                    listeners: {
-                        'click': function (button) {
+                    text:'Submit',
+                    listeners:{
+                        'click':function (button) {
                             var window = button.findParentByType('window'),
                                 formPanel = window.query('form')[0],
                                 grid = formPanel.down('grid'),
