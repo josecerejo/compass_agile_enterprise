@@ -1,5 +1,3 @@
-Compass.ErpApp.Utility.JsLoader.load(['/javascripts/erp_app/shared/dynamic_forms/dynamic_form_fields.js'], function(){
-
 Ext.define("Compass.ErpApp.Desktop.Applications.SecurityManagement",{
     extend:"Ext.ux.desktop.Module",
     id:'security_management-win',
@@ -50,22 +48,22 @@ Ext.define("Compass.ErpApp.Desktop.Applications.SecurityManagement",{
     }
 });
 
-  Ext.define('Compass.ErpApp.Desktop.Applications.SecurityManagement.SearchBox',{
-    extend: 'Compass.ErpForms.DynamicForms.DynamicRelatedSearchBox',
-    alias: 'widget.SecurityManagement-searchbox',
+Ext.define('Compass.ErpApp.Desktop.Applications.SecurityManagement.SearchBox',{
+  extend: 'Compass.ErpForms.DynamicForms.DynamicRelatedSearchBox',
+  alias: 'widget.SecurityManagement-searchbox',
 
-    constructor : function(config) {
-        var self = this;
-        config = Ext.apply({
-            url:'/erp_app/desktop/security_management/search',
-            display_template: config.display_template,
-            fields: config.fields,
-            extraParams: {
-                model: (config.model || 'User') 
-            }
+  constructor : function(config) {
+      var self = this;
+      config = Ext.apply({
+          url:'/erp_app/desktop/security_management/search',
+          display_template: config.display_template,
+          fields: config.fields,
+          extraParams: {
+              model: (config.model || 'User') 
+          }
 
-        }, config);
-    }
+      }, config);
+  }
 
-  });
 });
+new OnDemandLoadByAjax().load('/javascripts/erp_app/shared/dynamic_forms/dynamic_form_fields.js');

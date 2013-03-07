@@ -25,7 +25,7 @@
                     editor.getCommand('selectAll').setState(CKEDITOR.TRISTATE_DISABLED);
                     /* http://codemirror.net/manual.html */
                     var codemirrorInit = null;
-					Compass.ErpApp.Utility.JsLoader.load([
+                    new OnDemandLoadByAjax().load([
 						'/javascripts/erp_app/codemirror/mode/xml/xml.js',
 						'/javascripts/erp_app/codemirror/mode/javascript/javascript.js',
 						'/javascripts/erp_app/codemirror/mode/css/css.js',

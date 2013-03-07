@@ -1,6 +1,7 @@
 Compass.ErpApp.Widgets.Orders = {
+    template: new Ext.Template("<%= render_widget :orders %>"),
     add:function(){
-        Ext.getCmp('knitkitCenterRegion').addContentToActiveCodeMirror("<%= render_widget :orders %>");
+        Ext.getCmp('knitkitCenterRegion').addContentToActiveCodeMirror(Compass.ErpApp.Widgets.Orders.template.apply());
     }
 }
 

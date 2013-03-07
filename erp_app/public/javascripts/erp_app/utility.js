@@ -2,14 +2,14 @@ Ext.ns("Compass.ErpApp.Utility");
 
 //handle session timeout
 Compass.ErpApp.Utility.SessionTimeout = {
-    enabled:false,
-    redirectTo:null,
-    warnInMilliseconds:null,
-    warnTimer:null,
-    redirectInMilliseconds:null,
-    redirectTimer:null,
+    enabled: false,
+    redirectTo: null,
+    warnInMilliseconds: null,
+    warnTimer: null,
+    redirectInMilliseconds: null,
+    redirectTimer: null,
 
-    setForceRedirectTimer:function (action) {
+    setForceRedirectTimer: function (action) {
         switch (action) {
             case 'start':
                 var self = this;
@@ -22,22 +22,20 @@ Compass.ErpApp.Utility.SessionTimeout = {
                 break;
         }
     },
-    setWarnTimer:function (action) {
+    setWarnTimer: function (action) {
         switch (action) {
             case 'start':
                 var self = this;
                 this.warnTimer = window.setTimeout(function () {
-                    Ext.MessageBox.confirm('Confirm', 'Your session is about to expire due to inactivity. Do you wish to continue this session?', function(btn){
-                        if(btn == 'no'){
+                    Ext.MessageBox.confirm('Confirm', 'Your session is about to expire due to inactivity. Do you wish to continue this session?', function (btn) {
+                        if (btn == 'no') {
                             window.location = self.redirectTo;
                         }
-                        else
-                        if(btn == 'yes')
-                        {
+                        else if (btn == 'yes') {
                             Ext.Ajax.request({
-                                method:'POST',
-                                url:'/session/keep_alive',
-                                success: function( result, request ){
+                                method: 'POST',
+                                url: '/session/keep_alive',
+                                success: function (result, request) {
                                     self.reset();
                                 }
                             });
@@ -50,7 +48,7 @@ Compass.ErpApp.Utility.SessionTimeout = {
                 break;
         }
     },
-    setupSessionTimeout:function (warnInMilliseconds, redirectInMilliseconds, redirectTo) {
+    setupSessionTimeout: function (warnInMilliseconds, redirectInMilliseconds, redirectTo) {
         var self = this;
         Ext.Ajax.addListener('requestcomplete', this.reset, this);
 
@@ -62,7 +60,7 @@ Compass.ErpApp.Utility.SessionTimeout = {
         this.setForceRedirectTimer('start');
         this.setWarnTimer('start');
     },
-    reset:function () {
+    reset: function () {
         this.setWarnTimer('stop');
         this.setForceRedirectTimer('stop');
 
@@ -258,43 +256,44 @@ Compass.ErpApp.Utility.formatCurrency = function (num) {
     return (((sign) ? '' : '-') + '$' + num + '.' + cents);
 };
 
-Compass.ErpApp.Utility.JsLoader = {
-    load:function (url, successCallback) {
+function OnDemandLoadByAjax(){
+    this.load = function (components, callback) {
+        this.components = components;
+        this.successCallBack = callback;
         this.attempts = 0;
-        this.successCallBack = successCallback;
         this.scriptsToLoad = [];
 
-        if (!Compass.ErpApp.Utility.isArray(url)) {
-            url = [url];
+        if (!Compass.ErpApp.Utility.isArray(this.components)) {
+            this.components = [this.components];
         }
 
-        for (var i = 0; i < url.length; i++) {
+        for (var i = 0; i < this.components.length; i++) {
             this.scriptsToLoad.push({
-                url:url[i],
-                status:'pending'
+                url: this.components[i],
+                status: 'pending'
             });
         }
 
         for (var t = 0; t < this.scriptsToLoad.length; t++) {
             this.loadScript(this.scriptsToLoad[t]);
         }
-    },
+    };
 
-    allScriptsDone:function () {
+    this.allScriptsDone = function () {
         for (var i = 0; i < this.scriptsToLoad.length; i++) {
             if (this.scriptsToLoad[i].status == 'pending')
                 return false;
         }
         return true;
-    },
+    };
 
-    scriptDone:function () {
+    this.scriptDone = function () {
         if (this.allScriptsDone()) {
             this.onSuccess();
         }
-    },
+    };
 
-    loadScript:function (scriptToLoad) {
+    this.loadScript = function (scriptToLoad) {
         var self = this;
         var ss = document.getElementsByTagName("script");
         for (i = 0; i < ss.length; i++) {
@@ -320,15 +319,16 @@ Compass.ErpApp.Utility.JsLoader = {
             scriptToLoad.status = 'failure';
             self.scriptDone();
         }
-    },
+    };
 
-    onSuccess:function () {
-        if(!Ext.isEmpty(this.successCallBack) && this.successCallBack){
+    this.onSuccess = function () {
+        if (!Ext.isEmpty(this.successCallBack) && this.successCallBack) {
             this.successCallBack();
         }
-    },
-    onFailure:function () {
-    }
+    };
+
+    this.onFailure = function () {
+    };
 };
 
 //Javascript Extensions
@@ -423,25 +423,25 @@ String.prototype.upcase = function () {
     return this.toUpperCase();
 };
 
-String.prototype.camelize = function() {
-    var parts = this.replace(/_/,'-').split('-'), len = parts.length;
+String.prototype.camelize = function () {
+    var parts = this.replace(/_/, '-').split('-'), len = parts.length;
     if (len == 1) return parts[0];
 
     var camelized = this.charAt(0) == '-'
-      ? parts[0].charAt(0).toUpperCase() + parts[0].substring(1)
-      : parts[0];
+        ? parts[0].charAt(0).toUpperCase() + parts[0].substring(1)
+        : parts[0];
 
     for (var i = 1; i < len; i++)
-      camelized += parts[i].charAt(0).toUpperCase() + parts[i].substring(1);
+        camelized += parts[i].charAt(0).toUpperCase() + parts[i].substring(1);
 
     return camelized;
 };
 
-String.prototype.titleize = function() {
-    var parts = this.replace(/_/,'-').split('-'), len = parts.length, titleized = '';
-    for (var i = 0; i < len; i++){
-      if (i > 0) titleized += ' ';
-      titleized += parts[i].charAt(0).toUpperCase() + parts[i].substring(1);        
+String.prototype.titleize = function () {
+    var parts = this.replace(/_/, '-').split('-'), len = parts.length, titleized = '';
+    for (var i = 0; i < len; i++) {
+        if (i > 0) titleized += ' ';
+        titleized += parts[i].charAt(0).toUpperCase() + parts[i].substring(1);
     }
     return titleized;
 };

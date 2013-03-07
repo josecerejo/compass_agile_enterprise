@@ -4,13 +4,13 @@ module Widgets
   
       def index
         @model_name = params[:model_name]
-        @title = params[:title] || params[:model_name]
-        @width = params[:width] || '100%'
-        @height = params[:height] || 500
-        @page = params[:page] || true
-        @page_size = params[:page_size] || 10
-        @display_msg = params[:display_msg] || 'Displaying {0} - {1} of {2}'
-        @empty_msg = params[:empty_msg] || 'Empty'
+        @title = params[:grid][:title] || params[:model].pluralize
+        @width = params[:grid][:width] || '100%'
+        @height = params[:grid][:height] || 500
+        @page = params[:grid][:page] || true
+        @page_size = params[:grid][:page_size] || 10
+        @display_msg = params[:grid][:display_msg] || 'Displaying {0} - {1} of {2}'
+        @empty_msg = params[:grid][:empty_msg] || 'Empty'
 
         render :view => :index
       end

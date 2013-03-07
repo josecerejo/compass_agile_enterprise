@@ -149,7 +149,7 @@ Ext.define("Compass.ErpApp.Shared.CodeMirror", {
         var parserType = this.parser || 'html';
         if (CodeMirrorParsers.parser[parserType]) {
             var parserObj = CodeMirrorParsers.parser[parserType];
-            Compass.ErpApp.Utility.JsLoader.load('/javascripts/erp_app/codemirror/mode/' + parserObj.path + '/' + '' + parserObj.path + '.js', function () {
+            new OnDemandLoadByAjax().load('/javascripts/erp_app/codemirror/mode/' + parserObj.path + '/' + '' + parserObj.path + '.js', function () {
                 var editorConfig = Ext.applyIf(self.initialConfig.codeMirrorConfig, {
                     mode:parserObj.mode
                 });

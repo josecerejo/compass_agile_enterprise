@@ -8,7 +8,7 @@ ActionView::Base.class_eval do
   # }
   def render_dynamic_form(name, options={})
     output = raw '&nbsp<script type="text/javascript">Ext.onReady(function() {'
-    output += raw "Compass.ErpApp.Utility.JsLoader.load(['/javascripts/erp_app/shared/dynamic_forms/dynamic_form_fields.js'], function(){"
+    output += raw "new OnDemandLoadByAjax().load(['/javascripts/erp_app/shared/dynamic_forms/dynamic_form_fields.js'], function(){"
 
     output += raw DynamicForm.get_form(name.to_s, options[:internal_identifier]).to_extjs_widget(
                 { :url => build_widget_url(:new),

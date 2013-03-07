@@ -1,4 +1,8 @@
 Compass.ErpApp.Widgets.ProductCatalog = {
+    template: new Ext.XTemplate("<%= render_widget :product_catalog,\n",
+        "   :action => :index,\n",
+        "   :params => {:cart_items_url => '{cartItemsUrl}'} %>"),
+
     add:function(){
         var addProductCatalogWidgetWindow = Ext.create("Ext.window.Window",{
             layout:'fit',
@@ -34,12 +38,8 @@ Compass.ErpApp.Widgets.ProductCatalog = {
                         cartItemsUrl:cartItemsUrl
                     };
 
-                    var tpl = new Ext.XTemplate("<%= render_widget :product_catalog,\n",
-                        "   :action => :index,\n",
-                        "   :params => {:cart_items_url => '{cartItemsUrl}'} %>");
-
                     //add rendered template to center region editor
-                    Ext.getCmp('knitkitCenterRegion').addContentToActiveCodeMirror(tpl.apply(data));
+                    Ext.getCmp('knitkitCenterRegion').addContentToActiveCodeMirror(Compass.ErpApp.Widgets.ProductCatalog.template.apply(data));
                     addProductCatalogWidgetWindow.close();
                 }
             },

@@ -1,7 +1,7 @@
 // we load vtypes here not because these methods are dependent on vtypes but rather because we want to load vtypes when validation loads
 // we can't load vtypes when extjs loads because the vtypes depend on ErpTechSvcs.Config
 // we want vtypes available to both knitkit and desktop and this file is already loaded both places
-Compass.ErpApp.Utility.JsLoader.load(["/javascripts/extjs/vtypes.js"], function() {});
+new OnDemandLoadByAjax().load(["/javascripts/extjs/vtypes.js"], function() {});
 
 function initRegex(pattern){
   var regex_style = /^\//;
