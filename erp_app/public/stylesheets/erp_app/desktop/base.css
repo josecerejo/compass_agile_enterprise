@@ -175,4 +175,4 @@
 }
 
 /*Added to override a value set by extjs so that the ckeditor toolbar layouts out correctly */
-html.x-border-box td.cke_top *{-moz-box-sizing: content-box;}
+span.cke_browser_webkit *{box-sizing: content-box;}

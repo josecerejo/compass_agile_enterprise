@@ -41,5 +41,5 @@ Ext.override(Compass.ErpApp.Desktop.Applications.Knitkit.CenterRegion,{
     ['ShowBlocks','RemoveFormat'],
     ['Styles','Format','Font','FontSize' ],
     ['Maximize','-','About']
-  ],
+  ]
 });

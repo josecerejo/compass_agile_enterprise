@@ -25,6 +25,7 @@ module ErpApp
               resources << static_javascript_include_tag("extjs/helpQtip.js")
               resources << static_javascript_include_tag("extjs/ext_ux_tab_close_menu.js")
               resources << static_javascript_include_tag("extjs/Ext.ux.form.MultiSelect.js")
+              resources << static_javascript_include_tag("extjs/Ext.ux.CheckColumn.js")
 
               if opt[:theme] === false
                 #do nothing not theme loaded.
