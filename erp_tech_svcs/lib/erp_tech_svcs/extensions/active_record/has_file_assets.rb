@@ -46,6 +46,10 @@ module ErpTechSvcs
 						self.files.where('type = ?', 'Template')
           end
 
+          def stylesheets
+            self.files.where('type = ?', 'Stylesheet')
+          end
+
           def pdfs
             self.files.where('type = ?', 'Pdf')
           end

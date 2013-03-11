@@ -274,6 +274,19 @@ module Knitkit
           end
         end
 
+        def get_ckeditor_selectable_themes
+          themes = []
+          Theme.where('active = ?', 1).all.each do |theme|
+            theme_hash = {:name => theme.name, :theme_id => theme.theme_id, :stylesheets => []}
+            theme.stylesheets.each do |stylesheet|
+              theme_hash[:stylesheets] << {:name => stylesheet.name, :url => stylesheet.data.url}
+            end
+            themes << theme_hash
+          end
+
+          render :json => {:success => true, :themes => themes}
+        end
+
         protected
 
         def get_theme(path)

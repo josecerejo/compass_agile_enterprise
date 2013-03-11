@@ -17,7 +17,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.Knitkit.CenterRegion", {
         ['Link', 'Unlink', 'Anchor'],
         ['HorizontalRule', 'SpecialChar', 'PageBreak'],
         ['ShowBlocks', 'RemoveFormat'],
-        ['Styles', 'Format', 'Font', 'FontSize' ],
+        ['KnitkitThemes', 'Format', 'Font', 'FontSize' ],
         ['Maximize', '-', 'About']
     ],
 
@@ -235,7 +235,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.Knitkit.CenterRegion", {
                 autoHeight:true,
                 value:content,
                 ckEditorConfig:{
-                    extraPlugins:'jwplayer',
+                    extraPlugins:'jwplayer,knitkitthemes',
                     toolbar:self.ckEditorToolbar
                 },
                 listeners:{
@@ -408,7 +408,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.Knitkit.CenterRegion", {
                 autoHeight:true,
                 //value:content,
                 ckEditorConfig:{
-                    extraPlugins:'jwplayer',
+                    extraPlugins:'jwplayer,knitkitthemes',
                     toolbar:self.ckEditorToolbar
                 },
                 listeners:{

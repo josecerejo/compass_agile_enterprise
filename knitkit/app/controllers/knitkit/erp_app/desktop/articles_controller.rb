@@ -5,7 +5,6 @@ module Knitkit
         @@datetime_format = "%m/%d/%Y %l:%M%P"
 
         def new
-          model = DesktopApplication.find_by_internal_identifier('knitkit')
           begin
             current_user.with_capability('create', 'Content') do
               result = {}
@@ -38,7 +37,6 @@ module Knitkit
         end
 
         def update
-          model = DesktopApplication.find_by_internal_identifier('knitkit')
           begin
             current_user.with_capability('edit', 'Content') do
               result = {}
@@ -70,7 +68,6 @@ module Knitkit
         end
 
         def delete
-          model = DesktopApplication.find_by_internal_identifier('knitkit')
           begin
             current_user.with_capability('delete', 'Content') do
               render :json => Article.destroy(params[:id]) ? {:success => true} : {:success => false}
@@ -81,7 +78,6 @@ module Knitkit
         end
 
         def add_existing
-          model = DesktopApplication.find_by_internal_identifier('knitkit')
           begin
             current_user.with_capability('add_existing', 'Content') do
               website_section = WebsiteSection.find(params[:section_id])

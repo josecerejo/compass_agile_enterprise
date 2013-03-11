@@ -5,7 +5,6 @@ module Knitkit
       class ContentController < Knitkit::ErpApp::Desktop::AppController
         def update
           result = {:success => true}
-          model = DesktopApplication.find_by_internal_identifier('knitkit')
           begin
             current_user.with_capability('edit_html', 'Content') do
               id      = params[:id]
@@ -33,7 +32,6 @@ module Knitkit
 
         def save_excerpt
           result = {:success => true}
-          model = DesktopApplication.find_by_internal_identifier('knitkit')
           begin
             current_user.with_capability('edit_excerpt', 'Content') do
               id      = params[:id]
