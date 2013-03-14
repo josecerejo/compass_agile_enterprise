@@ -1,3 +1,6 @@
+Version 3.1.2 - 03-14-2013
+- Minor enhancements to capabilities
+- Added scope for stylesheets to has_file_assets
 Version 3.1.1 - 02-25-2013
 - Added protect_all_instances model security option
 - Refactored security queries for improved performance

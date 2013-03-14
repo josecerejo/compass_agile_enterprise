@@ -1,3 +1,7 @@
+Version 2.1.3 - 02-26-2013
+- Fixed padding of ckeditor toolbar
+- Added ability to apply theme css to content
+- Added ability to select roles when securing pages
 Version 2.1.2 - 02-26-2013
 - Fixed critical bug in website export
 Version 2.1.1 - 02-25-2013

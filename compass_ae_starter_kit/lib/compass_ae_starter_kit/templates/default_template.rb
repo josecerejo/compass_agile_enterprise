@@ -27,14 +27,13 @@ CompassAeStarterKit::FileSupport.patch_file 'config/environments/production.rb',
 CompassAeStarterKit::FileSupport.append_file 'Gemfile',
 "
 gem 'erp_base_erp_svcs', '3.1.1'
-gem 'erp_tech_svcs', '3.1.1'
-gem 'erp_app', '3.1.2'
-gem 'erp_forms', '3.0.0'
-gem 'knitkit', '2.1.2'
+gem 'erp_tech_svcs', '3.1.2'
+gem 'erp_app', '3.1.3'
+gem 'erp_forms', '3.0.1'
+gem 'knitkit', '2.1.3'
 gem 'rails_db_admin', '2.1.1'
 gem 'compass_ae_console', '2.0.0'
 "
-
 puts <<-end
 
 Thanks for installing Compass AE!
