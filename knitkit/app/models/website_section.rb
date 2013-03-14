@@ -2,7 +2,7 @@ class WebsiteSection < ActiveRecord::Base
   attr_protected :created_at, :updated_at
 
   after_create :update_paths # must happen after has_roles so that after_create :save_secured_model fires first
-  before_save  :update_path, :check_internal_indentifier
+  before_save  :update_path, :check_internal_identifier
 
   extend FriendlyId
   friendly_id :title, :use => [:slugged, :scoped], :slug_column => :permalink, :scope => [:website_id, :parent_id]
@@ -98,7 +98,6 @@ class WebsiteSection < ActiveRecord::Base
   end
 
   def get_published_layout(active_publication)
-    layout_content = nil
     published_website_id = active_publication.id
     published_element = PublishedElement.includes([:published_website]).where('published_websites.id = ? and published_element_record_id = ? and published_element_record_type = ?', published_website_id, self.id, 'WebsiteSection').first
     unless published_element.nil?
@@ -188,7 +187,7 @@ class WebsiteSection < ActiveRecord::Base
     end
   end
 
-  def check_internal_indentifier
+  def check_internal_identifier
     self.internal_identifier = self.permalink if self.internal_identifier.blank?
   end
   

@@ -32,6 +32,10 @@ class Capability < ActiveRecord::Base
                 where("capability_accessors.id IS NULL")
   end
 
+  def remove_all_roles
+    capability_accessors.destroy_all
+  end
+
   def roles
     SecurityRole.joins(:capability_accessors).where(:capability_accessors => {:capability_id => self.id })
   end

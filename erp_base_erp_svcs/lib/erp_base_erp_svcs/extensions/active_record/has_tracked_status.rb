@@ -19,6 +19,7 @@ module ErpBaseErpSvcs
         end
 
         module InstanceMethods
+
           #get status for given date
           #checks from_date attribute
           def get_status_for_date_time(datetime)

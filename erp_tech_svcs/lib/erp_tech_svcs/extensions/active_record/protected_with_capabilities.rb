@@ -178,7 +178,13 @@ module ErpTechSvcs
             capability = Capability.find_or_create_by_capability_resource_type_and_capability_resource_id_and_capability_type_id_and_scope_type_id(get_superclass, self.id, capability_type.id, scope_type.id)
             self.reload
             capability
-          end   
+          end
+
+          def roles
+            SecurityRole.joins(:capability_accessors => :capability)
+            .where(:capabilities => {:capability_resource_type => self.class.name})
+            .where(:capabilities => {:capability_resource_id => self.id})
+          end
 
           def protect_with_capability(capability_type_iid)
             add_capability(capability_type_iid)

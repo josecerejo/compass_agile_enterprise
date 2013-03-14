@@ -147,37 +147,45 @@ Ext.define("Compass.ErpApp.Desktop.Applications.Knitkit.WestRegion", {
         });
     },
 
-    changeSecurityOnSection:function (node, secure) {
-        var self = this;
-        self.setWindowStatus('Updating section...');
+    changeSecurityOnSection:function (node) {
         Ext.Ajax.request({
-            url:'/knitkit/erp_app/desktop/section/update_security',
+            url:'/knitkit/erp_app/desktop/available_roles',
             method:'POST',
-            params:{
-                id:node.data.id.split('_')[1],
-                site_id:node.data.siteId,
-                secure:secure
-            },
             success:function (response) {
                 var obj = Ext.decode(response.responseText);
                 if (obj.success) {
-                    self.clearWindowStatus();
-                    if (secure) {
-                        node.set('iconCls', 'icon-document_lock');
-                    }
-                    else {
-                        node.set('iconCls', 'icon-document');
-                    }
-                    node.set('isSecured', secure);
-                    node.commit();
+                    Ext.create('widget.knikit_selectroleswindow',{
+                        baseParams:{
+                            id:node.data.id.split('_')[1],
+                            site_id:node.get('siteId')
+                        },
+                        url:'/knitkit/erp_app/desktop/section/update_security',
+                        currentRoles:node.get('roles'),
+                        availableRoles:obj.availableRoles,
+                        listeners:{
+                            success:function(window, response){
+                                node.set('roles', response.roles);
+                                if (response.secured) {
+                                    node.set('iconCls', 'icon-document_lock');
+                                }
+                                else {
+                                    node.set('iconCls', 'icon-document');
+                                }
+                                node.set('isSecured', response.secured);
+                                node.commit();
+                            },
+                            failure:function(){
+                                Ext.Msg.alert('Error', 'Could not update security');
+                            }
+                        }
+                    }).show();
                 }
                 else {
-                    Ext.Msg.alert('Error', 'Error securing section');
+                    Ext.Msg.alert('Error', 'Could not load available roles');
                 }
             },
             failure:function (response) {
-                self.clearWindowStatus();
-                Ext.Msg.alert('Error', 'Error securing section.');
+                Ext.Msg.alert('Error', 'Could not load available roles');
             }
         });
     },
@@ -383,6 +391,9 @@ Ext.define("Compass.ErpApp.Desktop.Applications.Knitkit.WestRegion", {
                 },
                 {
                     name:'publication_comments_enabled'
+                },
+                {
+                    name:'roles'
                 }
             ],
             listeners:{

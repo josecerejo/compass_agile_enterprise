@@ -4,6 +4,10 @@ module Knitkit
       class AppController < ::ErpApp::Desktop::BaseController
         KNIT_KIT_ROOT = Knitkit::Engine.root.to_s
 
+        def available_roles
+          render :json => {:success => true, :availableRoles => SecurityRole.all.collect{|role| role.to_hash(:only => [:internal_identifier, :description])}}
+        end
+
         def websites
           websites = Website.order('name ASC').all
 
@@ -107,6 +111,7 @@ module Knitkit
             :siteId => website.id,
             :type => website_section.type,
             :isSecured => website_section.is_secured?,
+            :roles => website_section.roles.collect{|item| item.internal_identifier},
             :isSection => website_section.is_section?,
             :isDocument => website_section.is_document_section?,
             :inMenu => website_section.in_menu,

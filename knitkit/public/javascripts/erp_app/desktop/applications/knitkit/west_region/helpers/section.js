@@ -12,11 +12,11 @@ Compass.ErpApp.Desktop.Applications.Knitkit.addSectionOptions = function (self, 
     if (record.data.isSecured) {
         if (currentUser.hasCapability('unsecure','WebsiteSection')) {
             items.push({
-                text:'Unsecure',
-                iconCls:'icon-document',
+                text:'Security',
+                iconCls:'icon-document_lock',
                 listeners:{
                     'click':function () {
-                        self.changeSecurityOnSection(record, false);
+                        self.changeSecurityOnSection(record, true);
                     }
                 }
             });
@@ -25,7 +25,7 @@ Compass.ErpApp.Desktop.Applications.Knitkit.addSectionOptions = function (self, 
     else {
         if (currentUser.hasCapability('secure','WebsiteSection')) {
             items.push({
-                text:'Secure',
+                text:'Security',
                 iconCls:'icon-document_lock',
                 listeners:{
                     'click':function () {

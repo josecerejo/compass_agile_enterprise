@@ -6,14 +6,14 @@ Ext.define("Compass.ErpApp.Desktop.Applications.Knitkit.PublishWindow",{
     this.addEvents(
       /**
          * @event publish_success
-         * Fired after success response is recieved from server
+         * Fired after success response is received from server
          * @param {Compass.ErpApp.Applications.Desktop.PublishWindow} this Object
          * @param {Object} Server Response
          */
       "publish_success",
       /**
          * @event publish_failure
-         * Fired after response is recieved from server with error
+         * Fired after response is received from server with error
          * @param {Compass.ErpApp.Applications.Desktop.PublishWindow} this Object
          * @param {Object} Server Response
          */
@@ -33,7 +33,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.Knitkit.PublishWindow",{
       height:300,
       buttonAlign:'center',
       plain: true,
-      items: new Ext.form.FormPanel({
+      items: Ext.create('widget.form',{
         timeout: 130000,
         baseParams:config['baseParams'],
         autoHeight:true,
