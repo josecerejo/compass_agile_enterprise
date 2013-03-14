@@ -12,6 +12,13 @@ module Knitkit
     def build_tree
       render :inline => build_document_hash.to_json
     end
+
+    def get_content
+      document_section = OnlineDocumentSection.find(params[:document_section_id])
+      content = document_section.documented_item_published_content_html(@active_publication)
+
+      render :json => {:success => true, :html => content}
+    end
     
     protected 
     
@@ -21,11 +28,6 @@ module Knitkit
     
     def find_root
       @root = OnlineDocumentSection.find(params[:section_id])
-      if @root.documented_item_published_content(@active_publication)
-        @root_content = @root.documented_item_published_content(@active_publication).body_html.gsub(/\n/, '<br/>')
-      else
-        @root_content = ""
-      end
     end
     
     def find_document_sections
@@ -35,8 +37,7 @@ module Knitkit
     def build_document_hash
       [].tap do |documents|
         @document_sections.each do |section|
-          documents <<  {:id => section.id, :title => section.title, 
-                        :leaf => section.leaf, :documented_item_published_content_html => section.documented_item_published_content_html(@active_publication)}
+          documents <<  {:id => section.id, :title => section.title, :leaf => section.leaf}
         end
       end
     end

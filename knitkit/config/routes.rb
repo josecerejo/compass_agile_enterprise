@@ -11,7 +11,7 @@ Rails.application.routes.draw do
   match '/comments/add' => 'knitkit/comments#add', :as => 'comments'
   match '/unauthorized' => 'knitkit/unauthorized#index', :as => 'knitkit/unauthorized'
   match '/view_current_publication' => 'knitkit/base#view_current_publication'
-  match '/online_document_sections/build_tree' => 'knitkit/online_document_sections#build_tree'
+  match '/online_document_sections(/:action)' => 'knitkit/online_document_sections'
 end
 
 Knitkit::Engine.routes.draw do

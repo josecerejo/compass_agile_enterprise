@@ -4,13 +4,12 @@
 <script type="text/javascript" charset="utf-8">
 
     Ext.onReady(function () {
-        var index = 0;
-        var currentItem;
+        var currentItem, tree, tabs, fitted_panel;
 
-        var tree = Ext.create('Ext.tree.Panel', {
+        tree = Ext.create('Ext.tree.Panel', {
             region: 'west',
             cls: 'tree_styles',
-            store: Ext.create('Ext.data.TreeStore',{
+            store: Ext.create('Ext.data.TreeStore', {
                 proxy: {
                     type: 'ajax',
                     url: 'online_document_sections/build_tree',
@@ -25,20 +24,20 @@
                 fields: [
                     { name: 'id' },
                     { name: 'title' },
-                    { name: 'documented_item_published_content_html' },
                     { name: 'leaf' }
                 ]
             }),
             collapsible: true,
-            tbar: {
+            dockedItems: {
+                xtype: 'toolbar',
+                docked: 'top',
                 items: [
-                    new Ext.form.TextField({
-                        id: "search",
-                        disabled: true,
-                        cls: 'document_search',
+                    {
+                        xtype: 'textfield',
                         emptyText: 'Search',
-                        allowBlank: true,
-                    })
+                        disabled: true,
+                        allowBlank: true
+                    }
                 ]
             },
             header: false,
@@ -51,40 +50,24 @@
             title: '<%= @root.title %>',
             listeners: {
                 'itemclick': function (view, record, htmlItem, index, e) {
-                    var tab_panel = Ext.getCmp('tabs_root')
-                    var tab = Ext.getCmp("tab_" + record.data['id'])
-                    if (tab) {
-                        tab_panel.setActiveTab(tab.id);
-                    }
-                    else {
-                        addTab(record);
-                    }
+                    var tab_panel = Ext.getCmp('tabs_root'),
+                            tab = Ext.getCmp("tab_" + record.data['id']);
+                    showContent(record, tab);
                 }
             }
         });
 
-        var tabs = Ext.createWidget('tabpanel', {
+        tabs = Ext.createWidget('tabpanel', {
             id: 'tabs_root',
             region: 'center',
             plain: true,
             bodyBorder: true,
-            resizeTabs: true,
-            enableTabScroll: true,
             width: 640,
-            collapsible: false,
             defaults: {
                 autoScroll: true,
-                bodyPadding: 10,
+                bodyPadding: 10
             },
-            items: [
-                {
-                    id: "tab_" + <%= @root.id.to_s %>,
-                    title: '<%= @root.title %>',
-                    html: "<%= raw @root_content.gsub(/\n/, '<br/>') %>",
-                    closable: false,
-                    autoScroll: true
-                }
-            ],
+            items: [],
             plugins: Ext.create('Ext.ux.TabCloseMenu', {
                 extraItemsTail: [
                     '-',
@@ -110,23 +93,46 @@
             })
         });
 
-        function addTab(record) {
-            ++index;
-            tabs.add({
-                id: "tab_" + record.data['id'],
-                title: record.data['title'],
-                html: record.data['documented_item_published_content_html'],
-                closable: true
-            }).show();
+        function showContent(record, tab) {
+            Ext.Ajax.request({
+                url: 'online_document_sections/get_content',
+                params: {
+                    document_section_id: record.data['id'],
+                    section_id:<%= @root.id %>
+                },
+                success: function (response) {
+                    var responseObj = Ext.JSON.decode(response.responseText);
+                    if (responseObj.success) {
+                        if (Ext.isEmpty(tab)) {
+                            tabs.add({
+                                id: "tab_" + record.data['id'],
+                                title: record.data['title'],
+                                html: responseObj.html,
+                                closable: true
+                            }).show();
+                        }
+                        else {
+                            tabs.setActiveTab(tab);
+                            tab.update(responseObj.html)
+                        }
+                    }
+                    else {
+                        Ext.Msg.alert('Error', 'Could not load content');
+                    }
+                },
+                failure: function (response) {
+                    Ext.Msg.alert('Error', 'Could not load content');
+                }
+            });
         }
 
-        var fitted_panel = Ext.createWidget('panel', {
+        fitted_panel = Ext.createWidget('panel', {
             id: 'fitted_panel',
             layout: 'border',
             header: false,
             defaults: {
                 collapsible: true,
-                split: true,
+                split: true
             },
             renderTo: 'document_content',
             autoScroll: true,
@@ -137,7 +143,33 @@
         });
 
         resize_windows();
+    });
 
+    Ext.Ajax.request({
+        url: 'online_document_sections/get_content',
+        params: {
+            document_section_id:<%= @root.id %>,
+            section_id:<%= @root.id %>
+        },
+        success: function (response) {
+            var responseObj = Ext.JSON.decode(response.responseText);
+            if (responseObj.success) {
+                Ext.getCmp('tabs_root').add({
+                    xtype: 'panel',
+                    id: "tab_" + <%= @root.id.to_s %>,
+                    title: '<%= @root.title %>',
+                    html: responseObj.html,
+                    closable: false,
+                    autoScroll: true
+                });
+            }
+            else {
+                Ext.Msg.alert('Error', 'Could not load content');
+            }
+        },
+        failure: function (response) {
+            Ext.Msg.alert('Error', 'Could not load content');
+        }
     });
 
     function resize_windows() {
