@@ -22,6 +22,6 @@ class MobileApplicationGenerator < Rails::Generators::NamedBase
     route "match '/erp_app/mobile/#{file_name}(/:action)' => \"erp_app/mobile/#{file_name}/base\""
     
     #migration
-    template "migrate/migration_template.erb", "db/data_migrations/#{RussellEdge::DataMigrator.next_migration_number}_create_#{file_name}_mobile_application.rb"
+    template "migrate/migration_template.erb", "db/data_migrations/#{RussellEdge::DataMigrator.next_migration_number(1)}_create_#{file_name}_mobile_application.rb"
   end
 end

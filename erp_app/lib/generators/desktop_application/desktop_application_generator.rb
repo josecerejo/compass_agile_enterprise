@@ -20,6 +20,6 @@ class DesktopApplicationGenerator < Rails::Generators::NamedBase
     route "match '/erp_app/desktop/#{file_name}(/:action)' => \"erp_app/desktop/#{file_name}/base\""
     
     #migration
-    template "migrate/migration_template.erb", "db/data_migrations/#{RussellEdge::DataMigrator.next_migration_number}_create_#{file_name}_desktop_application.rb"
+    template "migrate/migration_template.erb", "db/data_migrations/#{RussellEdge::DataMigrator.next_migration_number(1)}_create_#{file_name}_desktop_application.rb"
   end
 end
