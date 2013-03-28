@@ -26,7 +26,7 @@ module ErpBaseErpSvcs
     end
 
     def mount_compass_ae_engines(routes)
-      Rails.application.config.erp_base_erp_svcs.compass_ae_engines.each do |engine|
+      installed_engines.each do |engine|
         routes.mount engine => "/#{engine.name.split("::").first.underscore}"
       end
     end
@@ -38,7 +38,7 @@ module ErpBaseErpSvcs
     end
 
     def load_compass_ae_engine(engine)
-      Rails.application.config.erp_base_erp_svcs.compass_ae_engines << engine unless installed_engines.include?(engine)
+      installed_engines << engine unless installed_engines.include?(engine)
       load_compass_ae_extensions(engine)
       load_root_compass_ae_framework_extensions
     end
