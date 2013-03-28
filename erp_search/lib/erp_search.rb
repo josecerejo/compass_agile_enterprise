@@ -6,7 +6,7 @@ require "erp_search/engine"
 module ErpSearch
 
   def self.use_tenancy?
-    Object.const_defined?('Tenancy')
+    ErpBaseErpSvcs.engine_loaded?('Tenancy')
   end
   
 end

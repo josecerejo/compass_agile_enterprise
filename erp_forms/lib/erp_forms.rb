@@ -15,6 +15,6 @@ require "erp_forms/engine"
 module ErpForms
 
   def self.use_solr?
-    Object.const_defined?('ErpSearch') and ErpSearch::Config.use_solr_for_dynamic_form_models
+    ErpBaseErpSvcs.engine_loaded?('ErpSearch') and ErpSearch::Config.use_solr_for_dynamic_form_models
   end
 end
