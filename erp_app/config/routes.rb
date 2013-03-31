@@ -79,6 +79,9 @@ ErpApp::Engine.routes.draw do
   #shared
   match '/shared/configuration/(/:action(/:id(/:category_id)))' => "shared/configuration"
   match '/shared/profile_management/:action' => "shared/profile_management"
+  
+  #job_tracker
+  match '/desktop/job_tracker(/:action)' => "desktop/job_tracker/base"
 end
 
 
