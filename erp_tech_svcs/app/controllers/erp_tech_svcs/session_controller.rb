@@ -11,8 +11,7 @@ module ErpTechSvcs
           #set logout
           session[:logout_to] = params[:logout_to]
 
-          login_to = last_login_at.nil? ? params[:first_login_to] : params[:login_to]
-          login_to = login_to || params[:login_to]
+          login_to = session[:return_to_url] or (last_login_at.nil? ? params[:first_login_to] : params[:login_to])
           request.xhr? ? (render :json => {:success => true, :login_to => login_to}) : (redirect_to login_to)
         else
           message = "Login failed. Try again"
