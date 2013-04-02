@@ -33,57 +33,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.Knitkit.SectionArticlesGridPanel
     var self = this;
 		var itemId = 'editArticle-'+record.get('id');
 		var editArticleWindow = Ext.ComponentQuery.query('#'+itemId).first();
-    // var addFormItems = self.addFormItems;
-		if (self.alias.first() == 'widget.knitkit_pagearticlesgridpanel'){
-			var addFormItems = [
-				{
-                    xtype:'textfield',
-                    fieldLabel:'Content Area',
-                    name:'content_area',
-                    value:record.data.content_area
-                },
-                {
-                    xtype:'numberfield',
-                    fieldLabel:'Position',
-                    name:'position',
-                    value:record.data.position
-                }
-            ];
-		} 
-		else {
-			if (self.alias.first() == 'widget.knitkit_blogarticlesgridpanel'){
-                var addFormItems = [
-                    {
-                        xtype:'textfield',
-                        fieldLabel:'Tags',
-                        allowBlank:true,
-                        name:'tags',
-                        value:record.data.tag_list
-                    }
-				];
-			}
-		}
-
-    if(Compass.ErpApp.Utility.isBlank(editArticleWindow)){  
-        var editArticleWindow = Ext.create("Ext.window.Window",{
-          layout:'fit',
-          width:375,
-          title:'Edit Article',
-          itemId:itemId,
-          plain: true,
-          buttonAlign:'center',
-          items: {
-            xtype: 'form',
-            labelWidth: 110,
-            frame:false,
-            bodyStyle:'padding:5px 5px 0',
-            width: 425,
-            url:'/knitkit/erp_app/desktop/articles/update/' + self.sectionId,
-            defaults: {
-              width: 225
-            },
-            items: [
-            {
+    var editFormItems = [{
                 xtype:'hidden',
                 allowBlank:false,
                 name:'id',
@@ -115,14 +65,44 @@ Ext.define("Compass.ErpApp.Desktop.Applications.Knitkit.SectionArticlesGridPanel
                 checked:!record.data.display_title
               }]
             },
-            {
-              xtype:'textfield',
-              fieldLabel:'Internal ID',
-              allowBlank:true,
-              name:'internal_identifier',
-              value: record.data.internal_identifier
-            },
-            addFormItems,
+              {
+                xtype:'textfield',
+                fieldLabel:'Internal ID',
+                allowBlank:true,
+                name:'internal_identifier',
+                value: record.data.internal_identifier
+            }
+          ];
+		if (self.alias.first() == 'widget.knitkit_pagearticlesgridpanel'){
+			editFormItems = editFormItems.concat([
+                {
+                    xtype:'textfield',
+                    fieldLabel:'Content Area',
+                    name:'content_area',
+                    value:record.data.content_area
+                },
+                {
+                    xtype:'numberfield',
+                    fieldLabel:'Position',
+                    name:'position',
+                    value:record.data.position
+                }
+            ]);
+		} 
+		else {
+			if (self.alias.first() == 'widget.knitkit_blogarticlesgridpanel'){
+        editFormItems = editFormItems.concat( [
+                    {
+                        xtype:'textfield',
+                        fieldLabel:'Tags',
+                        allowBlank:true,
+                        name:'tags',
+                        value:record.data.tag_list
+                    }
+				]);
+			}
+		}
+    editFormItems = editFormItems.concat([
             {
               xtype: 'displayfield',
               fieldLabel: 'Created At',
@@ -135,7 +115,26 @@ Ext.define("Compass.ErpApp.Desktop.Applications.Knitkit.SectionArticlesGridPanel
               name: 'updated_at',
               value: record.data.updated_at
             }
-            ]
+    ]);
+    if(Ext.isEmpty(editArticleWindow)){  
+        editArticleWindow = Ext.create("Ext.window.Window",{
+          layout:'fit',
+          width:375,
+          title:'Edit Article',
+          itemId:itemId,
+          plain: true,
+          buttonAlign:'center',
+          items: {
+            xtype: 'form',
+            labelWidth: 110,
+            frame:false,
+            bodyStyle:'padding:5px 5px 0',
+            width: 425,
+            url:'/knitkit/erp_app/desktop/articles/update/' + self.sectionId,
+            defaults: {
+              width: 225
+            },
+            items: editFormItems
           },
           buttons: [{
             text:'Submit',
@@ -265,7 +264,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.Knitkit.SectionArticlesGridPanel
                 width:40,
                 items:[{
                     icon:'/images/icons/edit/edit_16x16.png',
-					iconCls:'actioncolumn_hover',
+                    iconCls:'actioncolumn_hover',
                     tooltip:'Edit Attributes',
                     handler :function(grid, rowIndex, colIndex){
                         var rec = grid.getStore().getAt(rowIndex);
