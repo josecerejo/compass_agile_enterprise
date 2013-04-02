@@ -10,11 +10,9 @@ class JobTracker < ActiveRecord::Base
     Delayed::Job.where(delayed_job_tbl[:handler].matches("%#{self.job_klass}%")).first
   end
   
-  def track_job
-    job_tracker = JobTracker.where('job_name = ?', @jobName).first
-    job_tracker = JobTracker.new(:job_name => @jobName) if job_tracker.nil?
-    job_tracker.last_run_at = Time.now
-    #job_tracker.run_time = time_str
+  def track_job(job_name)
+    job_tracker = JobTracker.where('job_name = ?', job_name).first
+    job_tracker = JobTracker.new(:job_name => job_name) if job_tracker.nil?
     job_tracker.save
   end
   
