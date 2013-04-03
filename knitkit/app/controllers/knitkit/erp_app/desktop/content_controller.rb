@@ -40,7 +40,7 @@ module Knitkit
               content.excerpt_html = html
 
               if content.save
-                if params[:site_id]
+                unless params[:site_id].blank?
                   website = Website.find(params[:site_id])
                   content.publish(website, 'Auto Publish', content.version, current_user) if website.publish_on_save?
                 end
