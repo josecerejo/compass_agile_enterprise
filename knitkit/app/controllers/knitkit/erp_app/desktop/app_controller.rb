@@ -114,6 +114,7 @@ module Knitkit
             :roles => website_section.roles.collect{|item| item.internal_identifier},
             :isSection => website_section.is_section?,
             :isDocument => website_section.is_document_section?,
+            :useMarkdown => website_section.use_markdown,
             :inMenu => website_section.in_menu,
             :renderWithBaseLayout => website_section.render_base_layout?,
             :hasLayout => !website_section.layout.blank?,

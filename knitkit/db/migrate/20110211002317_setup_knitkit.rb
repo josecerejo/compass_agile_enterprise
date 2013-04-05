@@ -46,6 +46,7 @@ class SetupKnitkit < ActiveRecord::Migration
         t.text :layout
         t.boolean :in_menu
         t.integer :position, :default => 0
+        t.boolean :use_markdown, :default => false
         t.string :internal_identifier
         t.integer :version
         t.boolean :render_base_layout, :default => true

@@ -104,6 +104,7 @@ Compass.ErpApp.Desktop.Applications.Knitkit.addDocumentOptions = function (self,
                                                 if (obj.success) {
                                                     record.appendChild(obj.node);
                                                     self.initialConfig['centerRegion'].editContent(obj.documented_content.title, obj.documented_content.id, obj.documented_content.body_html, record.data.siteId, 'article');
+                                                    window.close();
                                                 }
                                                 else {
                                                     Ext.Msg.alert("Error", obj.message);
@@ -138,6 +139,8 @@ Compass.ErpApp.Desktop.Applications.Knitkit.addDocumentOptions = function (self,
     }
 
     if (currentUser.hasCapability('edit','WebsiteSection')) {
+        var contentInfo = record.data['contentInfo'];
+
         items.push({
             text:'Update Document',
             iconCls:'icon-edit',
@@ -193,6 +196,27 @@ Compass.ErpApp.Desktop.Applications.Knitkit.addDocumentOptions = function (self,
                                     ]
                                 },
                                 {
+                                    xtype:'radiogroup',
+                                    fieldLabel:'Use markdown?',
+                                    name:'use_markdown',
+                                    columns:2,
+                                    items:[
+                                        {
+                                            boxLabel:'Yes',
+                                            name:'use_markdown',
+                                            inputValue:'yes',
+                                            checked:record.data.useMarkdown
+                                        },
+
+                                        {
+                                            boxLabel:'No',
+                                            name:'use_markdown',
+                                            inputValue:'no',
+                                            checked:!record.data.useMarkdown
+                                        }
+                                    ]
+                                },
+                                {
                                     xtype:'hidden',
                                     name:'id',
                                     value:record.data.id.split('_')[1]
@@ -211,9 +235,11 @@ Compass.ErpApp.Desktop.Applications.Knitkit.addDocumentOptions = function (self,
                                             success:function (form, action) {
                                                 self.clearWindowStatus();
                                                 var values = formPanel.getValues();
+
                                                 record.set('title', values.title);
                                                 record.set('internal_identifier', values.internal_identifier);
                                                 record.set("inMenu", (values.in_menu == 'yes'));
+                                                record.set("useMarkdown", (values.use_markdown == 'yes'));
                                                 record.commit();
                                                 updateSectionWindow.close();
                                             },

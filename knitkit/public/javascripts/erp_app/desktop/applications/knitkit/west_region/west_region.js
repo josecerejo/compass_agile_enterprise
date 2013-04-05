@@ -500,7 +500,26 @@ Ext.define("Compass.ErpApp.Desktop.Applications.Knitkit.WestRegion", {
                         webNavigator.createWindow(record.data['url']);
                     }
                     else if (record.data['isDocument']) {
-                        self.initialConfig['centerRegion'].editContent(record.data['contentInfo'].title, record.data['contentInfo'].id, record.data['contentInfo'].body_html, record.data['siteId'], 'article');
+                        var contentInfo = record.data['contentInfo'];
+                        if(record.data['useMarkdown']){
+                            self.initialConfig['centerRegion'].editDocumentationMarkdown(
+                                contentInfo.title,
+                                record.data['siteId'],
+                                contentInfo.id,
+                                contentInfo.body_html,
+                                []
+                            );
+                        }
+                        else{
+                            self.initialConfig['centerRegion'].editContent(
+                                record.data['contentInfo'].title,
+                                record.data['contentInfo'].id,
+                                record.data['contentInfo'].body_html,
+                                record.data['siteId'],
+                                'article'
+                            );
+                        }
+
                     }
                 },
                 'itemcontextmenu':function (view, record, htmlItem, index, e) {

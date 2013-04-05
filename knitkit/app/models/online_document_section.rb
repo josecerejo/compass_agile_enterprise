@@ -19,6 +19,7 @@ class OnlineDocumentSection < WebsiteSection
     section_hash = {
       :name => self.title,
       :has_layout => false,
+      :use_markdown => self.use_markdown,
       :type => self.class.to_s,
       :in_menu => self.in_menu,
       :path => self.path,

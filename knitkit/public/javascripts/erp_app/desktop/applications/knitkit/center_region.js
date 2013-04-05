@@ -42,6 +42,8 @@ Ext.define("Compass.ErpApp.Desktop.Applications.Knitkit.CenterRegion", {
         return false;
     },
 
+    /* sections */
+
     saveSectionLayout:function (sectionId, content) {
         var self = this;
         this.setWindowStatus('Saving...');
@@ -127,6 +129,96 @@ Ext.define("Compass.ErpApp.Desktop.Applications.Knitkit.CenterRegion", {
         return false;
     },
 
+    /* documentation using markdown */
+
+    saveDocumentationMarkdown:function (id, siteId, content) {
+        var self = this;
+        this.setWindowStatus('Saving...');
+        Ext.Ajax.request({
+            url:'/knitkit/erp_app/desktop/content/update',
+            method:'POST',
+            params:{
+                id:id,
+                html:content,
+                site_id:siteId
+            },
+            success:function (response) {
+                var obj = Ext.decode(response.responseText);
+                if (obj.success) {
+                    self.clearWindowStatus();
+                    Ext.getStore('knitkit_articlesgridpanelStore').load();
+                    var activeTab = self.workArea.getActiveTab();
+                    var versionsGrid = activeTab.down('knitkit_versionsarticlegridpanel');
+                    versionsGrid.getStore().load();
+                }
+                else {
+                    Ext.Msg.alert('Error', 'Error saving contents');
+                    self.clearWindowStatus();
+                }
+            },
+            failure:function (response) {
+                self.clearWindowStatus();
+                Ext.Msg.alert('Error', 'Error saving contents');
+            }
+        });
+    },
+
+    editDocumentationMarkdown:function (sectionName, websiteId, contentId, content, tbarItems) {
+        var self = this;
+        var itemId = 'markdown-' + contentId;
+        var item = this.workArea.query('#' + itemId).first();
+
+        if (Compass.ErpApp.Utility.isBlank(item)) {
+            item = Ext.create("Ext.panel.Panel", {
+                layout:'border',
+                title:sectionName,
+                save:function (comp) {
+                    var content = comp.down('codemirror').getValue();
+                    self.saveDocumentationMarkdown(contentId, websiteId, content);
+                },
+                closable:true,
+                itemId:itemId,
+                items:[
+                    {
+                        title:sectionName + ' - Markdown',
+                        tbarItems:tbarItems,
+                        disableSave:true,
+                        listeners:{
+                            save:function (comp, content) {
+                                self.saveDocumentationMarkdown(contentId, websiteId, content);
+                            }
+                        },
+                        xtype:'codemirror',
+                        parser:'erb',
+                        region:'center',
+                        sourceCode:content
+                    },
+                    {
+                        xtype:'knitkit_versionsarticlegridpanel',
+                        contentId:contentId,
+                        region:'south',
+                        height:150,
+                        collapsible:true,
+                        centerRegion:self,
+                        siteId:websiteId
+                    }
+                ],
+                listeners:{
+                    'show':function (panel) {
+                        Ext.getCmp('knitkitWestRegion').selectWebsite(websiteId);
+                    }
+                }
+            });
+
+            this.workArea.add(item);
+        }
+
+        this.workArea.setActiveTab(item);
+        return false;
+    },
+
+    /* templates */
+
     saveTemplateFile:function (path, content) {
         var self = this;
         this.setWindowStatus('Saving...');
@@ -190,6 +282,8 @@ Ext.define("Compass.ErpApp.Desktop.Applications.Knitkit.CenterRegion", {
         this.workArea.setActiveTab(item);
         return false;
     },
+
+    /* excerpts */
 
     saveExcerpt:function (id, content, siteId) {
         var self = this;
@@ -310,6 +404,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.Knitkit.CenterRegion", {
         this.workArea.setActiveTab(item);
     },
 
+    /* image */
 
     showImage:function (node, themeId) {
         var self = this;
@@ -333,6 +428,8 @@ Ext.define("Compass.ErpApp.Desktop.Applications.Knitkit.CenterRegion", {
         this.workArea.setActiveTab(item);
         return false;
     },
+
+    /* content */
 
     saveContent:function (id, content, contentType, siteId) {
         var self = this;
@@ -488,6 +585,8 @@ Ext.define("Compass.ErpApp.Desktop.Applications.Knitkit.CenterRegion", {
 
         this.workArea.setActiveTab(item);
     },
+
+    /* comment */
 
     showComment:function (comment) {
         var activeTab = this.workArea.getActiveTab();
@@ -659,22 +758,6 @@ Ext.define("Compass.ErpApp.Desktop.Applications.Knitkit.CenterRegion", {
             }
             else {
                 Ext.Msg.alert('Error', 'No ckeditor or codemirror found');
-            }
-        }
-        return false;
-    },
-
-    insertHtmlIntoActiveCkEditor:function (html) {
-        var activeTab = this.workArea.getActiveTab();
-        if (Compass.ErpApp.Utility.isBlank(activeTab)) {
-            Ext.Msg.alert('Error', 'No editor');
-        }
-        else {
-            if (activeTab.query('ckeditor').length === 0) {
-                Ext.Msg.alert('Error', 'No ckeditor found');
-            }
-            else {
-                activeTab.query('ckeditor')[0].insertHtml(html);
             }
         }
         return false;

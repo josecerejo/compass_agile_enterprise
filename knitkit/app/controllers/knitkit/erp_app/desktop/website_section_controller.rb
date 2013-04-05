@@ -104,6 +104,12 @@ module Knitkit
               @website_section.render_base_layout = params[:render_with_base_layout] == 'yes'
               @website_section.internal_identifier = params[:internal_identifier]
 
+
+              #check if this is a OnlineDocumentSection if so set markdown
+              if @website_section.is_a?(OnlineDocumentSection) || @website_section.type == 'OnlineDocumentSection'
+                @website_section.use_markdown = (params[:use_markdown] == 'yes')
+              end
+
               website = @website_section.website
               if @website_section.save
                 @website_section.publish(website, 'Auto Publish', @website_section.version, current_user) if website.publish_on_save?

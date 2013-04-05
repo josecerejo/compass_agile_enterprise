@@ -1,17 +1,17 @@
 class DocumentedContent < Content
 
-  before_save :check_internal_indentifier
+  before_save :check_internal_identifier
 
   def to_param
     permalink
   end
 
-  def check_internal_indentifier
+  def check_internal_identifier
     self.internal_identifier = self.permalink if self.internal_identifier.blank?
   end
   
   def content_hash
-    {:id => self.id, :title => self.title, :body_html => self.body_html}  
+    {:id => self.id, :title => self.title, :body_html => self.body_html}
   end
   
   def self.find_published_by_section(active_publication, website_section)

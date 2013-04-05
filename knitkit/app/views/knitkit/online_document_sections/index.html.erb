@@ -62,7 +62,6 @@
             region: 'center',
             plain: true,
             bodyBorder: true,
-            width: 640,
             defaults: {
                 autoScroll: true,
                 bodyPadding: 10
@@ -129,13 +128,13 @@
         fitted_panel = Ext.createWidget('panel', {
             id: 'fitted_panel',
             layout: 'border',
+            width: 800,
             header: false,
             defaults: {
                 collapsible: true,
                 split: true
             },
             renderTo: 'document_content',
-            autoScroll: true,
             items: [
                 tree,
                 tabs
