@@ -33,6 +33,7 @@ module Knitkit
         @website_section = WebsiteSection.find(params[:section_id])
         if @website_section.protected_with_capability?(:view)
           if !current_user and @website_section.path != @login_path
+            session[:return_to_url] = @website_section.path
             redirect_to @login_path
           elsif current_user and !current_user.has_capability?(:view, @website_section)
             redirect_to Knitkit::Config.unauthorized_url

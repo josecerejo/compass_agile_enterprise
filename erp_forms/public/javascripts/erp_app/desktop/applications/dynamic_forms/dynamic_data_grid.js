@@ -344,7 +344,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.DynamicForms.DynamicDataGridPane
             url: '/erp_forms/erp_app/desktop/dynamic_forms/forms/get',
             method: 'POST',
             params:{ // params can come from create response or grid store
-                id:(Ext.isEmpty(rec.model_name) ? rec.get("form_id") : rec.form_id),
+                //id:(Ext.isEmpty(rec.model_name) ? rec.get("form_id") : rec.form_id),
                 record_id:(Ext.isEmpty(rec.model_name) ? rec.get("id") : rec.id),
                 model_name:(Ext.isEmpty(rec.model_name) ? rec.get("model_name") : rec.model_name),
                 form_action: 'update'

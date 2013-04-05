@@ -164,6 +164,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.Knitkit.ArticlesGridPanel",{
 
     // create the Data Store
     var store = Ext.create('Ext.data.Store', {
+      storeId: 'knitkit_articlesgridpanelStore',
       pageSize: 20,
       proxy: {
         type: 'ajax',

@@ -6,6 +6,16 @@ require "erp_base_erp_svcs/non_escape_json_string"
 
 module ErpBaseErpSvcs
   class << self
+
+    def installed_engines
+      ErpBaseErpSvcs::Config.compass_ae_engines
+    end
+
+    # engine_name should be module/class name (i.e. ErpSearch)
+    def engine_loaded?(engine_name)
+      installed_engines.map { |compass_ae_engine| compass_ae_engine.railtie_name.camelize }.include?(engine_name)
+    end
+
     def setup_compass_ae_callback(config, engine, &block)
       config.before_initialize do
         callback = (Rails.application.config.cache_classes ? 'after_initialize' : 'to_prepare') 
@@ -16,7 +26,7 @@ module ErpBaseErpSvcs
     end
 
     def mount_compass_ae_engines(routes)
-      Rails.application.config.erp_base_erp_svcs.compass_ae_engines.each do |engine|
+      installed_engines.each do |engine|
         routes.mount engine => "/#{engine.name.split("::").first.underscore}"
       end
     end
@@ -28,7 +38,7 @@ module ErpBaseErpSvcs
     end
 
     def load_compass_ae_engine(engine)
-      Rails.application.config.erp_base_erp_svcs.compass_ae_engines << engine unless Rails.application.config.erp_base_erp_svcs.compass_ae_engines.include?(engine)
+      installed_engines << engine unless installed_engines.include?(engine)
       load_compass_ae_extensions(engine)
       load_root_compass_ae_framework_extensions
     end

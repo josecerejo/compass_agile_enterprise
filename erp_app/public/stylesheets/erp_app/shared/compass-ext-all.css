@@ -393,12 +393,34 @@
     filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='/images/icons/arrow_down_blue/arrow_up_blue_16x16.png', sizingMethod='crop');
 }
 
-.icon-eye {
-    background-image:url( /images/icons/eye/eye_16x16.png ) !important;
-    filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='/images/icons/eye/eye_16x16.png', sizingMethod='crop');
+.warning-col {
+    background-image: url(/images/icons/warning/warning_16x16.png) !important;
+    filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='/images/icons/warning/warning_16x16.png', sizingMethod='crop');
+    height: 16px;
+    width: 16px;
+    cursor:pointer !important;
 }
 
-.icon-zoom-out {
-    background-image:url( /images/icons/zoom_out/zoom_out_16x16.png ) !important;
-    filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='/images/icons/zoom_out/zoom_out_16x16.png', sizingMethod='crop');
+.schedule-col {
+    background-image: url(/images/icons/calendar/calendar_16x16.png) !important;
+    filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='/images/icons/calendar/calendar_16x16.png', sizingMethod='crop');
+    height: 16px;
+    width: 16px;
+    cursor:pointer !important;
+}
+
+.accept-col {
+    background-image: url(/images/icons/accept/accept_16x16.png) !important;
+    filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='/images/icons/accept/accept_16x16.png', sizingMethod='crop');
+    height: 16px;
+    width: 16px;
+    cursor:pointer !important;
+}
+
+.delete-col {
+    background-image: url(/images/icons/delete/delete_16x16.png) !important;
+    filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='/images/icons/delete/delete_16x16.png', sizingMethod='crop');
+    height: 16px;
+    width: 16px;
+    cursor:pointer !important;
 }

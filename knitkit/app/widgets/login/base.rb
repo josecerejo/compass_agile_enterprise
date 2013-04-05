@@ -4,7 +4,7 @@ module Widgets
 
       def index
         @logout_to  = params[:logout_to]
-        @login_to   = params[:login_to]
+        @login_to   = (session[:return_to_url] or params[:login_to])
         @signup_url = params[:signup_url]
         @reset_password_url = params[:reset_password_url]
     
