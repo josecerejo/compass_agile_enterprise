@@ -61,7 +61,7 @@ module ErpBaseErpSvcs
               status = args
             end
             tracked_status_type = status.is_a?(TrackedStatusType) ? status : TrackedStatusType.find_by_internal_identifier(status.to_s)
-            raise "TrackedStatusType does not exists #{status.to_s}" unless tracked_status_type
+            raise "TrackedStatusType does not exist #{status.to_s}" unless tracked_status_type
 
             #set current StatusApplication thru_date to now
             current_status_application = self.status_applications.last
