@@ -181,9 +181,9 @@ module ErpTechSvcs
           end
 
           def roles
-            SecurityRole.joins(:capability_accessors => :capability)
-            .where(:capabilities => {:capability_resource_type => self.class.name})
-            .where(:capabilities => {:capability_resource_id => self.id})
+            SecurityRole.joins(:capability_accessors => :capability).
+              where(:capabilities => {:capability_resource_type => get_superclass}).
+              where(:capabilities => {:capability_resource_id => self.id})
           end
 
           def protect_with_capability(capability_type_iid)
