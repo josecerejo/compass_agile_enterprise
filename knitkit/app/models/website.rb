@@ -273,7 +273,8 @@ class Website < ActiveRecord::Base
     end
 
     online_document_sections.each do |online_documented_section|
-      File.open(File.join(documented_contents_path, "#{online_documented_section.internal_identifier}.html"), 'wb+') { |f| f.puts(online_documented_section.documented_item_published_content_html(active_publication)) }
+      extension = online_documented_section.use_markdown == true ? 'md' : 'html'
+      File.open(File.join(documented_contents_path, "#{online_documented_section.internal_identifier}.#{extension}"), 'wb+') { |f| f.puts(online_documented_section.documented_item_published_content_html(active_publication)) }
     end
 
     self.files.where("directory like '%/sites/#{self.iid}/images%'").all.each do |image_asset|
@@ -519,7 +520,8 @@ class Website < ActiveRecord::Base
       if section.is_a? OnlineDocumentSection
         section.use_markdown = hash[:use_markdown]
         section.save
-        entry_data = entries.find { |entry| entry[:type] == 'documented contents' and entry[:name] == "#{section.internal_identifier}.html" }[:data]
+        extension_type =  hash[:use_markdown] ? 'md' : 'html'
+        entry_data = entries.find { |entry| entry[:type] == 'documented contents' and entry[:name] == "#{section.internal_identifier}.#{extension_type}" }[:data]
         documented_content = DocumentedContent.create(:title => section.title, :body_html => entry_data)
         DocumentedItem.create(:documented_content_id => documented_content.id, :online_document_section_id => section.id)
       end
@@ -530,7 +532,8 @@ class Website < ActiveRecord::Base
           child_section.save
           child_section.move_to_child_of(section)
           # CREATE THE DOCUMENTED CONTENT HERE
-          entry_data = entries.find { |entry| entry[:type] == 'documented contents' and entry[:name] == "#{child_section.internal_identifier}.html" }[:data]
+          extension_type =  section_hash[:use_markdown] ? 'md' : 'html'
+          entry_data = entries.find { |entry| entry[:type] == 'documented contents' and entry[:name] == "#{child_section.internal_identifier}.#{extension_type}" }[:data]
           documented_content = DocumentedContent.create(:title => child_section.title, :body_html => entry_data)
           DocumentedItem.create(:documented_content_id => documented_content.id, :online_document_section_id => child_section.id)
         end

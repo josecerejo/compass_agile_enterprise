@@ -3,7 +3,7 @@ class PublishedWebsite < ActiveRecord::Base
 
   belongs_to :website
   belongs_to :published_by, :class_name => "User"
-  has_many   :published_elements, :dependent => :destroy
+  has_many :published_elements, :dependent => :destroy
 
   def published_by_username
     self.published_by.username rescue ''
@@ -16,7 +16,7 @@ class PublishedWebsite < ActiveRecord::Base
       published_website.active = false
       published_website.save
     end
-    
+
     #activate
     published_website = self.where(:website_id => website.id).where(:version => version).first
     published_website.active = true
@@ -30,18 +30,25 @@ class PublishedWebsite < ActiveRecord::Base
 
     #get a publish sections
     website_sections = new_publication.website.website_sections
-    website_sections = website_sections | website_sections.collect{|section| section.descendants}.flatten
+    website_sections = website_sections | website_sections.collect { |section| section.descendants }.flatten
     website_sections.each do |website_section|
-      if new_publication.published_elements.where('published_element_record_id = ? and (published_element_record_type = ? or published_element_record_type = ?)', website_section.id, website_section.class.to_s, website_section.class.superclass.to_s).first.nil?
-        published_element = PublishedElement.new
-        published_element.published_website = new_publication
-        published_element.published_element_record = website_section
-        published_element.version = website_section.version
-        published_element.published_by = current_user
-        published_element.save
+      #get nested elements too
+      website_section.self_and_descendants.each do |website_section|
+        if new_publication.published_elements.where('published_element_record_id = ? and (published_element_record_type = ? or published_element_record_type = ?)', website_section.id, website_section.class.to_s, website_section.class.superclass.to_s).first.nil?
+          published_element = PublishedElement.new
+          published_element.published_website = new_publication
+          published_element.published_element_record = website_section
+          published_element.version = website_section.version
+          published_element.published_by = current_user
+          published_element.save
+        end
       end
 
-      elements = elements | website_section.contents
+      if website_section.is_a?(OnlineDocumentSection)
+        elements = elements | [website_section.documented_item.content]
+      else
+        elements = elements | website_section.contents
+      end
     end
 
     #make sure all elements have published_element objects
