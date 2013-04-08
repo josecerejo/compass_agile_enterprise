@@ -6,41 +6,90 @@ Ext.define("Compass.ErpApp.Desktop.Applications.Knitkit.FileAssetsPanel",{
     this.websiteId = null;
     var self = this;
     self.module = config.module;
-			
+		
     this.changeSecurityOnFile = function(node, secure, model, websiteId){
-      var msg = secure ? 'Securing file...' : 'Unsecuring file...';
-      var waitMsg = Ext.Msg.wait("Please Wait", msg);
+      var updateUrl = '/knitkit/erp_app/desktop/file_assets/'+model+'/update_security';
       Ext.Ajax.request({
-        url: '/knitkit/erp_app/desktop/file_assets/'+model+'/update_security',
-        method: 'POST',
-        params:{
-          path:node.get('id'),
-          secure:secure,
-          website_id:websiteId
-        },
-        success: function(response) {
-          var obj = Ext.decode(response.responseText);
-          if(obj.success){
-            waitMsg.hide();
-            if(secure){
-              node.set('iconCls', 'icon-document_lock');
-            }
-            else{
-              node.set('iconCls', 'icon-document');
-            }
-            node.set('isSecured',secure);
-            node.commit();
+          url:'/knitkit/erp_app/desktop/available_roles',
+          method:'POST',
+          success:function (response) {
+              var obj = Ext.decode(response.responseText);
+              if (obj.success) {
+                  Ext.create('widget.knikit_selectroleswindow',{
+                      baseParams:{
+                          path:node.get('id'),
+                          website_id:websiteId
+                      },
+                      url: updateUrl,
+                      currentRoles:node.get('roles'),
+                      availableRoles:obj.availableRoles,
+                      listeners:{
+                          success:function(window, response){
+                            if(response.success){
+                              node.set('roles', response.roles);
+                              if (response.secured) {
+                                  node.set('iconCls', 'icon-document_lock');
+                              }
+                              else {
+                                  node.set('iconCls', 'icon-document');
+                              }
+                              node.set('isSecured', response.secured);
+                              node.commit();
+                            }
+                            else{
+                              Ext.Msg.alert('Error', 'Error securing file.');
+                            }
+                          },
+                          failure:function(){
+                            Ext.Msg.alert('Error', 'Could not update security');
+                          }
+                      }
+                  }).show();
+              }
+              else {
+                  Ext.Msg.alert('Error', 'Could not load available roles');
+              }
+          },
+          failure:function (response) {
+              Ext.Msg.alert('Error', 'Could not load available roles');
           }
-          else{
-            Ext.Msg.alert('Error', 'Error securing file.');
-          }
-        },
-        failure: function(response) {
-          waitMsg.hide();
-          Ext.Msg.alert('Error', 'Error securing file.');
-        }
       });
-    };
+    },
+
+    // this.changeSecurityOnFile = function(node, secure, model, websiteId){
+    //   var msg = secure ? 'Securing file...' : 'Unsecuring file...';
+    //   var waitMsg = Ext.Msg.wait("Please Wait", msg);
+    //   Ext.Ajax.request({
+    //     url: '/knitkit/erp_app/desktop/file_assets/'+model+'/update_security',
+    //     method: 'POST',
+    //     params:{
+    //       path:node.get('id'),
+    //       secure:secure,
+    //       website_id:websiteId
+    //     },
+    //     success: function(response) {
+    //       var obj = Ext.decode(response.responseText);
+    //       if(obj.success){
+    //         waitMsg.hide();
+    //         if(secure){
+    //           node.set('iconCls', 'icon-document_lock');
+    //         }
+    //         else{
+    //           node.set('iconCls', 'icon-document');
+    //         }
+    //         node.set('isSecured',secure);
+    //         node.commit();
+    //       }
+    //       else{
+    //         Ext.Msg.alert('Error', 'Error securing file.');
+    //       }
+    //     },
+    //     failure: function(response) {
+    //       waitMsg.hide();
+    //       Ext.Msg.alert('Error', 'Error securing file.');
+    //     }
+    //   });
+    // };
 
     this.sharedFileAssetsTreePanel = Ext.create("Compass.ErpApp.Shared.FileManagerTree",{
       loadMask: true,
@@ -107,7 +156,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.Knitkit.FileAssetsPanel",{
       },
       {
         nodeType:'leaf',
-        text:'Update Security',
+        text:'Security',
         iconCls:'icon-document_lock',
         listeners:{
           scope:self,
@@ -204,7 +253,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.Knitkit.FileAssetsPanel",{
       },
       {
         nodeType:'leaf',
-        text:'Update Security',
+        text:'Security',
         iconCls:'icon-document_lock',
         listeners:{
           scope:self,
