@@ -1,3 +1,7 @@
+Version 2.1.4 - 04-08-2013
+- Added ability to use Markdown in Document Sections
+- Added ability to assign multiple roles to Website Sections and Menu Items
+- Fixed bug in website import / export
 Version 2.1.3 - 02-26-2013
 - Fixed padding of ckeditor toolbar
 - Added ability to apply theme css to content
