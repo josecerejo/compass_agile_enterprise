@@ -208,7 +208,7 @@ class Website < ActiveRecord::Base
     setup_hash[:website_navs] = website_navs.collect do |website_nav|
       {
           :name => website_nav.name,
-          :items => website_nav.items.positioned.map { |website_nav_item| build_menu_item_hash(website_nav_item) }
+          :items => website_nav.items.positioned.map { |website_nav_item| website_nav_item.build_menu_item_hash }
       }
     end
 
@@ -452,9 +452,16 @@ class Website < ActiveRecord::Base
         child_website_item = build_menu_item(item)
         child_website_item.move_to_child_of(website_item)
       end
-      #add role if is_secured
-      website_item.add_role(website.role) if hash[:is_secured]
-
+      
+      #handle security
+      unless hash[:roles].empty? 
+        capability = website_item.add_capability(:view)
+        hash[:roles].each do |role_iid|
+          role = SecurityRole.find_by_internal_identifier(role_iid)
+          role.add_capability(capability)
+        end
+      end
+      
       website_item
     end
 
@@ -511,9 +518,16 @@ class Website < ActiveRecord::Base
           DocumentedItem.create(:documented_content_id => documented_content.id, :online_document_section_id => child_section.id)
         end
       end
-      #add role if is_secured
-      section.add_role(website.role) if hash[:is_secured]
-
+      
+      #handle security
+      unless hash[:roles].empty? 
+        capability = section.add_capability(:view)
+        hash[:roles].each do |role_iid|
+          role = SecurityRole.find_by_internal_identifier(role_iid)
+          role.add_capability(capability)
+        end
+      end
+      
       section
     end
 
@@ -522,19 +536,4 @@ class Website < ActiveRecord::Base
   def website_role_iid
     "website_#{self.iid}_access"
   end
-
-  private
-
-  def build_menu_item_hash(menu_item)
-    {
-        :title => menu_item.title,
-        :url => menu_item.url,
-        :is_secured => menu_item.is_secured?,
-        :linked_to_item_type => menu_item.linked_to_item_type,
-        :linked_to_item_path => menu_item.linked_to_item.nil? ? nil : menu_item.linked_to_item.path,
-        :position => menu_item.position,
-        :items => menu_item.children.collect { |child| build_menu_item_hash(child) }
-    }
-  end
-
 end

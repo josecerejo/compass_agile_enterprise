@@ -90,6 +90,7 @@ module Knitkit
             :canAddMenuItems => true,
             :websiteId => website.id,
             :isSecured => item.is_secured?,
+            :roles => item.roles.collect{|item| item.internal_identifier},
             :linkedToId => linked_to_item_id,
             :websiteNavItemId => item.id,
             :url => url,

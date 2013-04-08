@@ -123,8 +123,8 @@ Compass.ErpApp.Desktop.Applications.Knitkit.addMenuOptions = function (self, ite
                                 text:'Submit',
                                 listeners:{
                                     'click':function (button) {
-                                        var window = button.findParentByType('window');
-                                        var formPanel = window.query('form')[0];
+                                        var window = button.findParentByType('window'),
+                                        	formPanel = window.query('form')[0];
                                         self.setWindowStatus('Creating menu item...');
                                         formPanel.getForm().submit({
                                             reset:true,
@@ -137,6 +137,7 @@ Compass.ErpApp.Desktop.Applications.Knitkit.addMenuOptions = function (self, ite
                                                 else {
                                                     Ext.Msg.alert("Error", obj.msg);
                                                 }
+												window.close();
                                             },
                                             failure:function (form, action) {
                                                 self.clearWindowStatus();

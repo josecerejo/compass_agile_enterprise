@@ -9,31 +9,16 @@ Compass.ErpApp.Desktop.Applications.Knitkit.addSectionOptions = function (self, 
         }
     });
 
-    if (record.data.isSecured) {
-        if (currentUser.hasCapability('unsecure','WebsiteSection')) {
-            items.push({
-                text:'Security',
-                iconCls:'icon-document_lock',
-                listeners:{
-                    'click':function () {
-                        self.changeSecurityOnSection(record, true);
-                    }
+    if (currentUser.hasCapability('unsecure','WebsiteSection') || currentUser.hasCapability('secure','WebsiteSection')) {
+        items.push({
+            text:'Security',
+            iconCls:'icon-document_lock',
+            listeners:{
+                'click':function () {
+                    self.changeSecurity(record, '/knitkit/erp_app/desktop/section/update_security', record.data.id.split('_')[1]);
                 }
-            });
-        }
-    }
-    else {
-        if (currentUser.hasCapability('secure','WebsiteSection')) {
-            items.push({
-                text:'Security',
-                iconCls:'icon-document_lock',
-                listeners:{
-                    'click':function () {
-                        self.changeSecurityOnSection(record, true);
-                    }
-                }
-            });
-        }
+            }
+        });
     }
 
     if (currentUser.hasCapability('create','WebsiteSection')) {

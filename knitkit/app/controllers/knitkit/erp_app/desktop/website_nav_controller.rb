@@ -155,18 +155,27 @@ module Knitkit
           if current_user.has_capability?('secure', 'WebsiteNavItem') or current_user.has_capability?('unsecure', 'WebsiteNavItem')
             website_nav_item = WebsiteNavItem.find(params[:id])
 
-            if params[:secure] == 'true'
-              c = website_nav_item.add_capability(:view)
-              roles = ['admin', 'website_author', website_nav_item.website_nav.website.website_role_iid]
-              roles.each do |r|
-                role = SecurityRole.find_by_internal_identifier(r)
-                role.add_capability(c)
+            roles = []
+
+            #get roles
+            params.each do |k, v|
+              if v == 'on'
+                roles.push(k)
               end
-            else
-              website_nav_item.remove_capability(:view)
             end
 
-            render :json => {:success => true}
+            if roles.empty?
+              website_nav_item.remove_capability(:view)
+            else
+              capability = website_nav_item.add_capability(:view)
+              capability.remove_all_roles
+              roles.each do |r|
+                role = SecurityRole.find_by_internal_identifier(r)
+                role.add_capability(capability)
+              end
+            end
+
+            render :json => {:success => true, :secured => website_nav_item.is_secured?, :roles => website_nav_item.roles.collect{|item| item.internal_identifier}}
           else
             render :json => {:success => false, :message => "User does not have capability."}
           end

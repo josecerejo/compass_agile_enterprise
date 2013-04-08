@@ -147,7 +147,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.Knitkit.WestRegion", {
         });
     },
 
-    changeSecurityOnSection:function (node) {
+    changeSecurity:function (node, updateUrl, id) {
         Ext.Ajax.request({
             url:'/knitkit/erp_app/desktop/available_roles',
             method:'POST',
@@ -156,10 +156,10 @@ Ext.define("Compass.ErpApp.Desktop.Applications.Knitkit.WestRegion", {
                 if (obj.success) {
                     Ext.create('widget.knikit_selectroleswindow',{
                         baseParams:{
-                            id:node.data.id.split('_')[1],
+                            id:id,
                             site_id:node.get('siteId')
                         },
-                        url:'/knitkit/erp_app/desktop/section/update_security',
+                        url: updateUrl,
                         currentRoles:node.get('roles'),
                         availableRoles:obj.availableRoles,
                         listeners:{
@@ -186,41 +186,6 @@ Ext.define("Compass.ErpApp.Desktop.Applications.Knitkit.WestRegion", {
             },
             failure:function (response) {
                 Ext.Msg.alert('Error', 'Could not load available roles');
-            }
-        });
-    },
-
-    changeSecurityOnMenuItem:function (node, secure) {
-        var self = this;
-        self.setWindowStatus('Updating menu item security...');
-        Ext.Ajax.request({
-            url:'/knitkit/erp_app/desktop/website_nav/update_security',
-            method:'POST',
-            params:{
-                id:node.data.websiteNavItemId,
-                site_id:node.data.websiteId,
-                secure:secure
-            },
-            success:function (response) {
-                var obj = Ext.decode(response.responseText);
-                if (obj.success) {
-                    self.clearWindowStatus();
-                    if (secure) {
-                        node.set('iconCls', 'icon-document_lock');
-                    }
-                    else {
-                        node.set('iconCls', 'icon-document');
-                    }
-                    node.set('isSecured', secure);
-                    node.commit();
-                }
-                else {
-                    Ext.Msg.alert('Error', 'Error securing menu item');
-                }
-            },
-            failure:function (response) {
-                self.clearWindowStatus();
-                Ext.Msg.alert('Error', 'Error securing menu item');
             }
         });
     },
