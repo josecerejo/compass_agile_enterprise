@@ -14,7 +14,6 @@ module Knitkit
                 result = {:success => false, :message => 'Blog can not be the title of a Blog'}
               else
                 website_section = WebsiteSection.new
-                website_section.website_id = website.id
                 website_section.in_menu = params[:in_menu] == 'yes'
                 website_section.title = params[:title]
                 website_section.render_base_layout = params[:render_with_base_layout] == 'yes'
@@ -26,6 +25,8 @@ module Knitkit
                   if params[:website_section_id]
                     parent_website_section = WebsiteSection.find(params[:website_section_id])
                     website_section.move_to_child_of(parent_website_section)
+                  else
+                    website_section.website_id = website.id
                   end
 
                   if params[:type] == "OnlineDocumentSection"

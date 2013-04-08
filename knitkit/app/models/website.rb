@@ -1,8 +1,9 @@
 class Website < ActiveRecord::Base
   attr_protected :created_at, :updated_at
 
-  after_destroy :remove_sites_directory, :remove_website_role
-  after_create :setup_website
+  after_destroy  :remove_sites_directory, :remove_website_role
+  before_destroy :destroy_sections
+  after_create   :setup_website
 
   protected_with_capabilities
   has_file_assets
@@ -24,7 +25,7 @@ class Website < ActiveRecord::Base
       where('role_type_id = ?', RoleType.website_owner)
     end
   end
-  has_many :website_sections, :dependent => :destroy, :order => :lft do
+  has_many :website_sections, :order => :lft do
     def paths
       collect { |website_section| website_section.paths }.flatten
     end
@@ -53,6 +54,18 @@ class Website < ActiveRecord::Base
 
   alias :sections :website_sections
   alias :hosts :website_hosts
+  
+  #We only want to destroy parent sections as better nested set will destroy children for us
+  def destroy_sections
+    parents = []
+    website_sections.each do |section|
+      unless section.child?
+        parents << section
+      end
+    end
+    
+    parents.each {|parent| parent.destroy}
+  end
 
   def to_label
     self.name
@@ -504,6 +517,8 @@ class Website < ActiveRecord::Base
         end
       end
       if section.is_a? OnlineDocumentSection
+        section.use_markdown = hash[:use_markdown]
+        section.save
         entry_data = entries.find { |entry| entry[:type] == 'documented contents' and entry[:name] == "#{section.internal_identifier}.html" }[:data]
         documented_content = DocumentedContent.create(:title => section.title, :body_html => entry_data)
         DocumentedItem.create(:documented_content_id => documented_content.id, :online_document_section_id => section.id)
@@ -511,6 +526,8 @@ class Website < ActiveRecord::Base
       if hash[:online_document_sections]
         hash[:online_document_sections].each do |section_hash|
           child_section = build_section(section_hash, entries, website, current_user)
+          child_section.use_markdown = section_hash[:use_markdown]
+          child_section.save
           child_section.move_to_child_of(section)
           # CREATE THE DOCUMENTED CONTENT HERE
           entry_data = entries.find { |entry| entry[:type] == 'documented contents' and entry[:name] == "#{child_section.internal_identifier}.html" }[:data]
@@ -520,11 +537,13 @@ class Website < ActiveRecord::Base
       end
       
       #handle security
-      unless hash[:roles].empty? 
-        capability = section.add_capability(:view)
-        hash[:roles].each do |role_iid|
-          role = SecurityRole.find_by_internal_identifier(role_iid)
-          role.add_capability(capability)
+      if hash[:roles] #if this is a OnlineDocumentSection will not have roles
+        unless hash[:roles].empty? 
+          capability = section.add_capability(:view)
+          hash[:roles].each do |role_iid|
+            role = SecurityRole.find_by_internal_identifier(role_iid)
+            role.add_capability(capability)
+          end
         end
       end
       

@@ -26,6 +26,7 @@ class OnlineDocumentSection < WebsiteSection
       :permalink => self.permalink,
       :internal_identifier => self.internal_identifier,
       :position => self.position,
+      :use_markdown => self.use_markdown,
       :online_document_sections => self.children.each.map{|child| child.build_section_hash},
       :articles => [],
       :documented_item => {

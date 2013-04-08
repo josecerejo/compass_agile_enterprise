@@ -93,6 +93,7 @@ module Knitkit
                   :websiteId => website_nav.website.id,
                   :url => url,
                   :isSecure => false,
+                  :roles => [],
                   :canAddMenuItems => true,
                   :websiteNavItemId => website_nav_item.id,
                   :iconCls => 'icon-document',

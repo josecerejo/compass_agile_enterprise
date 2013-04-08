@@ -191,8 +191,6 @@ class WebsiteSection < ActiveRecord::Base
     self.internal_identifier = self.permalink if self.internal_identifier.blank?
   end
   
-  
-
   private
 
   def self.get_published_version(active_publication, content)

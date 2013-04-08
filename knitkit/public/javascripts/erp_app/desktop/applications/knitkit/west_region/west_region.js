@@ -68,7 +68,8 @@ Ext.define("Compass.ErpApp.Desktop.Applications.Knitkit.WestRegion", {
                         self.clearWindowStatus();
                         var obj = Ext.decode(response.responseText);
                         if (obj.success) {
-                            node.remove(true);
+                            node.removeAll();
+							node.remove();
                         }
                         else {
                             Ext.Msg.alert('Error', 'Error deleting Website');
@@ -359,13 +360,18 @@ Ext.define("Compass.ErpApp.Desktop.Applications.Knitkit.WestRegion", {
                 },
                 {
                     name:'roles'
+                },
+                {
+                    name:'useMarkdown'
                 }
             ],
             listeners:{
                 'load':function(store, node, records){
-                  var websiteId = records[0].id.split('_')[1];
-                  var westRegion = Ext.ComponentQuery.query('#knitkitWestRegion').first();
-                  westRegion.selectWebsite(websiteId);
+                  if(records.length > 0){
+					var websiteId = records[0].id.split('_')[1];
+                  		westRegion = Ext.ComponentQuery.query('#knitkitWestRegion').first();
+                  	westRegion.selectWebsite(websiteId);
+				  }	
                 }
             }
         });
