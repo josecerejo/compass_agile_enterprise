@@ -1,8 +1,8 @@
 module ErpTxnsAndAccts
-	module Extensions
-		module ActiveRecord
-			module ActsAsBizTxnAccount
-			
+  module Extensions
+    module ActiveRecord
+      module ActsAsBizTxnAccount
+
         def self.included(base)
           base.extend(ClassMethods)
         end
@@ -21,6 +21,7 @@ module ErpTxnsAndAccts
 
             [
               :biz_txn_acct_type,
+              :txn_account_type,
               :biz_txn_events,
               :biz_txn_acct_party_roles,
               :txn_events,:add_party_with_role,
@@ -52,13 +53,13 @@ module ErpTxnsAndAccts
           end
 
           def destroy_biz_txn_account
-					  self.biz_txn_acct_root.destroy if (self.biz_txn_acct_root && !self.biz_txn_acct_root.frozen?)
-					end
+            self.biz_txn_acct_root.destroy if (self.biz_txn_acct_root && !self.biz_txn_acct_root.frozen?)
+          end
         end
-        
+
         module SingletonMethods
         end
-        
+
       end#ActsAsBizTxnAccount
     end#ActiveRecord
   end#Extensions
