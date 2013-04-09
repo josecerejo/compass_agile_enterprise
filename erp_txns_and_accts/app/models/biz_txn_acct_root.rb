@@ -1,7 +1,7 @@
 class BizTxnAcctRoot < ActiveRecord::Base
 
   belongs_to :biz_txn_acct, :polymorphic => true
-  belongs_to :txn_account_type, :foreign_key => biz_txn_acct_type_id
+  belongs_to :txn_account_type, :class_name => 'BizTxnAcctType', :foreign_key => 'biz_txn_acct_type_id'
   has_many   :biz_txn_events, :dependent => :destroy
   has_many   :biz_txn_acct_party_roles, :dependent => :destroy
 
