@@ -21,7 +21,7 @@ module ErpTxnsAndAccts
 
             [
               :biz_txn_acct_type,
-              :txn_account_type,
+              :txn_account_type,:txn_account_type=,
               :biz_txn_events,
               :biz_txn_acct_party_roles,
               :txn_events,:add_party_with_role,
