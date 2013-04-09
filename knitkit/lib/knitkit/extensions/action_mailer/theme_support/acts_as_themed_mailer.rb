@@ -49,7 +49,7 @@ module Knitkit
             end
 
             def current_theme_paths(website)
-              website.themes.active.map { |theme| {:path => theme.path.to_s, :url => theme.url.to_s} }
+              website.nil? ? [] : website.themes.active.map { |theme| {:path => theme.path.to_s, :url => theme.url.to_s} }
             end
 
           end #InstanceMethods
