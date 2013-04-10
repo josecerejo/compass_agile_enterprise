@@ -164,25 +164,32 @@ module Knitkit
         def update_security
           path   = params[:path]
           secure = params[:secure]
-          
-          file = @assets_model.files.find(:first, :conditions => ['name = ? and directory = ?', ::File.basename(path), ::File.dirname(path)])
-          
-          if secure == 'true'
-            c = file.add_capability(:download)
-            roles = ['admin', 'website_author', 'content_author']
-            roles << @assets_model.website_role_iid if @context == :website
-            roles.each do |r|
-              role = SecurityRole.find_by_internal_identifier(r)
-              role.add_capability(c)
+          roles = []
+
+          #get roles
+          params.each do |k, v|
+            if v == 'on'
+              roles.push(k)
             end
-          else
-            file.remove_capability(:download)
           end
 
-          # if we're using S3, set file permissions to private or public_read   
-          @file_support.set_permissions(path, ((secure == 'true') ? :private : :public_read)) if ErpTechSvcs::Config.file_storage == :s3
+          file = @assets_model.files.where(['name = ? and directory = ?', ::File.basename(path), ::File.dirname(path)]).first
+
+          if roles.empty?
+            file.remove_capability(:download)
+          else
+            capability = file.add_capability(:download)
+            capability.remove_all_roles
+            roles.each do |r|
+              role = SecurityRole.find_by_internal_identifier(r)
+              role.add_capability(capability)
+            end
+          end
           
-          render :json =>  {:success => true}
+          # if we're using S3, set file permissions to private or public_read   
+          @file_support.set_permissions(path, (file.is_secured? ? :private : :public_read)) if ErpTechSvcs::Config.file_storage == :s3
+          
+          render :json => {:success => true, :secured => file.is_secured?, :roles => file.roles.uniq.collect{|item| item.internal_identifier}}
         end
 
         protected

@@ -141,7 +141,7 @@ class WebsiteSection < ActiveRecord::Base
       :type => self.class.to_s,
       :in_menu => self.in_menu,
       :articles => [],
-      :is_secured => self.is_secured?,
+      :roles => self.roles.collect(&:internal_identifier),
       :path => self.path,
       :permalink => self.permalink,
       :internal_identifier => self.internal_identifier,
@@ -191,8 +191,6 @@ class WebsiteSection < ActiveRecord::Base
     self.internal_identifier = self.permalink if self.internal_identifier.blank?
   end
   
-  
-
   private
 
   def self.get_published_version(active_publication, content)

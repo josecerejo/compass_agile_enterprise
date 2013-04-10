@@ -54,7 +54,6 @@ module Knitkit
                 layout = options[:layout] ? "menus/#{options[:layout]}" : "menus/knitkit/default_sub_menu"
               else
                 section = options[:section_unique_name].nil? ? @website_section : WebsiteSection.find_by_internal_identifier(options[:section_unique_name])
-                raise "No website sections exist" if section.nil?
                 locals[:section] = section
                 layout = options[:layout] ? "menus/#{options[:layout]}" : "menus/knitkit/default_sub_section_menu"
               end

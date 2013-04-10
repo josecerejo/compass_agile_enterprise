@@ -68,7 +68,8 @@ Ext.define("Compass.ErpApp.Desktop.Applications.Knitkit.WestRegion", {
                         self.clearWindowStatus();
                         var obj = Ext.decode(response.responseText);
                         if (obj.success) {
-                            node.remove(true);
+                            node.removeAll();
+							node.remove();
                         }
                         else {
                             Ext.Msg.alert('Error', 'Error deleting Website');
@@ -147,7 +148,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.Knitkit.WestRegion", {
         });
     },
 
-    changeSecurityOnSection:function (node) {
+    changeSecurity:function (node, updateUrl, id) {
         Ext.Ajax.request({
             url:'/knitkit/erp_app/desktop/available_roles',
             method:'POST',
@@ -156,10 +157,10 @@ Ext.define("Compass.ErpApp.Desktop.Applications.Knitkit.WestRegion", {
                 if (obj.success) {
                     Ext.create('widget.knikit_selectroleswindow',{
                         baseParams:{
-                            id:node.data.id.split('_')[1],
+                            id:id,
                             site_id:node.get('siteId')
                         },
-                        url:'/knitkit/erp_app/desktop/section/update_security',
+                        url: updateUrl,
                         currentRoles:node.get('roles'),
                         availableRoles:obj.availableRoles,
                         listeners:{
@@ -186,41 +187,6 @@ Ext.define("Compass.ErpApp.Desktop.Applications.Knitkit.WestRegion", {
             },
             failure:function (response) {
                 Ext.Msg.alert('Error', 'Could not load available roles');
-            }
-        });
-    },
-
-    changeSecurityOnMenuItem:function (node, secure) {
-        var self = this;
-        self.setWindowStatus('Updating menu item security...');
-        Ext.Ajax.request({
-            url:'/knitkit/erp_app/desktop/website_nav/update_security',
-            method:'POST',
-            params:{
-                id:node.data.websiteNavItemId,
-                site_id:node.data.websiteId,
-                secure:secure
-            },
-            success:function (response) {
-                var obj = Ext.decode(response.responseText);
-                if (obj.success) {
-                    self.clearWindowStatus();
-                    if (secure) {
-                        node.set('iconCls', 'icon-document_lock');
-                    }
-                    else {
-                        node.set('iconCls', 'icon-document');
-                    }
-                    node.set('isSecured', secure);
-                    node.commit();
-                }
-                else {
-                    Ext.Msg.alert('Error', 'Error securing menu item');
-                }
-            },
-            failure:function (response) {
-                self.clearWindowStatus();
-                Ext.Msg.alert('Error', 'Error securing menu item');
             }
         });
     },
@@ -394,13 +360,18 @@ Ext.define("Compass.ErpApp.Desktop.Applications.Knitkit.WestRegion", {
                 },
                 {
                     name:'roles'
+                },
+                {
+                    name:'useMarkdown'
                 }
             ],
             listeners:{
                 'load':function(store, node, records){
-                  var websiteId = records[0].id.split('_')[1];
-                  var westRegion = Ext.ComponentQuery.query('#knitkitWestRegion').first();
-                  westRegion.selectWebsite(websiteId);
+                  if(records.length > 0){
+					var websiteId = records[0].id.split('_')[1];
+                  		westRegion = Ext.ComponentQuery.query('#knitkitWestRegion').first();
+                  	westRegion.selectWebsite(websiteId);
+				  }	
                 }
             }
         });

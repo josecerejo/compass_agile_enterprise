@@ -1,4 +1,5 @@
 #compass libraries
+require 'compass_ae_sencha'
 require 'erp_tech_svcs'
 require 'will_paginate'
 require 'uglifier'

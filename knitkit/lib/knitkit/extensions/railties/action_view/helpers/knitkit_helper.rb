@@ -45,7 +45,7 @@ module Knitkit
                 raise "Website Section with that Internal ID does not exist" if section.nil?
                 links = section.self_and_ancestors.map{|child| {:url => child.path, :title => child.title}}
               else
-                links = @website_section.self_and_ancestors.collect{|child| {:url => child.path, :title => child.title}}
+                links = @website_section.nil? ? [] : @website_section.self_and_ancestors.collect{|child| {:url => child.path, :title => child.title}}
               end
 
               render :partial => 'shared/knitkit/bread_crumb', :locals => {:links => links}

@@ -5,7 +5,7 @@ module Knitkit
         KNIT_KIT_ROOT = Knitkit::Engine.root.to_s
 
         def available_roles
-          render :json => {:success => true, :availableRoles => SecurityRole.all.collect{|role| role.to_hash(:only => [:internal_identifier, :description])}}
+          render :json => {:success => true, :availableRoles => SecurityRole.order('description ASC').all.collect{|role| role.to_hash(:only => [:internal_identifier, :description])}}
         end
 
         def websites
@@ -90,6 +90,7 @@ module Knitkit
             :canAddMenuItems => true,
             :websiteId => website.id,
             :isSecured => item.is_secured?,
+            :roles => item.roles.collect{|item| item.internal_identifier},
             :linkedToId => linked_to_item_id,
             :websiteNavItemId => item.id,
             :url => url,

@@ -25,4 +25,16 @@ class WebsiteNavItem < ActiveRecord::Base
     self.protected_with_capability?('view')
   end
   
+  def build_menu_item_hash
+    {
+        :title => self.title,
+        :url => self.url,
+        :roles => self.roles.collect(&:internal_identifier),
+        :linked_to_item_type => self.linked_to_item_type,
+        :linked_to_item_path => self.linked_to_item.nil? ? nil : self.linked_to_item.path,
+        :position => self.position,
+        :items => self.children.collect { |child| child.build_menu_item_hash }
+    }
+  end
+  
 end

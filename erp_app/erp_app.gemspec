@@ -22,6 +22,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'uglifier', '~> 1.3.0'
 
   #compass dependencies
+  s.add_dependency 'compass_ae_sencha', "~> 1.0"
   s.add_dependency 'erp_tech_svcs', "~> 3.1"
   s.add_development_dependency 'erp_dev_svcs', "~> 3.1"
 end
