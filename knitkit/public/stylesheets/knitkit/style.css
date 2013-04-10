@@ -414,3 +414,13 @@ ul#side_menu li a:hover, ul#side_menu li.selected a, ul#side_menu li.selected a:
 a.tooltip {text-decoration:none;}
 a.tooltip span {display:none; padding:2px 3px; margin-left:8px; width:130px;}
 a.tooltip:hover span{display:inline; position:absolute; border:1px solid #cccccc; background:#ffffff; color:#6c6c6c;}
+
+.icon-documentation-document {
+    background-image: url(/images/knitkit/icons/document.png) !important;
+    filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='/images/knitkit/icons/document.png', sizingMethod='crop');
+}
+
+.icon-documentation-multi-document {
+    background-image: url(/images/knitkit/icons/multi_doc.png) !important;
+    filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='/images/knitkit/icons/multi_doc.png', sizingMethod='crop');
+}

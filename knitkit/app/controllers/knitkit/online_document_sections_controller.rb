@@ -44,7 +44,10 @@ module Knitkit
     def build_document_hash
       [].tap do |documents|
         @document_sections.each do |section|
-          documents << {:id => section.id, :title => section.title, :leaf => section.leaf}
+          documents << {:id => section.id,
+                        :title => section.title,
+                        :leaf => section.leaf,
+                        :iconCls => (section.leaf ? 'icon-documentation-document' : 'icon-documentation-multi-document')}
         end
       end
     end

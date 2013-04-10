@@ -1,3 +1,5 @@
+require "benchmark"
+
 module ErpTechSvcs
   module Sessions
     # Delayed Job to Reset Daily Assignments to Forecast
@@ -8,17 +10,22 @@ module ErpTechSvcs
       end
   
       def perform
-        begin
-          process_job
-        rescue => exception
-          ErpTechSvcs::Util::CompassLogger.delete_expired_sessions_job.error("An unrecoverable error has occured, the job will be rescheduled: #{exception.message} : #{exception.backtrace}")
-        end
-    
+        time = Benchmark.measure do
+          begin
+            process_job
+          rescue => exception
+            ErpTechSvcs::Util::CompassLogger.delete_expired_sessions_job.error("An unrecoverable error has occured, the job will be rescheduled: #{exception.message} : #{exception.backtrace}")
+          end
+        end #benchmark
+        
         # Run once per day
         date = Date.tomorrow
         start_time = DateTime.civil(date.year, date.month, date.day, 2, 0, 1, -(5.0/24.0))
-    
+        
         Delayed::Job.enqueue(DeleteExpiredSessionsJob.new(), @priority, start_time)
+        
+        #update job tracker
+        JobTracker.job_ran('Delete Expired Sessions', self.class.name, ("(%.4fs)" % time.real), start_time)
       end
 
       def self.schedule_job(schedule_dt)

@@ -15,7 +15,12 @@ module ErpApp
 
           render :json => {:total_count => total_count, :success => true,
                            :jobs => job_trackers.collect { |tracker| tracker.to_hash(
-                               :only => [:id, :job_name, :last_run_at, :next_run_at, :job_klass, :run_time], :additional_values => {:scheduled => (tracker.scheduled?)}) }}
+                               :only => [:id, :job_name, :job_klass, :run_time], 
+                               :additional_values => {
+                                 :scheduled => (tracker.scheduled?),
+                                 :last_run_at => (tracker.last_run_at.strftime("%m-%d-%Y %H:%M:%S")), 
+                                 :next_run_at => (tracker.next_run_at.strftime("%m-%d-%Y %H:%M:%S")),
+                                 }) }}
         end
 
         def schedule
