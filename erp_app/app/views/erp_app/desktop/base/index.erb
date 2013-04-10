@@ -56,10 +56,10 @@
     <!--javascript-->
     <%= include_extjs(:theme => @desktop.get_preference(:extjs_theme), :debug => (Rails.env != 'production')) %>
     <%= static_javascript_include_tag("extjs/overrides.js")%>
-    
+
     <%= static_javascript_include_tag("erp_app/utility.js")%>
     <%= static_javascript_include_tag("erp_app/desktop/ext_ux_desktop_module.js")%>
-    
+
     <%= static_javascript_include_tag('erp_app/widgets.js')%>
     <%= include_widgets%>
     <!-- shared application resources -->
@@ -90,7 +90,7 @@
    <!-- end application resources -->
    <!-- compass extensions -->
    <%=include_code_mirror_library%>
-   <style type="text/css"> 
+   <style type="text/css">
           .CodeMirror {
             border: 1px solid #eee;
           }
@@ -155,7 +155,7 @@
                   iconCls:"icon-key",
                   handler:b.onLogout,
                   scope:b
-                },  
+                },
                 {
                   text:"About",
                   iconCls:"icon-info",
@@ -199,7 +199,7 @@
                                        "<tr><td>{name}</td><td>{version}</td></tr>",
                                        '</tpl>',
                                        "</table>");
-          
+
           var aboutWindow = Ext.create('Ext.window.Window',{
             title: 'About Your Compass AE Instance',
             height: 200,
@@ -221,7 +221,7 @@
       var compassDesktop;
       Ext.onReady(function () {
         compassDesktop = new MyDesktop.App();
-            
+
         setTimeout(function(){
           Ext.get('loading').remove();
           Ext.get('loading-mask').fadeOut({remove:true});
@@ -231,6 +231,11 @@
         }, 250);
       });
 
+      window.onbeforeunload = function(){
+          return ' If you navigate away from this page without' +
+                  ' first saving your data, the changes will be' +
+                  ' lost.';
+      }
     </script>
     <div id="loading-mask"></div>
     <div id="loading">
