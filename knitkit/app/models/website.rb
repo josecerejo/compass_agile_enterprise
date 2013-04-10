@@ -230,7 +230,7 @@ class Website < ActiveRecord::Base
     end
 
     self.files.where("directory like '%/#{Rails.application.config.erp_tech_svcs.file_assets_location}/sites/#{self.iid}%'").all.each do |file_asset|
-      setup_hash[:files] << {:path => file_asset.directory, :name => file_asset.name}
+      setup_hash[:files] << {:path => file_asset.directory, :name => file_asset.name, :roles => file_asset.roles.uniq.collect{|r| r.internal_identifier}}
     end
 
     setup_hash
@@ -401,7 +401,16 @@ class Website < ActiveRecord::Base
             #puts "file_asset '#{filename}'"
             content = entries.find { |entry| entry[:type] == 'files' and entry[:path] == filename }
             unless content.nil?
-              website.add_file(content[:data], File.join(file_support.root, file_asset[:path], file_asset[:name]))
+              file = website.add_file(content[:data], File.join(file_support.root, file_asset[:path], file_asset[:name]))
+
+              #handle security
+              unless file_asset[:roles].empty? 
+                capability = file.add_capability(:download)
+                file_asset[:roles].each do |role_iid|
+                  role = SecurityRole.find_by_internal_identifier(role_iid)
+                  role.add_capability(capability)
+                end
+              end
             end
           end
 
