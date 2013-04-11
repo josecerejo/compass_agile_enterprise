@@ -31,7 +31,7 @@ module ErpTechSvcs
     def reset_password
       begin
         login_url = params[:login_url].blank? ? ErpTechSvcs::Config.login_url : params[:login_url]
-        if user = (User.find_by_email(params[:login]) || User.find_by_username(params[:login]))
+        if user = (User.find_by_email(params[:login]))
           new_password = Sorcery::Model::TemporaryToken.generate_random_token
           user.password_confirmation = new_password
           if user.change_password!(new_password)

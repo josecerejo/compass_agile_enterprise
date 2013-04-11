@@ -3,7 +3,7 @@
   <%= form_tag '/users/reset_password', :remote => true, :id => 'reset_password_form' do %>
     <div class="form_settings">
       <p>
-        <span style="width:175px">Username or Email Address</span>
+        <span style="width:175px">Email Address</span>
         <%= text_field_tag "login"%>
       </p>
       <input type="hidden" name="login_url" value="<%=@login_url%>" />
