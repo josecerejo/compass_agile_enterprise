@@ -1,9 +1,6 @@
 module ErpTechSvcs
   class SessionController < ActionController::Base
     def create
-      last_login_at = nil
-      potential_user = User.where('username = ? or email = ?', params[:login], params[:login]).first
-      last_login_at = potential_user.last_login_at unless potential_user.nil?
       if login(params[:login],params[:password])
         #log when someone logs in
         ErpTechSvcs::ErpTechSvcsAuditLog.successful_login(current_user)
@@ -11,7 +8,7 @@ module ErpTechSvcs
         #set logout
         session[:logout_to] = params[:logout_to]
 
-        login_to = session[:return_to_url].blank? ? (last_login_at.nil? ? params[:first_login_to] : params[:login_to]) : session[:return_to_url]
+        login_to = session[:return_to_url].blank? ? (current_user.last_login_at.nil? ? params[:first_login_to] : params[:login_to]) : session[:return_to_url]
         request.xhr? ? (render :json => {:success => true, :login_to => login_to}) : (redirect_to login_to)
       else
         message = "Login failed. Try again"
