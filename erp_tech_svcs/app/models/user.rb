@@ -21,6 +21,13 @@ class User < ActiveRecord::Base
   #username validations
   validates :username, :presence => {:message => 'Username cannot be blank'}, :uniqueness => {:case_sensitive => false}
 
+  validate :email_cannot_match_username_of_other_user
+  def email_cannot_match_username_of_other_user
+    unless User.where(:username => self.email).where('id != ?',self.id).first.nil?
+      errors.add(:email, "In use by another user")
+    end
+  end
+
   #these two methods allow us to assign instance level attributes that are not persisted.  These are used for mailers
   def instance_attributes
     @instance_attrs.nil? ? {} : @instance_attrs
