@@ -1,6 +1,6 @@
 class AddJobTracker < ActiveRecord::Migration
   def up
-    unless table_exists?(:job_trackers) do
+    unless table_exists?(:job_trackers)
       create_table :job_trackers do |t|
         t.string :job_name
         t.string :job_klass
@@ -12,7 +12,7 @@ class AddJobTracker < ActiveRecord::Migration
   end
 
   def down
-    if table_exists?(:job_trackers) do
+    if table_exists?(:job_trackers)
       drop_table :job_trackers
     end
   end
