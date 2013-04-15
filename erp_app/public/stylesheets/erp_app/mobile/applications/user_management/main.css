@@ -1,5 +1,21 @@
+div.profile{
+    padding:5px;
+}
 
-div.display span
-{ float: left;
-  width: 125px;
-  text-align: left;}
+.profile p {
+    overflow: hidden;
+    font-size:14px;
+}
+
+.profile .label {
+    vertical-align: top;
+    float: left;
+    width: 40%;
+    font-weight:bold;
+}
+
+.profile .value{
+    vertical-align: top;
+    float: left;
+    width: 60%;
+}

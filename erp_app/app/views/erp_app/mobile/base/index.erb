@@ -1,38 +1,43 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
-  <head>
-    <title>CompassAE Mobile</title>
-    <%=include_sencha_touch :debug => (Rails.env != 'production')%>
-    <%=static_javascript_include_tag('erp_app/utility.js')%>
-    <%=static_javascript_include_tag('erp_app/mobile/mobile_base.js')%>
-    <%#=setup_js_authentication(@user, @desktop)%>
-    <%=create_authenticity_token_sencha_touch_field%>
+<head>
+  <title>CompassAE Mobile</title>
+  <%= include_sencha_touch :debug => (Rails.env != 'production') %>
+  <%= static_javascript_include_tag('erp_app/utility.js') %>
+  <%= static_javascript_include_tag('erp_app/mobile/mobile_base.js') %>
+  <%= create_authenticity_token_sencha_touch_field %>
+  <%= add_authenticity_token_to_extjs %>
 
-    <!--stylesheets-->
-    <%= static_stylesheet_link_tag('erp_app/mobile/mobile.css') %>
-    <!--end stylesheets-->
+  <!--stylesheets-->
+  <%= static_stylesheet_link_tag('erp_app/mobile/mobile.css') %>
+  <!--end stylesheets-->
 
-    <script type="text/javascript">
-    var mobileApplications = [];
-    <%
-    @mobile.applications.each do |application|
-    %>
-    mobileApplications.push({
-      text:'<%=application.description%>',
-      iconCls:'<%=application.icon%>',
-      ui:'round',
-      handler:function(){
-        window.location = '<%=application.base_url%>'
-      }
-    });
-    <%
-    end
-    %>
-    </script>
+  <% @mobile.applications.each do |application| %>
+      <%= static_javascript_include_tag(application.locate_resources('javascripts')) %>
+      <%= static_stylesheet_link_tag(application.locate_resources('stylesheets')) %>
+  <% end %>
 
-    <%= static_javascript_include_tag("erp_app/mobile/app.js")%>
-  </head>
-  <body>
-    <%= setSessionTimeout %>
-  </body>
+  <script type="text/javascript">
+      var mobileApplications = [], mobileApplicationsData = [];
+      <%
+      @mobile.applications.each do |application|
+      %>
+
+      mobileApplications.push({xtype: '<%=application.xtype%>', itemId: '<%=application.internal_identifier%>'});
+      mobileApplicationsData.push({
+          iconCls: '<%=application.icon%>',
+          name: '<%=application.description%>',
+          itemId: '#<%=application.internal_identifier%>'
+      });
+
+      <%
+      end
+      %>
+  </script>
+
+  <%= static_javascript_include_tag("erp_app/mobile/app.js") %>
+</head>
+<body>
+<%= setSessionTimeout %>
+</body>
 </html>

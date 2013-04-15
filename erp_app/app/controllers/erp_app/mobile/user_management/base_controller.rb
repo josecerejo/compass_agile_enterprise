@@ -2,9 +2,6 @@ module ErpApp
 	module Mobile
     module UserManagement
       class BaseController < ::ErpApp::Mobile::BaseController
-        def index
-          @application = MobileApplication.find_by_internal_identifier('user_management')
-        end
 
         def users
           users = User.all.collect do |user|
