@@ -10,14 +10,17 @@ class CompassAeMobileGenerator < Rails::Generators::NamedBase
     run "sencha -sdk #{@sdk_path} generate app #{class_name} #{application_path}"
     
     %w{app.json build.xml index.html packager.json resources}.each do |file|
-      remove_file(File.join(application_path, file))
+      remove_file File.join(application_path, file)
     end
     
     gsub_file File.join(application_path, 'app.js'), %r[^//<debug>([\s\S])+//</debug>], "Ext.Loader.setPath({'#{class_name}': 'javascripts/#{class_name}/app'});"
     
     #replace Main.js
-    remove_file remove_file(File.join(application_path, 'app', 'view', 'Main.js'))
+    remove_file File.join(application_path, 'app', 'view', 'Main.js')
     template "javascripts/main_template.erb", File.join(application_path, 'app', 'view', 'Main.js')
+    
+    #remove touch library
+    remove_file File.join(application_path, 'touch')
   end
   
   def generate_compass_ae_files
