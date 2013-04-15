@@ -5,7 +5,7 @@ class CreateUserManagementMobileApplication
         :description => 'User Management',
         :icon => 'icon-user',
         :internal_identifier => 'user_management',
-        :base_url => '/erp_app/mobile/user_management/index'
+        :xtype => 'compass-erpapp-mobile-usermanagement-application'
     )
   end
 
