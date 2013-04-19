@@ -26,5 +26,5 @@ Gem::Specification.new do |s|
   s.add_dependency('nokogiri','1.5.5')
   s.add_dependency('rubyzip','0.9.9')
   s.add_dependency('acts-as-taggable-on','2.3.3')
-  s.add_dependency('github-markdown','0.5.3')
+  s.add_dependency('kramdown','1.0.1')
 end

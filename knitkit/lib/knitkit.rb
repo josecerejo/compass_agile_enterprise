@@ -9,6 +9,7 @@ require 'knitkit/extensions'
 require "knitkit/syntax_validator"
 require "knitkit/config"
 require "knitkit/engine"
+require 'kramdown'
 
 module Knitkit
 end

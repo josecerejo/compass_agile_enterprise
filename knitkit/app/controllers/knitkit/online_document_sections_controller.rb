@@ -1,5 +1,3 @@
-require 'github/markdown'
-
 module Knitkit
   class OnlineDocumentSectionsController < BaseController
     layout 'knitkit/online_document_sections'
@@ -19,7 +17,7 @@ module Knitkit
       document_section = OnlineDocumentSection.find(params[:document_section_id])
       content = document_section.documented_item_published_content(@active_publication)
       if document_section.use_markdown and content
-        html = GitHub::Markdown.render_gfm(content.body_html)
+        html = Kramdown::Document.new(content.body_html).to_html
       else
         html = content ? content.body_html : ''
       end
