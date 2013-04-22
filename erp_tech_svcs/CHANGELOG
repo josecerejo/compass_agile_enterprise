@@ -1,3 +1,8 @@
+Version 3.1.3 - 04-22-2013
+- Don't allow a user to have email that conflicts with username of another user.
+- Only reset password based on email address, not username also.
+- Upgrade migration to add queue column to delayed_jobs table
+- Added job tracker to expired session job
 Version 3.1.2 - 03-14-2013
 - Minor enhancements to capabilities
 - Added scope for stylesheets to has_file_assets

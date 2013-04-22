@@ -1,6 +1,9 @@
+Version 3.1.3 - 04-22-2013
+- Added latitude longitude to postal address
+- Updated check to see if CompassAE instance is active
 Version 3.1.2 - 04-08-2013
-- added GUID to CompassAEInstance
-- fixed bug in CompassAE Engine loading
+- Added GUID to CompassAEInstance
+- Fixed bug in CompassAE Engine loading
 Version 3.1.1 - 02-25-2013
 - Fixed extension loading bugs
 Version 3.1.0 - 01-11-2013

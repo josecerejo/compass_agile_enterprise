@@ -1,0 +1,6 @@
+Version 3.1.1 - 04-22-2013
+- Add missing biz_txn_acct_type_id to biz_txn_acct_roots
+- Adding delegation of txn_account_type assignment operator to acts_as_biz_txn_account
+- Fixed active record association to txn_account_type
+Version 3.1.0 - 01-11-2013
+- Updated for Rails 3.2

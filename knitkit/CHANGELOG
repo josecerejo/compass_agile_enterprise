@@ -1,3 +1,9 @@
+Version 2.1.5 - 04-22-2013
+- Switching markdown gem to kramdown (pure ruby markdown implementation will support both ruby and jruby)
+- Website export/import now supports file security
+- Check for empty website in themed action mailer
+- Only reset password based on email address, not username also.
+- Added new icons for documentation tree
 Version 2.1.4 - 04-08-2013
 - Added ability to use Markdown in Document Sections
 - Added ability to assign multiple roles to Website Sections and Menu Items
