@@ -7,6 +7,7 @@ class DynamicFormDocument < ActiveRecord::Base
   has_file_assets
   has_dynamic_forms
 	has_dynamic_data
+  acts_as_commentable
 
   # declare a subclass
   # pass in name of subclass
