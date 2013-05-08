@@ -3,10 +3,10 @@ Compass.ErpApp.Widgets.GoogleMap = {
         ':params => {\n',
         '   :zoom => {zoom},',
         "   :map_type => '{mapType}',",
-        '   :drop_pins=[\n{dropPins}\n',
+        '   :drop_pins => [\n{dropPins}\n',
         "]}%>"),
 
-    dropPinTemplate: new Ext.XTemplate('<tpl for=".">', '{title="{title}", address="{address}"}{[xindex === xcount ? "" : ","]}', '</tpl>'),
+    dropPinTemplate: new Ext.XTemplate('<tpl for=".">', '{:title => "{title}", :address => "{address}"}{[xindex === xcount ? "" : ","]}', '</tpl>'),
 
     addGoogleMap: function () {
 

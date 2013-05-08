@@ -15,9 +15,9 @@ module RoutingFilter
           path.sub!('/', "/#{$1}#{type}/#{valid_section.id}#{$3}")
         else
           if !Rails.application.config.knitkit.ignored_prefix_paths.include?(path) and path !~ %r(^/([\w]{2,4}/)?admin) and !paths.empty? and path =~ recognize_pattern(paths)
-            if section = website_section_by_path(website, path)
+            if section = website_section_by_path(website, $2)
               type = section.type.pluralize.downcase
-              path.sub!(path, "/#{$1}#{type}/#{section.id}#{$3}")
+              path.sub! %r(^/([\w]{2,4}/)?(#{paths})(?=/|\.|$)), "/#{$1}#{type}/#{section.id}#{$3}"
             end
           end
         end
@@ -41,6 +41,7 @@ module RoutingFilter
     end
 
     def website_section_by_path(website, path)
+      path = "/#{path}"
       valid_section = website.website_sections.detect{|website_section| website_section.path == path }
       if valid_section.nil?
         website.website_sections.each do |website_section|
