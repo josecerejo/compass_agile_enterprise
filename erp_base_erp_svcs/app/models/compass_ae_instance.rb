@@ -29,19 +29,8 @@ class CompassAeInstance < ActiveRecord::Base
   end
 
   def setup_guid
-    set_guid(Digest::SHA1.hexdigest(Time.now.to_s + rand(10000).to_s))
+    guid = Digest::SHA1.hexdigest(Time.now.to_s + rand(10000).to_s)
+    set_guid(guid)
+    guid
   end
-
-  def is_active? 
-    self.type.nil? || self.current_status == 'deployed'
-  end
-
-  def activate
-    self.current_status = 'deployed'
-  end
-
-  def deactivate
-    self.current_status = 'undeployed'
-  end
-  
 end
