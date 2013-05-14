@@ -1,4 +1,4 @@
-Compass.ErpApp.Mobile.UserManagement.Templates = {};
+Ext.ns('Compass.ErpApp.Mobile.UserManagement.Templates');
 Compass.ErpApp.Mobile.UserManagement.Templates.userDetails = new Ext.XTemplate(
     '<div class="profile">',
         '<p>',
