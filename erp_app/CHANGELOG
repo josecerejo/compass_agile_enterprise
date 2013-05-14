@@ -1,3 +1,6 @@
+Version 3.1.7 5-14-2013
+- Upgraded Sencha Touch to 2.2.0
+- Fixed bug in Scaffold desktop application
 Version 3.1.6 - 04-22-2013
 - Added warning before navigating away from desktop or organizer
 - Fixed bug in date format for job tracker desktop application
