@@ -61,7 +61,6 @@ module ErpApp
                 resources << static_stylesheet_link_tag("sencha_touch/resources/css/#{opt[:theme]}")
               else
                 resources << static_stylesheet_link_tag("sencha_touch/resources/css/sencha-touch.css")
-                resources << static_stylesheet_link_tag("sencha_touch/resources/css/apple.css")
               end
 
               raw resources
