@@ -1,3 +1,5 @@
+Version 3.1.8
+- Turned off plupload's chunk_size as it was causing truncated files
 Version 3.1.7 5-14-2013
 - Upgraded Sencha Touch to 2.2.0
 - Fixed bug in Scaffold desktop application
