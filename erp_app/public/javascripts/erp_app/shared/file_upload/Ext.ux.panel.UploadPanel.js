@@ -14,7 +14,7 @@ Ext.define ('Ext.ux.panel.UploadPanel',
 // Configuration
 //,	title		: 'Unggah'
 ,	url		: './file_manager/base/upload_file'	// URL to your server-side upload-script
-,	chunk_size	: '512kb'		// The chunk-size
+//,	chunk_size	: '512kb'		// DO NOT TURN THIS ON, IT CAUSES TRUNCATED FILES!
 ,	max_file_size	: '100mb'		// The max. allowed file-size
 ,	unique_names	: false			// Make sure to use only unique-names
 ,	multipart	: false			// Use multipart-uploads
