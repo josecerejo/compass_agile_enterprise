@@ -1,4 +1,4 @@
-Compass.ErpApp.Mobile.JobTracker.Templates = {};
+Ext.ns('Compass.ErpApp.Mobile.JobTracker.Templates');
 Compass.ErpApp.Mobile.JobTracker.Templates.jobDetails = new Ext.XTemplate(
     '<div class="profile">',
         '<p>',
