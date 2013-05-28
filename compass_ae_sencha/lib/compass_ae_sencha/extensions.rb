@@ -1,0 +1,1 @@
+require 'compass_ae_sencha/extensions/railties/action_view/base'

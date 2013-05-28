@@ -5,67 +5,6 @@ module ErpApp
         module Helpers
           module IncludeHelper
 
-            def static_javascript_include_tag(*srcs)
-              raw srcs.flatten.map { |src| "<script type=\"text/javascript\" src=\"/javascripts/#{src.include?('.js') ? src : "#{src}.js"}\"></script>" }.join("")
-            end
-
-            def static_stylesheet_link_tag(*srcs)
-              raw srcs.flatten.map { |src| "<link rel=\"stylesheet\" type=\"text/css\" href=\"/stylesheets/#{src.include?('.css') ? src : "#{src}.css"}\" />" }.join("")
-            end
-
-            def include_extjs(opt={})
-              resources = ''
-
-              if opt[:debug]
-                resources << static_javascript_include_tag("extjs/ext-all-debug.js")
-              else
-                resources << static_javascript_include_tag("extjs/ext-all.js")
-              end
-
-              resources << static_javascript_include_tag("extjs/helpQtip.js")
-              resources << static_javascript_include_tag("extjs/ext_ux_tab_close_menu.js")
-              resources << static_javascript_include_tag("extjs/Ext.ux.form.MultiSelect.js")
-              resources << static_javascript_include_tag("extjs/Ext.ux.CheckColumn.js")
-
-              if opt[:theme] === false
-                #do nothing not theme loaded.
-              elsif opt[:theme]
-                theme = opt[:theme].split(':')[0]
-                sub_theme = opt[:theme].split(':')[1]
-                resources << static_stylesheet_link_tag("#{theme}/resources/css/#{sub_theme}.css")
-              else
-                #this file will effectively be used as the default stylesheet if no theme is selected
-                resources << static_stylesheet_link_tag("clifton/resources/css/clifton.css")
-              end
-
-              resources << add_authenticity_token_to_extjs
-
-              # this requirement is new in ExtJS 4.1
-              resources << "<script type=\"text/javascript\">Ext.Loader.setConfig({ enabled: true, disableCaching: false });</script>"
-
-              raw resources
-            end
-
-            def include_sencha_touch(opt={})
-              resources = ''
-
-              if (opt[:debug])
-                resources << static_javascript_include_tag("sencha_touch/sencha-touch-all-debug.js")
-              else
-                resources << static_javascript_include_tag("sencha_touch/sencha-touch-all.js")
-              end
-
-              if opt[:theme] === false
-                #do nothing not theme loaded.
-              elsif opt[:theme]
-                resources << static_stylesheet_link_tag("sencha_touch/resources/css/#{opt[:theme]}")
-              else
-                resources << static_stylesheet_link_tag("sencha_touch/resources/css/sencha-touch.css")
-              end
-
-              raw resources
-            end
-
             def include_highslide(options = {})
               raw case options[:version].to_s.downcase
                     when 'full'
@@ -120,14 +59,6 @@ module ErpApp
                   :guid => compass_ae_instance.guid
               }
               raw "<script type=\"text/javascript\">compassAeInstance = #{json_hash.to_json};</script>"
-            end
-
-            def add_authenticity_token_to_extjs
-              raw "<script type='text/javascript'>Ext.ns('Compass.ErpApp'); Ext.Ajax.extraParams = { authenticity_token: '#{form_authenticity_token}' }; Compass.ErpApp.AuthentictyToken = '#{form_authenticity_token}';</script>"
-            end
-
-            def create_authenticity_token_sencha_touch_field
-              raw "<script type='text/javascript'>Compass.ErpApp.Mobile.AuthentictyTokenField = {xtype:'hiddenfield', name:'authenticity_token', value:'#{form_authenticity_token}'}; </script>"
             end
 
             def setSessionTimeout(warn_milli_seconds=((ErpApp::Config.session_warn_after*60)*1000),
