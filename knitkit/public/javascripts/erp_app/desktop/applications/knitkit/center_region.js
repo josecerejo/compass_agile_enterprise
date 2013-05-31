@@ -249,10 +249,10 @@ Ext.define("Compass.ErpApp.Desktop.Applications.Knitkit.CenterRegion", {
             containerDir = pathArr[pathArr.length-2],
             fileName = pathArr.pop(),
             baseName = fileName.split('.')[0],
-            fileType = node.data.id.split('.').pop();
+            fileType = node.data.id.split('.').pop(),
             filePathHash = Compass.ErpApp.Utility.Encryption.MD5(node.data.id),
 
-            itemId = baseName + "_" + filePathHash; // Using a hash will allow files with same name to be opened concurrently
+            itemId = baseName + "_" + filePathHash, // Using a hash will allow files with same name to be opened concurrently
             item = this.workArea.query('#' + itemId).first();
 
         // If this file isn't already an existing tab, let's open it
