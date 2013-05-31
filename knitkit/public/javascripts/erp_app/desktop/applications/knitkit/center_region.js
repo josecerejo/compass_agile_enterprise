@@ -244,16 +244,26 @@ Ext.define("Compass.ErpApp.Desktop.Applications.Knitkit.CenterRegion", {
     },
 
     editTemplateFile:function (node, content, tbarItems, themeId) {
-        var self = this;
-        var fileName = node.data.id.split('/').pop().split('.')[0];
-        var fileType = node.data.id.split('.').pop();
-        var itemId = fileName + themeId;
-        var item = this.workArea.query('#' + itemId).first();
+        var self = this,
+            pathArr = node.data.id.split('/'),
+            containerDir = pathArr[pathArr.length-2],
+            fileName = pathArr.pop(),
+            baseName = fileName.split('.')[0],
+            fileType = node.data.id.split('.').pop();
+            filePathHash = Compass.ErpApp.Utility.Encryption.MD5(node.data.id),
 
+            itemId = baseName + "_" + filePathHash; // Using a hash will allow files with same name to be opened concurrently
+            item = this.workArea.query('#' + itemId).first();
+
+        // If this file isn't already an existing tab, let's open it
         if (Compass.ErpApp.Utility.isBlank(item)) {
             item = Ext.create('Ext.panel.Panel', {
                 closable:true,
-                title:fileName,
+                title:baseName,
+                baseName: baseName,
+                fileName: fileName,
+                containerDir: containerDir,
+                filePathHash: filePathHash,
                 itemId:itemId,
                 layout:'fit',
                 save:function (comp) {
@@ -779,6 +789,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.Knitkit.CenterRegion", {
     },
 
     constructor:function (config) {
+        region = this;
         this.workArea = Ext.createWidget('tabpanel', {
             autoDestroy:true,
             region:'center',
@@ -804,7 +815,71 @@ Ext.define("Compass.ErpApp.Desktop.Applications.Knitkit.CenterRegion", {
                         menuitem.setChecked(item.closable);
                     }
                 }
-            })
+            }),
+            listeners: {
+                add:function() {
+                    this.smartRenameTabs();
+                },
+                remove:function() {
+                    this.smartRenameTabs();
+                }
+            },
+
+            smartRenameTabs: function () {
+                var tabs = this.queryBy(function(record) {
+                        if (record.filePathHash != undefined) {
+                            //Reset all filenames to baseName to allow name "downgrading" on file clo
+                            record.setTitle(record.baseName);
+                            return true;
+                        } else {
+                            return false;
+                        }
+                    }),
+                    baseNames = {},
+                    fileNames = {};
+
+                for (idx = 0; idx < tabs.length; idx++) {
+                    if (!baseNames[tabs[idx].baseName]) {
+                        baseNames[tabs[idx].baseName] = 1;
+                    } else {
+                        baseNames[tabs[idx].baseName]++;
+                    }
+                }
+
+                // This means we have some duplicates, rename only the duplicates from basename --> filename
+                if (baseNames.length != tabs.length) {
+                    for (baseName in baseNames) {
+                        if (baseNames[baseName] > 1) {
+                            for (idx = 0; idx < tabs.length; idx++) {
+                                if (tabs[idx].title == baseName) {
+                                    tabs[idx].setTitle(tabs[idx].fileName);
+                                }
+                            }
+                        }
+                    }
+                }
+
+                for (i = 0; i < tabs.length; i++) {
+                    if (!fileNames[tabs[i].fileName]) {
+                        fileNames[tabs[i].fileName] = 1;
+                    } else {
+                        fileNames[tabs[i].fileName]++;
+                    }
+                }
+
+                // This means we have some duplicates, rename only the duplicates from filename --> filename (container)
+                if (fileNames.length != tabs.length) {
+                    for (fileName in fileNames) {
+                        if (fileNames[fileName] > 1) {
+                            for (idx = 0; idx < tabs.length; idx++) {
+                                if (tabs[idx].title == fileName) {
+                                    tabs[idx].setTitle(tabs[idx].fileName+" ("+tabs[idx].containerDir+")");
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         });
 
         config = Ext.apply({
