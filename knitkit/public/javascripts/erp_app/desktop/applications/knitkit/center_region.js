@@ -251,15 +251,16 @@ Ext.define("Compass.ErpApp.Desktop.Applications.Knitkit.CenterRegion", {
             baseName = fileName.split('.')[0],
             fileType = node.data.id.split('.').pop(),
             filePathHash = Compass.ErpApp.Utility.Encryption.MD5(node.data.id),
-
+			templatePath = node.data.id.replace(new RegExp("/public/sites/.+/themes/"), ""),
+			
             itemId = baseName + "_" + filePathHash, // Using a hash will allow files with same name to be opened concurrently
             item = this.workArea.query('#' + itemId).first();
 
         // If this file isn't already an existing tab, let's open it
         if (Compass.ErpApp.Utility.isBlank(item)) {
-            item = Ext.create('Ext.panel.Panel', {
-                closable:true,
-                title:baseName,
+			item = Ext.create('Ext.panel.Panel', {
+				closable:true,
+                title:(templatePath + fileName),
                 baseName: baseName,
                 fileName: fileName,
                 containerDir: containerDir,
@@ -283,7 +284,12 @@ Ext.define("Compass.ErpApp.Desktop.Applications.Knitkit.CenterRegion", {
                         parser:fileType,
                         sourceCode:content
                     }
-                ]
+                ],
+				bbar:{
+					items:[
+						templatePath
+					]
+				}
             });
 
             this.workArea.add(item);
