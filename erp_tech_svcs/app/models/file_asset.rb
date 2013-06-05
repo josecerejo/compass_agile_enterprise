@@ -135,7 +135,7 @@ class FileAsset < ActiveRecord::Base
 
   # compass file download url
   def url
-    "/download/#{self.name}?#{self.directory}"
+    "/download/#{self.name}?path=#{self.directory}"
   end
 
   # returns full path to local image or url to s3 image
