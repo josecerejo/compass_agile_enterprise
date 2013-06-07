@@ -260,7 +260,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.Knitkit.CenterRegion", {
         if (Compass.ErpApp.Utility.isBlank(item)) {
 			item = Ext.create('Ext.panel.Panel', {
 				closable:true,
-                title:(templatePath + fileName),
+                title: baseName,
                 baseName: baseName,
                 fileName: fileName,
                 containerDir: containerDir,
@@ -833,9 +833,8 @@ Ext.define("Compass.ErpApp.Desktop.Applications.Knitkit.CenterRegion", {
 
             smartRenameTabs: function () {
                 var tabs = this.queryBy(function(record) {
+                        // If no filePathHash is found, this item is not an actual tab element, don't collect it into tabs array
                         if (record.filePathHash != undefined) {
-                            //Reset all filenames to baseName to allow name "downgrading" on file clo
-                            record.setTitle(record.baseName);
                             return true;
                         } else {
                             return false;
@@ -844,47 +843,34 @@ Ext.define("Compass.ErpApp.Desktop.Applications.Knitkit.CenterRegion", {
                     baseNames = {},
                     fileNames = {};
 
-                for (idx = 0; idx < tabs.length; idx++) {
-                    if (!baseNames[tabs[idx].baseName]) {
-                        baseNames[tabs[idx].baseName] = 1;
+                // Collect counts for each unique baseName and fileName
+                Ext.each(tabs, function(tab) {
+                    if (!baseNames[tab.baseName]) {
+                        baseNames[tab.baseName] = 1;
                     } else {
-                        baseNames[tabs[idx].baseName]++;
+                        baseNames[tab.baseName]++;
                     }
-                }
 
-                // This means we have some duplicates, rename only the duplicates from basename --> filename
-                if (baseNames.length != tabs.length) {
-                    for (baseName in baseNames) {
-                        if (baseNames[baseName] > 1) {
-                            for (idx = 0; idx < tabs.length; idx++) {
-                                if (tabs[idx].title == baseName) {
-                                    tabs[idx].setTitle(tabs[idx].fileName);
-                                }
-                            }
-                        }
-                    }
-                }
-
-                for (i = 0; i < tabs.length; i++) {
-                    if (!fileNames[tabs[i].fileName]) {
-                        fileNames[tabs[i].fileName] = 1;
+                    if (!fileNames[tab.fileName]) {
+                        fileNames[tab.fileName] = 1;
                     } else {
-                        fileNames[tabs[i].fileName]++;
+                        fileNames[tab.fileName]++;
                     }
-                }
+                });
 
-                // This means we have some duplicates, rename only the duplicates from filename --> filename (container)
-                if (fileNames.length != tabs.length) {
-                    for (fileName in fileNames) {
-                        if (fileNames[fileName] > 1) {
-                            for (idx = 0; idx < tabs.length; idx++) {
-                                if (tabs[idx].title == fileName) {
-                                    tabs[idx].setTitle(tabs[idx].fileName+" ("+tabs[idx].containerDir+")");
-                                }
-                            }
+                // Rename each tab as needed
+                Ext.each(tabs, function(tab) {
+                    if (baseNames[tab.baseName] > 1) {
+                        // Duplicate fileName, use fileName + container directory in title
+                        if (fileNames[tab.fileName] > 1) {
+                           tab.setTitle(tab.fileName+" ("+tab.containerDir+")");
+                        } else { // Duplicate baseName but unique fileName, use fileName for title
+                            tab.setTitle(tab.fileName);
                         }
+                    } else { // Unique basename, use it for titles
+                        tab.setTitle(tab.baseName);
                     }
-                }
+                });
             }
         });
 
