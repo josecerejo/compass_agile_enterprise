@@ -18,7 +18,7 @@ module ErpApp
 
 		  def locate_resource_files(resource_type)
   		  engine_dirs = Rails::Application::Railties.engines.map{|p| p.config.root.to_s}
-        root_and_engines_dirs = ([Rails.root] | engine_dirs)
+        root_and_engines_dirs = (engine_dirs | [Rails.root])
 
         application_files = []
   			root_and_engines_dirs.each do |engine_dir|

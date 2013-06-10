@@ -6,7 +6,7 @@ module ErpApp
       
 		  def locate_shared_files(resource_type, folder='shared')
   		  engine_dirs = Rails::Application::Railties.engines.map{|p| p.config.root.to_s}
-        root_and_engines_dirs = ([Rails.root] | engine_dirs)
+        root_and_engines_dirs = (engine_dirs | [Rails.root])
 
 				# get shared resources (global js and css)
   			shared_files = []
