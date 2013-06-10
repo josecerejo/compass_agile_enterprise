@@ -40,6 +40,20 @@ class Party < ActiveRecord::Base
     end
 	end
 
+  def has_role_type?(*passed_roles)
+    result = false
+    passed_roles.flatten!
+    passed_roles.each do |role|
+      role_iid = role.is_a?(RoleType) ?  role.internal_identifier : role.to_s
+      self.role_types.each do |this_role|
+        result = true if (this_role.internal_identifier == role_iid)
+        break if result
+      end
+      break if result
+    end
+    result
+  end
+
   def has_phone_number?(phone_number)
     result = nil
     self.contacts.each do |c|
