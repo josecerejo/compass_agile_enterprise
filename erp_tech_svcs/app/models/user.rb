@@ -2,7 +2,7 @@ class User < ActiveRecord::Base
   include ErpTechSvcs::Utils::CompassAccessNegotiator
   include ActiveModel::Validations
 
-  attr_accessor :password_validator
+  attr_accessor :password_validator, :skip_activation_email
 
   belongs_to :party
 
@@ -26,6 +26,11 @@ class User < ActiveRecord::Base
     unless User.where(:username => self.email).where('id != ?',self.id).first.nil?
       errors.add(:email, "In use by another user")
     end
+  end
+
+  # This allows the disabling of the activation email sent via the sorcery user_activation submodule
+  def send_activation_needed_email!
+    super unless skip_activation_email
   end
 
   #these two methods allow us to assign instance level attributes that are not persisted.  These are used for mailers
