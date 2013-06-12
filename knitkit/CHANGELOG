@@ -1,3 +1,6 @@
+Version 2.1.8 6-12-2013
+- Added smart renaming of file tabs to Knitkit
+- Fixed issue where multiple files with same basename could not be open concurrently
 Version 2.1.7 - 05-08-013
 - Fixed bug in knitkit sub-pages
 - Fixed bug in google maps widget

@@ -1,4 +1,4 @@
-Version 3.1.0
+Version 3.1.0 6-12-2013
 - Added acts_as_commentable to DynamicFormDocument
 - Allow for renderer to be passed to DynamicGridColumn#build_column 
 - Removed duplicate dynamic_form_fields.js (moved to erp_app)

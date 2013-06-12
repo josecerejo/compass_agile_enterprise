@@ -1,4 +1,4 @@
-Version 3.1.4
+Version 3.1.4 6-12-2013
 - Fixed file download URL in FileAsset#url (missing path=)
 - Remove registry of PDF mime type as not needed
 - Add override to skip sending of activation email on user creation.
