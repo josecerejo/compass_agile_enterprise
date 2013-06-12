@@ -1,6 +1,7 @@
 Version 3.1.0
 - Added acts_as_commentable to DynamicFormDocument
 - Allow for renderer to be passed to DynamicGridColumn#build_column 
+- Removed duplicate dynamic_form_fields.js (moved to erp_app)
 Version 3.0.2 - 04-08-2013
 - Fixed bug in CompassAE Engine loading
 Version 3.0.1 - 03-14-2013
