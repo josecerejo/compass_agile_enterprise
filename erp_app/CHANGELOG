@@ -1,3 +1,5 @@
+Version 3.1.11
+- Removed natigate away warning
 Version 3.1.10 6-12-2013
 - Change shared loader to load core, then app-specific files
 - Adding support for CellEditing to DynamicEditableGrid
