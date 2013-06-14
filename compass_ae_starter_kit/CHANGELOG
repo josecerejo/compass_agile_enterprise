@@ -1,3 +1,6 @@
+Version 3.0.13 - 05-29-2013
+- Updated versions in installation template
+- Added fix for gem 'jquery-rails', '2.1.4'
 Version 3.0.12 - 05-29-2013
 - Updated versions in installation template
 Version 3.0.11 - 05-15-2013

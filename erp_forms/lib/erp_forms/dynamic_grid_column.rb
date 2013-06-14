@@ -6,7 +6,7 @@ class DynamicGridColumn
     type = (field_hash[:type] ? field_hash[:type] : DynamicGridColumn.convert_xtype_to_column_type(field_hash[:xtype]))
     data_index = (field_hash[:dataIndex] ? field_hash[:dataIndex] : field_hash[:name])
     sortable = (field_hash[:sortable].nil? ? true : field_hash[:sortable])
-    renderer = (type == 'date' ? "Ext.util.Format.dateRenderer('m/d/Y')" : '')
+    renderer = (type == 'date' ? "Ext.util.Format.dateRenderer('m/d/Y')" : (field_hash[:renderer].blank? ? '' : field_hash[:renderer]))
     
     col = {
       :header => header,

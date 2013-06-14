@@ -60,9 +60,9 @@ Ext.define("Compass.ErpApp.Shared.DynamicEditableGrid",{
     },
 
     constructor : function(config) {
+        var plugins = [];
         if(config['editable']){
             var tbar = {};
-            var plugins = [];
             this.editing = Ext.create('Ext.grid.plugin.RowEditing', {
                 clicksToMoveEditor: 1
             });
@@ -109,6 +109,19 @@ Ext.define("Compass.ErpApp.Shared.DynamicEditableGrid",{
                     tbar:tbar
                 }, config);
             }
+        }
+
+        if(config['cell_editable']){
+            this.cell_editing = Ext.create('Ext.grid.plugin.CellEditing', {
+                clicksToEdit: 2
+            });
+
+            plugins.push(this.cell_editing);
+            
+            config = Ext.apply({
+                plugins:plugins,
+                selType: 'cellmodel'
+            }, config);
         }
 
         config = Ext.apply({

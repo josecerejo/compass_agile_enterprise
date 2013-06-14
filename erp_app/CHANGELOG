@@ -1,3 +1,6 @@
+Version 3.1.10 6-12-2013
+- Change shared loader to load core, then app-specific files
+- Adding support for CellEditing to DynamicEditableGrid
 Version 3.1.9 5-29-2013
 - Updated mobile apps to use sencha touch 2.2
 - Fixed bug in JobTracker mobile app
