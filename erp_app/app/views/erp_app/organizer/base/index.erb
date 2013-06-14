@@ -40,12 +40,6 @@
           organizerLayout.setupLogoutButton();
           organizerLayout.setup();
       });
-
-      window.onbeforeunload = function(){
-          return ' If you navigate away from this page without' +
-                  ' first saving your data, the changes will be' +
-                  ' lost.';
-      }
     </script>
     <%= setSessionTimeout %>
   </body>

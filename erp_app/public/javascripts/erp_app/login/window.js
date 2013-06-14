@@ -17,7 +17,8 @@ Ext.define("Compass.ErpApp.Login.Window",{
         success:function(form, action){
           var result = Ext.decode(action.response.responseText);
           if(result.success){
-            window.location = loginTo;
+            window.history.forward(1);
+			window.location = loginTo;
           }
           else{
             Ext.Msg.alert("Error", "Login failed. Try again");
