@@ -1,3 +1,5 @@
+Version 2.1.9 6-14-2013
+- Gem rebuild of 2.1.8 with spec.log removed
 Version 2.1.8 6-12-2013
 - Added smart renaming of file tabs to Knitkit
 - Fixed issue where multiple files with same basename could not be open concurrently
