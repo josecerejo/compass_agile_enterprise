@@ -30,7 +30,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.SecurityManagement.UsersWidget",
         available_grid.getStore().getProxy().extraParams = {};
         selected_grid.getStore().getProxy().extraParams = {};
       }
-    }, 500 );
+    }, 900 );
   },
 
   constructor : function(config) {
