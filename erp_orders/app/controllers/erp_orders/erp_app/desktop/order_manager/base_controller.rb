@@ -107,7 +107,7 @@ module ErpOrders
                 :quantity => 1,
                 :price => price,
                 :currency_display => currency_display,
-                :sku => (line_item.product_type.inventory_entries.first.sku resecue rescue 'N/A')
+                :sku => (line_item.product_type.inventory_entries.first.sku rescue 'N/A')
               }
             end
 
