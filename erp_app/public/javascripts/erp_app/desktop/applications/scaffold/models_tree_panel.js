@@ -34,6 +34,25 @@ Ext.define("Compass.ErpApp.Desktop.Applications.Scaffold.ModelsTree",{
         });
 
         config = Ext.apply({
+            dockedItems: [
+                {
+                    xtype: 'toolbar',
+                    docked: 'top',
+                    items: [
+                        {
+                            xtype: 'textfield',
+                            flex: 1,
+                            emptyText: 'Model Name',
+                            listeners:{
+                                change:function(comp, newValue, oldValue){
+                                    var store = comp.up('treepanel').getStore();
+                                    store.load({params:{name:newValue}});
+                                }
+                            }
+                        }
+                    ]
+                }
+            ],
             store:store,
             animate:false,
             region:'west',
