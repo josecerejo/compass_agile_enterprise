@@ -35,13 +35,13 @@
 }
 
 .icon-user{
-    background-image: url(/images/icons/user/user_48x48.png);
-    background-repeat:no-repeat;
-    background-position:center center;
+    background-image: url(/images/icons/user/user_48x48.png) !important;
+    background-repeat:no-repeat !important;
+    background-position:center center !important;
 }
 
 .icon-tasks{
-    background-image: url(/images/icons/calendar/calendar_48x48.png);
-    background-repeat:no-repeat;
-    background-position:center center;
+    background-image: url(/images/icons/calendar/calendar_48x48.png) !important;
+    background-repeat:no-repeat !important;
+    background-position:center center !important;
 }
