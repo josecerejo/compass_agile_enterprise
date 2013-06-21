@@ -6,7 +6,7 @@ Ext.ns("Compass.ErpApp.Organizer.Applications.<%= class_name %>");
 Compass.ErpApp.Organizer.Applications.<%= class_name %>.Base = function(config){
 
     var treeMenuStore = Ext.create('Compass.ErpApp.Organizer.DefaultMenuTreeStore', {
-        url:'/erp_app/organizer/<%= file_name %>',
+        url:'/erp_app/organizer/<%= file_name %>/menu',
         rootText:'Menu',
         rootIconCls:'icon-content'
     });
