@@ -289,7 +289,7 @@ Ext.define("Compass.ErpApp.Organizer.Applications.Crm.ContactMechanismGrid.Email
             {
                 xtype: 'button',
                 text: 'Send Email',
-                iconCls: 'icon-email',
+                iconCls: 'icon-mail',
                 handler: function (btn) {
                     var required = '<span style="color:red;font-weight:bold" data-qtip="Required">*</span>',
                         grid = btn.findParentByType('emailaddressgrid'),
