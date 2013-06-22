@@ -91,7 +91,7 @@ Ext.define("Compass.ErpApp.Organizer.Applications.Crm.PartyGrid",{
             {
                 text: 'All',
                 xtype:'button',
-                iconCls: 'icon-eye',
+                iconCls: 'icon-globe',
                 handler: function(button) {
                     store.proxy.extraParams.party_name = null;
                     store.load();

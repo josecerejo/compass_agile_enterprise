@@ -8,7 +8,7 @@ module ErpApp
 
 			  def get_models
           names = ActiveRecord::Base.all_subclasses.collect{|klass| klass.name}.delete_if{|item| item =~ /::/}.uniq.sort{|a,b| a <=> b}
-          names = names.select { |name| name =~ Regexp.new("^#{params[:name]}.")}
+          names = names.select { |name| name =~ Regexp.new("^#{params[:name]}.", Regexp::IGNORECASE)}
 
           respond_to do |format|
             format.json do

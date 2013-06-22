@@ -26,7 +26,7 @@ module RailsDbAdmin
               tables << {:name => table, :display => table} unless table.blank?
             end
 
-            tables = tables.select { |table| table[:name] =~ Regexp.new("^#{params[:name]}.")}
+            tables = tables.select { |table| table[:name] =~ Regexp.new("^#{params[:name]}.", Regexp::IGNORECASE)}
             tables.sort! { |a, b| a[:name].downcase <=> b[:name].downcase }
 
             tables.each do |table|
