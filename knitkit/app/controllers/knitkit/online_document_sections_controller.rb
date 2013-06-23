@@ -15,15 +15,12 @@ module Knitkit
     def search
       html = ''
       results = DocumentedContent.search({:query => params[:query].strip,
-                                 :content_type => 'OnlineDocumentSection',
-                                 :parent_id => params[:section_id],
-                                 :website_id => @website.id})
+                                          :content_type => 'OnlineDocumentSection',
+                                          :parent_id => params[:section_id],
+                                          :website_id => @website.id})
 
       DocumentedContent.build_search_results(results).each do |result|
-        html << "<p>
-                  <a href=\"javascript:findShowAndExpandNode('#{result[:internal_identifier]}');\">#{result[:title]}</a>
-                  <p>#{sanitize(result[:content].body_html[0..500])}...</p>
-                </p>"
+        html << "<p><a href=\"javascript:findShowAndExpandNode('#{result[:internal_identifier]}');\">#{result[:title]}</a><p style='border:solid 2px #CCC;padding:2px;'>#{strip_tags(result[:content].body_html[0..500])}...</p></p>"
       end
 
       render :json => {:success => true, :html => html}
