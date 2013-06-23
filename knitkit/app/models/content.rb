@@ -5,6 +5,7 @@ class Content < ActiveRecord::Base
 
   extend FriendlyId
   friendly_id :title, :use => [:slugged], :slug_column => :permalink
+
   def should_generate_new_friendly_id?
     new_record?
   end
@@ -13,7 +14,7 @@ class Content < ActiveRecord::Base
 
   acts_as_taggable
   acts_as_commentable
-  acts_as_versioned  :table_name => :content_versions
+  acts_as_versioned :table_name => :content_versions
   can_be_published
   has_relational_dynamic_attributes
 
@@ -21,53 +22,62 @@ class Content < ActiveRecord::Base
   has_many :website_sections, :through => :website_section_contents
   belongs_to :created_by, :class_name => "User"
   belongs_to :updated_by, :class_name => "User"
-    
+
   validates :type, :presence => {:message => 'Type cannot be blank'}
   validates_uniqueness_of :internal_identifier, :case_sensitive => false
 
   def self.search(options = {})
-    if options[:section_unique_name].nil? or options[:section_unique_name].empty?
-      section_scope = ''
-    else
-      section_scope = "website_sections.internal_identifier = '#{options[:section_unique_name]}' AND"
+    predicate = Content.includes([:website_sections])
+
+    if options[:section_unique_name]
+      predicate = predicate.where("website_sections.internal_identifier = ?", options[:section_unique_name])
     end
 
-    if options[:content_type].nil? or options[:content_type].empty?
-      content_type_scope = ''
-    else
-      content_type_scope = "website_sections.type = '#{options[:content_type]}' AND"
+    if options[:parent_id]
+      predicate = predicate.where("website_sections.id" => WebsiteSection.find(options[:parent_id]).self_and_descendants.collect(&:id))
     end
- 
-    Content.includes([:website_sections]).where("#{content_type_scope} #{section_scope} 
-                    website_sections.website_id = #{options[:website_id]} AND
-                    (UPPER(contents.title) LIKE UPPER('%#{options[:query]}%') 
+
+    if options[:content_type]
+      predicate = predicate.where("website_sections.type = ?", options[:content_type])
+    end
+
+    if options[:website_id]
+      predicate = predicate.where("website_sections.website_id = ?", options[:website_id])
+    end
+
+    predicate = predicate.where("(UPPER(contents.title) LIKE UPPER('%#{options[:query]}%')
                       OR UPPER(contents.excerpt_html) LIKE UPPER('%#{options[:query]}%') 
-                      OR UPPER(contents.body_html) LIKE UPPER('%#{options[:query]}%') )").order("contents.created_at DESC").paginate(:page => options[:page], :per_page => options[:per_page])
+                      OR UPPER(contents.body_html) LIKE UPPER('%#{options[:query]}%') )").order("contents.created_at DESC")
+    if options[:page]
+      predicate.paginate(:page => options[:page], :per_page => options[:per_page])
+    else
+      predicate.all
+    end
   end
 
-  def self.do_search(options = {})    
+  def self.do_search(options = {})
     @results = Content.search(options)
 
-    @search_results = build_search_results(@results) 
-    
+    @search_results = build_search_results(@results)
+
     @page_results = WillPaginate::Collection.create(options[:page], options[:per_page], @results.total_entries) do |pager|
       pager.replace(@search_results)
     end
-    
-    return @page_results
+
+    @page_results
   end
-      
-  def self.find_by_section_id( website_section_id )
+
+  def self.find_by_section_id(website_section_id)
     Content.joins(:website_section_contents).where('website_section_id = ?', website_section_id).order("website_section_contents.position ASC, website_section_contents.created_at DESC").all
   end
 
-  def self.find_by_section_id_filtered_by_id( website_section_id, id_filter_list )
+  def self.find_by_section_id_filtered_by_id(website_section_id, id_filter_list)
     Content.joins(:website_section_contents).where("website_section_id = ? AND contents.id IN (#{id_filter_list.join(',')})", website_section_id).all
   end
 
   def self.find_published_by_section(active_publication, website_section)
     published_content = []
-    contents = self.find_by_section_id( website_section.id )
+    contents = self.find_by_section_id(website_section.id)
     contents.each do |content|
       content = get_published_version(active_publication, content)
       published_content << content unless content.nil?
@@ -77,9 +87,9 @@ class Content < ActiveRecord::Base
   end
 
   def self.find_published_by_section_with_tag(active_publication, website_section, tag)
-    published_content = []    
-    id_filter_list = self.tagged_with(tag.name).collect{|t| t.id }    
-    contents = self.find_by_section_id_filtered_by_id( website_section.id, id_filter_list )
+    published_content = []
+    id_filter_list = self.tagged_with(tag.name).collect { |t| t.id }
+    contents = self.find_by_section_id_filtered_by_id(website_section.id, id_filter_list)
     contents.each do |content|
       content = get_published_version(active_publication, content)
       published_content << content unless content.nil?
@@ -88,11 +98,11 @@ class Content < ActiveRecord::Base
     published_content
   end
 
-  def find_website_sections_by_site_id( website_id )
-    self.website_sections.where('website_id = ?',website_id).all
+  def find_website_sections_by_site_id(website_id)
+    self.website_sections.where('website_id = ?', website_id).all
   end
 
-  def position( website_section_id )
+  def position(website_section_id)
     position = self.website_section_contents.find_by_website_section_id(website_section_id).position
     position
   end
@@ -102,7 +112,7 @@ class Content < ActiveRecord::Base
   end
 
   def update_content_area_and_position_by_section(section, content_area, position)
-    website_section_content = WebsiteSectionContent.where('content_id = ? and website_section_id = ?',self.id, section.id).first
+    website_section_content = WebsiteSectionContent.where('content_id = ? and website_section_id = ?', self.id, section.id).first
     unless website_section_content.nil?
       website_section_content.content_area = content_area
       website_section_content.position = position
@@ -112,16 +122,16 @@ class Content < ActiveRecord::Base
 
   def content_area_by_website_section(section)
     content_area = nil
-    unless WebsiteSectionContent.where('content_id = ? and website_section_id = ?',self.id, section.id).first.nil?
-      content_area = WebsiteSectionContent.where('content_id = ? and website_section_id = ?',self.id, section.id).first.content_area
+    unless WebsiteSectionContent.where('content_id = ? and website_section_id = ?', self.id, section.id).first.nil?
+      content_area = WebsiteSectionContent.where('content_id = ? and website_section_id = ?', self.id, section.id).first.content_area
     end
     content_area
   end
 
   def position_by_website_section(section)
     position = nil
-    unless WebsiteSectionContent.where('content_id = ? and website_section_id = ?',self.id, section.id).first.nil?
-      position = WebsiteSectionContent.where('content_id = ? and website_section_id = ?',self.id, section.id).first.position
+    unless WebsiteSectionContent.where('content_id = ? and website_section_id = ?', self.id, section.id).first.nil?
+      position = WebsiteSectionContent.where('content_id = ? and website_section_id = ?', self.id, section.id).first.position
     end
     position
   end
@@ -129,18 +139,18 @@ class Content < ActiveRecord::Base
   def assign_attribute_on_save
     super
 
-    Article.find_by_internal_identifier(self.internal_identifier) ? attribute_type_description = "updated_by_role"  : attribute_type_description = "created_by_role"
+    Article.find_by_internal_identifier(self.internal_identifier) ? attribute_type_description = "updated_by_role" : attribute_type_description = "created_by_role"
 
     if attribute_type_description == "created_by_role"
       user = self.created_by
     else
-      user = User.find(self.versions.sort_by {|version| version.version}.reverse[0].created_by_id)
+      user = User.find(self.versions.sort_by { |version| version.version }.reverse[0].created_by_id)
     end
-    
+
     if user
       #keep only the attributes related to the most recent change for each attribute_type
       self.destroy_values_of_type attribute_type_description
-    
+
       attribute_type = AttributeType.find_by_internal_identifier(attribute_type_description)
       attribute_type = AttributeType.create(:description => attribute_type_description, :data_type => "Text") unless attribute_type
 
@@ -156,9 +166,9 @@ class Content < ActiveRecord::Base
   def is_published?
     !PublishedElement.where('published_element_record_id = ? and published_element_record_type = ? and published_elements.version = ?', self.id, 'Content', self.version).first.nil?
   end
-  
+
   protected
-  
+
   def self.build_search_results(results)
     # and if it is a blog get the article link and title
     results_array = []
@@ -178,7 +188,7 @@ class Content < ActiveRecord::Base
 
       results_array << results_hash
     end
-    
+
     results_array
   end
 

@@ -19,6 +19,7 @@
     <%= static_javascript_include_tag('datepicker.js') %>
     <%= static_stylesheet_link_tag('datepicker.css') %>
     <%= static_stylesheet_link_tag('extjs/resources/css/knitkit_extjs_4.css') %>
+    <%= static_stylesheet_link_tag('erp_app/shared/compass-ext-all.css') %>
     <%= static_stylesheet_link_tag('knitkit/style.css') %>
     <%= static_javascript_include_tag('erp_app/widgets.js') %>
 
@@ -43,7 +44,6 @@
         <%#=render_menu(@contents, :menu => 'main')%>
       </div>
       <div id="site_content">
-        <%=build_crumbs %>
         <br/>
         <div id="content">
           <%= yield %>
