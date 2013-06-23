@@ -1,5 +1,7 @@
 module Knitkit
   class OnlineDocumentSectionsController < BaseController
+    include ActionView::Helpers::SanitizeHelper
+
     layout 'knitkit/online_document_sections'
 
     before_filter :find_root
@@ -7,6 +9,7 @@ module Knitkit
 
     def index
       @online_document = OnlineDocumentSection.find(params[:section_id])
+      @online_document = nil if @online_document.id == find_root.id
     end
 
     def search
@@ -19,6 +22,7 @@ module Knitkit
       DocumentedContent.build_search_results(results).each do |result|
         html << "<p>
                   <a href=\"javascript:findShowAndExpandNode('#{result[:internal_identifier]}');\">#{result[:title]}</a>
+                  <p>#{sanitize(result[:content].body_html[0..500])}...</p>
                 </p>"
       end
 
