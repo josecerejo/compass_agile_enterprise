@@ -11,13 +11,12 @@ module ErpApp
           dir  = sort_hash[:direction] || 'ASC'
           limit = params[:limit] || 25
           start = params[:start] || 0
-          total_count = 0
 
           if username.blank?
             users = User.order("#{sort} #{dir}").offset(start).limit(limit)
             total_count = User.count
           else
-            users = User.where('username like ?', "%#{username}%").order("#{sort} #{dir}").offset(start).limit(limit)
+            users = User.where('username like ? or email like ?', "%#{username}%", "%#{username}%").order("#{sort} #{dir}").offset(start).limit(limit)
             total_count = users.count
           end
 
@@ -26,7 +25,6 @@ module ErpApp
 
 			  def new
           response = {}
-          application = DesktopApplication.find_by_internal_identifier('user_management')
           begin
             current_user.with_capability(:create, 'User') do
             
@@ -37,8 +35,8 @@ module ErpApp
                 :password_confirmation => params[:password_confirmation]
               )
               #set this to tell activation where to redirect_to for login and temp password
-              user.add_instance_attribute(:login_url, '/erp_app/login');
-              user.add_instance_attribute(:temp_password, params[:password]);
+              user.add_instance_attribute(:login_url, '/erp_app/login')
+              user.add_instance_attribute(:temp_password, params[:password])
 
               if user.save
                 individual = Individual.create(:gender => params[:gender], :current_first_name => params[:first_name], :current_last_name => params[:last_name])
@@ -75,7 +73,7 @@ module ErpApp
         end
 
         def delete
-          application = DesktopApplication.find_by_internal_identifier('user_management')
+
           if current_user.has_capability?('create', 'User')
             unless @user.party.nil?
               @user.party.destroy
@@ -95,7 +93,7 @@ module ErpApp
           @user = User.find(params[:id])
         end
         
-      end
-    end
-  end
-end
+      end #BaseController
+    end #UserManagement
+  end #Desktop
+end #ErpApp

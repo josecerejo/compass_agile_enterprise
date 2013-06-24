@@ -94,9 +94,9 @@ module Knitkit
           @root_node = nil
 
           if @context == :website
-            @root_node = File.join("public", "sites", @assets_model.iid, "images") unless @assets_model.nil?
+            @root_node = File.join(Rails.application.config.knitkit.images_path, "sites", @assets_model.iid, "images") unless @assets_model.nil?
           else
-            @root_node = File.join("public", "images")
+            @root_node = File.join(Rails.application.config.knitkit.images_base_path, 'images')
           end
 
           @root_node
