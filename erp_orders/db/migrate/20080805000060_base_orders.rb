@@ -69,6 +69,7 @@ class BaseOrders < ActiveRecord::Migration
         t.column  	:sold_amount, 				          :integer
         t.column    :sold_amount_uom, 		          :integer
         t.column    :product_offer_id,      	      :integer
+        t.column    :quantity,                      :integer
         t.timestamps
       end
 

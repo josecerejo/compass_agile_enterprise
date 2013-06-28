@@ -32,7 +32,7 @@ Ext.define("Compass.ErpApp.Desktop.Applications.UserManagement.UserApplicationMg
   },
 
   saveApplications : function(){
-    var appIds = []
+    var appIds = [];
     var treePanel = this.current_applications_tree;
     var treeRoot = treePanel.getRootNode();
     this.setWindowStatus('Saving...');

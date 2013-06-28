@@ -3,19 +3,19 @@ module RailsDbAdmin
     module Desktop
       class BaseController < ::ErpApp::Desktop::BaseController
         before_filter :setup_database_connection
-	  
+
         def databases
           result = {:databases => []}
           Rails.configuration.database_configuration.each do |k, v|
             result[:databases] << {:display => k, :value => k}
           end
 
-          result[:databases].delete_if{|v| v[:value] == Rails.env}
+          result[:databases].delete_if { |v| v[:value] == Rails.env }
           result[:databases].unshift({:value => Rails.env, :display => Rails.env})
-		
+
           render :json => result
         end
-	  
+
         def tables
           result_hash = []
 
@@ -26,14 +26,15 @@ module RailsDbAdmin
               tables << {:name => table, :display => table} unless table.blank?
             end
 
-            tables.sort! { |a,b| a[:name].downcase <=> b[:name].downcase }
+            tables = tables.select { |table| table[:name] =~ Regexp.new("^#{params[:name]}.", Regexp::IGNORECASE)}
+            tables.sort! { |a, b| a[:name].downcase <=> b[:name].downcase }
 
             tables.each do |table|
               result_hash << {:isTable => true,
-                :text => table[:display],
-                :id => table[:display],
-                :iconCls => 'icon-data',
-                :leaf => false}
+                              :text => table[:display],
+                              :id => table[:display],
+                              :iconCls => 'icon-data',
+                              :leaf => false}
             end
           else
             columns = @database_connection_class.connection.columns(params[:node])
@@ -53,18 +54,18 @@ module RailsDbAdmin
 
           if @table_support.table_contains_column(table, :id)
             result[:columns] =
-              RailsDbAdmin::Extjs::JsonColumnBuilder.build_grid_columns(columns)
+                RailsDbAdmin::Extjs::JsonColumnBuilder.build_grid_columns(columns)
             result[:model] = table
             result[:fields] =
-              RailsDbAdmin::Extjs::JsonColumnBuilder.build_store_fields(columns)
+                RailsDbAdmin::Extjs::JsonColumnBuilder.build_store_fields(columns)
             result[:validations] = []
             result[:id_property] = "id"
           else
             result[:columns] =
-              RailsDbAdmin::Extjs::JsonColumnBuilder.build_grid_columns(columns, true)
+                RailsDbAdmin::Extjs::JsonColumnBuilder.build_grid_columns(columns, true)
             result[:model] = table
             result[:fields] =
-              RailsDbAdmin::Extjs::JsonColumnBuilder.build_store_fields(columns, true)
+                RailsDbAdmin::Extjs::JsonColumnBuilder.build_store_fields(columns, true)
             result[:validations] = []
             result[:id_property] = "fake_id"
           end
@@ -74,14 +75,14 @@ module RailsDbAdmin
 
         def table_data
           render :json => if request.get?
-            get_table_data
-          elsif request.post?
-            create_table_row
-          elsif request.put?
-            update_table_data
-          elsif request.delete?
-            delete_table_row
-          end
+                            get_table_data
+                          elsif request.post?
+                            create_table_row
+                          elsif request.put?
+                            update_table_data
+                          elsif request.delete?
+                            delete_table_row
+                          end
         end
 
         private
@@ -113,7 +114,7 @@ module RailsDbAdmin
             record = @json_data_builder.get_row_data(table, id)
           else
             params[:data].delete('fake_id')
-            fake_id = @table_support.insert_row(table, params[:data],true)
+            fake_id = @table_support.insert_row(table, params[:data], true)
             record = @json_data_builder.get_row_data_no_id(table, params[:data])
             record[:fake_id] = fake_id
           end
@@ -149,7 +150,7 @@ module RailsDbAdmin
           if @table_support.primary_key?(table)
             pk = @table_support.primary_key(table)
             pk[1] = id
-            @table_support.delete_row(table.pluralize.underscore,pk)
+            @table_support.delete_row(table.pluralize.underscore, pk)
           else
             exception = "Unable to determine primary key on this table. "\
               "Delete not performed"
@@ -169,14 +170,14 @@ module RailsDbAdmin
           @table_support = RailsDbAdmin::TableSupport.new(@database_connection_class)
           @json_data_builder = RailsDbAdmin::Extjs::JsonDataBuilder.new(@database_connection_class)
         end
-	  
+
         def database_connection_name
           database_name = Rails.env
 
           unless params[:database].blank?
             database_name = params[:database]
           end
-		
+
           database_name
         end
 

@@ -2,7 +2,7 @@ class OnlineDocumentSection < WebsiteSection
   has_one :documented_item, :dependent => :destroy
   delegate :content, :to => :documented_item, :prefix => true
   delegate :published_content, :to => :documented_item, :prefix => true
-  
+
   def documented_item_content_html
     documented_item_content.body_html
   rescue

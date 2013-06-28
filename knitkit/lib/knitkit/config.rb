@@ -1,12 +1,13 @@
 module Knitkit
   module Config
     class << self
-      attr_accessor :unauthorized_url, :ignored_prefix_paths
+      attr_accessor :unauthorized_url, :ignored_prefix_paths, :images_base_path
 
       def init!
         @defaults = {
           :@unauthorized_url => '/unauthorized',
-          :@ignored_prefix_paths => []
+          :@ignored_prefix_paths => [],
+          :@images_base_path => File.join("public", "knitkit")
         }
       end
 

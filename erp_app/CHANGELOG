@@ -1,5 +1,7 @@
-Version 3.1.11
-- Removed natigate away warning
+Version 3.1.11 - 6-23-2013
+- Minor bug fixes and cleanup
+- Added ability to email users in CSR
+- Add history additions to block user navigation in Desktop and Organizer
 Version 3.1.10 6-12-2013
 - Change shared loader to load core, then app-specific files
 - Adding support for CellEditing to DynamicEditableGrid

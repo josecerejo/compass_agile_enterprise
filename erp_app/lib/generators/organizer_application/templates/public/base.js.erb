@@ -6,7 +6,7 @@ Ext.ns("Compass.ErpApp.Organizer.Applications.<%= class_name %>");
 Compass.ErpApp.Organizer.Applications.<%= class_name %>.Base = function(config){
 
     var treeMenuStore = Ext.create('Compass.ErpApp.Organizer.DefaultMenuTreeStore', {
-        url:'/erp_app/organizer/<%= file_name %>',
+        url:'/erp_app/organizer/<%= file_name %>/menu',
         rootText:'Menu',
         rootIconCls:'icon-content'
     });
@@ -22,7 +22,7 @@ Compass.ErpApp.Organizer.Applications.<%= class_name %>.Base = function(config){
         }
     };
 
-    var examplePanel = new Ext.Panel({id:'<%= file_name %>_example_panel', html:'Put your content here', layout:'fit'})
+    var examplePanel = new Ext.Panel({id:'<%= file_name %>_example_panel', html:'Put your content here', layout:'fit'});
 
     this.setup = function(){
         config['organizerLayout'].addApplication(menuTreePanel, [examplePanel]);
