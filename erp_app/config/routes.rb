@@ -73,6 +73,9 @@ ErpApp::Engine.routes.draw do
   #audit_log_view
   match '/desktop/audit_log_viewer/:action.:format' => 'desktop/audit_log_viewer/base'
 
+  #tail
+  match '/desktop/tail(/:action)' => "desktop/tail/base"
+
   #widget proxy
   match '/widgets/:widget_name/:widget_action/:uuid(/:id)' => "widget_proxy#index", :as => :widget
 

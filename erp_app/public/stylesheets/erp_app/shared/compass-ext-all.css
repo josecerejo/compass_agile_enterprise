@@ -31,6 +31,11 @@
     padding : 5px;
 }
 
+.icon-document_pulse {
+    background-image: url(/images/icons/document_pulse/document_pulse_16x16.png) !important;
+    filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='/images/icons/document_pulse/document_pulse_16x16.png', sizingMethod='crop');
+}
+
 .icon-tasks {
     background-image: url(/images/icons/calendar/calendar_16x16.png) !important;
     filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='/images/icons/calendar/calendar_16x16.png', sizingMethod='crop');

@@ -36,7 +36,7 @@ gem 'erp_tech_svcs', '3.1.4'
 gem 'compass_ae_sencha', '1.0.2'
 gem 'erp_app', '3.1.11'
 gem 'erp_forms', '3.1.0'
-gem 'knitkit', '2.1.10'
+gem 'knitkit', '2.1.11'
 gem 'rails_db_admin', '2.1.2'
 gem 'compass_ae_console', '2.0.0'
 "
