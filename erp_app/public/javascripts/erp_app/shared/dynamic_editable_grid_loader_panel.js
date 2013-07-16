@@ -28,6 +28,7 @@ Ext.define("Compass.ErpApp.Shared.DynamicEditableGridLoaderPanel",{
                         validations:response.validations,
                         proxy:config.proxy,
                         listeners: config.grid_listeners,
+                        store_listeners: config.grid_store_listeners,
                         storeId: config['storeId'],
                         selType: (config.selType || 'rowmodel'),
                         multiSelect: (config.multiSelect || false),
