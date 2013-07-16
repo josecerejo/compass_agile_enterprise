@@ -4,7 +4,13 @@ class Configuration < ActiveRecord::Base
   scope :templates, where('is_template = ?', true)
 
   validates :internal_identifier, :presence => true, :uniqueness =>  {:scope => [:id, :is_template]}
-  validates :is_template, :uniqueness => {:scope => :internal_identifier}
+
+  validate :cannot_have_two_templates_per_iid
+  def cannot_have_two_templates_per_iid
+    unless Configuration.where('id != ?',self.id).where(:is_template => true).where(:internal_identifier => self.internal_identifier).first.nil?
+      errors.add(:is_template, "Cannot have more than one template per configuration")
+    end
+  end
 
   has_many :configuration_items, :dependent => :destroy do
     def by_category(category)
