@@ -1,0 +1,22 @@
+Ext.ns('Compass.ErpApp.Mobile.JobTracker.Templates');
+Compass.ErpApp.Mobile.JobTracker.Templates.jobDetails = new Ext.XTemplate(
+    '<div class="profile">',
+    '<p>',
+    '<span class="label">Job Name</span>',
+    '<span class="value">{job_name}</span>',
+    '</p>',
+    '<p>',
+    '<span class="label">Last Run At</span>',
+    '<span class="value">{last_run_at:date("m/d/Y g:i:s")}</span>',
+    '</p>',
+    '<p>',
+    '<span class="label">Next Run At</span>',
+    '<span class="value">{next_run_at:date("m/d/Y g:i:s")}</span>',
+    '</p>',
+    '<p>',
+    '<span class="label">Runtime</span>',
+    '<span class="value">{run_time}</span>',
+    '</p>',
+    '</div>',
+    '<br/>',
+    '<div id="resetPasswdBtnHolder"></div>');
