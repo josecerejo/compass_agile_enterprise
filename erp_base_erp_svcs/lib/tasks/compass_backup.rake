@@ -11,7 +11,7 @@ namespace :compass_ae do
     db_config = Rails.configuration.database_configuration[Rails.env]
     host = db_config['host'].blank? ? 'localhost' : db_config['host']
     username = db_config['username'].blank? ? 'postgres' : db_config['username']
-    pgpw = ENV['PGPASSWORD'].nil? ? '' : ENV['PGPASSWORD']
+    pgpw = ENV['PGPASSWORD'].nil? ? '' : "PGPASSWORD=#{ENV['PGPASSWORD']}"
 
   	desc 'backup all postgres databases'
     task :postgres => :environment do
