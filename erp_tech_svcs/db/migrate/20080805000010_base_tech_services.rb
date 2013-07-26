@@ -46,7 +46,7 @@ class BaseTechServices < ActiveRecord::Migration
       add_index :users, :remember_me_token
       add_index :users, :reset_password_token
       add_index :users, :activation_token
-    
+      add_index :users, :party_id, :name => 'users_party_id_idx'
     end
 
     unless table_exists?(:groups)
