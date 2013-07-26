@@ -1,3 +1,5 @@
+Version 3.1.12 - 7-26-2013
+- Added application to tail Rails log
 Version 3.1.11 - 6-23-2013
 - Minor bug fixes and cleanup
 - Added ability to email users in CSR

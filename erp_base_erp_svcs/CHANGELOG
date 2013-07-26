@@ -1,6 +1,6 @@
-Version 3.1.5
+Version 3.1.5 - 7-26-2013
 - Pass database host to pg_dump in rake compass_ae:backup:postgres
-Version 3.1.4 6-12-2013
+Version 3.1.4 - 6-12-2013
 - Added Party#has_role_type?
 Version 3.1.3 - 04-22-2013
 - Added latitude longitude to postal address

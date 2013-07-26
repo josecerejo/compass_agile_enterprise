@@ -1,0 +1,4 @@
+Version 3.1.1 - 7-26-2013
+- Added relationships from party to work_effort_assignments
+Version 3.1.0 - 1-11-2013
+- Support for Rails 3.2

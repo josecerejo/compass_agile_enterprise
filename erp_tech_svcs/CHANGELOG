@@ -1,4 +1,6 @@
-Version 3.1.4 6-12-2013
+Version 3.1.5 - 7-26-2013
+- Add index on users.party_id
+Version 3.1.4 - 6-12-2013
 - Fixed file download URL in FileAsset#url (missing path=)
 - Remove registry of PDF mime type as not needed
 - Add override to skip sending of activation email on user creation.
