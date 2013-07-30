@@ -1,3 +1,5 @@
+Version 3.1.6
+- Performance improvement for with_instance_security scope
 Version 3.1.5 - 7-26-2013
 - Add index on users.party_id
 Version 3.1.4 - 6-12-2013
