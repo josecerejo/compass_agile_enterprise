@@ -75,7 +75,7 @@ module ErpTechSvcs
               join_type = (self.protect_all_instances ? 'JOIN' : 'LEFT JOIN')
               query = joins("#{join_type} capabilities AS c ON c.capability_resource_id = #{self.table_name}.id AND c.capability_resource_type = '#{self.name}'").
                       group(columns.collect{|c| "#{self.table_name}.#{c.name}" })
-              query = (deny_count == 0 ? query.where("c.id IS NULL OR c.id = c.id") : query.where("c.id IS NULL OR c.id NOT IN (#{denied_capabilities.to_sql})"))
+              query = (deny_count == 0 ? query.where("c.id NOT IN (SELECT id FROM capabilities) OR c.id = c.id") : query.where("c.id NOT IN (SELECT id FROM capabilities) OR c.id NOT IN (#{denied_capabilities.to_sql})"))
               query
             }
 
