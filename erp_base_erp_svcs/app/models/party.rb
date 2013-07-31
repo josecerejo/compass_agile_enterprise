@@ -10,7 +10,7 @@ class Party < ActiveRecord::Base
   has_many   :party_roles, :dependent => :destroy #role_types
 	has_many   :role_types, :through => :party_roles
 
-  after_destroy :destroy_business_party
+  after_destroy :destroy_business_party, :destroy_party_relationships
 
 	attr_reader :relationships
   attr_writer :create_relationship
@@ -33,12 +33,16 @@ class Party < ActiveRecord::Base
     PartyRelationship.create(:description => description, :party_id_from => id, :party_id_to => to_party_id)
   end
 
-  # Callback
+  # Callbacks
 	def destroy_business_party
     if self.business_party
       self.business_party.destroy
     end
-	end
+  end
+
+  def destroy_party_relationships
+    PartyRelationship.destroy_all("party_id_from = #{id} or party_id_to = #{id}")
+  end
 
   def has_role_type?(*passed_roles)
     result = false

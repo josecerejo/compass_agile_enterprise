@@ -64,33 +64,15 @@ module ActionView
     end
 
     def mtime(p, file_support)
-      node = file_support.find_node(p)
-      node[:last_modified]
+      p = p.sub(%r{^/}, '')
+      ErpTechSvcs::FileSupport::S3Manager.new.bucket.objects[p].last_modified
     end
 
     protected
-    
-    def cache_key(path)
-      Thread.current[:tenant_id].nil? ? path : "tenant_#{Thread.current[:tenant_id]}_#{path}"
-    end
-    
-    def cache_template(path, file_support)
-      contents, message = file_support.get_contents(path)
-      path = path.sub(%r{^/},'')
-      #Rails.logger.info "creating cache with key: #{path}"
-      Rails.cache.write(cache_key(path), contents, :expires_in => ErpTechSvcs::Config.s3_cache_expires_in_minutes.minutes)
-      return contents, message 
-    end
 
     def build_template(p, virtual_path, formats, file_support, locals=nil)
       handler, format = extract_handler_and_format(p, formats)
-      contents = Rails.cache.read(cache_key(p.sub(%r{^/},'')))
-      if contents.nil?
-        contents, message = cache_template(p, file_support)
-      else
-        #Rails.logger.info "!!!!! USING CACHED TEMPLATE: #{contents.inspect}"
-        contents = contents.dup
-      end
+      contents, message = file_support.get_contents(p)
       
       Template.new(contents, p, handler, :virtual_path => virtual_path, :format => format, :updated_at => mtime(p, file_support), :locals => locals)
     end
