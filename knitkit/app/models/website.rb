@@ -301,8 +301,11 @@ class Website < ActiveRecord::Base
     File.open(tmp_dir + 'setup.yml', 'wb+') { |f| f.puts(export_setup.to_yaml) }
 
     (tmp_dir + "#{name}.zip").tap do |file_name|
+      Rails.logger.info "@@@@@@@@@@@@@@@"
+      Rails.logger.info file_name.inspect
+      Rails.logger.info "@@@@@@@@@@@@@@@"
       file_name.unlink if file_name.exist?
-      Zip::ZipFile.open(file_name, Zip::ZipFile::CREATE) do |zip|
+      Zip::ZipFile.open(file_name.to_s, Zip::ZipFile::CREATE) do |zip|
         files.each { |file| zip.add(file[:name], file[:path]) if File.exists?(file[:path]) }
         zip.add('setup.yml', tmp_dir + 'setup.yml')
       end

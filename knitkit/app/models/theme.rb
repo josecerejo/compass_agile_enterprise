@@ -153,7 +153,7 @@ class Theme < ActiveRecord::Base
     tmp_dir = Theme.make_tmp_dir
     (tmp_dir + "#{name}[#{theme_id}].zip").tap do |file_name|
       file_name.unlink if file_name.exist?
-      Zip::ZipFile.open(file_name, Zip::ZipFile::CREATE) do |zip|
+      Zip::ZipFile.open(file_name.to_s, Zip::ZipFile::CREATE) do |zip|
         files.each {|file|
           contents = file_support.get_contents(File.join(file_support.root,file.directory,file.name))
           relative_path = file.directory.sub("#{url}",'')
