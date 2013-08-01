@@ -37,7 +37,7 @@ module Knitkit
           begin
             current_user.with_capability('view', 'Theme') do
               unless params[:theme_data].blank?
-                @website.themes.import(params[:theme_data], @website)
+                Theme.import(params[:theme_data], @website)
               else
                 theme = Theme.create(:website => @website, :name => params[:name], :theme_id => params[:theme_id])
                 theme.version  = params[:version]
