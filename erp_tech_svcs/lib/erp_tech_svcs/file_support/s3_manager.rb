@@ -11,10 +11,10 @@ module ErpTechSvcs
           @@configuration = YAML::load_file(File.join(Rails.root, 'config', 's3.yml'))[Rails.env]
 
           # S3 debug logging
-          AWS.config(
-              :logger => Rails.logger,
-              :log_level => :info
-          )
+          # AWS.config(
+          #     :logger => Rails.logger,
+          #     :log_level => :info
+          # )
 
           @@s3_connection = AWS::S3.new(
               :access_key_id => @@configuration['access_key_id'],
