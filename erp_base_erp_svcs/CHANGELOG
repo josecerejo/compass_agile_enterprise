@@ -1,3 +1,5 @@
+Version 3.1.6
+- Added method to remove party_relationships when party is removed
 Version 3.1.5 - 7-26-2013
 - Pass database host to pg_dump in rake compass_ae:backup:postgres
 Version 3.1.4 - 6-12-2013
