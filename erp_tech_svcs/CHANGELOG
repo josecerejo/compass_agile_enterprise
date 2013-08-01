@@ -1,4 +1,4 @@
-Version 3.1.6 - 7-31-2013
+Version 3.1.6 - 7-31-2013 - yanked
 - Performance improvement for with_instance_security scope
 - Updates to S3 file adapter for better performance
 Version 3.1.5 - 7-26-2013
