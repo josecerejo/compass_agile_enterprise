@@ -40,7 +40,7 @@ class FileAsset < ActiveRecord::Base
     class_inheritable_writer :valid_extensions
   end
 
-  after_create :set_sti, :add_to_cached_s3_tree
+  after_create :set_sti
 
   belongs_to :file_asset_holder, :polymorphic => true
   instantiates_with_sti
@@ -165,19 +165,6 @@ class FileAsset < ActiveRecord::Base
       end
     end
     #return true
-  end
-
-  def add_to_cached_s3_tree
-    if ErpTechSvcs::Config.file_storage == :s3
-      file_support = ErpTechSvcs::FileSupport::Base.new(:storage => ErpTechSvcs::Config.file_storage)
-
-      s3_file_path = File.join(self.directory,self.name).sub(%r{^/},'')
-      s3_object = file_support.bucket.objects[s3_file_path]
-
-      parent_node = file_support.find_parent_node(s3_file_path)
-      child_hash = {:last_modified => s3_object.last_modified, :text => self.name, :downloadPath => "/"+s3_file_path, :leaf => !File.extname(self.name).blank?, :id => "/"+s3_file_path, :children => []}
-      parent_node[:children] << child_hash
-    end
   end
 
   def basename

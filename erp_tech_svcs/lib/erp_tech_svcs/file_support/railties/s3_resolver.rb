@@ -59,8 +59,12 @@ module ActionView
 
     def get_dir_entries(path, file_support)
       full_path = File.join(@path, path)
-      node = file_support.find_node(File.dirname(full_path))
-      node.nil? ? [] : node[:children].select{|child| child[:leaf]}.collect{|child| child[:id]}.select{|p|!p.scan(full_path).empty?}
+      tree = file_support.find_node(File.dirname(full_path))
+      if (tree.nil? or tree.empty?)
+        []
+      else
+        tree.collect{|child| "/#{child[:id]}"}.select{|p|!p.scan(full_path).empty?}
+      end
     end
 
     def mtime(p, file_support)
